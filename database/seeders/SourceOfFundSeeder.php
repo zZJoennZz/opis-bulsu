@@ -1,0 +1,29 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use App\Models\SourceOfFund;
+
+class SourceOfFundSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        //
+        SourceOfFund::create([
+            'source_of_fund' => 'GAA'
+        ]);
+        SourceOfFund::create([
+            'source_of_fund' => 'Income'
+        ]);
+        SourceOfFund::create([
+            'source_of_fund' => 'Fiduciary Fund'
+        ]);
+    }
+}
