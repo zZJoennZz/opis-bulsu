@@ -21,6 +21,51 @@ class UserSeeder extends Seeder
             'email' => 'admin@admin.com',
             'account_type' => 'admin',
             'password' => bcrypt('admin'),
+            'ppmp_year' => '2022',
+            'branches_id' => 5,
+        ]);
+
+        User::create([
+            'username' => 'enduser1',
+            'email' => 'enduser1@admin.com',
+            'account_type' => 'admin',
+            'password' => bcrypt('admin'),
+            'ppmp_year' => '2022',
+            'branches_id' => 1,
+        ]);
+        User::create([
+            'username' => 'enduser2',
+            'email' => 'enduser2@admin.com',
+            'account_type' => 'admin',
+            'password' => bcrypt('admin'),
+            'ppmp_year' => '2022',
+            'branches_id' => 2,
+        ]);
+        User::create([
+            'username' => 'enduser3',
+            'email' => 'enduser3@admin.com',
+            'account_type' => 'admin',
+            'password' => bcrypt('admin'),
+            'ppmp_year' => '2022',
+            'branches_id' => 3,
+        ]);
+
+        User::create([
+            'username' => 'bouser',
+            'email' => 'bouser@admin.com',
+            'account_type' => 'BUDGET_OFFICE',
+            'password' => bcrypt('admin'),
+            'ppmp_year' => '2022',
+            'branches_id' => 4,
+        ]);
+
+        User::create([
+            'username' => 'procure',
+            'email' => 'procure@admin.com',
+            'account_type' => 'PROCUREMENT_OFFICE',
+            'password' => bcrypt('admin'),
+            'ppmp_year' => '2022',
+            'branches_id' => 5,
         ]);
     }
 }

@@ -23,4 +23,9 @@ class ProProManPlan extends Model
         'remarks',
         'submitted_by',
     ];
+
+    public function milestones()
+    {
+        return $this->hasMany(MilestoneOfActivity::class, 'pro_pro_man_plans_id', 'id');
+    }
 }

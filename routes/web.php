@@ -2,8 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemDetailController;
+use App\Http\Controllers\PPMPController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,19 +19,65 @@ use App\Http\Controllers\ItemDetailController;
 |
 */
 
+//ONLY AVAILABLE TO PUBLIC
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [AuthController::class, 'show'])->name('login');
     Route::post('/', [AuthController::class, 'login'])->name('login.perform');
 });
 
+//AVAILABLE TO EVERYONE WHO ARE LOGGED IN
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard.show');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout.perform');
 
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notification.show');
+    Route::get('/notifications/{notif_id}', [NotificationController::class, 'read'])->name('notification.read');
+
+    Route::get('/ppmp-update-activity-log/{branch_id}', [PPMPController::class, 'ppmp_activity_log'])->name('ppmp-activity-log.show');
+    Route::get('/update-ppmp-record/{ppmp_id}', [PPMPController::class, 'get_ppmp_record'])->name('get-ppmp-record.show');
+    Route::post('/update-ppmp-record/{ppmp_id}', [PPMPController::class, 'update_ppmp'])->name('update-ppmp-record.perform');
+
+    Route::get('/add-new-item-detail', [ItemDetailController::class, 'new_item_detail'])->name('add-new-item.show');
+    Route::post('/add-new-item-detail', [ItemDetailController::class, 'submit_item_detail'])->name('add-new-item.perform');
+});
+
+//AVAILABLE TO END USERS
+Route::middleware('end.user')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard.show');
     //items
     Route::get('/item-detail/{id}', [ItemDetailController::class, 'show'])->name('item-detail-single.show');
     Route::post('/item-detail/{id}', [ItemDetailController::class, 'store'])->name('item-detail-single.add');
+
+    //cart
+    Route::get('/ppmp-cart', [CartController::class, 'get'])->name('ppmp-cart.get');
+    Route::post('/ppmp-cart', [CartController::class, 'submit'])->name('ppmp-cart.submit');
+
+    //PPMP
+    Route::get('/ppmp-request', [PPMPController::class, 'get'])->name('ppmp-request.get');
 });
 
+//AVAILABLE TO BUDGET OFFICE
+Route::middleware('budget.office')->group(function () {
+    Route::get('/bo-dashboard', [DashboardController::class, 'show'])->name('bo-dashboard.show');
 
-Route::get('/test1', [AuthController::class, 'add_user'])->name('test.add');
+    Route::get('/new-ppmp-request/{branch_id}', [PPMPController::class, 'new_ppmp_request'])->name('bo-new-ppmp-request.show');
+    Route::post('/new-ppmp-request', [PPMPController::class, 'approve_ppmp_request'])->name('bo-approve-ppmp-request.perform');
+
+    Route::get('/approved-ppmp-request/{branch_id}', [PPMPController::class, 'approved_ppmp_request'])->name('approved-ppmp-request.show');
+    Route::post('/send-back-ppmp-request/{user_id}', [PPMPController::class, 'send_back'])->name('send-bank-ppmp.perform');
+});
+
+//AVAILABLE TO PROCUREMENT OFFICE
+Route::middleware('procurement.office')->group(function () {
+    Route::get('/po-dashboard', [DashboardController::class, 'show'])->name('po-dashboard.show');
+
+    Route::get('/ppmp-approval/{branch_id}', [PPMPController::class, 'ppmp_approval'])->name('po-ppmp-approval.show');
+    Route::get('/approved-ppmp/{branch_id}', [PPMPController::class, 'po_approved_ppmp'])->name('po-approved-ppmp.show');
+    Route::post('/ppmp-approval', [PPMPController::class, 'po_approve_ppmp'])->name('po-approve-ppmp-approval.perform');
+
+    Route::post('/send-back-ppmp-approval/{user_id}', [PPMPController::class, 'po_send_back'])->name('send-back-ppmp-approval.perform');
+});
+
+//ADMIN ONLY
+Route::middleware('admin')->group(function () {
+    Route::get('/admin-dashboard', [DashboardController::class, 'show'])->name('admin-dashboard.show');
+});

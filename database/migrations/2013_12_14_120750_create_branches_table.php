@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
             $table->text('branch_name');
+            $table->text('type');
             $table->text('address')->nullable();
             $table->text('email_address')->nullable();
             $table->text('contact_number')->nullable();

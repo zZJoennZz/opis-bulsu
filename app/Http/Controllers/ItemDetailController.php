@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\ItemDetail;
+use App\Models\ItemCategory;
 use App\Models\MilestoneFormat;
 use App\Models\SourceOfFund;
 use App\Models\ItemPurpose;
 use App\Models\ProProManPlan;
 use App\Models\MilestoneOfActivity;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,26 +17,6 @@ use Throwable;
 
 class ItemDetailController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -113,10 +95,6 @@ class ItemDetailController extends Controller
         //
         $user = Auth::user();
 
-        // if ($user->account_type !== "END_USER") {
-        //     return "NOT ALLOWED";
-        // }
-
         $itemDetail = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->where('item_details.id', '=', $id)->select('item_details.*', 'units.uom', 'item_categories.description as cat_desc')->get();
 
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
@@ -131,26 +109,16 @@ class ItemDetailController extends Controller
             ->with('item_purposes', $itemPurposes);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ItemDetail  $itemDetail
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ItemDetail $itemDetail)
+    public function new_item_detail()
     {
-        //
+        $itemCategories = ItemCategory::all();
+        $units = Unit::all();
+        return view('global/add-new-item-detail')
+            ->with('item_categories', $itemCategories)
+            ->with('units', $units);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ItemDetail  $itemDetail
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ItemDetail $itemDetail)
+    public function submit_item_detail()
     {
-        //
     }
 }

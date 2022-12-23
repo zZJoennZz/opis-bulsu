@@ -1,22 +1,22 @@
-## OPIS v1
+## OPIS Prototype
 
 Online procurement system for BulSU
 
-## For developer - do first
+## For developers - do first
 
-Install the dependencies
+Install the PHP dependencies through composer:
 
 ```
 composer install
 ```
 
-and
+and then install JS dependencies through npm or yarn.
 
 ```
 yarn install
 ```
 
-Then copy the .env.example and rename to .env. Update the database credentials and run
+Make a copy of the .env.example and rename it to .env. Update the database credentials and run
 
 ```
 php artisan migrate --seed

@@ -5,7 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ItemCategory;
 use App\Models\ItemDetail;
+use App\Models\ProProManPlan;
+use App\Models\ProProManPlanHistory;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -13,13 +17,75 @@ class DashboardController extends Controller
 
     public function show()
     {
-        $allCategories = ItemCategory::all();
-        $allItems = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('item_details.*', 'item_categories.description as cat_desc', 'units.uom')->get();
-
         $user = Auth::user();
 
-        // session(['j_user_type' => $user->account_type]);
+        $viewToReturn = view('dashboard');
 
-        return view('dashboard')->with('categories', $allCategories)->with('items', $allItems);
+        if ($user->account_type === "END_USER" || $user->account_type === "admin") {
+            $allCategories = ItemCategory::all();
+            $allItems = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('item_details.*', 'item_categories.description as cat_desc', 'units.uom')->get();
+            $viewToReturn = $viewToReturn->with('categories', $allCategories)->with('items', $allItems);
+        }
+
+        if ($user->account_type === "BUDGET_OFFICE" || $user->account_type === "admin") {
+            $ppmpList = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->select('pro_pro_man_plans.year', 'branches.id', 'branches.branch_name', DB::raw('(SELECT u.username FROM users as u WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY id DESC LIMIT 1) as username'))->groupBy('pro_pro_man_plans.branches_id')->groupBy('branches.branch_name')->groupBy('branches.id')->groupBy('pro_pro_man_plans.year')->get();
+            $ppmpLogs = array();
+            $newBudgetReq = [];
+            $approvedBudgetReq = array();
+            $previousRecords = array();
+
+            foreach ($ppmpList as $ppmp) {
+                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 0)->where('is_pr_approve', '=', 0)->where('year', '=', $user->ppmp_year)->get();
+                array_push($newBudgetReq, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
+
+                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 0)->where('year', '=', $user->ppmp_year)->get();
+                array_push($approvedBudgetReq, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
+
+                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('year', '=', $user->ppmp_year)->get();
+                array_push($previousRecords, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
+
+                $getTotal = ProProManPlanHistory::leftJoin('pro_pro_man_plans', 'pro_pro_man_plans.id', '=', 'pro_pro_man_plan_histories.pro_pro_man_plans_id')->where('pro_pro_man_plans.year', '=', $user->ppmp_year)->where('pro_pro_man_plans.branches_id', '=', $ppmp->id)->get();
+                array_push($ppmpLogs, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
+            }
+
+            // $newBudgetReq = array_filter($newBudgetReq, function ($rec) {
+            //     return $rec["branches_id"] === 1;
+            // })[0]["count"];
+            // return response()->json($newBudgetReq);
+
+            $viewToReturn = $viewToReturn
+                ->with('ppmp_list', $ppmpList)
+                ->with('new_budget_requests', $newBudgetReq)
+                ->with('approved_budget_request', $approvedBudgetReq)
+                ->with('previous_records', $previousRecords)
+                ->with('ppmp_logs', $ppmpLogs);
+        }
+
+        if ($user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin") {
+            $ppmpList1 = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->select('pro_pro_man_plans.year', 'branches.id', 'branches.branch_name', DB::raw('(SELECT u.username FROM users as u WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY id DESC LIMIT 1) as username'))->groupBy('pro_pro_man_plans.branches_id')->groupBy('branches.branch_name')->groupBy('branches.id')->groupBy('pro_pro_man_plans.year')->get();
+            $ppmpLogs = array();
+            $newBudgetReq = [];
+            $approvedBudgetReq = array();
+            $previousRecords = array();
+
+            foreach ($ppmpList as $ppmp) {
+                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 0)->where('year', '=', $user->ppmp_year)->get();
+                array_push($newBudgetReq, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
+
+                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('year', '=', $user->ppmp_year)->get();
+                array_push($approvedBudgetReq, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
+
+                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
+                array_push($previousRecords, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
+            }
+
+            $viewToReturn = $viewToReturn
+                ->with('ppmp_list1', $ppmpList1)
+                ->with('new_budget_requests1', $newBudgetReq)
+                ->with('approved_budget_request1', $approvedBudgetReq)
+                ->with('previous_records1', $previousRecords);
+        }
+
+        return $viewToReturn;
     }
 }
