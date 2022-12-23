@@ -56,7 +56,22 @@
                     <h1>Add New Item Detail Form</h1>
                 </div>
                 <div class="mb-3">
-                    <form action="" method="post">
+                    @if ($errors->any())
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-danger mt-3 mb-3" role="alert">
+                                {{$error}}
+                            </div>
+                        @endforeach
+                    @endif
+                    @if (Session::get('success') !== null)
+                        <div class="alert alert-success mt-3 mb-3" role="alert">
+                            {{ Session::get('success') }}
+                        </div>
+                    @endif
+                </div>
+                <div class="mb-3">
+                    <form action="{{ route('add-new-item.perform') }}" method="post">
+                        @csrf
                         <div class="form-floating mb-3">
                             <input type="text" class="form-control" id="description" name="description" placeholder="Item name" required>
                             <label for="description">Item name</label>
@@ -86,6 +101,12 @@
                                 @endforeach
                             </select>
                             <label for="category_id">Category</label>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 d-flex" style="justify-content: end;">
+                                <button type="submit" class="btn btn-primary me-2"><em class="bi bi-save"></em> Save Item Detail</button>
+                                <a href="{{ route('dashboard.show') }}" class="btn btn-danger">Cancel</a>
+                            </div>
                         </div>
                     </form>
                 </div>

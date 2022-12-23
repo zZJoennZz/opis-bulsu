@@ -23,7 +23,7 @@ class DashboardController extends Controller
 
         if ($user->account_type === "END_USER" || $user->account_type === "admin") {
             $allCategories = ItemCategory::all();
-            $allItems = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('item_details.*', 'item_categories.description as cat_desc', 'units.uom')->get();
+            $allItems = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->where('item_details.is_approve', '=', 1)->where('item_details.is_delete', '=', 0)->select('item_details.*', 'item_categories.description as cat_desc', 'units.uom')->get();
             $viewToReturn = $viewToReturn->with('categories', $allCategories)->with('items', $allItems);
         }
 
@@ -68,7 +68,7 @@ class DashboardController extends Controller
             $approvedBudgetReq = array();
             $previousRecords = array();
 
-            foreach ($ppmpList as $ppmp) {
+            foreach ($ppmpList1 as $ppmp) {
                 $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 0)->where('year', '=', $user->ppmp_year)->get();
                 array_push($newBudgetReq, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
 

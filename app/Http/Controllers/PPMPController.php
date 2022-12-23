@@ -207,7 +207,7 @@ class PPMPController extends Controller
     {
         $user = Auth::user();
 
-        $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('is_bo_approve', '<>', 1)->where('is_pr_approve', '<>', 1)->select('pro_pro_man_plans.*', 'branches.branch_name')->find($ppmp_id);
+        $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_bo_approve', '<>', 1)->orWhere('pro_pro_man_plans.is_pr_approve', '<>', 1)->select('pro_pro_man_plans.*', 'branches.branch_name')->find($ppmp_id);
 
         if (!empty($ppmpRecord)) {
             $itemDetail = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')

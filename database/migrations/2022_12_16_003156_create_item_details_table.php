@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger("category_id");
             $table->unsignedBigInteger("unit_id");
             $table->boolean('is_approve')->default(false);
+            $table->boolean('is_delete')->default(false);
             $table->unsignedBigInteger("added_by");
             $table->timestamps();
 

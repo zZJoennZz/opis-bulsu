@@ -169,7 +169,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-12 d-flex" style="justify-content: end">
+                                        <div class="col-12 d-flex" style="justify-content: end;">
                                             <button type="submit" class="btn btn-primary me-2"><em class="bi bi-save2"></em> Update PPMP Record</button>
                                             <a href="{{ route('bo-new-ppmp-request.show', ['branch_id' => $ppmp_record->branches_id]) }}" class="btn btn-danger">Cancel</a>
                                         </div>

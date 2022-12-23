@@ -10,6 +10,8 @@ use App\Models\ItemPurpose;
 use App\Models\ProProManPlan;
 use App\Models\MilestoneOfActivity;
 use App\Models\Unit;
+use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -118,7 +120,52 @@ class ItemDetailController extends Controller
             ->with('units', $units);
     }
 
-    public function submit_item_detail()
+    public function submit_item_detail(Request $request)
     {
+        $request->validate([
+            'category_id' => 'min:1',
+            'unit_id' => 'min:1',
+            'description' => 'required|min:3',
+            'article' => 'required|min:3',
+            'price_catalogue' => 'required|numeric|min:1'
+        ]);
+
+        DB::beginTransaction();
+        $user = Auth::user();
+        $success_message = $user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin" ? "Item detail successfully saved." : "Item detail successfully submitted for review!";
+
+        try {
+            $newItem = new ItemDetail();
+            $newItem->description = $request->description;
+            $newItem->article = $request->article;
+            $newItem->price_catalogue = $request->price_catalogue;
+            $newItem->category_id = $request->category_id;
+            $newItem->unit_id = $request->unit_id;
+            $newItem->is_approve = $user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin" ? 1 : 0;
+            $newItem->is_delete = 0;
+            $newItem->added_by = $user->id;
+            $newItem->save();
+
+            if ($user->account_type !== "PROCUREMENT_OFFICE" && $user->account_type !== "admin") {
+                $users = User::where('account_type', '=', 'PROCUREMENT_OFFICE')->orWhere('account_type', '=', 'admin')->get();
+
+                foreach ($users as $user) {
+                    $newNotif = new Notification();
+                    $newNotif->title = "New item detail";
+                    $newNotif->message = "A new item detail has been added and required your approval. Please review here!";
+                    $newNotif->url = "/view-item-detail/" . $newItem->id;
+                    $newNotif->is_read = false;
+                    $newNotif->sent_to = $user->id;
+                    $newNotif->sent_by = $user->id;
+                    $newNotif->save();
+                }
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', $success_message);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['Something went wrong! Your submission failed.']);
+        }
     }
 }
