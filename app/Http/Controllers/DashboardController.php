@@ -28,7 +28,7 @@ class DashboardController extends Controller
         }
 
         if ($user->account_type === "BUDGET_OFFICE" || $user->account_type === "admin") {
-            $ppmpList = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->select('pro_pro_man_plans.year', 'branches.id', 'branches.branch_name', DB::raw('(SELECT u.username FROM users as u WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY id DESC LIMIT 1) as username'))->groupBy('pro_pro_man_plans.branches_id')->groupBy('branches.branch_name')->groupBy('branches.id')->groupBy('pro_pro_man_plans.year')->get();
+            $ppmpList = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->select('pro_pro_man_plans.year', 'branches.id', 'branches.branch_name', DB::raw('(SELECT CONCAT(up.first_name, " ", up.last_name) as username FROM users as u LEFT JOIN user_profiles as up on u.id = up.users_id WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY u.id DESC LIMIT 1) as username'))->groupBy('pro_pro_man_plans.branches_id')->groupBy('branches.branch_name')->groupBy('branches.id')->groupBy('pro_pro_man_plans.year')->get();
             $ppmpLogs = array();
             $newBudgetReq = [];
             $approvedBudgetReq = array();
@@ -62,7 +62,7 @@ class DashboardController extends Controller
         }
 
         if ($user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin") {
-            $ppmpList1 = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->select('pro_pro_man_plans.year', 'branches.id', 'branches.branch_name', DB::raw('(SELECT u.username FROM users as u WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY id DESC LIMIT 1) as username'))->groupBy('pro_pro_man_plans.branches_id')->groupBy('branches.branch_name')->groupBy('branches.id')->groupBy('pro_pro_man_plans.year')->get();
+            $ppmpList1 = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->select('pro_pro_man_plans.year', 'branches.id', 'branches.branch_name', DB::raw('(SELECT CONCAT(up.first_name, " ", up.last_name) as username FROM users as u LEFT JOIN user_profiles as up on u.id = up.users_id WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY u.id DESC LIMIT 1) as username'))->groupBy('pro_pro_man_plans.branches_id')->groupBy('branches.branch_name')->groupBy('branches.id')->groupBy('pro_pro_man_plans.year')->get();
             $ppmpLogs = array();
             $newBudgetReq = [];
             $approvedBudgetReq = array();

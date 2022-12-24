@@ -4,9 +4,26 @@
 }
 
 /*
-    * Sidebar
-    */
-
+* Sidebar
+*/
+.scroll--simple::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+}
+.scroll--simple::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+}
+.scroll--simple::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+.scroll--simple::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+.scroll--simple::-webkit-scrollbar-thumb:active {
+    background: rgba(0, 0, 0, 0.9);
+}
 .sidebar {
     position: fixed;
     top: 0;

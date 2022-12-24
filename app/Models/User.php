@@ -23,7 +23,8 @@ class User extends Authenticatable
         'password',
         'account_type',
         'ppmp_year',
-        'branches_id'
+        'branches_id',
+        'is_active'
     ];
 
     /**

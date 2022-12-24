@@ -20,6 +20,7 @@ class ProProManPlan extends Model
         'item_purposes_id',
         'estimated_budget',
         'is_priority',
+        'is_delete',
         'remarks',
         'submitted_by',
     ];

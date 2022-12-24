@@ -21,7 +21,7 @@ class CartController extends Controller
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
         $ppmpFormat = json_decode($ppmpFormat->format);
         $user = Auth::user();
-        $ppmpDrafts = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('pro_pro_man_plans.*', 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('submitted_by', '=', $user->id)->where('is_draft', '=', '1')->get();
+        $ppmpDrafts = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('pro_pro_man_plans.*', 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('pro_pro_man_plans.year', '=', $user->ppmp_year)->where('pro_pro_man_plans.submitted_by', '=', $user->id)->where('pro_pro_man_plans.is_draft', '=', '1')->where('pro_pro_man_plans.is_delete', '=', "0")->get();
 
         $ppmpIds = [];
         foreach ($ppmpDrafts as $draft) {

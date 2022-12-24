@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('item_purposes_id');
             $table->decimal('estimated_budget');
             $table->integer('is_priority');
+            $table->boolean('is_delete');
             $table->longText('remarks')->nullable();
             $table->unsignedBigInteger('submitted_by');
             $table->timestamps();

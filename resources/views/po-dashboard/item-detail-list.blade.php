@@ -1,0 +1,155 @@
+@include('layout/header', ['title' => 'Item Details | OPIS - BulSU e-PROCUREMENT'])
+@include('layout/member_header')
+<div class="container-fluid">
+    <div class="row">
+        @include('layout/sidebar')
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="alert alert-danger mt-3 mb-3" role="alert">
+                        {{$error}}
+                    </div>
+                @endforeach
+            @endif
+            @if (Session::get('success') !== null)
+                <div class="alert alert-success mt-3 mb-3" role="alert">
+                    {{ Session::get('success') }}
+                </div>
+            @endif
+            <div class="pt-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="h5 card-title">Item Detail List <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($item_details) }}</span></span></h1>
+                        <hr />
+                        <div class="mb-4">
+                            <a class="btn btn-primary" href="{{ route('add-new-item.show') }}"><em class="bi bi-folder-plus"></em> Add</a>
+                            <button class="btn btn-danger" onclick="deleteRecord()"><em class="bi bi-trash"></em> Delete</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered" id="item-details-table">
+                                <caption>Item Details</caption>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 5%;"></th>
+                                        <th class="text-center" style="width: 5%;">Edit</th>
+                                        <th style="width: 50%;">Item Name</th>
+                                        <th style="width: 20%">Unit</th>
+                                        <th style="width: 20%">Category</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($item_details as $item)
+                                        <tr>
+                                            <td>
+                                                <div class="form-check w-100 d-flex align-items-center justify-content-center">
+                                                    <input class="form-check-input item-checkbox" type="checkbox" value="{{ $item->id }}" id="category{{ $item->id }}" @if($item->is_delete===1) disabled @endif>
+                                                </div>
+                                            </td>
+                                            <td class="text-center">
+                                                <a class="btn btn-success" @if($item->is_delete===1) style="opacity: 0.5;" @else href="{{ route('view-item-detail.show', ['item_detail_id' => $item->id]) }}" @endif><em class="bi bi-pencil-square"></em></a>
+                                            </td>
+                                            <td>
+                                                <span
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="bottom"
+                                                    data-bs-title="{{ $item->article }}"
+                                                >
+                                                    {{ $item->description }}
+                                                </span>
+                                                @if($item->is_delete===1) <span class="badge bg-secondary">Item Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$item->id}})"><em class="bi bi-trash-fill"></em></button> @endif
+                                            </td>
+                                            <td>
+                                                {{$item->unit->uom}}
+                                            </td>
+                                            <td>
+                                                {{$item->category->description}}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+</script>
+<script>
+    let selectedCategory = 0;
+
+    async function openEdit(id) {
+        selectedCategory = id;
+        await axios.get(`{{ url('/item-categories') }}/${id}`)
+            .then(res => {
+                $('#edit_description').val(res.data.description);
+                $('#edit_under_of_group').val(`${res.data.under_of_group}`).change();
+                $('#editCategory').modal('toggle');
+            })
+            .catch(err => alert("Could not fetch the data. Please contact website administrator."));
+    }
+
+    async function saveChanges(e) {
+        e.preventDefault();
+        const data = {
+            "description" : $('#edit_description').val(),
+            "under_of_group" : $('#edit_under_of_group').val()
+        };
+        await axios.put(`{{ url('/item-categories') }}/${selectedCategory}`, data)
+            .then(res => {
+                {{Session::forget('success');}}
+                window.location.reload();
+            })
+            .catch(err => {
+                window.location.reload();
+                console.log("Could not fetch the data. Please contact website administrator.")
+            });
+
+        return false;
+    }
+
+    async function deleteRecord(id = null){
+        if (id === null) {
+            let allSelectedItem = $(".item-checkbox");
+            let toDelete = [];
+            for (let i = 0; i < allSelectedItem.length; i ++) {
+                if (allSelectedItem[i].checked) {
+                    toDelete.push(allSelectedItem[i].value);
+                }
+            }
+            if (toDelete.length > 0) {
+                let confirmDeleteBatch = confirm("Are you sure to delete?");
+                if (confirmDeleteBatch) {
+                    await axios.post(`{{ route('item-detail-list.delete_batch') }}`, { id : toDelete })
+                        .then(res => {
+                            window.location.reload();
+                        }).catch(err => {
+                            window.location.reload();
+                        });
+                }
+            } else {
+                alert("Select item to delete first!");
+            }
+        } else {
+            let confirmDeleteSingle = confirm("Are you sure to delete this category?");
+            if (confirmDeleteSingle) {
+                await axios.delete(`{{ url('/item-details/single') }}/${id}`)
+                    .then(res => {
+                        window.location.reload();
+                    })
+                    .catch(err => {
+                        window.location.reload();
+                    });
+            }
+        }
+    }
+</script>
+<link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
+@include('layout/datatable', ['tableId' => 'item-details-table'])
+@include('layout/footer')

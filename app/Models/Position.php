@@ -5,9 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ItemCategory extends Model
+class Position extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['description', 'under_of_group', 'added_by', 'is_delete'];
+    protected $fillable = ['description'];
 }
