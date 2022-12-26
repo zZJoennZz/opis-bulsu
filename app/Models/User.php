@@ -55,4 +55,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class, 'sent_to', 'id');
     }
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class, 'users_id', 'id');
+    }
+
+    public function branch()
+    {
+        return $this->hasOne(Branch::class, 'id', 'branches_id');
+    }
 }

@@ -17,8 +17,10 @@ class ProcurementOffice
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
+        if (!Auth::check() || !Auth::user()->is_active) {
+            Session::flush();
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['Your account is not active. Please contact procurement office or the administrator.']);
         }
 
         if (Auth::user()->account_type === "END_USER") {

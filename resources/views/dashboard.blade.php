@@ -1,4 +1,14 @@
     @include('layout/header', ['title' => 'OPIS - BulSU e-PROCUREMENT'])
+    <style>
+        .ppmpCard {
+            transition: ease-in-out all 200ms;
+            border: 1px solid transparent;
+        }
+        .ppmpCard:hover {
+            box-shadow: none !important;
+            border-bottom: 1px solid rgb(209, 209, 209) !important;
+        }
+    </style>
         @include('layout/member_header')
         <div class="container-fluid">
             <div class="row">

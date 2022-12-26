@@ -38,7 +38,7 @@ class DashboardController extends Controller
                 $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 0)->where('is_pr_approve', '=', 0)->where('year', '=', $user->ppmp_year)->get();
                 array_push($newBudgetReq, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
 
-                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 0)->where('year', '=', $user->ppmp_year)->get();
+                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('year', '=', $user->ppmp_year)->get();
                 array_push($approvedBudgetReq, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
 
                 $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('year', '=', $user->ppmp_year)->get();
@@ -75,7 +75,7 @@ class DashboardController extends Controller
                 $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('year', '=', $user->ppmp_year)->get();
                 array_push($approvedBudgetReq, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
 
-                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
+                $getTotal = ProProManPlan::where('branches_id', '=', $ppmp->id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('year', "!=", $user->ppmp_year)->groupBy('branches_id')->select('branches_id')->get();
                 array_push($previousRecords, ["branches_id" => $ppmp->id, "count" => count($getTotal)]);
             }
 

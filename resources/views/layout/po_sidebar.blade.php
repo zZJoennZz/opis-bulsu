@@ -41,7 +41,7 @@
     </b>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('dashboard.show') }}">
+    <a class="nav-link" aria-current="page" href="{{ route('users-list.show') }}">
         <em class="bi bi-people-fill"></em> Manage Users
     </a>
 </li>

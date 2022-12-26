@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class BudgetOffice
 {
@@ -17,10 +18,11 @@ class BudgetOffice
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check()) {
-            return redirect()->route('login');
+        if (!Auth::check() || !Auth::user()->is_active) {
+            Session::flush();
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['Your account is not active. Please contact procurement office or the administrator.']);
         }
-
         if (Auth::user()->account_type === "END_USER") {
             return redirect()->route('dashboard.show');
         }

@@ -1,4 +1,5 @@
 @include('layout/header', ['title' => 'PPMP Activity Log | OPIS - BulSU e-PROCUREMENT'])
+@if (count($ppmp_histories) > 0)
 <div class="for-print d-none d-print-none">
     <div class="row mb-3">
         <div class="col-2"></div>
@@ -46,6 +47,7 @@
         </div>
     </div>
 </div>
+@endif
 @include('layout/member_header')
 <div class="container-fluid">
     <div class="row">
@@ -57,7 +59,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="mb-3">
-                            <button class="btn btn-success" onclick="window.print()"><em class="bi bi-printer"></em> Print this log</button>
+                            <button class="btn btn-success @if(count($ppmp_histories) <= 0) d-none @endif" onclick="window.print()"><em class="bi bi-printer"></em> Print this log</button>
                         </div>
                         <div class="table-responsive">
                             <table id="ppmp-activity-log" class="table table-sm caption-top">
