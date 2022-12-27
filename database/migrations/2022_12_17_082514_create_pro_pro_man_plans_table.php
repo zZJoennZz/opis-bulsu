@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('pro_pro_man_plans', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_details_id');
-            $table->text('ppmp_year');
+            $table->text('year');
             $table->unsignedBigInteger('branches_id');
             $table->boolean('is_draft');
             $table->boolean('is_bo_approve');
