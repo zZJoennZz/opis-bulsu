@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('account_type')->default('user');
             $table->unsignedBigInteger('branches_id');
             $table->string('ppmp_year');
+            $table->boolean('is_active');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
