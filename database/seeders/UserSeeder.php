@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('admin'),
             'ppmp_year' => '2022',
             'branches_id' => 5,
+            'is_active' => 1,
         ]);
 
         User::create([
@@ -32,6 +33,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('admin'),
             'ppmp_year' => '2022',
             'branches_id' => 1,
+            'is_active' => 1,
         ]);
         User::create([
             'username' => 'enduser2',
@@ -40,6 +42,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('admin'),
             'ppmp_year' => '2022',
             'branches_id' => 2,
+            'is_active' => 1,
         ]);
         User::create([
             'username' => 'enduser3',
@@ -48,6 +51,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('admin'),
             'ppmp_year' => '2022',
             'branches_id' => 3,
+            'is_active' => 1,
         ]);
 
         User::create([
@@ -57,6 +61,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('admin'),
             'ppmp_year' => '2022',
             'branches_id' => 4,
+            'is_active' => 1,
         ]);
 
         User::create([
@@ -66,6 +71,7 @@ class UserSeeder extends Seeder
             'password' => bcrypt('admin'),
             'ppmp_year' => '2022',
             'branches_id' => 5,
+            'is_active' => 1,
         ]);
     }
 }
