@@ -30,11 +30,11 @@ return new class extends Migration
             $table->unsignedBigInteger('submitted_by');
             $table->timestamps();
 
-            $table->foreign('item_details_id')->references('item_details')->on('id');
-            $table->foreign('branch_id')->references('item_details')->on('id');
-            $table->foreign('source_of_funds_id')->references('source_of_funds')->on('id');
-            $table->foreign('item_purposes_id')->references('item_purposes')->on('id');
-            $table->foreign('submitted_by')->references('users')->on('id');
+            $table->foreign('item_details_id')->references('id')->on('item_details');
+            $table->foreign('branches_id')->references('id')->on('item_details');
+            $table->foreign('source_of_funds_id')->references('id')->on('source_of_funds');
+            $table->foreign('item_purposes_id')->references('id')->on('item_purposes');
+            $table->foreign('submitted_by')->references('id')->on('users');
         });
     }
 
