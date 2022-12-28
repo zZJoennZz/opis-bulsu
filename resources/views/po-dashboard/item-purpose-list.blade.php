@@ -31,7 +31,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="editCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="editPurpose" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form onsubmit="return saveChanges(event)">
@@ -89,7 +89,7 @@
                             <button class="btn btn-danger" onclick="deleteRecord()"><em class="bi bi-trash"></em> Delete</button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-sm table-bordered" id="item-category-table">
+                            <table class="table table-sm table-bordered" id="item-purpose-table">
                                 <caption>Item Categories</caption>
                                 <thead>
                                     <tr>
@@ -121,14 +121,14 @@
 </div>
 <script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
 <script>
-    let selectedCategory = 0;
+    let selectedPurpose = 0;
 
     async function openEdit(id) {
-        selectedCategory = id;
+        selectedPurpose = id;
         await axios.get(`{{ url('/item-purpose') }}/${id}`)
             .then(res => {
                 $('#edit_description').val(res.data.description);
-                $('#editCategory').modal('toggle');
+                $('#editPurpose').modal('toggle');
             })
             .catch(err => alert("Could not fetch the data. Please contact website administrator."));
     }
@@ -138,7 +138,7 @@
         const data = {
             "description" : $('#edit_description').val(),
         };
-        await axios.put(`{{ url('/item-purpose') }}/${selectedCategory}`, data)
+        await axios.put(`{{ url('/item-purpose') }}/${selectedPurpose}`, data)
             .then(res => {
                 {{Session::forget('success');}}
                 window.location.reload();
@@ -189,5 +189,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'item-category-table'])
+@include('layout/datatable', ['tableId' => 'item-purpose-table'])
 @include('layout/footer')
