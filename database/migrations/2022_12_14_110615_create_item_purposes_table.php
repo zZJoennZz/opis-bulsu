@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('item_purposes', function (Blueprint $table) {
             $table->id();
             $table->longText('description');
+            $table->unsignedBigInteger('added_by');
             $table->timestamps();
         });
     }
