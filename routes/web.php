@@ -10,6 +10,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\YearController;
+use App\Http\Controllers\ItemPurposeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,6 +105,12 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/item-details', [ItemDetailController::class, 'all'])->name('item-detail-list.all');
     Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');
     Route::post('/item-details/batch', [ItemDetailController::class, 'delete_batch'])->name('item-detail-list.delete_batch');
+
+    //item purpose
+    Route::get('/item-purpose', [ItemPurposeController::class, 'all'])->name('item-purpose.all');
+    Route::post('/item-purpose', [ItemPurposeController::class, 'add'])->name('item-purpose.add');
+    Route::get('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'get'])->name('item-purpose.single');
+    Route::put('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'update'])->name('item-purpose.update');
 
     Route::get('/users', [UserController::class, 'index'])->name('users-list.show');
     Route::get('/users/add', [UserController::class, 'add'])->name('add-new-user.show');
