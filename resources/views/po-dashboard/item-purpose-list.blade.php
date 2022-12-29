@@ -1,6 +1,6 @@
 @include('layout/header', ['title' => 'Item Purpose | OPIS - BulSU e-PROCUREMENT'])
 @include('layout/member_header')
-<div class="modal fade" id="addNewCategory" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="addNewItemPurpose" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <form action="{{ route('item-purpose.add') }}" method="POST">
@@ -14,14 +14,6 @@
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="description" name="description" placeholder="Description">
                     </div>
-                    {{-- <div>
-                        <label for="description" class="form-label">Under of what group (for reports)</label>
-                        <select class="form-select" id="under_of_group" name="under_of_group" aria-label="Category group">
-                            @foreach ($category_groups as $group)
-                                <option value="{{ $group->id }}">{{ $group->title }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
@@ -67,25 +59,13 @@
         @include('layout/sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mt-3 mb-3" role="alert">
-                        {{$error}}
-                    </div>
-                @endforeach
-            @endif
-            @if (Session::get('success') !== null)
-                <div class="alert alert-success mt-3 mb-3" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-            @endif
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
                         <h1 class="h5 card-title">Item Purpose List <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($item_purposes) }}</span></span></h1>
                         <hr />
                         <div class="mb-4">
-                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewCategory"><em class="bi bi-folder-plus"></em> Add</button>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewItemPurpose"><em class="bi bi-folder-plus"></em> Add</button>
                             <button class="btn btn-danger" onclick="deleteRecord()"><em class="bi bi-trash"></em> Delete</button>
                         </div>
                         <div class="table-responsive">
@@ -103,11 +83,11 @@
                                         <tr>
                                             <td>
                                                 <div class="form-check w-100 d-flex align-items-center justify-content-center">
-                                                    <input class="form-check-input category-checkbox" type="checkbox" value="{{ $purpose->id }}" id="category{{ $purpose->id }}" @if($purpose->is_delete===1) disabled @endif>
+                                                    <input class="form-check-input itempurpose-checkbox" type="checkbox" value="{{ $purpose->id }}" id="itempurpose{{ $purpose->id }}" @if($purpose->is_delete===1) disabled @endif>
                                                 </div>
                                             </td>
                                             <td class="text-center"><button class="btn btn-success" onclick="openEdit({{ $purpose->id }})" @if($purpose->is_delete===1) disabled @endif><em class="bi bi-pencil-square"></em></button></td>
-                                            <td>{{ $purpose->description }} @if($purpose->is_delete===1) <span class="badge bg-secondary">Category Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$purpose->id}})"><em class="bi bi-trash-fill"></em></button> @endif</td>
+                                            <td>{{ $purpose->description }} @if($purpose->is_delete===1) <span class="badge bg-secondary">Item Purpose Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$purpose->id}})"><em class="bi bi-trash-fill"></em></button> @endif</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -154,17 +134,17 @@
 
     async function deleteRecord(id = null){
         if (id === null) {
-            let allSelectedCategory = $(".category-checkbox");
+            let allSelectedItemPurpose = $(".itempurpose-checkbox");
             let toDelete = [];
-            for (let i = 0; i < allSelectedCategory.length; i ++) {
-                if (allSelectedCategory[i].checked) {
-                    toDelete.push(allSelectedCategory[i].value);
+            for (let i = 0; i < allSelectedItemPurpose.length; i ++) {
+                if (allSelectedItemPurpose[i].checked) {
+                    toDelete.push(allSelectedItemPurpose[i].value);
                 }
             }
             if (toDelete.length > 0) {
                 let confirmDeleteBatch = confirm("Are you sure to delete?");
                 if (confirmDeleteBatch) {
-                    await axios.post(`{{ route('item-cat.delete_batch') }}`, { id : toDelete })
+                    await axios.post(`{{ route('item-purpose.delete_batch') }}`, { id : toDelete })
                         .then(res => {
                             window.location.reload();
                         }).catch(err => {
@@ -172,10 +152,10 @@
                         });
                 }
             } else {
-                alert("Select category to delete first!");
+                alert("Select item purpose to delete first!");
             }
         } else {
-            let confirmDeleteSingle = confirm("Are you sure to delete this category?");
+            let confirmDeleteSingle = confirm("Are you sure to delete this item purpose?");
             if (confirmDeleteSingle) {
                 await axios.delete(`{{ url('item-purpose/single') }}/${id}`)
                     .then(res => {
