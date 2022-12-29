@@ -9,5 +9,5 @@ class ItemPurpose extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description'];
+    protected $fillable = ['description', 'added_by', 'is_delete'];
 }

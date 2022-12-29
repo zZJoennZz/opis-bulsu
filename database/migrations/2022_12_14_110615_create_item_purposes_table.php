@@ -16,8 +16,11 @@ return new class extends Migration
         Schema::create('item_purposes', function (Blueprint $table) {
             $table->id();
             $table->longText('description');
+            $table->boolean('is_delete');
             $table->unsignedBigInteger('added_by');
             $table->timestamps();
+
+            $table->foreign('added_by')->references('id')->on('users');
         });
     }
 
