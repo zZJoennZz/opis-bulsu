@@ -111,6 +111,8 @@ Route::middleware('procurement.office')->group(function () {
     Route::post('/item-purpose', [ItemPurposeController::class, 'add'])->name('item-purpose.add');
     Route::get('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'get'])->name('item-purpose.single');
     Route::put('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'update'])->name('item-purpose.update');
+    Route::delete('/item-purpose/single/{purpose_id}', [ItemPurposeController::class, 'delete_single'])->name('item-purpose.delete');
+    Route::post('/item-purpose/batch', [ItemPurposeController::class, 'delete_batch'])->name('item-purpose.delete_batch');
 
     Route::get('/users', [UserController::class, 'index'])->name('users-list.show');
     Route::get('/users/add', [UserController::class, 'add'])->name('add-new-user.show');

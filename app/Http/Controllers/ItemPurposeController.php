@@ -28,21 +28,19 @@ class ItemPurposeController extends Controller
             $newPurpose->save();
             $itemPurpose = ItemPurpose::all();
             DB::commit();
-            return redirect()->back()
+            return redirect()
+                ->back()
                 ->with('success', 'Purpose successfully added!')
                 ->with('item_purpose', $itemPurpose);
-
         } catch (Throwable $e) {
-
             DB::rollBack();
             $itemPurpose = ItemPurpose::all();
-
             return redirect()->back()
                 ->withErrors(['Something went wrong! Purpose not added.'])
                 ->with('item_purpose', $itemPurpose);
         }
     }
-    
+
     public function get($purpose_id)
     {
         $purpose = ItemPurpose::find($purpose_id);
@@ -69,6 +67,46 @@ class ItemPurposeController extends Controller
             DB::rollBack();
             return response()->json([
                 'success' => false,
+            ], 400);
+        }
+    }
+
+    public function delete_single($purpose_id)
+    {
+        $getPurpose = ItemPurpose::find($purpose_id);
+        DB::beginTransaction();
+        try {
+            $getPurpose->is_delete = 1;
+            $getPurpose->save();
+            DB::commit();
+            redirect()->back()->with('success', 'Item purpose successfully deleted!');
+            return response()->json([
+                "success" => true,
+            ], 200);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            redirect()->back()->withErrors("Something went wrong. Item purpose is not deleted. Please contact website administrator.");
+            return response()->json([
+                "success" => false,
+            ], 400);
+        }
+    }
+
+    public function delete_batch(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            ItemPurpose::whereIn('id', $request->id)->update(["is_delete" => 1]);
+            DB::commit();
+            redirect()->back()->with('success', 'Item purposes successfully deleted!');
+            return response()->json([
+                "success" => true,
+            ], 200);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            redirect()->back()->withErrors("Something went wrong. Item purpose is not deleted. Please contact website administrator.");
+            return response()->json([
+                "success" => false,
             ], 400);
         }
     }

@@ -221,7 +221,7 @@ class PPMPController extends Controller
 
             $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
             $sourceOfFunds = SourceOfFund::all();
-            $itemPurposes = ItemPurpose::all();
+            $itemPurposes = ItemPurpose::where('is_delete', '=', 0)->get();
 
             return view('bo-dashboard/edit-ppmp-request')
                 ->with('item_detail', $itemDetail)
