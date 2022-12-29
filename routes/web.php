@@ -9,6 +9,7 @@ use App\Http\Controllers\PPMPController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\YearController;
 use App\Http\Controllers\ItemPurposeController;
 
 /*
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'get_item_detail'])->name('view-item-detail.show');
     Route::post('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'update_item_detail'])->name('view-item-detail.update');
+
+    Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
 });
 
 Route::middleware(['procurement.office', 'admin'])->group(function () {
