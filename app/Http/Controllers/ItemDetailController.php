@@ -76,6 +76,11 @@ class ItemDetailController extends Controller
             'estimated_budget' => 'required|numeric',
         ]);
 
+        if (checkIfDeleted('item_purposes', $request->item_purposes_id) === 1) {
+            return redirect()
+                ->back()
+                ->withErrors(["Please don't use deleted item purpose."]);
+        }
 
         $user = Auth::user();
 
@@ -142,8 +147,9 @@ class ItemDetailController extends Controller
         $itemDetail = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->where('item_details.id', '=', $id)->select('item_details.*', 'units.uom', 'item_categories.description as cat_desc')->get();
 
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
+
         $sourceOfFunds = SourceOfFund::all();
-        $itemPurposes = ItemPurpose::all();
+        $itemPurposes = ItemPurpose::where('is_delete', '=', 0)->get();
 
         return view('dashboard/item_detail')
             ->with('item_detail', $itemDetail)
