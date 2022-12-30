@@ -36,6 +36,7 @@
                                         <th style="width: 50%;">Item Name</th>
                                         <th style="width: 20%">Unit</th>
                                         <th style="width: 20%">Category</th>
+                                        <th>Created At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,6 +66,7 @@
                                             <td>
                                                 {{$item->category->description}}
                                             </td>
+                                            <td>{{$item->created_at}}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -151,5 +153,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'item-details-table'])
+@include('layout/datatable', ['tableId' => 'item-details-table', 'columnId'=>'5'])
 @include('layout/footer')

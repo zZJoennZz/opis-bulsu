@@ -108,6 +108,7 @@
                                             </td>
                                             <td class="text-center"><button class="btn btn-success" onclick="openEdit({{ $category->id }})" @if($category->is_delete===1) disabled @endif><em class="bi bi-pencil-square"></em></button></td>
                                             <td>{{ $category->description }} @if($category->is_delete===1) <span class="badge bg-secondary">Category Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$category->id}})"><em class="bi bi-trash-fill"></em></button> @endif</td>
+                                            <td>{{$category->created_at}}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -190,5 +191,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'item-category-table'])
+@include('layout/datatable', ['tableId' => 'item-category-table', 'columnId' => '3'])
 @include('layout/footer')
