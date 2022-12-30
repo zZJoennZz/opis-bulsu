@@ -22,7 +22,8 @@ class ItemDetailSeeder extends Seeder
             'price_catalogue' => 111,
             'category_id' => 1,
             'unit_id' => 1,
-            'added_by' => 1
+            'added_by' => 1,
+            'is_approve' => 1
         ]);
     }
 }
