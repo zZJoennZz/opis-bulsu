@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'update_item_detail'])->name('view-item-detail.update');
 
     Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
+
+    Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
 });
 
 Route::middleware(['procurement.office', 'admin'])->group(function () {
@@ -88,6 +90,9 @@ Route::middleware('budget.office')->group(function () {
 //AVAILABLE TO PROCUREMENT OFFICE
 Route::middleware('procurement.office')->group(function () {
     Route::get('/po-dashboard', [DashboardController::class, 'show'])->name('po-dashboard.show');
+
+    Route::get('/previous-ppmp/{branch_id}', [PPMPController::class, 'previous_ppmp'])->name('previous-ppmp.show');
+    Route::get('/previous-ppmp/{branch_id}/{year}', [PPMPController::class, 'previous_ppmp_open'])->name('previous-ppmp-single.show');
 
     Route::get('/ppmp-approval/{branch_id}', [PPMPController::class, 'ppmp_approval'])->name('po-ppmp-approval.show');
     Route::get('/approved-ppmp/{branch_id}', [PPMPController::class, 'po_approved_ppmp'])->name('po-approved-ppmp.show');
