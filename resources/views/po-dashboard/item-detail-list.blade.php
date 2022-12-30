@@ -5,18 +5,6 @@
         @include('layout/sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mt-3 mb-3" role="alert">
-                        {{$error}}
-                    </div>
-                @endforeach
-            @endif
-            @if (Session::get('success') !== null)
-                <div class="alert alert-success mt-3 mb-3" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-            @endif
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">

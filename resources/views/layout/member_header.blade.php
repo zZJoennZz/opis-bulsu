@@ -28,16 +28,21 @@
         <div class="modal-content">
             <div class="modal-header fw-bold">
                 @if ($errors->any())
-                    Oh no!
+                    <span class="text-danger">
+                        Oh no!
+                    </span>
                 @else
-                    Success!
+                    <span class="text-success">
+                        Success!
+                    </span>
                 @endif
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body pb-5">
                 @if ($errors->any())
                     <div class="swal2-icon swal2-error swal2-animate-error-icon" style="display: flex;"><span class="swal2-x-mark"><span class="swal2-x-mark-line-left"></span><span class="swal2-x-mark-line-right"></span></span></div>
                     @foreach($errors->all() as $error)
-                        <div class="alert alert-danger mb-3" role="alert">
+                        <div class="text-center text-danger fw-bold fs-4" role="alert">
                             {{ $error }}
                         </div>
                     @endforeach
@@ -56,7 +61,7 @@
                         <div class="swal2-success-fix" style="background-color: rgb(255, 255, 255);"></div>
                         <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
                     </div>
-                    <div class="alert alert-success text-small" role="alert">
+                    <div class="text-center text-success fw-bold fs-4" role="alert">
                         {{ Session::get('success') }}
                     </div>
                     <script defer>
@@ -65,9 +70,6 @@
                         }
                     </script>
                 @endif
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

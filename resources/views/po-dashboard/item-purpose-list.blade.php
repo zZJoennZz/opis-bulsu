@@ -37,14 +37,6 @@
                         <label for="description" class="form-label">Description</label>
                         <input type="text" class="form-control" id="edit_description" name="description" placeholder="Description">
                     </div>
-                    {{-- <div>
-                        <label for="description" class="form-label">Under of what group (for reports)</label>
-                        <select class="form-select" id="edit_under_of_group" name="under_of_group" aria-label="Category group">
-                            @foreach ($category_groups as $group)
-                                <option value="{{ $group->id }}">{{ $group->title }}</option>
-                            @endforeach
-                        </select>
-                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
