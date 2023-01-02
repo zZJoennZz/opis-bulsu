@@ -20,6 +20,8 @@ return new class extends Migration
             $table->longText('before_change');
             $table->longText('after_change');
             $table->longText('changes');
+            $table->boolean('is_approve')->default(0);
+            $table->longText('remarks')->nullable();
             $table->timestamps();
 
             $table->foreign('item_details_id')->references('id')->on('item_details');
