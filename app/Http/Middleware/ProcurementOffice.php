@@ -27,9 +27,9 @@ class ProcurementOffice
         if (Auth::user()->account_type === "END_USER") {
             return redirect()->route('dashboard.show');
         }
-
-        if (Auth::user()->account_type === "END_USER") {
-            return redirect()->route('dashboard.show');
+        
+        if (Auth::user()->account_type === "BUDGET_OFFICE") {
+            return redirect()->route('bo-dashboard.show');
         }
 
         if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE") {

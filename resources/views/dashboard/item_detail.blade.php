@@ -61,14 +61,14 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            @foreach (json_decode($ppmp_format) as $format)
                                             <div class="row">
-                                                @foreach (json_decode($ppmp_format) as $format)
-                                                <div class="col-lg-4 col-md-12 mb-3 d-flex" style="align-items: center; justify-content: center;">
-                                                    <label class="me-2" for="{{ $format->id }}">{{ $format->name }}:</label>
-                                                    <input class="w-100 form-control" type="number" id="{{ $format->id }}" name="{{ $format->id }}" value="0" required />
+                                                <div class="col-lg-4 col-md-12 mb-1 d-flex" style="align-items: center; justify-content: center;">
+                                                    <label class="me-2"  style="max-width:50px;width:100%;" for="{{ $format->id }}">{{ $format->name }}:</label>
+                                                    <input class="w-100 form-control py-1" type="number" id="{{ $format->id }}" name="{{ $format->id }}" value="0" required />
                                                 </div>
-                                                @endforeach
                                             </div>
+                                            @endforeach
                                             <div class="row">
                                                 <div class="col-12 mb-3">
                                                     <label for="estimated_budget" class="form-label">Estimated Budget:</label>

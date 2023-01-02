@@ -24,35 +24,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
         ]);
         Branch::create([
-            'branch_name' => 'Main Office',
-            'type' => 'OFFICE',
-            'address' => null,
-            'email_address' => null,
-            'contact_number' => null,
-        ]);
-        Branch::create([
-            'branch_name' => 'Budget Office',
-            'type' => 'OFFICE',
-            'address' => null,
-            'email_address' => null,
-            'contact_number' => null,
-        ]);
-        Branch::create([
-            'branch_name' => 'Procurement Unit',
-            'type' => 'OFFICE',
-            'address' => null,
-            'email_address' => null,
-            'contact_number' => null,
-        ]);
-        Branch::create([
-            'branch_name' => 'Supply Office',
-            'type' => 'OFFICE',
-            'address' => null,
-            'email_address' => null,
-            'contact_number' => null,
-        ]);
-        Branch::create([
-            'branch_name' => 'Hagonoy Campus',
             'type' => 'CAMPUS',
             'address' => null,
             'email_address' => null,
