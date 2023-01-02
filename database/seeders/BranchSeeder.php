@@ -17,6 +17,13 @@ class BranchSeeder extends Seeder
     {
         //
         Branch::create([
+            'branch_name' => 'N/A',
+            'type' => 'N/A',
+            'address' => null,
+            'email_address' => null,
+            'contact_number' => null,
+        ]);
+        Branch::create([
             'branch_name' => 'Campus 1',
             'type' => 'CAMPUS',
             'address' => null,

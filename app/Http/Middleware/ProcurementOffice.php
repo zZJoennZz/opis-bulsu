@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class ProcurementOffice
 {
@@ -21,10 +22,6 @@ class ProcurementOffice
             Session::flush();
             Auth::logout();
             return redirect()->route('login')->withErrors(['Your account is not active. Please contact procurement office or the administrator.']);
-        }
-
-        if (Auth::user()->account_type === "END_USER") {
-            return redirect()->route('dashboard.show');
         }
 
         if (Auth::user()->account_type === "END_USER") {

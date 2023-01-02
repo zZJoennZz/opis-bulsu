@@ -101,12 +101,18 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/item-details', [ItemDetailController::class, 'all'])->name('item-detail-list.all');
     Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');
     Route::post('/item-details/batch', [ItemDetailController::class, 'delete_batch'])->name('item-detail-list.delete_batch');
+   
+   
+   //USERS
+    Route::prefix('/users')->group(function(){
+        Route::get('/', [UserController::class, 'index'])->name('users-list.show');
+        Route::get('/add', [UserController::class, 'add'])->name('add-new-user.show');
+        Route::post('/add', [UserController::class, 'save_new'])->name('add-new-user.perform');
+        Route::get('/{user_id}', [UserController::class, 'show'])->name('view-user.show');
+        Route::put('/', [UserController::class, 'update'])->name('view-user.update');
+   });
+  
 
-    Route::get('/users', [UserController::class, 'index'])->name('users-list.show');
-    Route::get('/users/add', [UserController::class, 'add'])->name('add-new-user.show');
-    Route::post('/users/add', [UserController::class, 'save_new'])->name('add-new-user.perform');
-    Route::get('/users/{user_id}', [UserController::class, 'show'])->name('view-user.show');
-    Route::put('/users', [UserController::class, 'update'])->name('view-user.update');
 });
 
 //ADMIN ONLY
