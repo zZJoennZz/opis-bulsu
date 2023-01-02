@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h2 class="h3">Budget Office Dashboard</h2>
+    <h2 class="h3">Budget Office Dashboard <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></h2>
 </div>
 @foreach ($ppmp_list as $ppmp)
 <div class="row border-bottom rounded-5 p-3 mb-3">
@@ -27,8 +27,8 @@
                 <div class="mt-4 fs-6 fw-bold text-primary">
                     New PPMP Budget Request
                 </div>
-                <div class="fs-1 fw-bold text-primary">
-                    {{ $count["count"] }}
+                <div class="fs-2 fw-bold text-primary">
+                    NEW
                 </div>
             </a>
             @else
@@ -39,8 +39,8 @@
                 <div class="mt-4 fs-6 fw-bold text-secondary">
                     New PPMP Budget Request
                 </div>
-                <div class="fs-1 fw-bold text-secondary">
-                    {{ $count["count"] }}
+                <div class="fs-6 mt-2 text-uppercase fst-italic text-secondary">
+                    No new submission yet
                 </div>
             </a>
             @endif
@@ -62,8 +62,8 @@
                 <div class="mt-4 fs-6 fw-bold text-primary">
                     Approved PPMP Budget Request
                 </div>
-                <div class="fs-1 fw-bold text-primary">
-                    {{ $count["count"] }}
+                <div class="fs-2 fw-bold text-primary">
+                    APPROVED
                 </div>
             </a>
             @else
@@ -74,8 +74,8 @@
                 <div class="mt-4 fs-6 fw-bold text-secondary">
                     Approved PPMP Budget Request
                 </div>
-                <div class="fs-1 fw-bold text-secondary">
-                    {{ $count["count"] }}
+                <div class="fs-6 fst-italic text-uppercase text-secondary">
+                    Not approved yet
                 </div>
             </a>
             @endif

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->unsignedBigInteger('under_of_group')->nullable();
             $table->unsignedBigInteger('added_by');
-            $table->boolean('is_delete');
+            $table->boolean('is_delete')->default(false);
             $table->timestamps();
 
             $table->foreign('under_of_group')->references('id')->on('item_category_groups');

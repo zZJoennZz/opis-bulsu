@@ -10,7 +10,7 @@
                     <div class="card-body table-responsive small">
                         <table class="table table-small" id="notification-table">
                             <thead>
-                                <tr>    
+                                <tr>
                                     <th>Notification/s</th>
                                 </tr>
                             </thead>

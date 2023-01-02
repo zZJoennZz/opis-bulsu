@@ -5,18 +5,6 @@
         @include('layout/sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mt-3 mb-3" role="alert">
-                        {{$error}}
-                    </div>
-                @endforeach
-            @endif
-            @if (Session::get('success') !== null)
-                <div class="alert alert-success mt-3 mb-3" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-            @endif
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
@@ -36,6 +24,7 @@
                                         <th style="width: 50%;">Item Name</th>
                                         <th style="width: 20%">Unit</th>
                                         <th style="width: 20%">Category</th>
+                                        <th>Created At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,6 +54,7 @@
                                             <td>
                                                 {{$item->category->description}}
                                             </td>
+                                            <td>{{$item->created_at}}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -151,5 +141,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'item-details-table'])
+@include('layout/datatable', ['tableId' => 'item-details-table', 'columnId'=>'5'])
 @include('layout/footer')

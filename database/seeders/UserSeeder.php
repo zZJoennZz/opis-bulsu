@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Position;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\UserProfile;
 
 class UserSeeder extends Seeder
 {
@@ -20,52 +22,108 @@ class UserSeeder extends Seeder
             'username' => 'admin',
             'email' => 'admin@admin.com',
             'account_type' => 'admin',
-            'password' => bcrypt('admin'),
-            'ppmp_year' => '2022',
-            'branches_id' => 5,
+            'password' => 'admin',
+            'ppmp_year' => date('Y'),
+            'branches_id' => 1,
+            'is_active' => 1,
+        ]);
+        Position::create([
+            'description' => 'Web Developer',
+        ]);
+        UserProfile::create([
+            'users_id' => 1,
+            'first_name' => 'Web',
+            'last_name' => 'Developer',
+            'positions_id' => 1,
         ]);
 
         User::create([
             'username' => 'enduser1',
             'email' => 'enduser1@admin.com',
-            'account_type' => 'admin',
-            'password' => bcrypt('admin'),
+            'account_type' => 'END_USER',
+            'password' => 'admin',
             'ppmp_year' => '2022',
-            'branches_id' => 1,
+            'branches_id' => 7,
+            'is_active' => 1,
         ]);
+        Position::create([
+            'description' => 'Professor',
+        ]);
+        UserProfile::create([
+            'users_id' => 2,
+            'first_name' => 'Test 1',
+            'last_name' => 'End User 1',
+            'positions_id' => 2,
+        ]);
+
         User::create([
             'username' => 'enduser2',
             'email' => 'enduser2@admin.com',
-            'account_type' => 'admin',
-            'password' => bcrypt('admin'),
+            'account_type' => 'END_USER',
+            'password' => 'admin',
             'ppmp_year' => '2022',
-            'branches_id' => 2,
+            'branches_id' => 8,
+            'is_active' => 1,
         ]);
+        UserProfile::create([
+            'users_id' => 3,
+            'first_name' => 'Test 2',
+            'last_name' => 'End User 2',
+            'positions_id' => 2,
+        ]);
+
         User::create([
             'username' => 'enduser3',
             'email' => 'enduser3@admin.com',
-            'account_type' => 'admin',
-            'password' => bcrypt('admin'),
+            'account_type' => 'END_USER',
+            'password' => 'admin',
             'ppmp_year' => '2022',
-            'branches_id' => 3,
+            'branches_id' => 9,
+            'is_active' => 1,
+        ]);
+        UserProfile::create([
+            'users_id' => 4,
+            'first_name' => 'Test 3',
+            'last_name' => 'End User 3',
+            'positions_id' => 2,
         ]);
 
         User::create([
             'username' => 'bouser',
             'email' => 'bouser@admin.com',
             'account_type' => 'BUDGET_OFFICE',
-            'password' => bcrypt('admin'),
+            'password' => 'admin',
             'ppmp_year' => '2022',
-            'branches_id' => 4,
+            'branches_id' => 3,
+            'is_active' => 1,
+        ]);
+        Position::create([
+            'description' => 'Budget Office Staff',
+        ]);
+        UserProfile::create([
+            'users_id' => 5,
+            'first_name' => 'Budget Office',
+            'last_name' => 'User',
+            'positions_id' => 3,
         ]);
 
         User::create([
             'username' => 'procure',
             'email' => 'procure@admin.com',
             'account_type' => 'PROCUREMENT_OFFICE',
-            'password' => bcrypt('admin'),
+            'password' => 'admin',
             'ppmp_year' => '2022',
-            'branches_id' => 5,
+            'branches_id' => 4,
+            'is_active' => 1,
+        ]);
+        Position::create([
+            'description' => 'Procurement Unit Staff',
+        ]);
+        UserProfile::create([
+            'users_id' => 6,
+            'first_name' => 'Procurement Unit',
+            'last_name' => 'User 1',
+            'positions_id' => 4,
         ]);
     }
 }

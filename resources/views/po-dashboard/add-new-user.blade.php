@@ -10,18 +10,6 @@
                     <div class="card-body">
                         <h1 class="h5 card-title">Add User</h1>
                         <hr />
-                        @if ($errors->any())
-                            @foreach($errors->all() as $error)
-                                <div class="alert alert-danger mb-3" role="alert">
-                                    {{ $error }}
-                                </div>
-                            @endforeach
-                        @endif
-                        @if( Session::has('success') )
-                            <div class="alert alert-success mt-3 mb-3" role="alert">
-                                {{ Session::get('success') }}
-                            </div>
-                        @endif
                         <form action="{{route('add-new-user.perform')}}" method="POST">
                             @csrf
                             <div class="row">

@@ -15,18 +15,6 @@
                             <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm"><em class="bi bi-caret-left-fill"></em> Go Back</a>
                         </div>
                         <div class="mb-3">
-                            @if ($errors->any())
-                                @foreach ($errors->all() as $error)
-                                    <div class="alert alert-danger mt-3 mb-3" role="alert">
-                                        {{$error}}
-                                    </div>
-                                @endforeach
-                            @endif
-                            @if (Session::get('success') !== null)
-                                <div class="alert alert-success mt-3 mb-3" role="alert">
-                                    {{ Session::get('success') }}
-                                </div>
-                            @endif
                         </div>
                         <div class="mb-3">
                             <form action="{{ route('add-new-item.perform') }}" method="post">

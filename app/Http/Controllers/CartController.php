@@ -36,6 +36,21 @@ class CartController extends Controller
             ->with('milestones', $milestoneOfActivities);
     }
 
+    public function delete_from_cart($ppmp_id)
+    {
+        $ppmpRecord = ProProManPlan::find($ppmp_id);
+        DB::beginTransaction();
+        try {
+            $ppmpRecord->is_delete = 1;
+            $ppmpRecord->save();
+            DB::commit();
+            return redirect()->back()->with('success', 'Item removed.');
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->with('success', 'Item not removed. Please contact website administrator.');
+        }
+    }
+
     public function submit(Request $request)
     {
         DB::beginTransaction();

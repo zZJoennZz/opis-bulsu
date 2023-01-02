@@ -29,4 +29,34 @@ class ProProManPlan extends Model
     {
         return $this->hasMany(MilestoneOfActivity::class, 'pro_pro_man_plans_id', 'id');
     }
+
+    public function item_detail()
+    {
+        return $this->hasOne(ItemDetail::class, 'id', 'item_details_id');
+    }
+
+    public function source_of_fund()
+    {
+        return $this->hasOne(SourceOfFund::class, 'id', 'source_of_funds_id');
+    }
+
+    public function item_purpose()
+    {
+        return $this->hasOne(ItemPurpose::class, 'id', 'item_purposes_id');
+    }
+
+    public function branch()
+    {
+        return $this->hasOne(Branch::class, 'branches_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'submitted_by');
+    }
+
+    public function user_profile()
+    {
+        return $this->hasOne(UserProfile::class, 'users_id', 'submitted_by');
+    }
 }

@@ -57,7 +57,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('dashboard.show') }}">
+    <a class="nav-link" aria-current="page" href="{{ route('item-purpose.all') }}">
         <em class="bi bi-bullseye"></em> Manage Item Purposes
     </a>
 </li>

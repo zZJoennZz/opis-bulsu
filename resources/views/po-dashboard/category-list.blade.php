@@ -67,18 +67,6 @@
         @include('layout/sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mt-3 mb-3" role="alert">
-                        {{$error}}
-                    </div>
-                @endforeach
-            @endif
-            @if (Session::get('success') !== null)
-                <div class="alert alert-success mt-3 mb-3" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-            @endif
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
@@ -108,6 +96,7 @@
                                             </td>
                                             <td class="text-center"><button class="btn btn-success" onclick="openEdit({{ $category->id }})" @if($category->is_delete===1) disabled @endif><em class="bi bi-pencil-square"></em></button></td>
                                             <td>{{ $category->description }} @if($category->is_delete===1) <span class="badge bg-secondary">Category Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$category->id}})"><em class="bi bi-trash-fill"></em></button> @endif</td>
+                                            <td>{{$category->created_at}}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -190,5 +179,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'item-category-table'])
+@include('layout/datatable', ['tableId' => 'item-category-table', 'columnId' => '3'])
 @include('layout/footer')

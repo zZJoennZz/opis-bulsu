@@ -221,7 +221,7 @@ class PPMPController extends Controller
 
             $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
             $sourceOfFunds = SourceOfFund::all();
-            $itemPurposes = ItemPurpose::all();
+            $itemPurposes = ItemPurpose::where('is_delete', '=', 0)->get();
 
             return view('bo-dashboard/edit-ppmp-request')
                 ->with('item_detail', $itemDetail)
@@ -411,5 +411,26 @@ class PPMPController extends Controller
         $ppmpHistories = ProProManPlanHistory::leftJoin('pro_pro_man_plans', 'pro_pro_man_plans.id', '=', 'pro_pro_man_plan_histories.pro_pro_man_plans_id')->leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->select('pro_pro_man_plan_histories.*', 'pro_pro_man_plans.branches_id', 'item_details.description as product_name', 'branches.branch_name', DB::raw('(SELECT CONCAT(up.first_name, " ", up.last_name) as username FROM users as u LEFT JOIN user_profiles as up on u.id = up.users_id WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY u.id DESC LIMIT 1) as username'))->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.year', '=', Auth::user()->ppmp_year)->orderBy('pro_pro_man_plan_histories.created_at', 'DESC')->get();
 
         return view('bo-dashboard/ppmp-activity-log')->with('ppmp_histories', $ppmpHistories);
+    }
+
+    public function previous_ppmp($branch_id)
+    {
+        $ppmpBefore = ProProManPlan::where('year', '<>', Auth::user()->ppmp_year)->where('branches_id', '=', $branch_id)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->select('year', 'branches_id')->groupBy('year')->groupBy('branches_id')->get();
+        $branch = Branch::find($branch_id);
+        return view('po-dashboard/previous-ppmp')
+            ->with('ppmp_before', $ppmpBefore)
+            ->with('branch', $branch);
+    }
+
+    public function previous_ppmp_open($branch_id, $year)
+    {
+        $ppmpRecord = ProProManPlan::where('branches_id', '=', $branch_id)->where('year', '=', $year)->where('is_delete', '=', 0)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
+        $branch = Branch::find($branch_id);
+        $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
+        return view('po-dashboard/view-previous-ppmp')
+            ->with('branch', $branch)
+            ->with('record_year', $year)
+            ->with('ppmp_record', $ppmpRecord)
+            ->with('ppmp_format', $ppmpFormat);
     }
 }

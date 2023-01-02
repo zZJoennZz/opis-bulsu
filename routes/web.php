@@ -9,6 +9,8 @@ use App\Http\Controllers\PPMPController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\YearController;
+use App\Http\Controllers\ItemPurposeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,6 +50,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'get_item_detail'])->name('view-item-detail.show');
     Route::post('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'update_item_detail'])->name('view-item-detail.update');
+
+    Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
+
+    Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
 });
 
 Route::middleware(['procurement.office', 'admin'])->group(function () {
@@ -85,6 +91,9 @@ Route::middleware('budget.office')->group(function () {
 Route::middleware('procurement.office')->group(function () {
     Route::get('/po-dashboard', [DashboardController::class, 'show'])->name('po-dashboard.show');
 
+    Route::get('/previous-ppmp/{branch_id}', [PPMPController::class, 'previous_ppmp'])->name('previous-ppmp.show');
+    Route::get('/previous-ppmp/{branch_id}/{year}', [PPMPController::class, 'previous_ppmp_open'])->name('previous-ppmp-single.show');
+
     Route::get('/ppmp-approval/{branch_id}', [PPMPController::class, 'ppmp_approval'])->name('po-ppmp-approval.show');
     Route::get('/approved-ppmp/{branch_id}', [PPMPController::class, 'po_approved_ppmp'])->name('po-approved-ppmp.show');
     Route::post('/ppmp-approval', [PPMPController::class, 'po_approve_ppmp'])->name('po-approve-ppmp-approval.perform');
@@ -102,17 +111,18 @@ Route::middleware('procurement.office')->group(function () {
     Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');
     Route::post('/item-details/batch', [ItemDetailController::class, 'delete_batch'])->name('item-detail-list.delete_batch');
    
-   
-   //USERS
-    Route::prefix('/users')->group(function(){
-        Route::get('/', [UserController::class, 'index'])->name('users-list.show');
-        Route::get('/add', [UserController::class, 'add'])->name('add-new-user.show');
-        Route::post('/add', [UserController::class, 'save_new'])->name('add-new-user.perform');
-        Route::get('/{user_id}', [UserController::class, 'show'])->name('view-user.show');
-        Route::put('/', [UserController::class, 'update'])->name('view-user.update');
-   });
-  
+    Route::get('/item-purpose', [ItemPurposeController::class, 'all'])->name('item-purpose.all');
+    Route::post('/item-purpose', [ItemPurposeController::class, 'add'])->name('item-purpose.add');
+    Route::get('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'get'])->name('item-purpose.single');
+    Route::put('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'update'])->name('item-purpose.update');
+    Route::delete('/item-purpose/single/{purpose_id}', [ItemPurposeController::class, 'delete_single'])->name('item-purpose.delete');
+    Route::post('/item-purpose/batch', [ItemPurposeController::class, 'delete_batch'])->name('item-purpose.delete_batch');
 
+    Route::get('/users', [UserController::class, 'index'])->name('users-list.show');
+    Route::get('/users/add', [UserController::class, 'add'])->name('add-new-user.show');
+    Route::post('/users/add', [UserController::class, 'save_new'])->name('add-new-user.perform');
+    Route::get('/users/{user_id}', [UserController::class, 'show'])->name('view-user.show');
+    Route::put('/users', [UserController::class, 'update'])->name('view-user.update');
 });
 
 //ADMIN ONLY
