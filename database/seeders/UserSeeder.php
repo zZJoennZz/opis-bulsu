@@ -29,6 +29,8 @@ class UserSeeder extends Seeder
         ]);
         Position::create([
             'description' => 'Web Developer',
+            'is_delete' => 0,
+            'added_by' => 1,
         ]);
         UserProfile::create([
             'users_id' => 1,
@@ -48,6 +50,8 @@ class UserSeeder extends Seeder
         ]);
         Position::create([
             'description' => 'Professor',
+            'is_delete' => 0,
+            'added_by' => 1,
         ]);
         UserProfile::create([
             'users_id' => 2,
@@ -99,6 +103,8 @@ class UserSeeder extends Seeder
         ]);
         Position::create([
             'description' => 'Budget Office Staff',
+            'is_delete' => 0,
+            'added_by' => 1,
         ]);
         UserProfile::create([
             'users_id' => 5,
@@ -118,6 +124,8 @@ class UserSeeder extends Seeder
         ]);
         Position::create([
             'description' => 'Procurement Unit Staff',
+            'is_delete' => 0,
+            'added_by' => 1,
         ]);
         UserProfile::create([
             'users_id' => 6,

@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Position extends Model
 {
     use HasFactory;
-    protected $fillable = ['description'];
+    protected $fillable = ['description', 'added_by', 'is_delete'];
 }

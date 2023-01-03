@@ -11,7 +11,7 @@ use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\YearController;
 use App\Http\Controllers\ItemPurposeController;
-
+use App\Http\Controllers\PositionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -118,6 +118,15 @@ Route::middleware('procurement.office')->group(function () {
     Route::put('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'update'])->name('item-purpose.update');
     Route::delete('/item-purpose/single/{purpose_id}', [ItemPurposeController::class, 'delete_single'])->name('item-purpose.delete');
     Route::post('/item-purpose/batch', [ItemPurposeController::class, 'delete_batch'])->name('item-purpose.delete_batch');
+
+    //position
+    Route::get('/position', [PositionController::class, 'all'])->name('positions.all');
+    Route::post('/position', [PositionController::class, 'add'])->name('position.add');
+    Route::get('/position/{position_id}', [PositionController::class, 'get'])->name('position.single');
+    Route::put('/position/{position_id}', [PositionController::class, 'update'])->name('position.update');
+    Route::delete('/position/single/{purpose_id}', [PositionController::class, 'delete_single'])->name('position.delete');
+    Route::post('/position/batch', [PositionController::class, 'delete_batch'])->name('position.delete_batch');
+
 
     Route::get('/users', [UserController::class, 'index'])->name('users-list.show');
     Route::get('/users/add', [UserController::class, 'add'])->name('add-new-user.show');
