@@ -70,7 +70,7 @@ class ItemDetailController extends Controller
     public function store(Request $request, $id)
     {
         //
-        $validation = $request->validate([
+        $request->validate([
             'source_of_funds_id' => 'required|numeric|min:1',
             'item_purposes_id' => 'required|numeric|min:1',
             'estimated_budget' => 'required|numeric',
@@ -112,6 +112,7 @@ class ItemDetailController extends Controller
             $newPPMP->item_purposes_id = $item_purposes_id;
             $newPPMP->estimated_budget = $estimated_budget;
             $newPPMP->is_priority = $is_priority;
+            $newPPMP->is_delete = 0;
             $newPPMP->remarks = $remarks;
             $newPPMP->submitted_by = $submitted_by;
 
@@ -133,7 +134,8 @@ class ItemDetailController extends Controller
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            return redirect()->back()->withErrors(["message" => "Something went wrong! Your submission isn't added to the cart."]);
+            die($e);
+            return redirect()->back()->withErrors(["Something went wrong! Your submission isn't added to the cart."]);
         }
 
         return redirect('dashboard')->with('success', 'Item successfully added to PPMP cart.');

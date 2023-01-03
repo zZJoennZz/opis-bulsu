@@ -3,27 +3,7 @@
 <div class="container-fluid">
     <div class="row">
         @include('layout/sidebar')
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mt-3 mb-3" role="alert">
-                        {{$error}}
-                    </div>
-                @endforeach
-            @endif
-
-            @if (isset($success))
-                <div class="alert alert-success mt-3 mb-3" role="alert">
-                    {{ $success }}
-                </div>
-            @endif
-
-            @if( Session::has('success') )
-                <div class="alert alert-success mt-3 mb-3" role="alert">
-                    {{ Session::get('success') }}
-                </div>
-            @endif
-            
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">   
             <div class="p-3">
                 <div class="card">
                     <div class="card-body">

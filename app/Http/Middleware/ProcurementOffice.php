@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class ProcurementOffice
 {
@@ -26,9 +27,9 @@ class ProcurementOffice
         if (Auth::user()->account_type === "END_USER") {
             return redirect()->route('dashboard.show');
         }
-
-        if (Auth::user()->account_type === "END_USER") {
-            return redirect()->route('dashboard.show');
+        
+        if (Auth::user()->account_type === "BUDGET_OFFICE") {
+            return redirect()->route('bo-dashboard.show');
         }
 
         if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE") {

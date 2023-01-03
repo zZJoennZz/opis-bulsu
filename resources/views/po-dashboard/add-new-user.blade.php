@@ -10,18 +10,6 @@
                     <div class="card-body">
                         <h1 class="h5 card-title">Add User</h1>
                         <hr />
-                        @if ($errors->any())
-                            @foreach($errors->all() as $error)
-                                <div class="alert alert-danger mb-3" role="alert">
-                                    {{ $error }}
-                                </div>
-                            @endforeach
-                        @endif
-                        @if( Session::has('success') )
-                            <div class="alert alert-success mt-3 mb-3" role="alert">
-                                {{ Session::get('success') }}
-                            </div>
-                        @endif
                         <form action="{{route('add-new-user.perform')}}" method="POST">
                             @csrf
                             <div class="row">
@@ -110,11 +98,22 @@
         },
         @endforeach
     ];
+   
+    let Positions = [
+        @foreach($positions as $position)
+        {
+            'id' : {{$position->id}},
+            'description' : '{{$position->description}}',
+        },
+        @endforeach
+    ];
 
     async function accountTypeOnChange(e) {
         let deptDiv = $('#dept-div');
+        let pos = $('#positions_id');
         deptDiv[0].innerHTML = "ASD";
         let branches;
+        let position;
         if (e === "END_USER") {
             branches = allBranches.filter(d => d.type === "CAMPUS");
             deptDiv[0].innerHTML = `
@@ -128,6 +127,47 @@
                     }
                 </select>
             `;
+        } else if(e === "PROCUREMENT_OFFICE"){
+            branches = allBranches.filter(d => d.branch_name === "Procurement Office");
+            deptDiv[0].innerHTML = `
+                <label for="branches_id" class="form-label">Department:</label>
+                <select name="branches_id" id="branches_id" class="form-select" required>
+                    ${
+                        branches.map(d =>
+                            `<option value="${d.id}" selected>${d.branch_name}</option>`
+                        )
+                    }
+                </select>
+            `;
+            position = Positions.filter(dx => dx.description === "Procurement Staff");
+            pos.html( `
+                    ${
+                        position.map(dx => 
+                            `<option value="${dx.id}" selected>${dx.description}</option>`
+                        )
+                    }                              
+            `);
+        } else if(e === "BUDGET_OFFICE"){
+            branches = allBranches.filter(d => d.branch_name === "Budget Office");
+            deptDiv[0].innerHTML = `
+                <label for="branches_id" class="form-label">Department:</label>
+                <select name="branches_id" id="branches_id" class="form-select" required>
+                    <option value="0" selected>Select department</option>
+                    ${
+                        branches.map(d =>
+                            `<option value="${d.id}">${d.branch_name}</option>`
+                        )
+                    }
+                </select>
+            `;
+            position = Positions.filter(dx => dx.description === "Budget Office Staff");
+            pos.html( `
+                    ${
+                        position.map(dx => 
+                            `<option value="${dx.id}" selected>${dx.description}</option>`
+                        )
+                    }                              
+            `);
         } else {
             branches = allBranches.filter(d => d.type !== "CAMPUS");
             deptDiv[0].innerHTML = `
@@ -141,6 +181,13 @@
                     }
                 </select>
             `;
+            pos.html( `
+                    ${
+                        Positions.map(dx => 
+                            `<option value="${dx.id}" selected>${dx.description}</option>`
+                        )
+                    }                              
+            `);
         }
 
         if (e === "0") {
@@ -152,6 +199,7 @@
             `;
         }
         branches = null;
+        position = null;
     }
 </script>
 {{-- <label for="account_type" class="form-label">Select first</label>

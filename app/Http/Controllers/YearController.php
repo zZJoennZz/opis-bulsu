@@ -18,7 +18,7 @@ class YearController extends Controller
             $user->ppmp_year = $request->ppmp_year;
             $user->save();
             DB::commit();
-            return redirect()->back()->with('success', 'PPMP year saved!');
+            return redirect()->back()->with('success', 'Year saved!');
         } catch (Throwable $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(['Your PPMP year does not change. Please try again or contact website administrator.']);

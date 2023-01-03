@@ -5,13 +5,6 @@
         @include('layout/sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mt-3 mb-3" role="alert">
-                        {{$error}}
-                    </div>
-                @endforeach
-            @endif
             <div class="p-2">
                 <div class="card">
                     <div class="card-body">
@@ -68,7 +61,7 @@
                                             <td>{{ $item->remarks }}</td>
                                             <td>
                                                 <a href="{{ route('get-ppmp-record.show', ['ppmp_id' => $item->id]) }}" type="button" class="btn btn-primary m-1"><em class="bi bi-pencil-fill"></em></a>
-                                                <button type="button" class="btn btn-danger m-1"><em class="bi bi-trash-fill"></em></button>
+                                                <button type="button" onclick="deleteFromCart({{$item->id}})" class="btn btn-danger m-1"><em class="bi bi-trash-fill"></em></button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -103,6 +96,18 @@
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
 <script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
 <script defer>
+    async function deleteFromCart(itemId) {
+        let confirmDelete = confirm("Are you sure to delete this item from the cart?");
+        if (confirmDelete) {
+            await axios.delete(`{{url('/delete-ppmp-record')}}/${itemId}`)
+                .then(res => {
+                    window.location.reload();
+                })
+                .catch(err => {
+                    window.location.reload();
+                })
+        }
+    }
     async function submitCart() {
         let a = confirm("Are you sure to submit this cart?");
         if (a) {

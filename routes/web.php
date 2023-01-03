@@ -52,6 +52,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'update_item_detail'])->name('view-item-detail.update');
 
     Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
+
+    Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
 });
 
 Route::middleware(['procurement.office', 'admin'])->group(function () {
@@ -89,6 +91,9 @@ Route::middleware('budget.office')->group(function () {
 Route::middleware('procurement.office')->group(function () {
     Route::get('/po-dashboard', [DashboardController::class, 'show'])->name('po-dashboard.show');
 
+    Route::get('/previous-ppmp/{branch_id}', [PPMPController::class, 'previous_ppmp'])->name('previous-ppmp.show');
+    Route::get('/previous-ppmp/{branch_id}/{year}', [PPMPController::class, 'previous_ppmp_open'])->name('previous-ppmp-single.show');
+
     Route::get('/ppmp-approval/{branch_id}', [PPMPController::class, 'ppmp_approval'])->name('po-ppmp-approval.show');
     Route::get('/approved-ppmp/{branch_id}', [PPMPController::class, 'po_approved_ppmp'])->name('po-approved-ppmp.show');
     Route::post('/ppmp-approval', [PPMPController::class, 'po_approve_ppmp'])->name('po-approve-ppmp-approval.perform');
@@ -105,8 +110,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/item-details', [ItemDetailController::class, 'all'])->name('item-detail-list.all');
     Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');
     Route::post('/item-details/batch', [ItemDetailController::class, 'delete_batch'])->name('item-detail-list.delete_batch');
-
-    //item purpose
+   
     Route::get('/item-purpose', [ItemPurposeController::class, 'all'])->name('item-purpose.all');
     Route::post('/item-purpose', [ItemPurposeController::class, 'add'])->name('item-purpose.add');
     Route::get('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'get'])->name('item-purpose.single');
