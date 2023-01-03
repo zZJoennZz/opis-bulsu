@@ -14,7 +14,9 @@ class ItemDetailHistory extends Model
         'added_by',
         'before_change',
         'after_change',
-        'changes'
+        'changes',
+        'is_approve',
+        'remarks',
     ];
 
     public function item_detail()

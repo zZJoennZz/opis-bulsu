@@ -20,4 +20,9 @@ class ItemDetail extends Model
     {
         return $this->hasOne(Unit::class, 'id', 'unit_id');
     }
+
+    public function histories()
+    {
+        return $this->hasMany(ItemDetailHistory::class, 'item_details_id', 'id');
+    }
 }
