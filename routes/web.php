@@ -110,7 +110,8 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/item-details', [ItemDetailController::class, 'all'])->name('item-detail-list.all');
     Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');
     Route::post('/item-details/batch', [ItemDetailController::class, 'delete_batch'])->name('item-detail-list.delete_batch');
-   
+    Route::get('/item-details/pending', [ItemDetailController::class, 'pending_items'])->name('pending-item-detail.show');
+
     Route::get('/item-purpose', [ItemPurposeController::class, 'all'])->name('item-purpose.all');
     Route::post('/item-purpose', [ItemPurposeController::class, 'add'])->name('item-purpose.add');
     Route::get('/item-purpose/{purpose_id}', [ItemPurposeController::class, 'get'])->name('item-purpose.single');

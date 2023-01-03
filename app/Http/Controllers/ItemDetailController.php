@@ -23,6 +23,7 @@ class ItemDetailController extends Controller
     public function all()
     {
         $allItemDetails = ItemDetail::all();
+
         return view('po-dashboard/item-detail-list')
             ->with('item_details', $allItemDetails);
     }
@@ -121,7 +122,6 @@ class ItemDetailController extends Controller
             $lastInsertedId = $newPPMP->id;
 
             foreach ($ppmpFormat as $format) {
-                // echo $request[$format->id];
                 $newMilestone = new MilestoneOfActivity();
                 $newMilestone->pro_pro_man_plans_id = $lastInsertedId;
                 $newMilestone->milestone_formats_id = env("MILESTONE_FORMAT");
@@ -148,6 +148,9 @@ class ItemDetailController extends Controller
 
         $itemDetail = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->where('item_details.id', '=', $id)->select('item_details.*', 'units.uom', 'item_categories.description as cat_desc')->get();
 
+        if (count($itemDetail) === 0) {
+            abort(404);
+        }
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
 
         $sourceOfFunds = SourceOfFund::all();
@@ -243,7 +246,10 @@ class ItemDetailController extends Controller
             $itemDetail->price_catalogue = $request->price_catalogue;
             $itemDetail->category_id = $request->category_id;
             $itemDetail->unit_id = $request->unit_id;
-            $itemDetail->save();
+
+            if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE") {
+                $itemDetail->save();
+            }
 
             $changesSummary = [];
 
@@ -269,10 +275,12 @@ class ItemDetailController extends Controller
             $recordHistory->before_change = json_encode($beforeChange);
             $recordHistory->after_change = json_encode($itemDetail);
             $recordHistory->changes = json_encode($changesSummary);
+            $recordHistory->is_approve = Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE" ? 1 : 0;
+            $recordHistory->remarks = "n/a";
             $recordHistory->save();
             DB::commit();
 
-            return redirect()->back()->with('success', 'Item successfully updated!');
+            return redirect()->back()->with('success', Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE" ? 'Item successfully updated!' : "Your changes needs to be reviewed first.");
         } catch (Throwable $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(['Item not updated. Please contact website administartor.']);
@@ -353,5 +361,12 @@ class ItemDetailController extends Controller
             DB::rollBack();
             return redirect()->back()->withErrors(['Something went wrong. Item is not deleted.']);
         }
+    }
+
+    public function pending_items()
+    {
+        $allItemDetails = ItemDetail::all();
+        return view('po-dashboard/pending-item-changes')
+            ->with('item_details', $allItemDetails);
     }
 }
