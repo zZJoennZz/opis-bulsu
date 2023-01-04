@@ -66,6 +66,11 @@
         <em class="bi bi-person-lines-fill"></em> Manage Positions
     </a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('branch.all') }}">
+        <em class="bi bi-building-gear"></em> Manage Branch
+    </a>
+</li>
 <li><hr /></li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('dashboard.show') }}">
