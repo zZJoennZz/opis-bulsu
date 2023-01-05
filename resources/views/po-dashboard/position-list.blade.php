@@ -41,7 +41,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary"><em class="bi bi-save"></em> Save Category</button>
+                    <button type="submit" class="btn btn-primary"><em class="bi bi-save"></em> Save Position</button>
                 </div>
             </form>
         </div>

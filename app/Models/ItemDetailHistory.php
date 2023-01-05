@@ -11,7 +11,7 @@ class ItemDetailHistory extends Model
 
     protected $fillable = [
         'item_details_id',
-        'added_by',
+        'action_by',
         'before_change',
         'after_change',
         'changes',
@@ -26,6 +26,6 @@ class ItemDetailHistory extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class, 'id', 'added_by');
+        return $this->hasOne(User::class, 'id', 'action_by');
     }
 }

@@ -57,11 +57,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
 });
 
-Route::middleware(['procurement.office', 'admin'])->group(function () {
-    Route::post('/approve-item-detail/{item_detail_id}', [ItemDetailController::class, 'approve_item_detail'])->name('item-detail-review-approve.perform');
-    Route::delete('/delete-item-detail/{item_detail_id}', [ItemDetailController::class, 'delete_item_detail'])->name('item-detail.delete');
-});
-
 //AVAILABLE TO END USERS
 Route::middleware('end.user')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'show'])->name('dashboard.show');
@@ -112,6 +107,8 @@ Route::middleware('procurement.office')->group(function () {
     Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');
     Route::post('/item-details/batch', [ItemDetailController::class, 'delete_batch'])->name('item-detail-list.delete_batch');
     Route::get('/item-details/pending', [ItemDetailController::class, 'pending_items'])->name('pending-item-detail.show');
+    Route::get('/item-details/pending/{item_detail_id}', [ItemDetailController::class, 'view_pending_item'])->name('pending-item-detail.single');
+    Route::put('/item-details/pending/approve/{item_details_id}', [ItemDetailController::class, 'approve_pending_update'])->name('approve-pending-item.perform');
 
     Route::get('/item-purpose', [ItemPurposeController::class, 'all'])->name('item-purpose.all');
     Route::post('/item-purpose', [ItemPurposeController::class, 'add'])->name('item-purpose.add');
@@ -142,6 +139,9 @@ Route::middleware('procurement.office')->group(function () {
     Route::post('/users/add', [UserController::class, 'save_new'])->name('add-new-user.perform');
     Route::get('/users/{user_id}', [UserController::class, 'show'])->name('view-user.show');
     Route::put('/users', [UserController::class, 'update'])->name('view-user.update');
+
+    Route::post('/approve-item-detail/{item_detail_id}', [ItemDetailController::class, 'approve_item_detail'])->name('item-detail-review-approve.perform');
+    Route::delete('/delete-item-detail/{item_detail_id}', [ItemDetailController::class, 'delete_item_detail'])->name('item-detail.delete');
 });
 
 //ADMIN ONLY

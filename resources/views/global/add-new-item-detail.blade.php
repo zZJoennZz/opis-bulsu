@@ -12,7 +12,7 @@
                             <h1>Add New Item Detail Form</h1>
                         </div>
                         <div class="mb-3">
-                            <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm"><em class="bi bi-caret-left-fill"></em> Go Back</a>
+                            <a href="{{ route('item-detail-list.all') }}" class="btn btn-secondary btn-sm"><em class="bi bi-caret-left-fill"></em> Go Back</a>
                         </div>
                         <div class="mb-3">
                         </div>

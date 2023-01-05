@@ -17,7 +17,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary"><em class="bi bi-save"></em> Save Category</button>
+                    <button type="submit" class="btn btn-primary"><em class="bi bi-save"></em> Save Purpose</button>
                 </div>
             </form>
         </div>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary"><em class="bi bi-save"></em> Save Category</button>
+                    <button type="submit" class="btn btn-primary"><em class="bi bi-save"></em> Save Purpose</button>
                 </div>
             </form>
         </div>
@@ -62,7 +62,7 @@
                         </div>
                         <div class="table-responsive">
                             <table class="table table-sm table-bordered" id="item-purpose-table">
-                                <caption>Item Categories</caption>
+                                <caption>Item Purpose List</caption>
                                 <thead>
                                     <tr>
                                         <th style="width: 5%;"></th>
@@ -162,5 +162,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'item-purpose-table', 'columnId' => '3'])
+@include('layout/datatable', ['tableId' => 'item-purpose-table'])
 @include('layout/footer')

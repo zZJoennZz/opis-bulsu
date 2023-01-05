@@ -13,7 +13,7 @@
                         <div class="mb-4">
                             <a class="btn btn-primary" href="{{ route('add-new-item.show') }}"><em class="bi bi-folder-plus"></em> Add</a>
                             <button class="btn btn-danger" onclick="deleteRecord()"><em class="bi bi-trash"></em> Delete</button>
-                            <a href="{{ route('pending-item-detail.show') }}" class="btn btn-primary">Pending Updates</a>
+                            <a href="{{ route('pending-item-detail.show') }}" class="btn btn-secondary"><em class="bi bi-clock-history"></em> Pending Updates</a>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-sm table-bordered" id="item-details-table">
