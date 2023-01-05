@@ -12,6 +12,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\YearController;
 use App\Http\Controllers\ItemPurposeController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\BranchController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -126,6 +127,14 @@ Route::middleware('procurement.office')->group(function () {
     Route::put('/position/{position_id}', [PositionController::class, 'update'])->name('position.update');
     Route::delete('/position/single/{purpose_id}', [PositionController::class, 'delete_single'])->name('position.delete');
     Route::post('/position/batch', [PositionController::class, 'delete_batch'])->name('position.delete_batch');
+
+    // Branch
+    Route::get('/branch', [BranchController::class, 'all'])->name('branch.all');
+    Route::post('/branch', [BranchController::class, 'add'])->name('branch.add');
+    Route::get('/branch/{branch_id}', [BranchController::class, 'get'])->name('branch.single');
+    Route::put('/branch/{branch_id}', [BranchController::class, 'update'])->name('branch.update');
+    Route::delete('/branch/single/{branch_id}', [BranchController::class, 'delete_single'])->name('branch.delete');
+    Route::post('/branch/batch', [BranchController::class, 'delete_batch'])->name('branch.delete_batch');
 
 
     Route::get('/users', [UserController::class, 'index'])->name('users-list.show');
