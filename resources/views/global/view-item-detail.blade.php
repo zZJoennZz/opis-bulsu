@@ -10,9 +10,12 @@
                     <div class="card-body">
                         <div class="mb-3">
                             <h1 class="card-title">Edit Item: {{$item_detail->description}} @if($item_detail->is_approve === 0 && $item_detail->is_delete === 0) <span class="badge bg-secondary">Under Review</span> @endif @if($item_detail->is_delete===1) <span class="badge bg-danger">Item deleted</span> @endif</h1>
+                            <div>
+                                <small><a href="{{route('pending-item-detail.single', ['item_detail_id' => $item_detail->id])}}">View changes logs</a></small>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <a href="{{ url()->previous() }}" class="btn btn-secondary btn-sm"><em class="bi bi-caret-left-fill"></em> Go Back</a>
+                            <a href="{{ route('item-detail-list.all') }}" class="btn btn-secondary btn-sm"><em class="bi bi-caret-left-fill"></em> Go Back</a>
                         </div>
                         <div class="mb-3">
                             <form action="@if($item_detail->is_approve === 0 && $item_detail->is_delete === 0 && (Auth::user()->account_type === "PROCUREMENT_OFFICE" || Auth::user()->account_type === "admin")){{ route('item-detail-review-approve.perform', ['item_detail_id' => $item_detail->id]) }}@else{{ route('view-item-detail.update', ['item_detail_id' => $item_detail->id]) }}@endif" method="post">
@@ -64,9 +67,19 @@
                                             </script>
                                             <button type="button" @if($item_detail->is_delete===1) disabled @endif class="btn btn-danger me-2" onclick="deleteItem()"><em class="bi bi-trash"></em> Delete Item</button>
                                         @endif
-                                        @if ($item_detail->is_approve === 1 && $item_detail->is_delete === 0)
-                                            <button type="submit" @if($item_detail->is_delete===1) disabled @endif class="btn btn-primary me-2"><em class="bi bi-save"></em> Save Item Detail</button>
+
+                                        @if (count($item_detail->histories) >= 1)
+                                            @if ($item_detail->is_approve === 1 && $item_detail->is_delete === 0 && $item_detail->histories[count($item_detail->histories)-1]->is_approve === 1)
+                                                <button type="submit" @if($item_detail->is_delete===1) disabled @endif class="btn btn-primary me-2"><em class="bi bi-save"></em> Save Item Detail</button>
+                                            @elseif ($item_detail->histories[count($item_detail->histories)-1]->is_approve === 0)
+                                                <button disabled class="btn btn-primary me-2"><em class="bi bi-save"></em> This item have pending changes, can't save new changes</button>
+                                            @endif
+                                        @else
+                                            @if ($item_detail->is_approve === 1 && $item_detail->is_delete === 0)
+                                                <button type="submit" @if($item_detail->is_delete===1) disabled @endif class="btn btn-primary me-2"><em class="bi bi-save"></em> Save Item Detail</button>
+                                            @endif
                                         @endif
+                                        
                                         <a href="{{ route('dashboard.show') }}" class="btn btn-danger">Cancel</a>
                                     </div>
                                 </div>

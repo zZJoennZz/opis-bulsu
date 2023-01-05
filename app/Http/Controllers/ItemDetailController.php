@@ -13,6 +13,7 @@ use App\Models\Unit;
 use App\Models\Notification;
 use App\Models\User;
 use App\Models\ItemDetailHistory;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -253,20 +254,25 @@ class ItemDetailController extends Controller
 
             $changesSummary = [];
 
-            if ($beforeChange->description !== $itemDetail->description) {
+            if (trim($beforeChange->description) !== trim($itemDetail->description)) {
                 array_push($changesSummary, 'Description was changed from "' . $beforeChange->description . '" to "' . $itemDetail->description . '".');
             }
-            if ($beforeChange->article !== $itemDetail->article) {
+            if (trim($beforeChange->article) !== trim($itemDetail->article)) {
                 array_push($changesSummary, 'Article was changed from "' . $beforeChange->article . '" to "' . $itemDetail->article . '".');
             }
             if ($beforeChange->price_catalogue !== $itemDetail->price_catalogue) {
                 array_push($changesSummary, 'Price catalogue was changed from "' . $beforeChange->price_catalogue . '" to "' . $itemDetail->price_catalogue . '".');
             }
-            if ($beforeChange->unit_id !== $itemDetail->unit_id) {
+            if (intval($beforeChange->unit_id) !== intval($itemDetail->unit_id)) {
                 array_push($changesSummary, 'Unit was changed from "' . $beforeChange->unit->uom . '" to "' . $itemDetail->unit->uom . '".');
             }
-            if ($beforeChange->category_id !== $itemDetail->category_id) {
+            if (intval($beforeChange->category_id) !== intval($itemDetail->category_id)) {
                 array_push($changesSummary, 'Category was changed from "' . $beforeChange->category->description . '" to "' . $itemDetail->category->description . '".');
+            }
+
+            if (count($changesSummary) === 0) {
+                DB::rollBack();
+                return redirect()->back()->with('success', "Nothing was changed.");
             }
 
             $recordHistory = new ItemDetailHistory();
@@ -306,20 +312,20 @@ class ItemDetailController extends Controller
             $changesSummary = [];
 
             array_push($changesSummary, 'Item approved.');
-            if ($beforeChange->description !== $itemDetail->description) {
-                array_push($changesSummary, 'Description was changed from "' . $beforeChange->description . '" to "' . $itemDetail->description . '".');
+            if (trim($beforeChange->description) !== trim($itemDetail->description)) {
+                array_push($changesSummary, 'Description was approved from "' . $beforeChange->description . '" to "' . $itemDetail->description . '".');
             }
-            if ($beforeChange->article !== $itemDetail->article) {
-                array_push($changesSummary, 'Article was changed from "' . $beforeChange->article . '" to "' . $itemDetail->article . '".');
+            if (trim($beforeChange->article) !== trim($itemDetail->article)) {
+                array_push($changesSummary, 'Article was approved from "' . $beforeChange->article . '" to "' . $itemDetail->article . '".');
             }
-            if ($beforeChange->price_catalogue !== $itemDetail->price_catalogue) {
-                array_push($changesSummary, 'Price catalogue was changed from "' . $beforeChange->price_catalogue . '" to "' . $itemDetail->price_catalogue . '".');
+            if (floatval($beforeChange->price_catalogue) !== floatval($itemDetail->price_catalogue)) {
+                array_push($changesSummary, 'Price catalogue was approved from "' . $beforeChange->price_catalogue . '" to "' . $itemDetail->price_catalogue . '".');
             }
-            if ($beforeChange->unit_id !== $itemDetail->unit_id) {
-                array_push($changesSummary, 'Unit was changed from "' . $beforeChange->unit->uom . '" to "' . $itemDetail->unit->uom . '".');
+            if (intval($beforeChange->unit_id) !== intval($itemDetail->unit_id)) {
+                array_push($changesSummary, 'Unit was approved from "' . $beforeChange->unit->uom . '" to "' . $itemDetail->unit->uom . '".');
             }
-            if ($beforeChange->category_id !== $itemDetail->category_id) {
-                array_push($changesSummary, 'Category was changed from "' . $beforeChange->category->description . '" to "' . $itemDetail->category->description . '".');
+            if (intval($beforeChange->category_id) !== intval($itemDetail->category_id)) {
+                array_push($changesSummary, 'Category was approved from "' . $beforeChange->category->description . '" to "' . $itemDetail->category->description . '".');
             }
 
             $recordHistory = new ItemDetailHistory();
@@ -328,6 +334,7 @@ class ItemDetailController extends Controller
             $recordHistory->before_change = json_encode($beforeChange);
             $recordHistory->after_change = json_encode($itemDetail);
             $recordHistory->changes = json_encode($changesSummary);
+            $recordHistory->is_approve = 1;
             $recordHistory->save();
             DB::commit();
 
@@ -368,5 +375,57 @@ class ItemDetailController extends Controller
         $allItemDetails = ItemDetail::all();
         return view('po-dashboard/pending-item-changes')
             ->with('item_details', $allItemDetails);
+    }
+
+    public function view_pending_item($item_detail_id)
+    {
+        $categories = ItemCategory::all();
+        $units = Unit::all();
+        $getItem = ItemDetail::find($item_detail_id);
+        return view('po-dashboard/pending-item-history')
+            ->with('item_detail', $getItem)
+            ->with('categories', $categories)
+            ->with('units', $units);
+    }
+
+    public function approve_pending_update($item_details_id)
+    {
+        $pendingItem = ItemDetailHistory::where('item_details_id', '=', $item_details_id)->orderBy('created_at', 'DESC')->limit(1)->get();
+        $currentItem = ItemDetail::find($item_details_id);
+
+        DB::beginTransaction();
+        try {
+            $newDetail = json_decode($pendingItem[0]->after_change);
+            $currentItem->description = $newDetail->description;
+            $currentItem->article = $newDetail->article;
+            $currentItem->price_catalogue = $newDetail->price_catalogue;
+            $currentItem->category_id = $newDetail->category_id;
+            $currentItem->unit_id = $newDetail->unit_id;
+            $currentItem->save();
+
+            $approveHistory = ItemDetailHistory::find($pendingItem[0]->id);
+            $approveHistory->is_approve = 1;
+            $approveHistory->save();
+
+            $newHistory = new ItemDetailHistory();
+            $newHistory->item_details_id = $approveHistory->item_details_id;
+            $newHistory->before_change = $approveHistory->before_change;
+            $newHistory->after_change = $approveHistory->after_change;
+            $changes = json_decode($approveHistory->changes);
+            array_unshift($changes, "Approved the following changes:");
+            $newHistory->changes = json_encode($changes);
+            $newHistory->is_approve = 1;
+            $newHistory->action_by = Auth::user()->id;
+            $newHistory->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Pending changes approved. New details is now live!');
+        } catch (Throwable $e) {
+
+            DB::rollBack();
+
+            return redirect()->back()->withErrors(["Something went wrong. Changes not approved."]);
+        }
     }
 }

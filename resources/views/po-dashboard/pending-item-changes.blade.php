@@ -16,6 +16,8 @@
                                 <thead>
                                     <tr>
                                         <th>Item Name</th>
+                                        <th>Updates By</th>
+                                        <th>Review</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -24,7 +26,9 @@
                                         @if($historyCount >= 1)
                                             @if ($item->histories[$historyCount - 1]->is_approve === 0)
                                                 <tr>
-                                                    <td>Update by {{$item->histories[$historyCount - 1]->action_by}}</td>
+                                                    <td>{{$item->histories[$historyCount - 1]->item_detail->description}}</td>
+                                                    <td>{{$item->histories[$historyCount - 1]->user->profile->first_name}} {{$item->histories[$historyCount - 1]->user->profile->last_name}}</td>
+                                                    <td><a href="{{ route('pending-item-detail.single', ['item_detail_id' => $item->id]) }}" class="btn btn-primary"><em class="bi bi-eye"></em></a></td>
                                                 </tr>
                                             @endif
                                         @endif
@@ -32,7 +36,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        
                     </div>
                 </div>
             </div>
