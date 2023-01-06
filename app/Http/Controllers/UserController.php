@@ -142,4 +142,10 @@ class UserController extends Controller
             }
         }
     }
+    public function status_manage($id, $st){
+            $users = User::find($id);
+            $users->is_active= $st;
+            $users->save();
+    }
+    
 }

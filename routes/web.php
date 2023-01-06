@@ -140,6 +140,9 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/users/{user_id}', [UserController::class, 'show'])->name('view-user.show');
     Route::put('/users', [UserController::class, 'update'])->name('view-user.update');
 
+    // Manage user approval
+    Route::get('/users/update-status/{id}/{st}', [UserController::class, 'status_manage'])->name('status.manage');
+
     Route::post('/approve-item-detail/{item_detail_id}', [ItemDetailController::class, 'approve_item_detail'])->name('item-detail-review-approve.perform');
     Route::delete('/delete-item-detail/{item_detail_id}', [ItemDetailController::class, 'delete_item_detail'])->name('item-detail.delete');
 });
