@@ -9,5 +9,5 @@ class Unit extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['uom', 'added_by'];
+    protected $fillable = ['uom', 'added_by', 'is_delete'];
 }
