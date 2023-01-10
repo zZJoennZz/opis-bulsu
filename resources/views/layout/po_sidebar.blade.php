@@ -71,6 +71,11 @@
         <em class="bi bi-building-gear"></em> Manage Branch
     </a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('units.all') }}">
+        <i class="bi bi-file-earmark-ruled"></i> Manage Units
+    </a>
+</li>
 <li><hr /></li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('dashboard.show') }}">

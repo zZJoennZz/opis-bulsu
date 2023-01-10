@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->text('uom');
+            $table->boolean('is_delete')->default('0');
             $table->unsignedBigInteger('added_by');
             $table->timestamps();
 
