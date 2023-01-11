@@ -70,7 +70,7 @@
                                             <div class="row mb-3">
                                                 <div class="col-lg-4 col-md-12 mb-1 d-flex" style="align-items: center; justify-content: center;">
                                                     <label class="me-2"  style="max-width:50px;width:100%;" for="{{ $format->id }}">{{ $format->name }}:</label>
-                                                    <input class="w-100 form-control py-1" type="number" id="{{ $format->id }}" name="{{ $format->id }}" value="0" required />
+                                                    <input class="w-100 form-control py-1" type="number" id="{{ $format->id }}" name="{{ $format->id }}" value="0" min="0" required />
                                                 </div>
                                             </div>
                                             @endforeach
