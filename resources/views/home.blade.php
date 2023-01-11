@@ -7,7 +7,7 @@
                         <img src="{{ asset('img/logo.png') }}" class="img-fluid" alt="BSU Logo">
                     </div>
                     <div class="row mb-3">
-                        <div class="col-12 text-center text-light">
+                        <div class="col-12 text-justify text-light">
                             <h2 class="h3 text-start mb-3">The BulSU Transparency Seal</h2>
                             <p class="small">
                                 A pearl buried inside a tightly-shut shell is practically worthless. Government information is a pearl, meant to be shared with the public in order to maximize its inherent value.The Transparency Seal, depicted by a pearl shining out of an open shell, is a symbol of a policy shift towards openness in access to government information. On the one hand, it hopes to inspire Filipinos in the civil service to be more open to citizen engagement; on the other, to invite the Filipino citizenry to exercise their right to participate in governance… <a class="text-secondary" href="https://bulsu.edu.ph/transparency-seal/" target="_blank" role="button">Read More</a>
@@ -15,9 +15,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 text-center text-light">
+                        <div class="col-12 text-justify text-light">
                             <h2 class="h3 text-start mb-3">About BulSU</h2>
-                            <p class="small">
+                            <p class="small text-justify">
                                 Bulacan State University (BulSU) is a state-funded institution of higher learning established in 1904 and converted into a university in 1993 by virtue of Republic Act 7665. The University in mandated to provide higher professional/technical and special instruction for special purpose and to promote research and extension services, advanced studies and extension services, advanced studies and progressive leadership in Engineering, Architecture, Education, Art and Science, Fine Arts, Information Technology, Technical courses, Commerce… <a class="text-secondary" href="https://bulsu.edu.ph/about/" target="_blank" role="button">Read More</a>
                             </p>
                         </div>
