@@ -14,6 +14,7 @@ use App\Http\Controllers\ItemPurposeController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\UnitController;
+use App\Http\Controllers\SourceofFundsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -133,6 +134,14 @@ Route::middleware('procurement.office')->group(function () {
     Route::put('/unit/{unit_id}', [UnitController::class, 'update'])->name('unit.update');
     Route::delete('/unit/single/{unit_id}', [UnitController::class, 'delete_single'])->name('unit.delete');
     Route::post('/unit/batch', [UnitController::class, 'delete_batch'])->name('unit.delete_batch');
+
+    // source of funds
+    Route::get('/source-of-fund', [SourceofFundsController::class, 'all'])->name('source-of-fund.all');
+    Route::post('/source-of-fund', [SourceofFundsController::class, 'add'])->name('source-of-fund.add');
+    Route::get('/source-of-fund/{source_of_fund_id}', [SourceofFundsController::class, 'get'])->name('source-of-fund.single');
+    Route::put('/source-of-fund/{source_of_fund_id}', [SourceofFundsController::class, 'update'])->name('source-of-fund.update');
+    Route::delete('/source-of-fund/single/{source_of_fund_id}', [SourceofFundsController::class, 'delete_single'])->name('source-of-fund.delete');
+    Route::post('/source-of-fund/batch', [SourceofFundsController::class, 'delete_batch'])->name('source-of-fund.delete_batch');
 
     // Branch
     Route::get('/branch', [BranchController::class, 'all'])->name('branch.all');
