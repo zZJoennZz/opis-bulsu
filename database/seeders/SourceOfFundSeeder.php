@@ -17,13 +17,19 @@ class SourceOfFundSeeder extends Seeder
     {
         //
         SourceOfFund::create([
-            'source_of_fund' => 'GAA'
+            'source_of_fund' => 'GAA',
+            'is_delete' => 0,
+            'added_by' => 1,
         ]);
         SourceOfFund::create([
-            'source_of_fund' => 'Income'
+            'source_of_fund' => 'Income',
+            'is_delete' => 0,
+            'added_by' => 1,
         ]);
         SourceOfFund::create([
-            'source_of_fund' => 'Fiduciary Fund'
+            'source_of_fund' => 'Fiduciary Fund',
+            'is_delete' => 0,
+            'added_by' => 1,
         ]);
     }
 }
