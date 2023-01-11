@@ -11,7 +11,7 @@
                         <div class="mb-1">
                             <a href="{{ route('bo-dashboard.show') }}" class="btn btn-secondary"><em class="bi bi-arrow-bar-left"></em> Back</a>
                             <button class="btn btn-success" type="button" onclick="submitApprove()"><em class="bi bi-check2-square"></em> Approve</button>
-                            <button class="btn btn-warning" type="button" onclick="sendBack()"><em class="bi bi-arrow-90deg-up"></em> Send Bank</button>
+                            <button class="btn btn-warning" type="button" onclick="sendBack()"><em class="bi bi-arrow-90deg-up"></em> Send Back</button>
                         </div>
                         <div class="table-responsive mb-3">
                             <table class="table table-sm table-bordered border-dark caption-top" id="ppmp-cart">
