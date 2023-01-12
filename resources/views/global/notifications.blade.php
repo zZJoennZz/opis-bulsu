@@ -9,6 +9,7 @@
                 <div class="card mb-4">
                     <div class="card-body table-responsive small">
                         <div class="mb-4">
+                            <input type="checkbox" id="checkAll" >
                             <button class="btn btn-primary" onclick="acknowledgeRecord()"><em class="bi bi-check-circle-fill"></em> Acknowledge</button>
                         </div>
                         <table class="table table-small" id="notification-table">
@@ -68,6 +69,10 @@
 </script>
 <script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
 <script>
+    $('#checkAll').click(function () {    
+        $('.notification-checkbox').prop('checked', this.checked);    
+    });
+
     async function acknowledgeRecord(id = null){
         if (id === null) {
             let allSelectedNotification = $(".notification-checkbox");
