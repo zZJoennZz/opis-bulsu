@@ -57,6 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
 
     Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
+
+   
 });
 
 //AVAILABLE TO END USERS
@@ -83,6 +85,8 @@ Route::middleware('budget.office')->group(function () {
 
     Route::get('/approved-ppmp-request/{branch_id}', [PPMPController::class, 'approved_ppmp_request'])->name('approved-ppmp-request.show');
     Route::post('/send-back-ppmp-request/{user_id}', [PPMPController::class, 'send_back'])->name('send-bank-ppmp.perform');
+
+    Route::post('/notifications/batch', [NotificationController::class, 'acknowledge_batch'])->name('notification.acknowledge_batch');
 });
 
 //AVAILABLE TO PROCUREMENT OFFICE
@@ -160,6 +164,8 @@ Route::middleware('procurement.office')->group(function () {
 
     // Manage user approval
     Route::get('/users/update-status/{id}/{st}', [UserController::class, 'status_manage'])->name('status.manage');
+
+    
 
     Route::post('/approve-item-detail/{item_detail_id}', [ItemDetailController::class, 'approve_item_detail'])->name('item-detail-review-approve.perform');
     Route::delete('/delete-item-detail/{item_detail_id}', [ItemDetailController::class, 'delete_item_detail'])->name('item-detail.delete');
