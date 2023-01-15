@@ -10,8 +10,11 @@
                     <div class="card-body table-responsive small">
                         <div class="mb-4">
                             @if(!empty($user_notif))
-                                <input type="checkbox" id="checkAll" >
-                                <button class="btn btn-primary" onclick="acknowledgeRecord()"><em class="bi bi-check-circle-fill"></em> Acknowledge</button>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                                    <a href="#" class="user-select-auto h6 pe-auto btn btn-primary" onclick="acknowledgeRecord()">Acknowledge </a>
+                                </div>
+                                
                             @endif
                         </div>
                         <table class="table table-small" id="notification-table">
