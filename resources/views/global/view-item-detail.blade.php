@@ -8,14 +8,39 @@
             <div class="p-3">
                 <div class="card">
                     <div class="card-body">
+                        @php
+                            $bc = [];
+                            $cancelUrl;
+                            if (Auth::user()->account_type === 'END_USER') {
+                                $bc =
+                                [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'Add <span class="badge bg-primary">' . $item_detail->description . '</span> to cart', 'routeWithParam' => route('item-detail-single.show', ['id' => $item_detail->id])],
+                                    ['name' => 'Edit item detail: <span class="badge bg-primary">' . $item_detail->description . '</span>']
+                                ];
+                                $cancelUrl = route('item-detail-single.show', ['id' => $item_detail->id]);
+                            } else if (Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin') {
+                                $bc =
+                                [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'Item Details List', 'route' => 'item-detail-list.all'],
+                                    ['name' => 'Edit item detail: <span class="badge bg-primary">' . $item_detail->description . '</span>']
+                                ];
+                                $cancelUrl = route('item-detail-list.all');
+                            }
+                        @endphp
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => $bc
+                        ]
+                        )
                         <div class="mb-3">
-                            <h1 class="card-title">Edit Item: {{$item_detail->description}} @if($item_detail->is_approve === 0 && $item_detail->is_delete === 0) <span class="badge bg-secondary">Under Review</span> @endif @if($item_detail->is_delete===1) <span class="badge bg-danger">Item deleted</span> @endif</h1>
-                            <div>
-                                <small><a href="{{route('pending-item-detail.single', ['item_detail_id' => $item_detail->id])}}">View changes logs</a></small>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <a href="{{ route('item-detail-list.all') }}" class="btn btn-secondary btn-sm"><em class="bi bi-caret-left-fill"></em> Go Back</a>
+                            <h1 class="card-title">@if($item_detail->is_approve === 0 && $item_detail->is_delete === 0) <span class="badge bg-secondary">Under Review</span> @endif @if($item_detail->is_delete===1) <span class="badge bg-danger">Item deleted</span> @endif</h1>
+                            @if (Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin')
+                                <div>
+                                    <small><a href="{{route('pending-item-detail.single', ['item_detail_id' => $item_detail->id])}}">View changes logs</a></small>
+                                </div>
+                            @endif
                         </div>
                         <div class="mb-3">
                             <form action="@if($item_detail->is_approve === 0 && $item_detail->is_delete === 0 && (Auth::user()->account_type === "PROCUREMENT_OFFICE" || Auth::user()->account_type === "admin")){{ route('item-detail-review-approve.perform', ['item_detail_id' => $item_detail->id]) }}@else{{ route('view-item-detail.update', ['item_detail_id' => $item_detail->id]) }}@endif" method="post">
@@ -80,7 +105,7 @@
                                             @endif
                                         @endif
                                         
-                                        <a href="{{ route('dashboard.show') }}" class="btn btn-danger">Cancel</a>
+                                        <a href="{{ $cancelUrl }}" class="btn btn-danger">Cancel</a>
                                     </div>
                                 </div>
                             </form>

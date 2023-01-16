@@ -8,20 +8,15 @@
             <div class="mt-4">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="h5 card-title">{{$user->profile->first_name}} {{$user->profile->last_name}}</h1>
-                        <hr />
-                        @if ($errors->any())
-                            @foreach($errors->all() as $error)
-                                <div class="alert alert-danger mb-3" role="alert">
-                                    {{ $error }}
-                                </div>
-                            @endforeach
-                        @endif
-                        @if( Session::has('success') )
-                            <div class="alert alert-success mt-3 mb-3" role="alert">
-                                {{ Session::get('success') }}
-                            </div>
-                        @endif
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Users List', 'route' => 'users-list.show'],
+                                ['name' => 'Edit User: <span class="badge bg-primary">' . $user->profile->first_name . ' ' . $user->profile->last_name . '</span>']
+                            ]
+                        ]
+                        )
                         {{-- <form action="{{route('add-new-user.perform')}}" method="POST"> --}}
                         <form onsubmit="submitForm(event)">
                             @method('PUT')

@@ -5,16 +5,17 @@
         @include('layout/sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger mt-3 mb-3" role="alert">
-                        {{$error}}
-                    </div>
-                @endforeach
-            @endif
             <div class="mt-4">
                 <div class="card">
                     <div class="card-body">
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'PPMP <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>']
+                            ]
+                        ]
+                        )
                         <div class="table-responsive mb-3">
                             <table class="table table-sm table-bordered border-dark caption-top" id="ppmp-request-table">
                                 <caption>Project Procurement Management Plan Request <span class="badge text-bg-primary">Year <strong>{{ Auth::user()->ppmp_year }}</strong></span></caption>

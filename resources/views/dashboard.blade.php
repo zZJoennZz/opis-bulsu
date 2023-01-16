@@ -17,6 +17,11 @@
                 <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <div class="mt-3 card">
                         <div class="card-body">
+                            @include('layout/breadcrumb',
+                            [
+                                'breadcrumbs' => [['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show']]
+                            ]
+                            )
                             @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "END_USER")
                                 @include('layout/enduser_dashboard')
                                 <hr />

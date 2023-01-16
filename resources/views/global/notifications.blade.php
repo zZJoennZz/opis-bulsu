@@ -5,10 +5,18 @@
         @include('layout/sidebar')
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="pt-4">
+            <div class="pt-3">
                 <div class="card mb-4">
-                    <div class="card-body table-responsive small">
-                        <table class="table table-small" id="notification-table">
+                    <div class="card-body table-responsive">
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Notifications']
+                            ]
+                        ]
+                        )
+                        <table class="table table-small small" id="notification-table">
                             <thead>
                                 <tr>
                                     <th>Notification/s</th>

@@ -8,7 +8,15 @@
                     <div class="p-3">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="cart-title" style="border-bottom: 1px solid gray; padding-bottom: 1rem;">{{ $item_detail[0]->description }}</h5>
+                                @include('layout/breadcrumb',
+                                [
+                                    'breadcrumbs' => [
+                                        ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                        ['name' => 'Add <span class="badge bg-primary">' . $item_detail[0]->description . '</span> to cart']
+                                    ]
+                                ]
+                                )
+                                
                                 <div class="row">
                                     <div class="col-lg-6 col-md-12">
                                         <div class="fs-3 mb-3">Order Item Details</div>
@@ -33,7 +41,7 @@
                                             <input type="text" class="form-control" id="cat_desc" value="{{ $item_detail[0]->cat_desc }}" readonly>
                                         </div>
                                         <div class="mb-3">
-                                            <a href={{ route('view-item-detail.show',['item_detail_id' => $item_detail[0]->id]) }} class="btn btn-success" style="font-size: 0.7rem;"><em class="bi bi-pencil-square"></em> Edit this item</a>
+                                            <a href={{ route('view-item-detail.show',['item_detail_id' => $item_detail[0]->id]) }} class="btn btn-link" style="font-size: 0.8rem;"><em class="bi bi-pencil-square"></em> Edit this item</a>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-12">

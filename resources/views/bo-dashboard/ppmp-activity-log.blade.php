@@ -58,6 +58,32 @@
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
+                        @php
+                            $bc = [];
+                            if (Auth::user()->account_type === 'admin' || Auth::user()->account_type === 'PROCUREMENT_OFFICE') {
+                                $bc = [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'New PPMP Requests', 'url' => '/ppmp-approval/' . $ppmp_histories[0]->branches_id],
+                                    ['name' => 'PPMP Activity Log']
+                                ];
+                            } else if (Auth::user()->account_type === 'END_USER') {
+                                $bc = [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'PPMP Cart', 'route' => 'ppmp-cart.get'],
+                                    ['name' => 'PPMP Activity Log']
+                                ];
+                            } else if (Auth::user()->account_type === 'BUDGET_OFFICE') {
+                                $bc = [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'PPMP Activity Log'],
+                                ];
+                            }
+                        @endphp
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => $bc
+                        ]
+                        )
                         <div class="mb-3">
                             <button class="btn btn-success @if(count($ppmp_histories) <= 0) d-none @endif" onclick="window.print()"><em class="bi bi-printer"></em> Print this log</button>
                         </div>

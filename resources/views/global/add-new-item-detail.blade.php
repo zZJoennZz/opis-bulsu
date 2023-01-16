@@ -8,14 +8,31 @@
             <div class="p-3">
                 <div class="card">
                     <div class="card-body">
-                        <div class="mb-3">
-                            <h1>Add New Item Detail Form</h1>
-                        </div>
-                        <div class="mb-3">
-                            <a href="{{ route('item-detail-list.all') }}" class="btn btn-secondary btn-sm"><em class="bi bi-caret-left-fill"></em> Go Back</a>
-                        </div>
-                        <div class="mb-3">
-                        </div>
+                        @php
+                            $bc = [];
+                            $cancelUrl;
+                            if (Auth::user()->account_type === 'END_USER') {
+                                $bc =
+                                [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'Add new item detail']
+                                ];
+                                $cancelUrl = route('dashboard.show');
+                            } else if (Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin') {
+                                $bc =
+                                [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'Item Details List', 'route' => 'item-detail-list.all'],
+                                    ['name' => 'Add new item detail']
+                                ];
+                                $cancelUrl = route('item-detail-list.all');
+                            }
+                        @endphp
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => $bc
+                        ]
+                        )
                         <div class="mb-3">
                             <form action="{{ route('add-new-item.perform') }}" method="post">
                                 @csrf
@@ -52,7 +69,7 @@
                                 <div class="row">
                                     <div class="col-12 d-flex" style="justify-content: end;">
                                         <button type="submit" class="btn btn-primary me-2"><em class="bi bi-save"></em> Save Item Detail</button>
-                                        <a href="{{ route('dashboard.show') }}" class="btn btn-danger">Cancel</a>
+                                        <a href="{{ $cancelUrl }}" class="btn btn-danger">Cancel</a>
                                     </div>
                                 </div>
                             </form>

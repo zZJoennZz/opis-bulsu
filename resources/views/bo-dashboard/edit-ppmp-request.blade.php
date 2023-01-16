@@ -3,11 +3,37 @@
 <div class="container-fluid">
     <div class="row">
         @include('layout/sidebar')
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">   
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="p-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="cart-title" style="border-bottom: 1px solid gray; padding-bottom: 1rem;">{{ $item_detail[0]->description }}</h5>
+                        @php
+                            $bc = [];
+                            if (Auth::user()->account_type === 'admin' || Auth::user()->account_type === 'PROCUREMENT_OFFICE') {
+                                $bc = [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'Edit PPMP for <strong>' . $item_detail[0]->description . '</strong>']
+                                ];
+                            } else if (Auth::user()->account_type === 'END_USER') {
+                                $bc = [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'PPMP Cart', 'route' => 'ppmp-cart.get'],
+                                    ['name' => 'Edit PPMP for <strong>' . $item_detail[0]->description . '</strong>']
+                                ];
+                            } else if (Auth::user()->account_type === 'BUDGET_OFFICE') {
+                                $bc = [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'Pending PPMP', 'url' => '/new-ppmp-request/' . $ppmp_record->branches_id],
+                                    ['name' => 'Edit PPMP for <strong>' . $item_detail[0]->description . '</strong>']
+                                ];
+                            }
+                        @endphp
+                        
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => $bc
+                        ]
+                        )
                         <div class="row">
                             <div class="col-lg-6 col-md-12">
                                 <div class="fs-3 mb-3 fw-bold">Edit PPMP Request</div>
