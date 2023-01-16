@@ -1,6 +1,5 @@
 @include('layout/header', ['title' => 'Consolidate | OPIS - BulSU e-PROCUREMENT'])
 @include('layout/member_header')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <div class="container-fluid">
     <div class="row">
         @include('layout/sidebar')
@@ -27,10 +26,14 @@
                                 <button type="submit" class="btn btn-primary btn-lg mx-auto"><em class="bi bi-collection-fill"></em> Consolidate <span class="badge bg-dark">{{ Auth::user()->ppmp_year }}</span></button>
                             </form>
                         @else
-                            <button onclick="window.print()" type="button" class="btn btn-success mx-auto"><em class="bi bi-printer-fill"></em> Print</button>
-                            <form class="d-inline" onsubmit="return confirm('Are you sure to reset the consolidated records?')" action="{{ route('consolidate.reset') }}" method="POST">
+                            
+                            <form onsubmit="return confirm('Are you sure to reset the consolidated records?')" action="{{ route('consolidate.reset') }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn-danger mx-auto"><em class="bi bi-arrow-clockwise"></em> Reset</button>
+                                <div class="btn-group" role="toolbar" aria-label="Consolidated PPMP Records Tools">
+                                    <button onclick="window.print()" type="button" class="btn btn-outline-success"><em class="bi bi-printer-fill"></em> Print</button>
+                                    <button onclick="printConsolidated()" type="button" class="btn btn-outline-success"><em class="bi bi-file-earmark-pdf-fill"></em> Save as PDF</button>
+                                    <button type="submit" class="btn btn-outline-danger"><em class="bi bi-arrow-clockwise"></em> Reset</button>
+                                </div>
                             </form>
                             <div class="table-responsive mt-3">
                                 <table class="table table-small table-bordered border-dark caption-top" id="consolidated-ppmp">
@@ -168,12 +171,21 @@
         </div>
     </div>
 </div>
-{{-- <script defer>
-    let element = document.getElementById('printReport');
-    html2pdf(element);
-</script> --}}
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
 @if ($consolidated_records !== null || count($consolidated_records) !== 0)
 @include('layout/datatable', ['tableId' => 'consolidated-ppmp'])
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script defer>
+    function printConsolidated() {
+        let element = document.getElementById('printReport');
+        let opt = {
+            margin: 0.2,
+            filename: 'Consolidated Annual Procurement Plan {{ Auth::user()->ppmp_year }}',
+            jsPDF: { unit: 'in', format: 'a4' }
+        };
+        let toPrint = element.innerHTML;
+        const worker = html2pdf().set(opt).from(toPrint).save();
+    }
+</script>
 @endif
 @include('layout/footer')
