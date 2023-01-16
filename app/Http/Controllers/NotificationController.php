@@ -45,4 +45,29 @@ class NotificationController extends Controller
             return redirect()->route($this->route)->with('user_notif', $userNotifAll);
         }
     }
+
+    public function acknowledge_batch(Request $request)
+    {
+        $user = Auth::user();
+
+        // DB::beginTransaction();
+        // try {
+            Notification::whereIn('id', $request->id)->update(["is_read" => 1]);
+
+            DB::commit();
+            $userNotifAll = Notification::where('sent_to', '=', $user->id)->get();
+            dd($userNotifAll);
+            return redirect()->route($this->route)->with('user_notif', $userNotifAll);
+
+            return response()->json([
+                "success" => true,
+            ], 200);
+        // } catch (Throwable $e) {
+        //     DB::rollBack();
+        //     redirect()->back()->withErrors("Something went wrong. Position is not deleted. Please contact website administrator.");
+        //     return response()->json([
+        //         "success" => false,
+        //     ], 400);
+        // }
+    }
 }
