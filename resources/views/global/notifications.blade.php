@@ -8,15 +8,30 @@
             <div class="pt-4">
                 <div class="card mb-4">
                     <div class="card-body table-responsive small">
+                        <div class="mb-4">
+                            @if(!empty($user_notif))
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="checkAll">
+                                    <a href="#" class="user-select-auto h6 pe-auto btn btn-primary" onclick="acknowledgeRecord()">Acknowledge </a>
+                                </div>
+                                
+                            @endif
+                        </div>
                         <table class="table table-small" id="notification-table">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Notification/s</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($user_notif as $notif)
                                     <tr>
+                                        <td>
+                                         <div class="form-check w-100 d-flex align-items-center justify-content-center">
+                                                    <input class="form-check-input notification-checkbox" type="checkbox" value="{{ $notif->id }}" id="notification{{ $notif->id }}" @if($notif->is_read===1) disabled @endif>
+                                                </div>
+                                            </td>
                                         <td>
                                             <div class="card mb-3">
                                                 <div class="card-body">
@@ -56,5 +71,36 @@
             "searching" : false
         });
     });
+</script>
+<script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
+<script>
+    $('#checkAll').click(function () {    
+        $('.notification-checkbox:not([disabled])').prop('checked', this.checked);    
+    });
+
+    async function acknowledgeRecord(id = null){
+        if (id === null) {
+            let allSelectedNotification = $(".notification-checkbox");
+            let toAcknowledge = [];
+            for (let i = 0; i < allSelectedNotification.length; i ++) {
+                if (allSelectedNotification[i].checked) {
+                    toAcknowledge.push(allSelectedNotification[i].value);
+                }
+            }
+            if (toAcknowledge.length > 0) {
+                let confirmAcknowledgeBatch = confirm("Are you sure to acknowledge?");
+                if (confirmAcknowledgeBatch) {
+                    await axios.post(`{{ route('notification.acknowledge_batch') }}`, { id : toAcknowledge })
+                        .then(res => {
+                            window.location.reload();
+                        }).catch(err => {
+                            window.location.reload();
+                        });
+                }
+            } else {
+                alert("Select notification to acknowledge first!");
+            }
+        }
+    }
 </script>
 @include('layout/footer')
