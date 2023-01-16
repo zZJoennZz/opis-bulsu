@@ -18,7 +18,13 @@ class Admin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!Auth::check() || !Auth::user()->is_active) {
+        if (!Auth::check()) {
+            Session::flush();
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['Please login to access the system.']);
+        }
+
+        if (!Auth::user()->is_active) {
             Session::flush();
             Auth::logout();
             return redirect()->route('login')->withErrors(['Your account is not active. Please contact procurement office or the administrator.']);
