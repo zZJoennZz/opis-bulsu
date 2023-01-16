@@ -140,7 +140,7 @@ class ItemDetailController extends Controller
             return redirect()->back()->withErrors(["Something went wrong! Your submission isn't added to the cart."]);
         }
 
-        return redirect('dashboard')->with('success', 'Item successfully added to PPMP cart.');
+        return redirect()->route('ppmp-cart.get')->with('success', 'Item successfully added to PPMP cart.');
     }
 
     public function show($id)
