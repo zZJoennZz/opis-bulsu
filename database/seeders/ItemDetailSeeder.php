@@ -16,10 +16,41 @@ class ItemDetailSeeder extends Seeder
     public function run()
     {
         //
+        $articleForTest = "For testing";
         ItemDetail::create([
-            'description' => 'TEST ITEM',
-            'article' => 'Test',
-            'price_catalogue' => 111,
+            'description' => 'Pencil',
+            'article' => $articleForTest,
+            'price_catalogue' => 50,
+            'category_id' => 1,
+            'unit_id' => 1,
+            'added_by' => 1,
+            'is_approve' => 1
+        ]);
+
+        ItemDetail::create([
+            'description' => 'Ballpen',
+            'article' => $articleForTest,
+            'price_catalogue' => 50,
+            'category_id' => 1,
+            'unit_id' => 1,
+            'added_by' => 1,
+            'is_approve' => 1
+        ]);
+
+        ItemDetail::create([
+            'description' => 'Plastic Folder',
+            'article' => $articleForTest,
+            'price_catalogue' => 50,
+            'category_id' => 1,
+            'unit_id' => 1,
+            'added_by' => 1,
+            'is_approve' => 1
+        ]);
+
+        ItemDetail::create([
+            'description' => 'A4 Paper',
+            'article' => $articleForTest,
+            'price_catalogue' => 50,
             'category_id' => 1,
             'unit_id' => 1,
             'added_by' => 1,

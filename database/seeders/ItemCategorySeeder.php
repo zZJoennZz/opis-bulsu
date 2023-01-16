@@ -17,7 +17,7 @@ class ItemCategorySeeder extends Seeder
     {
         //
         ItemCategory::create([
-            'description' => 'TEST CATEGORY',
+            'description' => 'Office Supplies',
             'under_of_group' => 1,
             'added_by' => 1,
         ]);
