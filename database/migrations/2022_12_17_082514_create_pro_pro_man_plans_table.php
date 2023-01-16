@@ -18,9 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('item_details_id');
             $table->text('year');
             $table->unsignedBigInteger('branches_id');
-            $table->boolean('is_draft');
-            $table->boolean('is_bo_approve');
-            $table->boolean('is_pr_approve');
+            $table->boolean('is_draft')->default(1);
+            $table->boolean('is_bo_approve')->default(0);
+            $table->boolean('is_pr_approve')->default(0);
+            $table->boolean('is_consolidate')->default(0);
             $table->unsignedBigInteger('source_of_funds_id');
             $table->unsignedBigInteger('item_purposes_id');
             $table->double('estimated_budget');

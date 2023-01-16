@@ -16,6 +16,7 @@ class ProProManPlan extends Model
         'is_draft',
         'is_bo_approve',
         'is_pr_approve',
+        'is_consolidate',
         'source_of_funds_id',
         'item_purposes_id',
         'estimated_budget',
