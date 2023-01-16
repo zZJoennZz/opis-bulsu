@@ -15,6 +15,8 @@ use App\Http\Controllers\PositionController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\SourceofFundsController;
+use App\Http\Controllers\ConsolidateController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -88,6 +90,10 @@ Route::middleware('budget.office')->group(function () {
 //AVAILABLE TO PROCUREMENT OFFICE
 Route::middleware('procurement.office')->group(function () {
     Route::get('/po-dashboard', [DashboardController::class, 'show'])->name('po-dashboard.show');
+
+    Route::get('/consolidate', [ConsolidateController::class, 'index'])->name('consolidated.show');
+    Route::post('/consolidate', [ConsolidateController::class, 'consolidate'])->name('consolidate.perform');
+    Route::post('/consolidate/reset', [ConsolidateController::class, 'reset_consolidation'])->name('consolidate.reset');
 
     Route::get('/previous-ppmp/{branch_id}', [PPMPController::class, 'previous_ppmp'])->name('previous-ppmp.show');
     Route::get('/previous-ppmp/{branch_id}/{year}', [PPMPController::class, 'previous_ppmp_open'])->name('previous-ppmp-single.show');
