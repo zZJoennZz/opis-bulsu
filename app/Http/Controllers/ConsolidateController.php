@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\ProProManPlan;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Throwable;
+
+class ConsolidateController extends Controller
+{
+    //
+
+    public function index()
+    {
+        $getConsolidated = ProProManPlan::get()->where('is_consolidate', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->groupBy(function ($data) {
+            return $data->item_detail;
+        });
+
+        // $test = ProProManPlan::get()->where('year', '=', Auth::user()->ppmp_year)->groupBy('item_details_id');
+
+        // return $test;
+        return view('po-dashboard/view-consolidate')->with('consolidated_records', $getConsolidated);
+    }
+
+    public function consolidate()
+    {
+        $getConsolidated = ProProManPlan::get()->where('is_consolidate', '=', 0)->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1);
+
+        $toConsolidate = [];
+        foreach ($getConsolidated as $ppmp) {
+            array_push($toConsolidate, $ppmp->id);
+        }
+
+        DB::beginTransaction();
+        try {
+            ProProManPlan::whereIn('id', $toConsolidate)->update(['is_consolidate' => 1]);
+            DB::commit();
+            return redirect()->route('consolidated.show')->with('success', 'Consolidation successful!');
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(["Consolidation failed. Please try again. If the problem persists, contact website administrator."]);
+        }
+    }
+
+    public function reset_consolidation()
+    {
+        DB::beginTransaction();
+        try {
+            ProProManPlan::where('is_consolidate', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 0]);
+            DB::commit();
+            return redirect()->route('consolidated.show')->with('success', 'Successfully reset the consolidation for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(["Consolidation failed. Please try again. If the problem persists, contact website administrator."]);
+        }
+    }
+}

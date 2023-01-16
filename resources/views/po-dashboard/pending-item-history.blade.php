@@ -8,11 +8,19 @@
             <div class="mt-4">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="h5 card-title">{{$item_detail->description}} Histories</h1>
-                        <hr />
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Item Details List', 'route' => 'item-detail-list.all'],
+                                ['name' => 'Edit item detail: <span class="badge bg-primary">' . $item_detail->description . '</span>', 'routeWithParam' => route('view-item-detail.show', ['item_detail_id' => $item_detail->id])],
+                                ['name' => '<span class="badge bg-primary">' . $item_detail->description . '</span> History']
+                            ]
+                        ]
+                        )
                         @if(count($item_detail->histories) === 0)
                             <div class="row">
-                                <div class="col-12">NO LOGS FOR THIS ITEM YET</div>
+                                <div class="col-12 small fst-italic text-secondary">NO LOGS FOR THIS ITEM YET</div>
                             </div>
                         @else
                         @php (

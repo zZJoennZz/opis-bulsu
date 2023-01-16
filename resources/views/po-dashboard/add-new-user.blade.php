@@ -8,8 +8,15 @@
             <div class="mt-4">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="h5 card-title">Add User</h1>
-                        <hr />
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Users List', 'route' => 'users-list.show'],
+                                ['name' => 'Add User']
+                            ]
+                        ]
+                        )
                         <form action="{{route('add-new-user.perform')}}" method="POST">
                             @csrf
                             <div class="row">

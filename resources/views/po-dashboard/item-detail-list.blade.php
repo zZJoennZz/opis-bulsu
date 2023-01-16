@@ -8,14 +8,21 @@
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="h5 card-title">Item Detail List <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($item_details) }}</span></span></h1>
-                        <hr />
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Item Details List'],
+                            ]
+                        ]
+                        )
+                        <h1 class="h5 card-title"><span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($item_details) }}</span></span></h1
                         <div class="mb-4">
                             <a class="btn btn-primary" href="{{ route('add-new-item.show') }}"><em class="bi bi-folder-plus"></em> Add</a>
                             <button class="btn btn-danger" onclick="deleteRecord()"><em class="bi bi-trash"></em> Delete</button>
                             <a href="{{ route('pending-item-detail.show') }}" class="btn btn-secondary"><em class="bi bi-clock-history"></em> Pending Updates</a>
                         </div>
-                        <div class="table-responsive">
+                        <div class="table-responsive p-3">
                             <table class="table table-sm table-bordered" id="item-details-table">
                                 <caption>Item Details</caption>
                                 <thead>

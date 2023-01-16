@@ -62,7 +62,7 @@
                         <div class="swal2-success-circular-line-right" style="background-color: rgb(255, 255, 255);"></div>
                     </div>
                     <div class="text-center text-success fw-bold fs-4" role="alert">
-                        {{ Session::get('success') }}
+                        {!! Session::get('success') !!}
                     </div>
                     <script defer>
                         window.onload = function() {
@@ -82,24 +82,22 @@
     {{-- <input class="form-control form-control-dark w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search"> --}}
     <div class="w-100 ps-2 fs-5 text-light">
         <em>PPMP Year:</em> <span data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="badge bg-secondary" style="cursor: pointer;">{{ Auth::user()->ppmp_year }} <em class="bi bi-pencil-square"></em></span>
-
+        <div class="float-end mx-3">
+            
+            @if(Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin')
+                <i class="bi bi-shield-check"></i>
+            @elseif(Auth::user()->account_type === 'BUDGET_OFFICE')
+                <i class="bi bi-cash-stack"></i>
+            @elseif(Auth::user()->account_type === 'END_USER')
+                <i class="bi bi-person"></i>
+            @endif
+            {{ Auth::user()->profile->first_name }}
+            
+        </div>
         <div class="float-end">
             <div id="system-clock" style="color: gray;"></div>
         </div>
-        <div class="float-end mx-3">
-            <h3>
-                {{ Auth::user()->profile->first_name}}
-                @if(Auth::user()->profile->position->description === 'Procurement Office')
-                 <i class="bi bi-shield-check"></i>
-                @elseif(Auth::user()->profile->position->description === 'Budget Office')    
-                 <i class="bi bi-cash-stack"></i>   
-                @elseif(Auth::user()->profile->position->description === 'Procurement Unit Staff')
-                <i class="bi bi-shield-plus"></i>
-                @elseif(Auth::user()->profile->position->description === 'End User' || Auth::user()->profile->position->description === 'EndUser')
-                <i class="bi bi-person"></i>
-                @endif
-            </h3>
-        </div>
+        
     </div>
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">

@@ -8,6 +8,14 @@
             <div class="p-2">
                 <div class="card">
                     <div class="card-body">
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'PPMP Cart']
+                            ]
+                        ]
+                        )
                         <div class="row mb-3">
                             <div class="col-12">
                                 <a href="{{ route('dashboard.show') }}" type="button" class="btn btn-warning"><em class="bi bi-plus"></em> Add new item</a>

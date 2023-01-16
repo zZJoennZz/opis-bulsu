@@ -8,8 +8,15 @@
             <div class="mt-4">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="h5 card-title">Pending Item Detail Updates</h1>
-                        <hr />
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Item Details List', 'route' => 'item-detail-list.all'],
+                                ['name' => 'Pending Item Updates'],
+                            ]
+                        ]
+                        )
                         <div class="table-responsive">
                             <table class="table table-small table-bordered" id="pending-item-changes">
                                 <caption>Pending item details changes made by end users</caption>

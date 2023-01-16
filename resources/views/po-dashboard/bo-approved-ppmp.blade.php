@@ -9,6 +9,14 @@
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'New PPMP Requests']
+                            ]
+                        ]
+                        )
                         <div class="mb-4">
                             <a href="{{ route('bo-dashboard.show') }}" class="btn btn-secondary"><em class="bi bi-arrow-bar-left"></em> Back</a>
                             <button class="btn btn-success" type="button" onclick="submitApprove()"><em class="bi bi-check2-square"></em> Approve</button>

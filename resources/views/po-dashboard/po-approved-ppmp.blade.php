@@ -8,10 +8,14 @@
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
-                        <div class="mb-4">
-                            <a href="{{ route('po-dashboard.show') }}" class="btn btn-secondary"><em class="bi bi-arrow-bar-left"></em> Back</a>
-                        </div>
-                        <hr />
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Approved PPMP']
+                            ]
+                        ]
+                        )
                         <div class="mb-3 fs-4"><strong>End User / Unit:</strong> {{ $brach_name }}</div>
                         <div class="mb-2">
                             <span class="badge text-bg-primary"><em class="bi bi-check-circle-fill"></em> Budget Office</span>

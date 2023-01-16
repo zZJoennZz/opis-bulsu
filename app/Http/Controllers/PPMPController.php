@@ -189,12 +189,24 @@ class PPMPController extends Controller
         DB::beginTransaction();
         try {
             ProProManPlan::whereIn('id', $request->all())->update(['is_bo_approve' => 1]);
+            foreach ($request->all() as $id) {
+                $ppmpNewHistory = new ProProManPlanHistory();
+                $ppmpNewHistory->pro_pro_man_plans_id = $id;
+                $ppmpNewHistory->before_state = json_encode(['state' => 'SAME']);
+                $ppmpNewHistory->after_state = json_encode(['state' => 'SAME']);
+                $ppmpNewHistory->remarks = 'Approved';
+                $ppmpNewHistory->is_confirm = 1;
+                $ppmpNewHistory->changes_summary = json_encode(['Approved']);
+                $ppmpNewHistory->record_by = Auth::user()->id;
+
+                $ppmpNewHistory->save();
+            }
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => $e,
+                'message' => "Something went wrong. Please contact website administrator.",
             ], 400);
         }
         return response()->json([
