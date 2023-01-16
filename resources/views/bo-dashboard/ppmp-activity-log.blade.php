@@ -121,26 +121,6 @@
         </main>
     </div>
 </div>
-<style>
-@media print
-{
-    body * {
-        visibility: hidden;
-    }
-
-    .for-print {
-        display: block !important;
-    }
-
-    .for-print,
-    .for-print * {
-        visibility: visible;
-    }
-    .for-print {
-        display: block !important;
-    }
-}
-</style>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
 @include('layout/datatable', ['tableId' => 'ppmp-activity-log'])
 @include('layout/footer')

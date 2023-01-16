@@ -1549,3 +1549,20 @@ body.swal2-no-backdrop .swal2-shown.swal2-bottom-right {
 a {
     text-decoration: none;
 }
+
+@media print {
+    body * {
+        visibility: hidden;
+        height: 0;
+    }
+
+    .for-print {
+        display: block !important;
+    }
+
+    .for-print,
+    .for-print * {
+        visibility: visible;
+        height: auto;
+    }
+}
