@@ -22,6 +22,16 @@ Make a copy of the .env.example and rename it to .env. Update the database crede
 php artisan migrate --seed
 ```
 
+## For developers - after rebasing/pull
+
+Always run
+
+```
+php artisan migrate:fresh --seed
+```
+
+That way, our databases are synced.
+
 ## Finally
 
 Run
