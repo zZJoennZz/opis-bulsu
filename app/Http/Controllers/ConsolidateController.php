@@ -18,9 +18,6 @@ class ConsolidateController extends Controller
             return $data->item_detail;
         });
 
-        // $test = ProProManPlan::get()->where('year', '=', Auth::user()->ppmp_year)->groupBy('item_details_id');
-
-        // return $test;
         return view('po-dashboard/view-consolidate')->with('consolidated_records', $getConsolidated);
     }
 

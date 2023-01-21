@@ -80,13 +80,10 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email|exists:users',
-            'password' => [
-                'required|string|min:6|confirmed',
-                Passwords::min(8)->mixedCase()->letters()->numbers()->symbols()->uncompromised(),
-            ],
-
+            'password' => 'required|string|min:6|confirmed',
             'password_confirmation' => 'required'
         ]);
+        // Passwords::min(8)->mixedCase()->letters()->numbers()->symbols()->uncompromised(),
 
         $updatePassword = DB::table('password_resets')
             ->where([

@@ -44,7 +44,6 @@ class ItemPurposeController extends Controller
     public function get($purpose_id)
     {
         $purpose = ItemPurpose::find($purpose_id);
-
         return response()->json($purpose, 200);
     }
 
