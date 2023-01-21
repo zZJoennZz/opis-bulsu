@@ -21,52 +21,42 @@
             
         </script>
         
-<script>
-      $('#users-list-table tbody tr .status__id').click(function(){
-    
-        if($(this).hasClass('approved')){
-          $(this).attr('title','off');
-        }else{
-          $(this).attr('title','off');
-    
-        }
-      }); 
-    
-    
-    
-      function status(id, status){
-        // alert(id+"-"+status);
-        
-        var stp = document.getElementById('status'+id).title;
-        
-        // alert(stp);
-        if(stp == 'off'){
-          stf = 0;
-        }
-        if(stp == 'on'){
-          stf = 1;
-        }
-    
-        $.ajax({
-            type: 'GET',
-            url: "/users/update-status/"+id+"/"+stf,
-    
-            success:function(response){
+        <script>
+              function status(id, status){
+                // alert(id+"-"+status);
+                let confirmStatus = confirm("Are you sure to change the status?");
+                  if (confirmStatus) {
+                    var stp = document.getElementById('status'+id).title;
+                    
+                    // alert(stp);
+                    if(stp == 'off'){
+                      stf = 0;
+                    }
+                    if(stp == 'on'){
+                      stf = 1;
+                    }
                 
-              if(response.status == "1")
-              {
-                document.getElementById('status'+ adid).innerHTML = "OFF";
+                    $.ajax({
+                        type: 'GET',
+                        url: "/users/update-status/"+id+"/"+stf,
+                
+                        success:function(response){
+                            
+                          if(response.status == "1")
+                          {
+                            document.getElementById('status'+ adid).innerHTML = "OFF";
+                          }
+                
+                          if(response.status == "0")
+                          {
+                            document.getElementById('status'+ adid).innerHTML = "ON";
+                          }
+                        }
+                
+                    });
+                    location.reload();
+                  }
               }
-    
-              if(response.status == "0")
-              {
-                document.getElementById('status'+ adid).innerHTML = "ON";
-              }
-            }
-    
-        });
-        location.reload();
-      }
-    </script>
+            </script>
     </body>
 </html>
