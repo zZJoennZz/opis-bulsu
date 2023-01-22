@@ -170,18 +170,6 @@
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
 @if ($consolidated_records !== null || count($consolidated_records) !== 0)
 @include('layout/datatable', ['tableId' => 'consolidated-ppmp'])
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script defer>
-    function printConsolidated() {
-        let element = document.getElementById('printReport');
-        let opt = {
-            margin: 0.2,
-            filename: 'Consolidated Annual Procurement Plan {{ Auth::user()->ppmp_year }}',
-            jsPDF: { unit: 'in', format: 'a4' }
-        };
-        let toPrint = element.innerHTML;
-        const worker = html2pdf().set(opt).from(toPrint).save();
-    }
-</script>
+@include('layout/save-pdf', ['divId' => 'printReport', 'margin' => 0.2, 'fileName' => 'eprocure-consolidated-' . date('Y')])
 @endif
 @include('layout/footer')

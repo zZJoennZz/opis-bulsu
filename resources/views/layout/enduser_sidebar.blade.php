@@ -22,7 +22,7 @@
     </a>
 </li>   
 <li class="nav-item">
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="{{ route('pr-list.show') }}">
         <em class="bi bi-list-ul"></em>
         Purchase Request List
     </a>
