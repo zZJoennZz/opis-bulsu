@@ -16,7 +16,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="type" class="form-label">Type</label>
-                        <input type="text" class="form-control" id="type" name="type" placeholder="Type" required>
+                        <select class="form-select"  for="type" id="type" name="type" required>
+                            <option value="" id="">Choose Type</option>
+                            <option value="CAMPUS" id="campus">CAMPUS</option>
+                            <option value="DEVELOPER" id="developer">DEVELOPER</option>
+                            <option value="OFFICE" id="office">OFFICE</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
@@ -55,7 +60,6 @@
                     </div>
                     <div class="mb-3 ">
                         <label for="type" class="form-label">Type</label>
-                        {{-- <input type="text" class="form-control" id="edit_type" name="type" placeholder="Type"> --}}
                         <select class="form-select edit_selectForm"  for="type" id="edit_type" name="type">
                             <option value="CAMPUS" id="campus">CAMPUS</option>
                             <option value="DEVELOPER" id="developer">DEVELOPER</option>
@@ -167,7 +171,7 @@
                     $('#edit_type option:not(#developer)').removeAttr("selected","selected");
                     $('#edit_type option#developer').attr("selected","selected");
                 }
-                
+
                 $('#edit_address').val(res.data.address);
                 $('#edit_email_address').val(res.data.email_address);
                 $('#edit_contact_number').val(res.data.contact_number);
