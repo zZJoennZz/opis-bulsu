@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Http\Requests\LoginRequest;
-use Illuminate\Support\Facades\Password;
+// use Illuminate\Support\Facades\Passwords;
 
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rules\Passwords;
+use Illuminate\Validation\Rules\Password;
 
 
 class AuthController extends Controller
@@ -81,8 +81,8 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email|exists:users',
             'password' => [
-                'required|string|min:6|confirmed',
-                Passwords::min(8)->mixedCase()->letters()->numbers()->symbols()->uncompromised(),
+                // 'required|string|min:6|confirmed',
+                Password::min(8)->mixedCase()->letters()->numbers()->symbols()->uncompromised(),
             ],
 
             'password_confirmation' => 'required'
