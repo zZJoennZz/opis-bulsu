@@ -21,7 +21,7 @@
             <a href="{{ route('pr-admin.show') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-basket2-fill float-start"></em> Purchase Request</a>
         </div>
         <div class="mb-2">
-            <a class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-chat-left-quote-fill float-start"></em> Price Quotation</a>
+            <a href="{{ route('quotation.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-chat-left-quote-fill float-start"></em> Price Quotation</a>
         </div>
         <div class="mb-2">
             <a class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-envelope-check-fill float-start"></em> BAC Resolution</a>
