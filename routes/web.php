@@ -17,6 +17,8 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\SourceofFundsController;
 use App\Http\Controllers\ConsolidateController;
 use App\Http\Controllers\PurchaseRequestController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\QuotationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,8 @@ Route::middleware(['guest'])->group(function () {
 });
 
 //AVAILABLE TO EVERYONE WHO ARE LOGGED IN
+//TODO
+//Fix or create new middleware to check if the account is active before logging in or accessing pages inside this group.
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout.perform');
 
@@ -182,6 +186,17 @@ Route::middleware('procurement.office')->group(function () {
     //Purchase request
     Route::get('/purchase-request', [PurchaseRequestController::class, 'pr_admin'])->name('pr-admin.show');
     Route::post('/toggle-purchase-request', [PurchaseRequestController::class, 'toggle_pr_mode'])->name('pr.toggle');
+
+    //companies
+    Route::get('/company-profiles', [CompanyController::class, 'all'])->name('company.all');
+    Route::post('/company-profiles', [CompanyController::class, 'add'])->name('company.add');
+    Route::get('/company-profiles/{company_id?}', [CompanyController::class, 'single_api'])->name('company.single.api');
+    Route::put('/company-profiles/{company_id?}', [CompanyController::class, 'update'])->name('company.update');
+    Route::delete('/company-profiles/{company_id?}', [CompanyController::class, 'toggleDelete'])->name('company.delete');
+
+    //price quotations
+    Route::get('/quotations', [QuotationController::class, 'all'])->name('quotation.all');
+    Route::get('/quotations/add', [QuotationController::class, 'add'])->name('quotation.add');
 });
 
 //ADMIN ONLY
