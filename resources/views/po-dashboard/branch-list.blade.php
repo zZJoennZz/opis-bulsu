@@ -16,7 +16,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="type" class="form-label">Type</label>
-                        <input type="text" class="form-control" id="type" name="type" placeholder="Type" required>
+                        <select class="form-select"  for="type" id="type" name="type" required>
+                            <option value="" id="">Choose Type</option>
+                            <option value="CAMPUS" id="campus">CAMPUS</option>
+                            <option value="DEVELOPER" id="developer">DEVELOPER</option>
+                            <option value="OFFICE" id="office">OFFICE</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
@@ -48,14 +53,18 @@
                     <h1 class="modal-title fs-5" id="edit-cat-header-text">Edit Item Branch</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body content_box">
                     <div class="mb-3">
                         <label for="branch_name" class="form-label">Branch Name</label>
                         <input type="text" class="form-control" id="edit_branch_name" name="branch_name" placeholder="Branch Name">
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 ">
                         <label for="type" class="form-label">Type</label>
-                        <input type="text" class="form-control" id="edit_type" name="type" placeholder="Type">
+                        <select class="form-select edit_selectForm"  for="type" id="edit_type" name="type">
+                            <option value="CAMPUS" id="campus">CAMPUS</option>
+                            <option value="DEVELOPER" id="developer">DEVELOPER</option>
+                            <option value="OFFICE" id="office">OFFICE</option>
+                        </select>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
@@ -86,8 +95,15 @@
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="h5 card-title">Item Branch List <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($branches) }}</span></span></h1>
-                        <hr />
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Item Branch List'],
+                            ]
+                        ]
+                        )
+                        <h1 class="h5 card-title"><span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($branches) }}</span></span></h1>
                         <div class="mb-4">
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewBranch"><em class="bi bi-folder-plus"></em> Add</button>
                             <button class="btn btn-danger" onclick="deleteRecord()"><em class="bi bi-trash"></em> Delete</button>
@@ -142,7 +158,20 @@
         await axios.get(`{{ url('/branch') }}/${id}`)
             .then(res => {
                 $('#edit_branch_name').val(res.data.branch_name);
-                $('#edit_type').val(res.data.type);
+                // $('#edit_type').val(res.data.type);
+                // $('#edit_type option').val(res.data.type);
+
+                if(res.data.type === 'CAMPUS'){
+                    $('#edit_type option:not(#campus)').removeAttr("selected","selected");
+                    $('#edit_type option#campus').attr("selected","selected");
+                }else if(res.data.type === 'OFFICE'){
+                    $('#edit_type option:not(#office)').removeAttr("selected","selected");
+                    $('#edit_type option#office').attr("selected","selected");
+                }else if(res.data.type === 'DEVELOPER'){
+                    $('#edit_type option:not(#developer)').removeAttr("selected","selected");
+                    $('#edit_type option#developer').attr("selected","selected");
+                }
+
                 $('#edit_address').val(res.data.address);
                 $('#edit_email_address').val(res.data.email_address);
                 $('#edit_contact_number').val(res.data.contact_number);

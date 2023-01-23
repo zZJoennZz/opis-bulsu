@@ -77,9 +77,9 @@
                                                 @endif
                                                  --}}
                                                 @if($user->is_active==1)
-                                                    <a href="javascript:void(0)" id="status{{$user->id}}" title="off" onclick="status('{{$user->id}}','{{$user->is_active}}')" class="status__id"><span class="badge text-bg-success"><em class="bi bi-person-fill-check"></em> Active</span></a>
+                                                    <a href="javascript:void(0)" id="status{{$user->id}}" title="off" onclick="status('{{$user->id}}','{{$user->is_active}}')" class="status__id"><span class="badge text-bg-success" title=""><em class="bi bi-person-fill-check"></em> Active</span></a>
                                                 @else
-                                                    <a href="javascript:void(0)" id="status{{$user->id}}" title="on" onclick="status('{{$user->id}}','{{$user->is_active}}')" class="status__id"><span class="badge text-bg-warning"><em class="bi bi-person-fill-slash"></em> Inactive</span></a>
+                                                    <a href="javascript:void(0)" id="status{{$user->id}}" title="on" onclick="status('{{$user->id}}','{{$user->is_active}}')" class="status__id"><span class="badge text-bg-warning" title=""><em class="bi bi-person-fill-slash"></em> Inactive</span></a>
                                                 @endif
                                             </td>
                                         </tr>

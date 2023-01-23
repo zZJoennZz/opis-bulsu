@@ -55,8 +55,15 @@
             <div class="pt-3">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="h5 card-title">Position List <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($positions) }}</span></span></h1>
-                        <hr />
+                        @include('layout/breadcrumb',
+                        [
+                            'breadcrumbs' => [
+                                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                ['name' => 'Item Position List'],
+                            ]
+                        ]
+                        )
+                        <h1 class="h5 card-title"><span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($positions) }}</span></span></h1>
                         <div class="mb-4">
                             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addNewPosition"><em class="bi bi-folder-plus"></em> Add</button>
                             <button class="btn btn-danger" onclick="deleteRecord()"><em class="bi bi-trash"></em> Delete</button>
