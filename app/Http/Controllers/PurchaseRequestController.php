@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\ProProManPlan;
 use App\Models\PurchaseRequest;
 use App\Models\PurchaseRequestItem;
@@ -15,7 +16,28 @@ class PurchaseRequestController extends Controller
 {
     public function pr_admin()
     {
-        return view('po-dashboard/view-purchase-request');
+        $user = Auth::user();
+        $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
+            return $query->where('is_draft', '=', 0)
+                ->where('is_bo_approve', '=', 1)
+                ->where('is_pr_approve', '=', 1)
+                ->where('is_consolidate', '=', 1)
+                ->where('is_delete', '=', 0)
+                ->where('year', '=', $user->ppmp_year)
+                ->with('item_detail');
+        }])
+            ->with('branch')
+            ->with('requester')
+            ->where('year', '=', $user->ppmp_year)
+            ->get();
+
+        $branches = Branch::has('ppmp')
+            ->with('pr_mode', function ($query) {
+                return $query->where('year', '=', Auth::user()->ppmp_year);
+            })
+            ->get();
+        // return $branches;
+        return view('po-dashboard/view-purchase-request')->with('pr_records', $pr_records)->with('branches', $branches);
     }
 
     public function pr_list()
@@ -28,7 +50,8 @@ class PurchaseRequestController extends Controller
         if ($is_enabled) {
             $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
                 return $query->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('is_consolidate', '=', 1)->where('is_delete', '=', 0)->where('year', '=', $user->ppmp_year)->where('branches_id', '=', $user->branches_id)->with('item_detail');
-            }])->with('branch')->with('requester')->get();
+            }])->with('branch')->with('requester')->where('branches_id', '=', $user->branches_id)->get();
+            // return $pr_records;
             $return_value = $return_value->with('pr_records', $pr_records);
         }
         return $return_value;
@@ -60,6 +83,13 @@ class PurchaseRequestController extends Controller
 
     public function new_submission(Request $request)
     {
+        $request->validate([
+            'id' => 'required|min:3'
+        ], [
+            'id.required' => 'Please select item/s to submit.',
+            'id.min' => 'Please select item/s to submit'
+        ]);
+
         $ppmp_id = json_decode($request->id);
         $user = Auth::user();
 
@@ -104,6 +134,39 @@ class PurchaseRequestController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Please reload the page and report if the submissions failed again. DO NOT MODIFY WEB PAGE THROUGH DEVELOPER TOOLS.',
+            ], 400);
+        }
+    }
+
+    public function toggle_pr_mode(Request $request)
+    {
+        $mode = $request->mode ? "ENABLED" : "DISABLED";
+        $check_pr_mode = PurchaseRequestMode::where('branches_id', '=', $request->branches_id)->where('year', '=', Auth::user()->ppmp_year)->get();
+        $is_pr_mode_exists = count($check_pr_mode) >= 1 ? true : false;
+        // return response()->json($is_pr_mode_exists, 200);
+        DB::beginTransaction();
+        try {
+            if ($is_pr_mode_exists) {
+                $toggleMode = PurchaseRequestMode::find($check_pr_mode[0]->id);
+                $toggleMode->mode = $mode;
+                $toggleMode->save();
+            } else {
+                $newMode = new PurchaseRequestMode();
+                $newMode->branches_id = $request->branches_id;
+                $newMode->mode = $mode;
+                $newMode->year = Auth::user()->ppmp_year;
+                $newMode->save();
+            }
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'message' => 'PR toggled',
+            ], 200);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Toggling didn\'t work.'
             ], 400);
         }
     }

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Auth;
 
 class Branch extends Model
 {
@@ -16,5 +15,15 @@ class Branch extends Model
     public function ppmp()
     {
         return $this->hasMany(ProProManPlan::class, 'branches_id', 'id');
+    }
+
+    public function pr_record()
+    {
+        return $this->hasMany(PurchaseRequest::class, 'branches_id', 'id');
+    }
+
+    public function pr_mode()
+    {
+        return $this->hasMany(PurchaseRequestMode::class, 'branches_id', 'id');
     }
 }

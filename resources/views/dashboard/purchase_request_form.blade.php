@@ -71,7 +71,7 @@
                                             </table>
                                         </div>
                                         <div>
-                                            <button class="btn btn-primary"><em class="bi bi-file-earmark-fill"></em> Submit Purchase Request</button>
+                                            <button id="submitBtn" disabled class="btn btn-primary"><em class="bi bi-file-earmark-fill"></em> Submit Purchase Request</button>
                                         </div>
                                     </form>
                                 </div>
@@ -183,7 +183,12 @@
             .then(res => {
                 window.location.href = `{{ route('pr-list.show') }}`;
             })
-            .catch(err => window.location.reload());
+            .catch(err => {
+                if (err.name && err.name === 'AxiosError') {
+                    alert(err.response.data.message);
+                }
+                window.location.reload();
+            });
     }
 
     $(document).ready(async function() {
@@ -191,6 +196,11 @@
             .then(res => {
                 allItems = res.data.data;
                 masterList = allItems;
+                if (masterList.length > 0) {
+                    $('#submitBtn').prop("disabled", false);
+                } else {
+                    $('#submitBtn').html(`<em class="bi bi-exclamation-diamond-fill"></em> No items available`);
+                }
                 $('#items-are-loading').fadeOut();
             })
             .then(() => {

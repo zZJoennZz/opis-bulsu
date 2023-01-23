@@ -24,7 +24,7 @@
                                 <a href="{{ route('pr-form.show') }}" class="btn btn-outline-success"><em class="bi bi-plus-circle"></em> New Purchase Request</a>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-small table-bordered border-dark">
+                                <table class="table table-small table-bordered">
                                     <caption>Purchase Requests for the Year <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
                                     <thead>
                                         <tr>
@@ -34,8 +34,8 @@
                                             <th>Date</th>
                                             <th>Item Description</th>
                                             <th>Quantity</th>
-                                            <th>Estimated Budget</th>
                                             <th>Total Cost</th>
+                                            <th>Estimated Budget</th>
                                             <th>Fund Cluster</th>
                                             <th>Responsibility Center</th>
                                             <th></th>
@@ -45,20 +45,20 @@
                                     <tbody>
                                         @foreach ($pr_records as $pr)
                                             <tr>
-                                                <td>{{ $pr->pr_number }} <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample{{$pr->id}}" aria-expanded="false" aria-controls="collapseExample">
-                                                    Button with data-bs-target
-                                                  </button></td>
+                                                <td>{{ $pr->pr_number }}</td>
                                                 <td>{{ $pr->branch->branch_name }}</td>
                                                 <td>{{ $pr->requester->profile->first_name }} {{ $pr->requester->profile->last_name }}</td>
                                                 <td>{{ date("m-d-Y", strtotime($pr->created_at)) }}</td>
                                                 <td colspan="6"></td>
                                                 <td>
-                                                    <button class="btn btn-primary" type="button"><em class="bi bi-check2-circle"></em> Approve</button>
+                                                    <button class="btn btn-danger" type="button"><em class="bi bi-arrow-counterclockwise"></em></button>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <button class="btn btn-primary" type="button"><em class="bi bi-printer-fill"></em></button>
+                                                </td>
                                             </tr>
                                             @foreach ($pr->pr_items as $item)
-                                                <tr class="collapse" id="collapseExample{{$pr->id}}">
+                                                <tr>
                                                     <td colspan="4"></td>
                                                     <td>{{ $item->ppmp->item_detail->description }}</td>
                                                     <td>
@@ -70,10 +70,10 @@
                                                         @endphp
                                                         {{ $total_qty }}
                                                     </td>
+                                                    <td>{{ number_format($item->ppmp->item_detail->price_catalogue * $total_qty, 2) }}</td>
                                                     <td>{{ number_format($item->ppmp->estimated_budget, 2) }}</td>
-                                                    <td>{{ number_format($item->ppmp->estimated_budget * $total_qty, 2) }}</td>
                                                     <td>{{ $item->ppmp->source_of_fund->source_of_fund }}</td>
-                                                    <td></td>
+                                                    <td><span class="text-secondary fst-italic">Placeholder</span></td>
                                                     <td colspan="2"></td>
                                             @endforeach
                                         @endforeach

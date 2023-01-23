@@ -181,6 +181,7 @@ Route::middleware('procurement.office')->group(function () {
 
     //Purchase request
     Route::get('/purchase-request', [PurchaseRequestController::class, 'pr_admin'])->name('pr-admin.show');
+    Route::post('/toggle-purchase-request', [PurchaseRequestController::class, 'toggle_pr_mode'])->name('pr.toggle');
 });
 
 //ADMIN ONLY
