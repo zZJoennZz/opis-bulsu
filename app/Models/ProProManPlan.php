@@ -60,4 +60,9 @@ class ProProManPlan extends Model
     {
         return $this->hasOne(UserProfile::class, 'users_id', 'submitted_by');
     }
+
+    public function pr_item()
+    {
+        return $this->hasOne(PurchaseRequestItem::class, 'pro_pro_man_plans_id', 'id');
+    }
 }

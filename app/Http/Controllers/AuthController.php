@@ -84,9 +84,9 @@ class AuthController extends Controller
                 // 'required|string|min:6|confirmed',
                 Password::min(8)->mixedCase()->letters()->numbers()->symbols()->uncompromised(),
             ],
-
             'password_confirmation' => 'required'
         ]);
+        // Passwords::min(8)->mixedCase()->letters()->numbers()->symbols()->uncompromised(),
 
         $updatePassword = DB::table('password_resets')
             ->where([

@@ -5,9 +5,9 @@
     $(document).ready(function() {
         $('#{{ $tableId }}').DataTable(
             @if(isset($columnId))
-                {   
+                {
                     columnDefs: [ { "targets":[{{$columnId}}], "visible":false, "searchable": false } ],
-                    order: [[ {{$columnId}}, 'desc' ]],       
+                    order: [[ {{$columnId}}, 'desc' ]],
                 }
             @endif
         );

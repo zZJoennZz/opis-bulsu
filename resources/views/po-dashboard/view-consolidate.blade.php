@@ -16,9 +16,6 @@
                             ]
                         ]
                         )
-                        <div class="mb-3">
-                            <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($consolidated_records) }}</span></span>
-                        </div>
                         @if ($consolidated_records === null || count($consolidated_records) === 0)
                             <p class="text-center fst-italic text-secondary">PPMP for the year <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span> is not yet consolidated.</p>
                             <form onsubmit="return confirm(`Are you sure to consolidate the submitted PPMP as of ${new Date().toLocaleDateString('en-PH', { weekday: 'short', 'year': 'numeric', 'day': 'numeric', 'month': 'long', 'hour': '2-digit', 'minute': '2-digit', 'second': '2-digit' })} for the year {{ Auth::user()->ppmp_year }}.`)" class="d-flex w-100" method="POST" action="{{ route('consolidate.perform') }}">
@@ -26,7 +23,9 @@
                                 <button type="submit" class="btn btn-primary btn-lg mx-auto"><em class="bi bi-collection-fill"></em> Consolidate <span class="badge bg-dark">{{ Auth::user()->ppmp_year }}</span></button>
                             </form>
                         @else
-                            
+                            <div class="mb-3">
+                                <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($consolidated_records) }}</span></span>
+                            </div>
                             <form onsubmit="return confirm('Are you sure to reset the consolidated records?')" action="{{ route('consolidate.reset') }}" method="POST">
                                 @csrf
                                 <div class="btn-group" role="toolbar" aria-label="Consolidated PPMP Records Tools">
@@ -57,13 +56,10 @@
                                                 <td>{{ $ppmp[0]->item_detail->unit->uom }}</td>
                                                 <td class="text-center">
                                                     @php($totalQty = 0)
-        
                                                     @foreach ($ppmp[0]->milestones as $rec)
                                                         @php($totalQty += $rec->milestone_value)
                                                     @endforeach
-        
                                                     {{ $totalQty }}
-
                                                     @php($grandTotalQty += $totalQty)
                                                 </td>
                                                 <td class="text-end">
@@ -174,18 +170,6 @@
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
 @if ($consolidated_records !== null || count($consolidated_records) !== 0)
 @include('layout/datatable', ['tableId' => 'consolidated-ppmp'])
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js" integrity="sha512-YcsIPGdhPK4P/uRW6/sruonlYj+Q7UHWeKfTAkBW+g83NKM+jMJFJ4iAPfSnVp7BKD4dKMHmVSvICUbE/V1sSw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script defer>
-    function printConsolidated() {
-        let element = document.getElementById('printReport');
-        let opt = {
-            margin: 0.2,
-            filename: 'Consolidated Annual Procurement Plan {{ Auth::user()->ppmp_year }}',
-            jsPDF: { unit: 'in', format: 'a4' }
-        };
-        let toPrint = element.innerHTML;
-        const worker = html2pdf().set(opt).from(toPrint).save();
-    }
-</script>
+@include('layout/save-pdf', ['divId' => 'printReport', 'margin' => 0.2, 'fileName' => 'eprocure-consolidated-' . date('Y')])
 @endif
 @include('layout/footer')

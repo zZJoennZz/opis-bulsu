@@ -16,6 +16,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\SourceofFundsController;
 use App\Http\Controllers\ConsolidateController;
+use App\Http\Controllers\PurchaseRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,8 +60,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
 
     Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
-
-   
 });
 
 //AVAILABLE TO END USERS
@@ -76,6 +75,12 @@ Route::middleware('end.user')->group(function () {
 
     //PPMP
     Route::get('/ppmp-request', [PPMPController::class, 'get'])->name('ppmp-request.get');
+
+    //purchase request list
+    Route::get('/purchase-requests-list', [PurchaseRequestController::class, 'pr_list'])->name('pr-list.show');
+    Route::get('/purchase-request-form', [PurchaseRequestController::class, 'pr_form'])->name('pr-form.show');
+    Route::get('/available-items-for-pr', [PurchaseRequestController::class, 'pr_available_items_api'])->name('pr-items.show');
+    Route::post('/new-purchase-request', [PurchaseRequestController::class, 'new_submission'])->name('new-pr.perform');
 });
 
 //AVAILABLE TO BUDGET OFFICE
@@ -171,10 +176,12 @@ Route::middleware('procurement.office')->group(function () {
     // Manage user approval
     Route::get('/users/update-status/{id}/{st}', [UserController::class, 'status_manage'])->name('status.manage');
 
-    
-
     Route::post('/approve-item-detail/{item_detail_id}', [ItemDetailController::class, 'approve_item_detail'])->name('item-detail-review-approve.perform');
     Route::delete('/delete-item-detail/{item_detail_id}', [ItemDetailController::class, 'delete_item_detail'])->name('item-detail.delete');
+
+    //Purchase request
+    Route::get('/purchase-request', [PurchaseRequestController::class, 'pr_admin'])->name('pr-admin.show');
+    Route::post('/toggle-purchase-request', [PurchaseRequestController::class, 'toggle_pr_mode'])->name('pr.toggle');
 });
 
 //ADMIN ONLY
