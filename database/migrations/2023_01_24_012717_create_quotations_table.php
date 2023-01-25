@@ -17,12 +17,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('companies_id');
             $table->string('quotation_number');
-            $table->unsignedBigInteger('pro_pro_man_plans_id');
-            $table->string('purpose'); //not sure if this is really needed.
+            $table->string('year');
             $table->timestamps();
 
             $table->foreign('companies_id')->references('id')->on('companies');
-            $table->foreign('pro_pro_man_plans_id')->references('id')->on('pro_pro_man_plans');
         });
     }
 
