@@ -12,7 +12,16 @@ class Quotation extends Model
     protected $fillable = [
         'companies_id',
         'quotation_number',
-        'pro_pro_man_plans_id',
-        'purpose'
+        'year'
     ];
+
+    public function items()
+    {
+        return $this->hasMany(QuotationItem::class, 'quotations_id', 'id');
+    }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class, 'id', 'companies_id');
+    }
 }
