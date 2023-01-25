@@ -51,7 +51,11 @@
                                                 <td>{{ date("m-d-Y", strtotime($pr->created_at)) }}</td>
                                                 <td colspan="6"></td>
                                                 <td>
-                                                    <button class="btn btn-danger" type="button"><em class="bi bi-arrow-counterclockwise"></em></button>
+                                                    @if ($pr->is_approve === 1)
+                                                        <button class="btn btn-danger" type="button" disabled><em class="bi bi-arrow-counterclockwise"></em></button>
+                                                    @else
+                                                        <button class="btn btn-danger" type="button"><em class="bi bi-arrow-counterclockwise"></em></button>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-primary" type="button"><em class="bi bi-printer-fill"></em></button>

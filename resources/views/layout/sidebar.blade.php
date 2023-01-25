@@ -13,11 +13,12 @@
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link position-relative" href="{{ route('notification.show') }}">
-                    <em class="bi bi-patch-exclamation-fill"></em>
-                    Notification(s)
                     @if (count(Auth::user()->notifications->where('is_read', '=', 0)) > 0)
-                        <span class="badge text-bg-danger">New!</span>
+                        <em class="bi bi-circle-square text-danger"></em>
+                    @else
+                        <em class="bi bi-app text-secondary"></em>
                     @endif
+                    Notification(s)
                 </a>
             </li>
         </ul>

@@ -4,12 +4,13 @@
 <script defer>
     $(document).ready(function() {
         $('#{{ $tableId }}').DataTable(
-            @if(isset($columnId))
-                {
+            {
+                @if(isset($columnId))
                     columnDefs: [ { "targets":[{{$columnId}}], "visible":false, "searchable": false } ],
                     order: [[ {{$columnId}}, 'desc' ]],
-                }
-            @endif
+                @endif
+            "autoWidth": false,
+        }
         );
     });
 </script>

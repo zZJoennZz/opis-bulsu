@@ -17,6 +17,8 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\SourceofFundsController;
 use App\Http\Controllers\ConsolidateController;
 use App\Http\Controllers\PurchaseRequestController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\QuotationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +43,8 @@ Route::middleware(['guest'])->group(function () {
 });
 
 //AVAILABLE TO EVERYONE WHO ARE LOGGED IN
+//TODO
+//Fix or create new middleware to check if the account is active before logging in or accessing pages inside this group.
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout.perform');
 
@@ -182,6 +186,22 @@ Route::middleware('procurement.office')->group(function () {
     //Purchase request
     Route::get('/purchase-request', [PurchaseRequestController::class, 'pr_admin'])->name('pr-admin.show');
     Route::post('/toggle-purchase-request', [PurchaseRequestController::class, 'toggle_pr_mode'])->name('pr.toggle');
+    Route::get('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'pr_single'])->name('pr-single.api');
+    Route::post('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'approve_pr'])->name('pr-approve.api');
+
+    //companies
+    Route::get('/company-profiles', [CompanyController::class, 'all'])->name('company.all');
+    Route::post('/company-profiles', [CompanyController::class, 'add'])->name('company.add');
+    Route::get('/company-profiles/{company_id?}', [CompanyController::class, 'single_api'])->name('company.single.api');
+    Route::put('/company-profiles/{company_id?}', [CompanyController::class, 'update'])->name('company.update');
+    Route::delete('/company-profiles/{company_id?}', [CompanyController::class, 'toggleDelete'])->name('company.delete');
+
+    //price quotations
+    Route::get('/quotations', [QuotationController::class, 'all'])->name('quotation.all');
+    Route::get('/quotations/add', [QuotationController::class, 'add'])->name('quotation.add');
+    Route::post('/quotations/add', [QuotationController::class, 'new_request'])->name('quotation.new');
+    Route::get('/quotations/single/{quotation_id?}', [QuotationController::class, 'get_single'])->name('quotation.single.api');
+    Route::get('/quotations/summary', [QuotationController::class, 'get_summary'])->name('quotation.summary');
 });
 
 //ADMIN ONLY
