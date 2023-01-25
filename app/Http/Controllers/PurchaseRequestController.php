@@ -46,12 +46,24 @@ class PurchaseRequestController extends Controller
 
         $pr_records = [];
         $is_enabled = $this->isPrEnabled();
-        $return_value = view('dashboard/purchase_request_list')->with('is_pr_enabled', $is_enabled);
+        $return_value = view('dashboard/purchase_request_list')
+            ->with('is_pr_enabled', $is_enabled);
         if ($is_enabled) {
             $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
-                return $query->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('is_consolidate', '=', 1)->where('is_delete', '=', 0)->where('year', '=', $user->ppmp_year)->where('branches_id', '=', $user->branches_id)->with('item_detail');
-            }])->with('branch')->with('requester')->where('branches_id', '=', $user->branches_id)->get();
-            // return $pr_records;
+                return $query->where('is_draft', '=', 0)
+                    ->where('is_bo_approve', '=', 1)
+                    ->where('is_pr_approve', '=', 1)
+                    ->where('is_consolidate', '=', 1)
+                    ->where('is_delete', '=', 0)
+                    ->where('year', '=', $user->ppmp_year)
+                    ->where('branches_id', '=', $user->branches_id)
+                    ->with('item_detail');
+            }])
+                ->with('branch')
+                ->with('requester')
+                ->where('branches_id', '=', $user->branches_id)
+                ->get();
+
             $return_value = $return_value->with('pr_records', $pr_records);
         }
         return $return_value;
@@ -65,9 +77,22 @@ class PurchaseRequestController extends Controller
     public function pr_available_items_api()
     {
         try {
-            $available_items = ProProManPlan::where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('is_consolidate', '=', 1)->where('is_delete', '=', 0)->where('year', '=', Auth::user()->ppmp_year)->where('branches_id', '=', Auth::user()->branches_id)->whereNotIn('id', function ($query) {
-                return $query->select('pro_pro_man_plans_id')->from('purchase_request_items');
-            })->with('item_detail')->with('milestones')->with('source_of_fund')->with('item_purpose')->get();
+            $available_items = ProProManPlan::where('is_draft', '=', 0)
+                ->where('is_bo_approve', '=', 1)
+                ->where('is_pr_approve', '=', 1)
+                ->where('is_consolidate', '=', 1)
+                ->where('is_delete', '=', 0)
+                ->where('year', '=', Auth::user()->ppmp_year)
+                ->where('branches_id', '=', Auth::user()->branches_id)
+                ->whereNotIn('id', function ($query) {
+                    return $query->select('pro_pro_man_plans_id')
+                        ->from('purchase_request_items');
+                })
+                ->with('item_detail')
+                ->with('milestones')
+                ->with('source_of_fund')
+                ->with('item_purpose')
+                ->get();
 
             return response()->json([
                 'success' => true,
@@ -94,9 +119,19 @@ class PurchaseRequestController extends Controller
         $user = Auth::user();
 
         //2nd layer of validation
-        $is_ppmp_valid_for_pr = count(ProProManPlan::whereIn('id', $ppmp_id)->where('branches_id', '=', $user->branches_id)->where('year', '=', $user->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('is_consolidate', '=', 1)->where('is_delete', '=', 0)->whereNotIn('id', function ($query) {
-            return $query->select('pro_pro_man_plans_id')->from('purchase_request_items');
-        })->get()) === 0 ? false : true;
+        $is_ppmp_valid_for_pr = count(ProProManPlan::whereIn('id', $ppmp_id)
+            ->where('branches_id', '=', $user->branches_id)
+            ->where('year', '=', $user->ppmp_year)
+            ->where('is_draft', '=', 0)
+            ->where('is_bo_approve', '=', 1)
+            ->where('is_pr_approve', '=', 1)
+            ->where('is_consolidate', '=', 1)
+            ->where('is_delete', '=', 0)
+            ->whereNotIn('id', function ($query) {
+                return $query->select('pro_pro_man_plans_id')
+                    ->from('purchase_request_items');
+            })
+            ->get()) === 0 ? false : true;
 
         DB::beginTransaction();
         if ($is_ppmp_valid_for_pr) {
@@ -138,6 +173,29 @@ class PurchaseRequestController extends Controller
         }
     }
 
+    public function approve_pr($pr_id)
+    {
+        DB::beginTransaction();
+        try {
+            $pr_record = PurchaseRequest::find($pr_id);
+            $pr_record->is_approve = 1;
+            $pr_record->save();
+            DB::commit();
+            redirect()->back()->with('success', 'Purchase request approved.');
+            return response()->json([
+                'success' => true,
+                'message' => 'Purchase request approved.'
+            ], 200);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            redirect()->back()->withErrors(['Something went wrong. Purchase request not approved.Something went wrong. Purchase request not approved.']);
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Purchase request not approved.'
+            ], 400);
+        }
+    }
+
     public function toggle_pr_mode(Request $request)
     {
         $mode = $request->mode ? "ENABLED" : "DISABLED";
@@ -169,6 +227,16 @@ class PurchaseRequestController extends Controller
                 'message' => 'Something went wrong. Toggling didn\'t work.'
             ], 400);
         }
+    }
+
+    public function pr_single($pr_id)
+    {
+        $pr_records = PurchaseRequest::where('id', '=', $pr_id)
+            ->where('year', '=', Auth::user()->ppmp_year)
+            ->where('is_approve', '=', '1')
+            ->with(['pr_items', 'pr_items.ppmp', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.milestones'])
+            ->get();
+        return response()->json($pr_records, 200);
     }
 
     private function isPrEnabled()
