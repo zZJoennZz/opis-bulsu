@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Setting;
 
 if (!function_exists('checkIfDeleted')) {
     function checkIfDeleted(string $tableName, int $id)
@@ -10,5 +12,27 @@ if (!function_exists('checkIfDeleted')) {
         }
         $checkIfDelete = DB::table($tableName)->select('is_delete')->where('id', '=', $id)->get();
         return $checkIfDelete[0]->is_delete;
+    }
+}
+
+if (!function_exists('getSettingValue')) {
+    function getSettingValue(string $settingName)
+    {
+        if ($settingName === "" || $settingName === null) {
+            return "Error: Please provide which setting to get.";
+        }
+        try {
+            $setting = Setting::where('name', '=', $settingName)->get();
+            return $setting[0]->value;
+        } catch (Throwable $e) {
+            return "Something went wrong with fetching '" . $settingName . "' setting.";
+        }
+    }
+}
+
+if (!function_exists('getPpmpYear')) {
+    function getPpmpYear()
+    {
+        return Auth::user()->ppmp_year;
     }
 }
