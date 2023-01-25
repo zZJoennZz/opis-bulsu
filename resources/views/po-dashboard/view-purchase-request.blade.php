@@ -64,7 +64,7 @@
                             <table class="table table-small table-bordered">
                                 <caption>Purchase Requests for the Year <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
                                 <thead>
-                                    <tr>
+                                    <tr class="small">
                                         <th>PR #</th>
                                         <th>Entity Name</th>
                                         <th>Requested By</th>
@@ -75,8 +75,8 @@
                                         <th>Estimated Budget</th>
                                         <th>Fund Cluster</th>
                                         <th>Responsibility Center</th>
-                                        <th></th>
-                                        <th></th>
+                                        <th>Approve</th>
+                                        <th>Print</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -88,10 +88,34 @@
                                             <td>{{ date("m-d-Y", strtotime($pr->created_at)) }}</td>
                                             <td colspan="6"></td>
                                             <td>
-                                                <button class="btn btn-danger" type="button"><em class="bi bi-arrow-counterclockwise"></em></button>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    @if ($pr->is_approve === 0)
+                                                        <button
+                                                            class="btn btn-primary"
+                                                            type="button"
+                                                            onclick="approvePr({{$pr->id}})"
+                                                        >
+                                                            <em class="bi bi-check-circle"></em>
+                                                        </button>
+                                                    @else
+                                                        <button
+                                                            class="btn btn-primary"
+                                                            type="button"
+                                                            disabled
+                                                        >
+                                                            <em class="bi bi-check-circle"></em>
+                                                        </button>
+                                                    @endif
+                                                </div>
                                             </td>
                                             <td>
-                                                <button class="btn btn-primary" type="button"><em class="bi bi-printer-fill"></em></button>
+                                                <div class="d-flex justify-content-center align-items-center">
+                                                    <button
+                                                        class="btn btn-secondary"
+                                                        type="button"
+                                                    >
+                                                        <em class="bi bi-printer-fill"></em></button>
+                                                </div>
                                             </td>
                                         </tr>
                                         @foreach ($pr->pr_items as $item)
@@ -136,6 +160,18 @@
         await axios.post(`{{ route('pr.toggle') }}`, data)
             .then(res => console.log(res))
             .catch(err => alert('Toggling the PR mode didn\'t work. Please refresh the page. If the problem persists, please report to web administrator.'));
+    }
+
+    async function approvePr(prId) {
+        await axios.post(`{{ route('pr-approve.api') }}/${prId}`)
+            .then(res => {
+                console.log(res);
+                window.location.reload();
+            })
+            .catch(err => {
+                console.log(err);
+                window.location.reload();
+            });
     }
 </script>
 @include('layout/datatable', ['tableId' => 'branches-list'])
