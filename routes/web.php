@@ -186,6 +186,8 @@ Route::middleware('procurement.office')->group(function () {
     //Purchase request
     Route::get('/purchase-request', [PurchaseRequestController::class, 'pr_admin'])->name('pr-admin.show');
     Route::post('/toggle-purchase-request', [PurchaseRequestController::class, 'toggle_pr_mode'])->name('pr.toggle');
+    Route::get('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'pr_single'])->name('pr-single.api');
+    Route::post('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'approve_pr'])->name('pr-approve.api');
 
     //companies
     Route::get('/company-profiles', [CompanyController::class, 'all'])->name('company.all');
@@ -197,6 +199,9 @@ Route::middleware('procurement.office')->group(function () {
     //price quotations
     Route::get('/quotations', [QuotationController::class, 'all'])->name('quotation.all');
     Route::get('/quotations/add', [QuotationController::class, 'add'])->name('quotation.add');
+    Route::post('/quotations/add', [QuotationController::class, 'new_request'])->name('quotation.new');
+    Route::get('/quotations/single/{quotation_id?}', [QuotationController::class, 'get_single'])->name('quotation.single.api');
+    Route::get('/quotations/summary', [QuotationController::class, 'get_summary'])->name('quotation.summary');
 });
 
 //ADMIN ONLY
