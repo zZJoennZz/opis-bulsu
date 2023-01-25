@@ -22,4 +22,9 @@ class Company extends Model
     {
         return $this->hasOne(User::class, 'id', 'added_by');
     }
+
+    public function quotations()
+    {
+        return $this->hasMany(Quotation::class, 'companies_id', 'id');
+    }
 }
