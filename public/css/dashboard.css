@@ -1554,6 +1554,7 @@ a {
     body * {
         visibility: hidden;
         height: 0;
+        overflow: visible;
     }
 
     .for-print {
@@ -1562,6 +1563,18 @@ a {
 
     .for-print,
     .for-print * {
+        visibility: visible;
+        height: auto;
+    }
+
+    .for-q-print {
+        display: block !important;
+        width: 95% !important;
+        margin: auto;
+    }
+
+    .for-q-print,
+    .for-q-print * {
         visibility: visible;
         height: auto;
     }
