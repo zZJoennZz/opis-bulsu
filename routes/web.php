@@ -85,6 +85,7 @@ Route::middleware('end.user')->group(function () {
     Route::get('/purchase-request-form', [PurchaseRequestController::class, 'pr_form'])->name('pr-form.show');
     Route::get('/available-items-for-pr', [PurchaseRequestController::class, 'pr_available_items_api'])->name('pr-items.show');
     Route::post('/new-purchase-request', [PurchaseRequestController::class, 'new_submission'])->name('new-pr.perform');
+    Route::get('/pr-api/{pr_id?}', [PurchaseRequestController::class, 'pr_single_user'])->name('get-pr-user.single.api');
 });
 
 //AVAILABLE TO BUDGET OFFICE
