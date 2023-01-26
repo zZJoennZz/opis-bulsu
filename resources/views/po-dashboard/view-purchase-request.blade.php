@@ -113,6 +113,7 @@
                                                     <button
                                                         class="btn btn-secondary"
                                                         type="button"
+                                                        onclick="getPr({{$pr->id}})"
                                                     >
                                                         <em class="bi bi-printer-fill"></em></button>
                                                 </div>
@@ -141,6 +142,109 @@
                                 </tbody>
                             </table>
                         </div>
+                        
+                        {{-- FOR PRINT --}}
+                        <div class="modal fade" id="printPr" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="printPrLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-fullscreen">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="printPrLabel">Purchase Request Details</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="w-75 m-auto for-q-print" id="quotation-element">
+                                            <div>
+                                                <div class="row mb-4">
+                                                    <div class="col-2"></div>
+                                                    <div class="col-8 text-center fw-bold">
+                                                        <img src="{{ asset('img/bsu-small-logo.png') }}" alt="bsu logo" width="100" style="float: left;" />
+                                                        <div class="h-100 d-flex align-content-center flex-column justify-content-center">
+                                                            <div>Republic of Philippines</div>
+                                                            <div class="fs-4 mb-2">Bulacan State University</div>
+                                                            <div class="fs-6">City of Malolos, Bulacan</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-2"></div>
+                                                </div>
+                                                <div class="row mb-4">
+                                                    <div class="col-12 text-center fs-5 fw-bold text-uppercase">
+                                                        Purchase Request
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3 small">
+                                                    <div class="col-6">
+                                                        <div>
+                                                            <span class="text-secondary">Entity Name:</span> <span id="entity_name"></span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-secondary">Office/Section:</span> _______________________ <span class="text-secondary">PR No.:</span> <span id="pr_number"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div>
+                                                            <span class="text-secondary">Fund Cluster:</span> <span id="source_of_fund"></span>
+                                                        </div>
+                                                        <div>
+                                                            <span class="text-secondary">Responsibility Center Code:</span> _______________________ <span class="text-secondary">Date:</span> <span id="pr_date"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-12">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th class="text-center">Stock/Property No.</th>
+                                                                    <th class="text-center">Item Description</th>
+                                                                    <th class="text-center">Quantity</th>
+                                                                    <th class="text-center">Unit</th>
+                                                                    <th class="text-center">Unit Cost</th>
+                                                                    <th class="text-center">Total Cost</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody id="pr_items_body">
+                                                                
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col-1">Purpose:</div>
+                                                    <div class="col-11 m-auto border-bottom border-dark"> <span id="item_purposes"></span></div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6 border border-dark p-3">
+                                                        <div class="small text-center mb-3">Requested by:</div>
+                                                        <div class="row small">
+                                                            <div class="col-4 fw-bold text-end">Signature:</div>
+                                                            <div class="col-7 border-bottom border-dark"></div>
+                                                        </div>
+                                                        <div class="row small">
+                                                            <div class="col-4 fw-bold text-end">Printed Name:</div>
+                                                            <div class="col-7 border-bottom border-dark"></div>
+                                                        </div>
+                                                        <div class="row small">
+                                                            <div class="col-4 fw-bold text-end">Disignation:</div>
+                                                            <div class="col-7 text-center">AO V. Procurement Officer</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6 border-top border-end border-bottom border-dark p-3">
+                                                        <div class="small text-center mb-5">Approved</div>
+                                                        <div class="text-center fw-bold">{{ getSettingValue('university_president') }}</div>
+                                                        <div class="text-center fst-italic">University President</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" onclick="window.print()" class="btn btn-primary"><em class="bi bi-printer-fill"></em> Print</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -172,6 +276,62 @@
                 console.log(err);
                 window.location.reload();
             });
+    }
+
+    async function getPr(prId) {
+        const dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        await axios.get(`{{ route('pr-single.api') }}/${prId}`)
+            .then(res => {
+                let prData = res.data[0];
+                let sourceOfFund = '';
+                let sourceOfFundArr = [];
+                let prTableContent = '';
+                let itemPurposes = '';
+                prData.pr_items.map(item => {
+                    
+                    if (!sourceOfFundArr.includes(item.ppmp.source_of_fund.source_of_fund)) {
+                        if (sourceOfFund === '') {
+                        sourceOfFund += item.ppmp.source_of_fund.source_of_fund;
+                        } else {
+                            sourceOfFund += ', ' + item.ppmp.source_of_fund.source_of_fund;
+                        }
+                    }
+
+                    sourceOfFundArr.push(item.ppmp.source_of_fund.source_of_fund);
+
+                    let totalQty = 0;
+                    item.ppmp.milestones.map(m => {
+                        totalQty += m.milestone_value;
+                    });
+
+                    
+                    if (itemPurposes === '') {
+                        itemPurposes += item.ppmp.item_purpose.description;
+                    } else {
+                        itemPurposes += ', ' + item.ppmp.item_purpose.description;
+                    }
+
+                    prTableContent += `
+                        <tr>
+                            <td>1</td>
+                            <td>${item.ppmp.item_detail.description}</td>
+                            <td>${totalQty}</td>
+                            <td>${item.ppmp.item_detail.unit.uom}</td>
+                            <td>₱ ${item.ppmp.item_detail.price_catalogue}</td>
+                            <td>₱ ${(item.ppmp.item_detail.price_catalogue * totalQty).toFixed(2)}</td>
+                        </tr>
+                    `;
+                })
+                let prDate = new Date(prData.created_at);
+                $('#pr_date').html(prDate.toLocaleDateString('en-PH', dateOptions));
+                $('#entity_name').html(prData.branch.branch_name);
+                $('#pr_number').html(prData.pr_number);
+                $('#source_of_fund').html(sourceOfFund);
+                $('#pr_items_body').html(prTableContent);
+                $('#item_purposes').html(itemPurposes);
+                $('#printPr').modal('toggle');
+            })
+            .catch(err => alert('Cannot fetch purchase request record.'));
     }
 </script>
 @include('layout/datatable', ['tableId' => 'branches-list'])
