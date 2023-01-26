@@ -105,18 +105,15 @@ class UserController extends Controller
         $user = Auth::user();
 
         if ($user->account_type !== "admin" && $user->account_type !== "PROCUREMENT_OFFICE") {
-            return redirect()->route('dashboard.show');
+            return redirect()->route('dashboard.show')->withErrors(['You are not allowed to visit this page.']);
         } else {
             DB::beginTransaction();
             try {
                 $newUser = User::find($inputs["id"]);
                 $newUser->username = $inputs['username'];
-                $newUser->password = "a";
                 $newUser->email = $inputs['email'];
                 $newUser->account_type = $inputs['account_type'];
-                $newUser->ppmp_year = date('Y');
                 $newUser->branches_id = $inputs['branches_id'];
-                $newUser->is_active = 1;
                 $newUser->save();
 
                 $newUserProfile = UserProfile::find($inputs["profile_id"]);
@@ -142,27 +139,27 @@ class UserController extends Controller
             }
         }
     }
-    public function status_manage($id, $st){
-            DB::beginTransaction();
-            try {
-                $users = User::find($id);
-                $users->is_active= $st;
-                $users->save();
+    public function status_manage($id, $st)
+    {
+        DB::beginTransaction();
+        try {
+            $users = User::find($id);
+            $users->is_active = $st;
+            $users->save();
 
-                DB::commit();
-                back()
-                    ->with('success', 'User status successfully updated.');
-                return response()->json([
-                    "success" => true
-                ], 200);
-            } catch (Throwable $e) {
-                DB::rollBack();
-                back()
-                    ->withErrors(['Something went wrong! User changes is not saved.']);
-                return response()->json([
-                    "success" => false
-                ], 400);
-            }
+            DB::commit();
+            back()
+                ->with('success', 'User status successfully updated.');
+            return response()->json([
+                "success" => true
+            ], 200);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            back()
+                ->withErrors(['Something went wrong! User changes is not saved.']);
+            return response()->json([
+                "success" => false
+            ], 400);
+        }
     }
-    
 }
