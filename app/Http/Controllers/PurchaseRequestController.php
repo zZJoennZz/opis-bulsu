@@ -62,6 +62,7 @@ class PurchaseRequestController extends Controller
                 ->with('branch')
                 ->with('requester')
                 ->where('branches_id', '=', $user->branches_id)
+                ->where('year', '=', $user->ppmp_year)
                 ->get();
 
             $return_value = $return_value->with('pr_records', $pr_records);
@@ -234,9 +235,24 @@ class PurchaseRequestController extends Controller
         $pr_records = PurchaseRequest::where('id', '=', $pr_id)
             ->where('year', '=', Auth::user()->ppmp_year)
             ->where('is_approve', '=', '1')
-            ->with(['pr_items', 'pr_items.ppmp', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.milestones'])
+            ->with(['pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
             ->get();
         return response()->json($pr_records, 200);
+    }
+
+    public function pr_single_user($pr_id)
+    {
+        $pr_records = PurchaseRequest::where('id', '=', $pr_id)
+            ->where('year', '=', Auth::user()->ppmp_year)
+            ->where('is_approve', '=', '1')
+            ->with(['requester', 'pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
+            ->get();
+
+        if ($pr_records[0]->requester->id === Auth::user()->id) {
+            return response()->json($pr_records, 200);
+        } else {
+            return response()->json('You are not allowed to access this.', 401);
+        }
     }
 
     private function isPrEnabled()
