@@ -58,7 +58,11 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    <button onclick="getPr({{$pr->id}})" class="btn btn-primary" type="button"><em class="bi bi-printer-fill"></em></button>
+                                                    @if ($pr->is_approve === 1)
+                                                        <button onclick="getPr({{$pr->id}})" class="btn btn-primary" type="button"><em class="bi bi-printer-fill"></em></button>
+                                                    @else
+                                                        <button disabled class="btn btn-primary" type="button"><em class="bi bi-printer-fill"></em></button>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @foreach ($pr->pr_items as $item)
