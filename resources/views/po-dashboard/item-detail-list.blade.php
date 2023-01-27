@@ -30,10 +30,10 @@
                                         <th style="width: 5%;"></th>
                                         <th class="text-center" style="width: 5%;">Edit</th>
                                         <th style="width: 5%">Status</th>
-                                        <th style="width: 45%;">Item Name</th>
+                                        <th style="width: 30%;">Item Name</th>
                                         <th style="width: 20%">Unit</th>
-                                        <th style="width: 20%">Category</th>
-                                        <th>Created At</th>
+                                        <th style="width: 25%">Category</th>
+                                        <th style="width: 15%;">Date Added</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -70,8 +70,8 @@
                                             @if($item->is_delete===1) <span class="badge bg-secondary">Item Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$item->id}})"><em class="bi bi-trash-fill"></em></button> @endif
                                         </td>
                                         <td>{{$item->unit->uom}}</td>
-                                        <td>{{$item->created_at}}</td>
                                         <td>{{$item->category->description}}</td>
+                                        <td>{{$item->created_at}}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -158,5 +158,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'item-details-table', 'columnId'=>'5'])
+@include('layout/datatable', ['tableId' => 'item-details-table'])
 @include('layout/footer')

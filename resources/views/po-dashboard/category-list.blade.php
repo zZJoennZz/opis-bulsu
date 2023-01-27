@@ -84,6 +84,7 @@
                                         <th style="width: 5%;"></th>
                                         <th class="text-center" style="width: 5%;">Edit</th>
                                         <th style="width: 80%;">Category</th>
+                                        <th>Date Added</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -179,5 +180,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'item-category-table', 'columnId' => '3'])
+@include('layout/datatable', ['tableId' => 'item-category-table'])
 @include('layout/footer')
