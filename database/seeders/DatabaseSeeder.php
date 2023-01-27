@@ -25,7 +25,8 @@ class DatabaseSeeder extends Seeder
             ItemDetailSeeder::class,
             MilestoneFormatSeeder::class,
             ItemPurposeSeeder::class,
-            SourceOfFundSeeder::class
+            SourceOfFundSeeder::class,
+            SettingSeeder::class
         ]);
     }
 }
