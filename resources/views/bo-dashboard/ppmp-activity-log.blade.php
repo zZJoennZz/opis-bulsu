@@ -108,12 +108,40 @@
                                             </td>
                                             <td>{{ $history->created_at }}</td>
                                             <td>
-                                                <button class="btn btn-info">Show comparison</button>
+                                                <button type="button" onclick="openComparison()" class="btn btn-info">Show comparison</button>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+
+                        <div>
+                            <div class="row border-bottom text-secondary pb-2">
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="fs-4 fw-bold text-secondary">Before Update</div>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="fs-4 fw-bold text-secondary">After Update</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="showComparisonModal" aria-hidden="true" aria-labelledby="showComparisonModalLabel" tabindex="-1">
+                            <div class="modal-dialog modal-fullscreen modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="showComparisonModalLabel">History Comparison</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Show a second modal and hide this one with the button below.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -122,5 +150,11 @@
     </div>
 </div>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
+<script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
+<script>
+    async function openComparison() {
+        $('#showComparisonModal').modal('toggle');
+    }
+</script>
 @include('layout/datatable', ['tableId' => 'ppmp-activity-log'])
 @include('layout/footer')
