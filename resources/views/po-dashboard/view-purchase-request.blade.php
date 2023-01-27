@@ -110,12 +110,23 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex justify-content-center align-items-center">
-                                                    <button
-                                                        class="btn btn-secondary"
-                                                        type="button"
-                                                        onclick="getPr({{$pr->id}})"
-                                                    >
-                                                        <em class="bi bi-printer-fill"></em></button>
+                                                    @if ($pr->is_approve === 1)
+                                                        <button
+                                                            class="btn btn-secondary"
+                                                            type="button"
+                                                            onclick="getPr({{$pr->id}})"
+                                                        >
+                                                            <em class="bi bi-printer-fill"></em>
+                                                        </button>
+                                                    @else
+                                                        <button
+                                                            class="btn btn-secondary"
+                                                            type="button"
+                                                            disabled
+                                                        >
+                                                            <em class="bi bi-printer-fill"></em>
+                                                        </button>
+                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>
