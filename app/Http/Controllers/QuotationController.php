@@ -24,15 +24,22 @@ class QuotationController extends Controller
     public function add()
     {
         $company_profiles = Company::all();
+        $quotation_items = QuotationItem::select('pro_pro_man_plans_id')
+            ->whereIn('quotations_id', function ($query) {
+                $query->select('id')->from('quotations')->where('year', '=', Auth::user()->ppmp_year);
+            })->get();
+        $pr_items = PurchaseRequestItem::select('purchase_requests_id')
+            ->whereNotIn('pro_pro_man_plans_id', $quotation_items)
+            ->whereIn('purchase_requests_id', function ($query) {
+                $query->select('id')->from('purchase_requests')->where('year', '=', Auth::user()->ppmp_year);
+            })->get();
         $purchase_requests = PurchaseRequest::where('year', '=', Auth::user()->ppmp_year)
             ->where('is_approve', '=', 1)
             ->where('is_delete', '=', 0)
             ->where('is_draft', '=', 0)
-            ->whereNotIn('id', function ($query) {
-                $query->select('purchase_request_items.purchase_requests_id')->from('quotation_items')->leftJoin('pro_pro_man_plans', 'pro_pro_man_plans.id', '=', 'quotation_items.pro_pro_man_plans_id')->leftJoin('purchase_request_items', 'purchase_request_items.pro_pro_man_plans_id', '=', 'pro_pro_man_plans.id');
-            })
+            ->whereIn('id', $pr_items)
             ->get();
-        // return $purchase_requests;
+
         return view('po-dashboard/add-new-quotation')
             ->with('company_profiles', $company_profiles)
             ->with('purchase_requests', $purchase_requests);
