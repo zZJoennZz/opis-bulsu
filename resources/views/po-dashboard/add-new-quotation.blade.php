@@ -272,7 +272,7 @@
     }
 
     async function get_pr_record(event) {
-        await axios.get(`{{ route('pr-single.api') }}/${event.target.value}`)
+        await axios.get(`{{ route('pr-single-quotation.api') }}/${event.target.value}`)
             .then(res => {
                 prItems = res.data[0].pr_items;
                 itemsMaster = prItems;
