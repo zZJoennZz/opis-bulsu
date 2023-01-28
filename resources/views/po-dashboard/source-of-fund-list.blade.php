@@ -1,4 +1,4 @@
-@include('layout/header', ['title' => 'SourceofFund | OPIS - BulSU e-PROCUREMENT'])
+@include('layout/header', ['title' => 'Source of Funds | OPIS - BulSU e-PROCUREMENT'])
 @include('layout/member_header')
 <div class="modal fade" id="addNewSourceofFund" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
