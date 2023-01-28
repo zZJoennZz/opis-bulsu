@@ -162,4 +162,23 @@ class UserController extends Controller
             ], 400);
         }
     }
+
+    public function account_settings()
+    {
+        $account_details = User::where('id', '=', Auth::user()->id)->with(['profile', 'profile.position'])->get();
+        return view('global/account-settings')->with('account_details', $account_details[0]);
+    }
+
+    public function change_user_details(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            UserProfile::where('users_id', '=', Auth::user()->id)->update(['first_name' => $request->first_name, 'last_name' => $request->last_name]);
+            DB::commit();
+            return redirect()->back()->with('success', 'Account details updated.');
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['Account details changes not saved.']);
+        }
+    }
 }

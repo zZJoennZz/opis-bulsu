@@ -17,6 +17,18 @@ class SettingSeeder extends Seeder
     {
         //
         Setting::create([
+            'name' => 'maintenance_mode',
+            'value' => '0',
+        ]);
+        Setting::create([
+            'name' => 'ppmp_due_month',
+            'value' => '12',
+        ]);
+        Setting::create([
+            'name' => 'ppmp_due_day',
+            'value' => '31',
+        ]);
+        Setting::create([
             'name' => 'bac_chairman',
             'value' => 'Assoc. Prof. JOSEPH ROY F. CELESTINO',
         ]);
