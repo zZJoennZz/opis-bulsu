@@ -60,6 +60,13 @@
                                 </div>
                             </div>
                         </div>
+                        @if (count($pr_records) === 0 && count($branches) === 0)
+                            <div class="mb-3">
+                                <div class="alert alert-warning" role="alert">
+                                    This year's PPMP is not yet consolidated.
+                                </div>
+                            </div>
+                        @endif
                         <div class="table-responsive">
                             <table class="table table-small table-bordered">
                                 <caption>Purchase Requests for the Year <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
