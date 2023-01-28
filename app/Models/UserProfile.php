@@ -11,7 +11,8 @@ class UserProfile extends Model
     protected $fillable = ['users_id', 'first_name', 'last_name', 'positions_id'];
 
 
-    public function position(){
-        return $this->hasOne(Position::class,'id','positions_id');
+    public function position()
+    {
+        return $this->hasOne(Position::class, 'id', 'positions_id');
     }
 }

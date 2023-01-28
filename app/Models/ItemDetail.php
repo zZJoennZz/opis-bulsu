@@ -25,4 +25,9 @@ class ItemDetail extends Model
     {
         return $this->hasMany(ItemDetailHistory::class, 'item_details_id', 'id');
     }
+
+    public function ppmp()
+    {
+        return $this->hasMany(ProProManPlan::class, 'item_details_id', 'id');
+    }
 }

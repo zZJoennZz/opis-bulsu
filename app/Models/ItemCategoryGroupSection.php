@@ -14,4 +14,9 @@ class ItemCategoryGroupSection extends Model
         'report_sub_total_footer',
         'order'
     ];
+
+    public function category_groups()
+    {
+        return $this->hasMany(ItemCategoryGroup::class, 'under_of_section', 'id');
+    }
 }

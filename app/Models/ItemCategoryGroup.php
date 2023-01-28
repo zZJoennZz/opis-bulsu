@@ -13,6 +13,16 @@ class ItemCategoryGroup extends Model
         'title',
         'report_sub_total_footer',
         'order',
-        'under_of_secion',
+        'under_of_section',
     ];
+
+    public function category_group_section()
+    {
+        return $this->belongsTo(ItemCategoryGroupSection::class, 'under_of_section', 'id');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(ItemCategory::class, 'under_of_group', 'id');
+    }
 }
