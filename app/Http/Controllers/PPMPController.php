@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\ItemCategoryGroupSection;
 use Illuminate\Http\Request;
 use App\Models\ItemDetail;
 use App\Models\MilestoneFormat;
@@ -422,7 +423,7 @@ class PPMPController extends Controller
     {
         $ppmpHistories = ProProManPlanHistory::leftJoin('pro_pro_man_plans', 'pro_pro_man_plans.id', '=', 'pro_pro_man_plan_histories.pro_pro_man_plans_id')->leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->select('pro_pro_man_plan_histories.*', 'pro_pro_man_plans.branches_id', 'item_details.description as product_name', 'branches.branch_name', DB::raw('(SELECT CONCAT(up.first_name, " ", up.last_name) as username FROM users as u LEFT JOIN user_profiles as up on u.id = up.users_id WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY u.id DESC LIMIT 1) as username'))->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.year', '=', Auth::user()->ppmp_year)->orderBy('pro_pro_man_plan_histories.created_at', 'DESC')->get();
 
-        return view('bo-dashboard/ppmp-activity-log')->with('ppmp_histories', $ppmpHistories);
+        return view('bo-dashboard/ppmp-activity-log')->with('ppmp_histories', $ppmpHistories)->with('branch_id', $branch_id);
     }
 
     public function previous_ppmp($branch_id)
@@ -439,10 +440,16 @@ class PPMPController extends Controller
         $ppmpRecord = ProProManPlan::where('branches_id', '=', $branch_id)->where('year', '=', $year)->where('is_delete', '=', 0)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
         $branch = Branch::find($branch_id);
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
+
+        $ppmp_report = ItemCategoryGroupSection::with(['category_groups', 'category_groups.categories', 'category_groups.categories.item_details', 'category_groups.categories.item_details.unit'])->with('category_groups.categories.item_details.ppmp', function ($query) use ($year, $branch_id) {
+            return $query->where('year', '=', $year)->where('branches_id', '=', $branch_id)->with('milestones');
+        })->get();
+
         return view('po-dashboard/view-previous-ppmp')
             ->with('branch', $branch)
             ->with('record_year', $year)
             ->with('ppmp_record', $ppmpRecord)
-            ->with('ppmp_format', $ppmpFormat);
+            ->with('ppmp_format', $ppmpFormat)
+            ->with('ppmp_report', $ppmp_report);
     }
 }
