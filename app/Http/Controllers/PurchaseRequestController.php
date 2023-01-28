@@ -17,25 +17,31 @@ class PurchaseRequestController extends Controller
     public function pr_admin()
     {
         $user = Auth::user();
-        $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
-            return $query->where('is_draft', '=', 0)
-                ->where('is_bo_approve', '=', 1)
-                ->where('is_pr_approve', '=', 1)
-                ->where('is_consolidate', '=', 1)
-                ->where('is_delete', '=', 0)
+        $checkIfConsolidated = ProProManPlan::where('year', '=', $user->ppmp_year)->where('is_consolidate', '=', 1)->get();
+        if (count($checkIfConsolidated) >= 1) {
+            $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
+                return $query->where('is_draft', '=', 0)
+                    ->where('is_bo_approve', '=', 1)
+                    ->where('is_pr_approve', '=', 1)
+                    ->where('is_consolidate', '=', 1)
+                    ->where('is_delete', '=', 0)
+                    ->where('year', '=', $user->ppmp_year)
+                    ->with('item_detail');
+            }])
+                ->with('branch')
+                ->with('requester')
                 ->where('year', '=', $user->ppmp_year)
-                ->with('item_detail');
-        }])
-            ->with('branch')
-            ->with('requester')
-            ->where('year', '=', $user->ppmp_year)
-            ->get();
+                ->get();
 
-        $branches = Branch::has('ppmp')
-            ->with('pr_mode', function ($query) {
-                return $query->where('year', '=', Auth::user()->ppmp_year);
-            })
-            ->get();
+            $branches = Branch::has('ppmp')
+                ->with('pr_mode', function ($query) {
+                    return $query->where('year', '=', Auth::user()->ppmp_year);
+                })
+                ->get();
+        } else {
+            $pr_records = [];
+            $branches = [];
+        }
         // return $branches;
         return view('po-dashboard/view-purchase-request')->with('pr_records', $pr_records)->with('branches', $branches);
     }
@@ -234,7 +240,23 @@ class PurchaseRequestController extends Controller
     {
         $pr_records = PurchaseRequest::where('id', '=', $pr_id)
             ->where('year', '=', Auth::user()->ppmp_year)
-            ->where('is_approve', '=', '1')
+            ->where('is_approve', '=', 1)
+            ->with('pr_items', function ($query) {
+                $query->whereNotIn('pro_pro_man_plans_id', function ($query1) {
+                    $query1->select('pro_pro_man_plans_id')->from('quotation_items');
+                })->with(['ppmp', 'ppmp.source_of_fund', 'ppmp.item_detail', 'ppmp.item_detail.unit', 'ppmp.item_purpose', 'ppmp.milestones']);
+            })
+            ->with('branch')
+            ->with(['pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
+            ->get();
+        return response()->json($pr_records, 200);
+    }
+
+    public function pr_single_quotation($pr_id)
+    {
+        $pr_records = PurchaseRequest::where('id', '=', $pr_id)
+            ->where('year', '=', Auth::user()->ppmp_year)
+            ->where('is_approve', '=', 1)
             ->with('pr_items', function ($query) {
                 $query->whereNotIn('pro_pro_man_plans_id', function ($query1) {
                     $query1->select('pro_pro_man_plans_id')->from('quotation_items');
