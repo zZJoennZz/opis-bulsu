@@ -84,14 +84,7 @@
         <em>PPMP Year:</em> <span data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="badge bg-secondary" style="cursor: pointer;">{{ Auth::user()->ppmp_year }} <em class="bi bi-pencil-square"></em></span>
         <div class="float-end mx-3">
             
-            @if(Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin')
-                <i class="bi bi-shield-check"></i>
-            @elseif(Auth::user()->account_type === 'BUDGET_OFFICE')
-                <i class="bi bi-cash-stack"></i>
-            @elseif(Auth::user()->account_type === 'END_USER')
-                <i class="bi bi-person"></i>
-            @endif
-            {{ Auth::user()->profile->first_name }}
+            
             
         </div>
         <div class="float-end">
@@ -101,7 +94,7 @@
     </div>
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">
-        <a class="nav-link px-3" href="{{ route('logout.perform') }}">Logout</a>
+            <a class="nav-link px-3" href="{{ route('logout.perform') }}">Logout</a>
         </div>
     </div>
 </header>
