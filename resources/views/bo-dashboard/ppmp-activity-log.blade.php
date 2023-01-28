@@ -63,7 +63,7 @@
                             if (Auth::user()->account_type === 'admin' || Auth::user()->account_type === 'PROCUREMENT_OFFICE') {
                                 $bc = [
                                     ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-                                    ['name' => 'New PPMP Requests', 'url' => '/ppmp-approval/' . $ppmp_histories[0]->branches_id],
+                                    ['name' => 'New PPMP Requests', 'url' => '/ppmp-approval/' . $branch_id],
                                     ['name' => 'PPMP Activity Log']
                                 ];
                             } else if (Auth::user()->account_type === 'END_USER') {
