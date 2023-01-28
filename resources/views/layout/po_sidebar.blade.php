@@ -88,3 +88,8 @@
         <em class="bi bi-file-text"></em> Reports Configuration
     </a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('settings.index') }}">
+        <em class="bi bi-gear-fill"></em> Settings
+    </a>
+</li>
