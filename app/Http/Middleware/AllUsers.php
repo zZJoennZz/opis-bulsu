@@ -19,6 +19,12 @@ class AllUsers
      */
     public function handle(Request $request, Closure $next)
     {
+        if (intval(getSettingValue('maintenance_mode')) === 1 && Auth::user()->account_type !== "PROCUREMENT_OFFICE" && Auth::user()->account_type !== "admin") {
+            Session::flush();
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['System is currently in maintenance. Please try again later.']);
+        }
+
         if (!Auth::check()) {
             return redirect()->route('login');
         }
