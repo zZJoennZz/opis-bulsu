@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
         //
         User::create([
             'username' => 'admin',
-            'email' => 'admin@admin.com',
+            'email' => 'joenn.shift101@gmail.com',
             'account_type' => 'admin',
             'password' => 'admin',
             'ppmp_year' => date('Y'),
@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
             'email' => 'enduser1@admin.com',
             'account_type' => 'END_USER',
             'password' => 'admin',
-            'ppmp_year' => '2022',
+            'ppmp_year' => date('Y'),
             'branches_id' => 7,
             'is_active' => 1,
         ]);
@@ -55,8 +55,8 @@ class UserSeeder extends Seeder
         ]);
         UserProfile::create([
             'users_id' => 2,
-            'first_name' => 'Test 1',
-            'last_name' => 'End User 1',
+            'first_name' => 'Jaymark',
+            'last_name' => 'Fernandez',
             'positions_id' => 2,
         ]);
 
@@ -65,30 +65,30 @@ class UserSeeder extends Seeder
             'email' => 'enduser2@admin.com',
             'account_type' => 'END_USER',
             'password' => 'admin',
-            'ppmp_year' => '2022',
+            'ppmp_year' => date('Y'),
             'branches_id' => 8,
             'is_active' => 1,
         ]);
         UserProfile::create([
             'users_id' => 3,
-            'first_name' => 'Test 2',
-            'last_name' => 'End User 2',
+            'first_name' => 'Roncy',
+            'last_name' => 'Nava',
             'positions_id' => 2,
         ]);
 
         User::create([
             'username' => 'enduser3',
-            'email' => 'enduser3@admin.com',
+            'email' => 'joennsa@gmail.com',
             'account_type' => 'END_USER',
             'password' => 'admin',
-            'ppmp_year' => '2022',
+            'ppmp_year' => date('Y'),
             'branches_id' => 9,
             'is_active' => 1,
         ]);
         UserProfile::create([
             'users_id' => 4,
-            'first_name' => 'Test 3',
-            'last_name' => 'End User 3',
+            'first_name' => 'Joenn',
+            'last_name' => 'Aquilino',
             'positions_id' => 2,
         ]);
 
