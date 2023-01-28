@@ -5,12 +5,12 @@
     </div>
 </div>
 <div class="mb-3">
-    <div class="message">
-        @if (isset($success))
-            {{ $success }}
-        @endif
-    </div>
     <div class="mb-3 fs-3 fw-bold"><em class="bi bi-tags-fill"></em> All Items</div>
+    @if($is_consolidated)
+        <div class="alert alert-warning mb-3 fs-4" role="alert">
+            PPMP items for the year <div class="badge bg-primary">{{ Auth::user()->ppmp_year }}</div> is already consolidated. You are not allowed to add more items.
+        </div>
+    @endif
     <div class="mb-3">
         <input type="text" class="form-control fs-4" id="item-search-text" oninput="onChangeText()" placeholder="Search..." />
     </div>
@@ -55,7 +55,11 @@
                             <p class="card-text">
                                 ${item["cat_desc"]}
                             </p>
-                            <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</a>
+                            @if($is_consolidated)
+                                <button disabled class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</button>
+                            @else
+                                <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</a>
+                            @endif
                         </div>
                     </div>
                 </div>
