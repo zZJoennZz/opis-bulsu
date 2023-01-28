@@ -23,14 +23,12 @@ class AllUsers
             return redirect()->route('login');
         }
 
-        if (Auth::user()->is_active) {
-            return $next($request);
+        if (!Auth::user()->is_active) {
+            Session::flush();
+            Auth::logout();
+            return redirect('/')->withErrors(['Your account is not active. Please contact procurement office or the administrator.']);
         }
 
-        Session::flush();
-        Auth::logout();
-        return redirect('/')->withErrors(['Your account is not active. Please contact procurement office or the administrator.']);
-
-        abort(403);
+        return $next($request);
     }
 }
