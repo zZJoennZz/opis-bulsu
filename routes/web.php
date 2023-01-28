@@ -19,6 +19,7 @@ use App\Http\Controllers\ConsolidateController;
 use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +44,6 @@ Route::middleware(['guest'])->group(function () {
 });
 
 //AVAILABLE TO EVERYONE WHO ARE LOGGED IN
-//TODO
-//Fix or create new middleware to check if the account is active before logging in or accessing pages inside this group.
 Route::middleware('auth')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout.perform');
 
@@ -64,6 +63,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
 
     Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
+
+    Route::get('/account-settings', [UserController::class, 'account_settings'])->name('account-settings.show');
+    Route::post('/account-settings', [UserController::class, 'change_user_details'])->name('account-settings.save');
 });
 
 //AVAILABLE TO END USERS
@@ -188,6 +190,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/purchase-request', [PurchaseRequestController::class, 'pr_admin'])->name('pr-admin.show');
     Route::post('/toggle-purchase-request', [PurchaseRequestController::class, 'toggle_pr_mode'])->name('pr.toggle');
     Route::get('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'pr_single'])->name('pr-single.api');
+    Route::get('/purchase-request-quotation/{pr_id?}', [PurchaseRequestController::class, 'pr_single_quotation'])->name('pr-single-quotation.api');
     Route::post('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'approve_pr'])->name('pr-approve.api');
 
     //companies
@@ -203,6 +206,9 @@ Route::middleware('procurement.office')->group(function () {
     Route::post('/quotations/add', [QuotationController::class, 'new_request'])->name('quotation.new');
     Route::get('/quotations/single/{quotation_id?}', [QuotationController::class, 'get_single'])->name('quotation.single.api');
     Route::get('/quotations/summary', [QuotationController::class, 'get_summary'])->name('quotation.summary');
+
+    //settings
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
 });
 
 //ADMIN ONLY
