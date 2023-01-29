@@ -67,7 +67,7 @@
             <script>
               $('form').on('submit', function (e) {
                   $('button[type=submit], input[type=submit]', $(this)).blur().addClass('disabled is-submited');
-                  console.log("submit test")
+                  $('button[type=submit], input[type=submit]', $(this)).attr("disabled","disabled");
               });
               $(document).on('click', 'button[type=submit].is-submited, input[type=submit].is-submited', function(e) {
                     e.preventDefault();
