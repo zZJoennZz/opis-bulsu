@@ -77,11 +77,12 @@
                     <div class="mb-3">
                         <label for="contact_number" class="form-label">Contact Number</label>
                         <input type="number" class="form-control" id="edit_contact_number" name="contact_number" placeholder="Contact Number">
+                        <input type="hidden" class="form-control" id="edit_is_update" name="is_update" value="1">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary"><em class="bi bi-save"></em> Save Category</button>
+                    <button type="submit" class="btn btn-primary" ><em class="bi bi-save"  ></em> Save Category</button>
                 </div>
             </form>
         </div>
@@ -175,6 +176,15 @@
                 $('#edit_address').val(res.data.address);
                 $('#edit_email_address').val(res.data.email_address);
                 $('#edit_contact_number').val(res.data.contact_number);
+                $('#edit_is_update').val(res.data.is_update);
+
+                if(res.data.is_update != `0`){
+                    $('#editBranch .modal-footer button[type="submit"]').attr("disabled","disabled");
+                }else{
+                    $('#editBranch .modal-footer button[type="submit"]').removeAttr("disabled","disabled");
+                }
+
+
                 $('#editBranch').modal('toggle');
             })
             .catch(err => alert("Could not fetch the data. Please contact website administrator."));
@@ -188,7 +198,9 @@
             "address" : $('#edit_address').val(),
             "email_address" : $('#edit_email_address').val(),
             "contact_number" : $('#edit_contact_number').val(),
+            "is_update" : $('#edit_is_update').val()
         };
+
         await axios.put(`{{ url('/branch') }}/${selectedBranch}`, data)
             .then(res => {
                 {{Session::forget('success');}}

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('email_address')->nullable();
             $table->text('contact_number')->nullable();
             $table->boolean('is_delete')->default('0');
+            $table->boolean('is_update')->default('0');
             $table->unsignedBigInteger('added_by');
             $table->timestamps();
         });

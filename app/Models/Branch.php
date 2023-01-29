@@ -9,7 +9,7 @@ class Branch extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'branch_name', 'type', 'address', 'email_address', 'contact_number', 'added_by', 'is_delete'
+        'branch_name', 'type', 'address', 'email_address', 'contact_number', 'added_by', 'is_delete', 'is_update'
     ];
 
     public function ppmp()

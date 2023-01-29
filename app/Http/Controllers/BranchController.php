@@ -57,26 +57,32 @@ class BranchController extends Controller
         $getBranch = Branch::find($branch_id);
         DB::beginTransaction();
 
-        // try {
+        try {
             $getBranch->branch_name = $request->branch_name;
             $getBranch->type = $request->type;
             $getBranch->address = $request->address;
             $getBranch->email_address = $request->email_address;
             $getBranch->contact_number = $request->contact_number;
+            $getBranch->is_update = $request->is_update;
             $getBranch->save();
+
+            $disabled = true;
 
             DB::commit();
 
             session(['success' => 'Branch successfully updated!']);
             return response()->json([
                 'success' => true,
-            ], 200);
-        // } catch (Throwable $e) {
-        //     DB::rollBack();
-        //     return response()->json([
-        //         'success' => false,
-        //     ], 400);
-        // }
+            ], 200)
+            ->with('success_update', 'Branch successfully added!')
+            ->with('disabled', $disabled);
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+            ], 400);
+        }
     }
 
     public function delete_single($branch_id)
