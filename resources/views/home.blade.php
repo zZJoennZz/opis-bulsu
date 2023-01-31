@@ -25,7 +25,8 @@
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 mb-sm-5">
                     <div class="card shadow">
-                        <div class="card-body p-3">
+                        <div class="card-body p-3 position-relative">
+                            @include('global/spinner-loader')
                             <form method="POST" action={{ route('login.perform') }}>
                                 <div class="mb-3 d-flex" style="flex-direction: column;">
                                     <img src="{{ asset('img/bsu-small-logo.png') }}" class="mx-auto mb-2" alt="BSU Small Logo" />
@@ -49,7 +50,7 @@
                                     <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required />
                                     <label for="floatingPassword">Password</label>
                                 </div>
-                                <button class="mb-3 w-100 btn btn-lg btn-primary" type="submit">Login</button>
+                                <button class="mb-3 w-100 btn btn-lg btn-primary" type="submit" homelogin>Login</button>
                                 <div class="text-center"><a href="{{ route('forgot-password.show') }}">Forgot password?</a></div>
                                 <hr class="my-4">
                                 <small class="text-muted text-center d-block">OPIS v1.0</small>
@@ -99,7 +100,8 @@
                         </div>
                     </div>
                     <div class="col-md-10 mx-auto col-lg-5">
-                        <form class="p-4 p-md-5 border rounded-3 bg-light" method="POST" action={{ route('login.perform') }}>
+                        <form class="p-4 p-md-5 border rounded-3 bg-light position-relative" method="POST" action={{ route('login.perform') }}>
+                        @include('global/spinner-loader')
                             <div class="mb-3 d-flex" style="flex-direction: column;">
                                 <img src="{{ asset('img/bsu-small-logo.png') }}" class="mx-auto mb-2" alt="BSU Small Logo" />
                                 <div class="text-center text-uppercase">Bulacan State University</div>
@@ -112,7 +114,7 @@
                                         @endforeach
                                     </ul>
                                 </div>
-                                @endif
+                                @endif  
                             </div>
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Username" required />
@@ -122,7 +124,7 @@
                                 <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required />
                                 <label for="floatingPassword">Password</label>
                             </div>
-                            <button class="mb-3 w-100 btn btn-lg btn-primary" type="submit">Login</button>
+                            <button class="mb-3 w-100 btn btn-lg btn-primary" type="submit" homelogin>Login</button>
                             <div class="text-center"><a href="{{ route('forgot-password.show') }}">Forgot password?</a></div>
                             <hr class="my-4">
                             <small class="text-muted text-center d-block">OPIS v1.0</small>

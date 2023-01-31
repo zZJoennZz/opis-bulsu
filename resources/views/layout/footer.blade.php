@@ -58,6 +58,11 @@
                     location.reload();
                   }
               }
+
+              $('[homelogin]').click(function(){
+                  $('[container-spinner]').removeClass('d-none');
+                  $('[container-spinner]').addClass('d-flex');
+              });
             </script>
     </body>
 </html>
