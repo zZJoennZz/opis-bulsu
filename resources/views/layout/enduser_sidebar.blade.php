@@ -12,7 +12,14 @@
 <li class="nav-item">
     <a class="nav-link" href="{{ route('ppmp-cart.get') }}">
         <em class="bi bi-cart-fill"></em>
-        PPMP Cart
+        <div class="position-relative d-inline">
+            PPMP Cart
+            <span class="badge rounded-pill bg-danger" style="font-size: 0.7rem">
+                @php
+                    echo getCartCount()
+                @endphp
+            </span>
+        </div>
     </a>
 </li>
 <li class="nav-item">
