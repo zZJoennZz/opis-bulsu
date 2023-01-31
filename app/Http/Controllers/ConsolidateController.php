@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProProManPlan;
+use App\Models\PurchaseRequestMode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -46,6 +47,7 @@ class ConsolidateController extends Controller
         DB::beginTransaction();
         try {
             ProProManPlan::where('is_consolidate', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 0]);
+            PurchaseRequestMode::where('year', '=', Auth::user()->ppmp_year)->update(['mode' => 'DISABLED']);
             DB::commit();
             return redirect()->route('consolidated.show')->with('success', 'Successfully reset the consolidation for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
         } catch (Throwable $e) {
