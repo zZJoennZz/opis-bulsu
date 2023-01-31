@@ -18,9 +18,17 @@
                         ]
                         )
                         <div class="mb-3">
-                            <button onclick="window.print()" class="btn btn-primary">
+
+                            <button 
+                            @if (count($quotation_summaries) > 1)
+                            onclick="window.print()"
+                            @else
+                            onclick="alert('there is no printable data')"
+                            @endif
+                            class="btn btn-primary">
                                 <em class="bi bi-printer-fill"></em> Print
                             </button>
+
                         </div>
                         <div class="m-auto for-q-print pt-0">
                             <div class="row mb-3 d-none d-print-flex" style="margin-top: -50px">
@@ -52,7 +60,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($quotation_summaries as $summary)
+                                      @if (count($quotation_summaries) > 1)
+                                      @foreach ($quotation_summaries as $summary)
                                             <tr>
                                                 <td colspan="3">{{$summary->name}}</td>
                                             </tr>
@@ -68,6 +77,13 @@
                                                 @endforeach
                                             @endforeach
                                         @endforeach
+                                      @else
+                                      <tr>
+                                        <td colspan="3">
+                                            <dt style="text-align:center;font-weight:300;font-family:sans-serif;padding:10px 0px;">no summary of quotation</dt>
+                                        </td>
+                                      </tr>
+                                      @endif
                                     </tbody>
                                 </table>
                             </div>
