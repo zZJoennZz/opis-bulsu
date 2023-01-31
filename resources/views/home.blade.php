@@ -23,10 +23,16 @@
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 mb-sm-5">
                     <div class="card shadow">
                         <div class="card-body p-3 position-relative">
                             @include('global/spinner-loader')
+=======
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 mb-sm-5 order-first order-md-last">
+                    <div class="card shadow mb-3 mt-3">
+                        <div class="card-body p-3">
+>>>>>>> a12513e (New: UI improvement)
                             <form method="POST" action={{ route('login.perform') }}>
                                 <div class="mb-3 d-flex" style="flex-direction: column;">
                                     <img src="{{ asset('img/bsu-small-logo.png') }}" class="mx-auto mb-2" alt="BSU Small Logo" />
@@ -70,6 +76,7 @@
             <!-- Copyright -->
         </div>
     </section>
+<<<<<<< HEAD
         {{-- <div>
             <header class="bg-dark d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
                 <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
@@ -135,4 +142,6 @@
             </div>
         </div> --}}
 
+=======
+>>>>>>> a12513e (New: UI improvement)
     @include('layout/footer')

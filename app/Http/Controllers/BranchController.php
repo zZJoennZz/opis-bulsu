@@ -58,19 +58,19 @@ class BranchController extends Controller
         DB::beginTransaction();
 
         // try {
-            $getBranch->branch_name = $request->branch_name;
-            $getBranch->type = $request->type;
-            $getBranch->address = $request->address;
-            $getBranch->email_address = $request->email_address;
-            $getBranch->contact_number = $request->contact_number;
-            $getBranch->save();
+        $getBranch->branch_name = $request->branch_name;
+        $getBranch->type = $request->type;
+        $getBranch->address = $request->address;
+        $getBranch->email_address = $request->email_address;
+        $getBranch->contact_number = $request->contact_number;
+        $getBranch->save();
 
-            DB::commit();
+        DB::commit();
 
-            session(['success' => 'Branch successfully updated!']);
-            return response()->json([
-                'success' => true,
-            ], 200);
+        session(['success' => 'Branch successfully updated!']);
+        return response()->json([
+            'success' => true,
+        ], 200);
         // } catch (Throwable $e) {
         //     DB::rollBack();
         //     return response()->json([

@@ -124,21 +124,18 @@
     </div>
 </div>
 <script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
-@include('layout/datatable', ['tableId' => 'pr-items-table'])
-{{-- <script>
-    $(document).ready(function() {
-        $('#quote-items-table').DataTable({
-            "autoWidth": false,
-        });
-    });
-</script> --}}
 <script>
+    const qnew = "{{ route('quotation.new') }}";
+    const qnewRed = "{{ route('quotation.all') }}";
+    const comSingApi = "{{ route('company.single.api') }}";
+    const prSingQApi = "{{ route('pr-single-quotation.api') }}";
+
     let itemsMaster = [];
     let prItems = [];
     let quoteItems = [];
     let selectedItems = [];
 
-    async   function submitRequest() {
+    async function submitRequest() {
         const confirmSubmission = confirm("Are you sure to submit this request?");
         if (confirmSubmission) {
             if ($('#companies_id').val() !== "Select company" && $('#purchase_requests_id').val() !== 'Select purchase request') {
@@ -159,9 +156,9 @@
                         'items': itemData,
                     };
 
-                    await axios.post(`{{ route('quotation.new') }}`, data)
+                    await axios.post(qnew, data)
                         .then(res => {
-                            window.location.href = `{{ route('quotation.all') }}`
+                            window.location.href = qnewRed;
                         })
                         .catch(err => alert('Quotation submission failed. Please try again.'));
                 } else {
@@ -252,7 +249,7 @@
     }
 
     async function get_company_details(event) {
-        await axios.get(`{{ route('company.single.api') }}/${event.target.value}`)
+        await axios.get(`${comSingApi}/${event.target.value}`)
             .then(res => {
                 let companyDetails = res.data.data[0];
                 let htmlContent = `
@@ -268,11 +265,14 @@
                 `;
                 $('#company-details').html(htmlContent);
             })
-            .catch(err => alert(`Cannot fetch company profile. Please reload the page.`));
+            .catch(err => {
+                alert(`Cannot fetch company profile. Please reload the page.`)
+                $('#company-details').html(``);
+            });
     }
 
     async function get_pr_record(event) {
-        await axios.get(`{{ route('pr-single-quotation.api') }}/${event.target.value}`)
+        await axios.get(`${prSingQApi}/${event.target.value}`)
             .then(res => {
                 prItems = res.data[0].pr_items;
                 itemsMaster = prItems;
@@ -281,8 +281,9 @@
                 mapQuoteItems();
             })
             .catch(err => {
-                console.log(err);
-                alert(`Cannot fetch PR record. Please reload the page.`)
+                alert(`Cannot fetch PR record. Please reload the page.`);
+                $('#quote-item-details').html(``);
+                $('#pr-item-details').html(``);
             });
         
     }

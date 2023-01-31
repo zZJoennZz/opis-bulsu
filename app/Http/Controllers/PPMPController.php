@@ -20,12 +20,13 @@ use Throwable;
 class PPMPController extends Controller
 {
     //
+    private $select_all_ppmp = 'pro_pro_man_plans.*';
     public function get()
     {
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
         $ppmpFormat = json_decode($ppmpFormat->format);
         $user = Auth::user();
-        $ppmpDrafts = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('pro_pro_man_plans.*', 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('submitted_by', '=', $user->id)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $user->branches_id)->get();
+        $ppmpDrafts = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('submitted_by', '=', $user->id)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $user->branches_id)->get();
 
         $ppmpIds = [];
         foreach ($ppmpDrafts as $draft) {
@@ -47,7 +48,7 @@ class PPMPController extends Controller
 
         $user = Auth::user();
 
-        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('pro_pro_man_plans.*', 'item_details.description', 'units.uom', 'item_details.price_catalogue', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 0)->get();
+        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 0)->get();
 
         if (count($ppmpNewRequests) <= 0) {
             return redirect()->route('bo-dashboard.show');
@@ -73,7 +74,7 @@ class PPMPController extends Controller
 
         $user = Auth::user();
 
-        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->select('pro_pro_man_plans.*', 'item_details.description', 'units.uom', 'item_details.price_catalogue', 'pro_pro_man_plans.submitted_by', 'branches.branch_name')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->where('pro_pro_man_plans.is_pr_approve', '=', 0)->get();
+        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue', 'pro_pro_man_plans.submitted_by', 'branches.branch_name')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->where('pro_pro_man_plans.is_pr_approve', '=', 0)->get();
 
         if (count($ppmpNewRequests) <= 0) {
             return redirect()->route('bo-dashboard.show');
@@ -146,7 +147,7 @@ class PPMPController extends Controller
 
         $user = Auth::user();
 
-        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('pro_pro_man_plans.*', 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->get();
+        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->get();
 
         $ppmpIds = [];
         foreach ($ppmpNewRequests as $newRequest) {
@@ -170,7 +171,7 @@ class PPMPController extends Controller
 
         $user = Auth::user();
 
-        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select('pro_pro_man_plans.*', 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->get();
+        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->get();
 
         $ppmpIds = [];
         foreach ($ppmpNewRequests as $newRequest) {
@@ -220,9 +221,9 @@ class PPMPController extends Controller
     {
         $user = Auth::user();
         if ($user->account_type === "BUDGET_OFFICE" && $user->account_type === "admin") {
-            $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_bo_approve', '<>', 1)->where('pro_pro_man_plans.is_pr_approve', '<>', 1)->select('pro_pro_man_plans.*', 'branches.branch_name')->find($ppmp_id);
+            $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_bo_approve', '<>', 1)->where('pro_pro_man_plans.is_pr_approve', '<>', 1)->select($this->select_all_ppmp, 'branches.branch_name')->find($ppmp_id);
         } else {
-            $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_pr_approve', '<>', 1)->select('pro_pro_man_plans.*', 'branches.branch_name')->find($ppmp_id);
+            $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_pr_approve', '<>', 1)->select($this->select_all_ppmp, 'branches.branch_name')->find($ppmp_id);
         }
 
         if (!empty($ppmpRecord)) {
@@ -256,24 +257,17 @@ class PPMPController extends Controller
             'item_purposes_id' => 'required|numeric|min:1',
             'estimated_budget' => 'required|numeric',
         ]);
-
         $user = Auth::user();
-
         $source_of_funds_id = $request->source_of_funds_id;
         $item_purposes_id = $request->item_purposes_id;
         $estimated_budget = $request->estimated_budget;
         $is_priority = $request->is_priority === "yes" ? 1 : 0;
         $remarks = $request->remarks;
-
         $ppmpRecord = ProProManPlan::where('year', '=', $user->ppmp_year)->find($ppmp_id);
-
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
-
         $newMilestones = [];
 
-        $fields = json_decode($ppmpFormat->format);
-
-        foreach ($fields as $field) {
+        foreach (json_decode($ppmpFormat->format) as $field) {
             array_push(
                 $newMilestones,
                 [
@@ -336,7 +330,7 @@ class PPMPController extends Controller
             array_push($summaryLog, "Remarks was changed from '" . $oldState["remarks"] . "' to '" . $newState["remarks"] . "'.");
         }
 
-        for ($i = 0; $i < count($fields); $i++) {
+        for ($i = 0; $i < count(json_decode($ppmpFormat->format)); $i++) {
             // var_dump($oldState["milestones"][$i]->milestone_value);
             // echo " - ";
             // var_dump($newState["milestones"][$i]["milestone_value"]);
@@ -360,7 +354,7 @@ class PPMPController extends Controller
 
             $ppmpRecord->save();
 
-            foreach ($fields as $field) {
+            foreach (json_decode($ppmpFormat->format) as $field) {
                 $milestoneFind = MilestoneOfActivity::where('pro_pro_man_plans_id', '=', $ppmp_id)->where('milestone_value_id', '=', $field->id)->first();
                 $milestoneFind->milestone_value = $request[$field->id];
                 $milestoneFind->save();
@@ -393,19 +387,20 @@ class PPMPController extends Controller
 
     public function send_back(Request $request, $user_id)
     {
-        $user = Auth::user();
+        // $user = Auth::user();
         DB::beginTransaction();
         try {
-            $newNotif = new Notification();
-            $newNotif->title = "Budget office sent back the PPMP.";
-            $newNotif->message = "The budget office has sent back your PPMP request with changes. Click here to check!";
-            $newNotif->url = "/ppmp-cart";
-            $newNotif->is_read = false;
-            $newNotif->sent_to = $user_id;
-            $newNotif->sent_by = $user->id;
-            $newNotif->save();
+            // $newNotif = new Notification();
+            // $newNotif->title = "Budget office sent back the PPMP.";
+            // $newNotif->message = "The budget office has sent back your PPMP request with changes. Click here to check!";
+            // $newNotif->url = "/ppmp-cart";
+            // $newNotif->is_read = false;
+            // $newNotif->sent_to = $user_id;
+            // $newNotif->sent_by = $user->id;
+            // $newNotif->save();
             ProProManPlan::whereIn('id', $request->all())->update(['is_draft' => 1]);
             DB::commit();
+            sendNotification($user_id, 'Budget office sent back the PPMP.', 'The budget office has sent back your PPMP request with changes. Click here to check!', '/ppmp-cart');
             return response()->json([
                 "success" => true,
                 "message" => "Changes was sent back to the user.",
