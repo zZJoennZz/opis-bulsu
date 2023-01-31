@@ -18,8 +18,8 @@
                         )
                         <h1 class="h5 card-title"> <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($quotations) }}</span></span></h1>
                         <div class="mb-4">
-                            <a href="{{route('quotation.add')}}" class="btn btn-primary"><em class="bi bi-folder-plus"></em> Add New Quotation</a>
-                            <a href="{{route('quotation.summary')}}" class="btn btn-success"><em class="bi bi-file-spreadsheet-fill"></em> Quotation Summary Report</a>
+                            <a href="{{route('quotation.add')}}" class="btn btn-primary @if(count($pryears)<1) disabled @endif"> <em class="bi bi-folder-plus"></em> Add New Quotation</a>
+                            <a href="{{route('quotation.summary')}}" class="btn btn-success @if(count($pryears)<1) disabled @endif"><em class="bi bi-file-spreadsheet-fill"></em> Quotation Summary Report</a>
                             <a href="{{route('company.all')}}" class="btn btn-secondary"><em class="bi bi-buildings"></em> Company Profiles</a>
                         </div>
                         

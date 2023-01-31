@@ -17,8 +17,10 @@ class QuotationController extends Controller
     public function all()
     {
         $quotations = Quotation::with(['items', 'company', 'items.ppmp', 'items.ppmp.milestones'])->where('year', '=', getPpmpYear())->get();
+        $pryears = PurchaseRequest::where('year', '=', getPpmpYear())->get();
         // return $quotations;
-        return view('po-dashboard/quotation-list')->with('quotations', $quotations);
+        // return view('po-dashboard/quotation-list')->with('quotations', $quotations);
+        return view('po-dashboard.quotation-list',compact('quotations','pryears'));
     }
 
     public function add()
