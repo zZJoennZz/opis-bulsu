@@ -9,9 +9,16 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="mb-4">
-                            <a href="{{ route('po-dashboard.show') }}" class="btn btn-secondary"><em class="bi bi-arrow-bar-left"></em> Back</a>
+                            @include('layout/breadcrumb',
+                            [
+                                'breadcrumbs' => [
+                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                                    ['name' => 'Previous PPMP Records', 'routeWithParam' => route('previous-ppmp.show', ['branch_id' => $branch->id])],
+                                    ['name' => 'PPMP <span class="badge bg-primary">'.  $record_year .'</span>']
+                                ]
+                            ]
+                            )
                         </div>
-                        <hr />
 
                         <table class="table table-sm table-bordered border-dark caption-top">
                             <caption>

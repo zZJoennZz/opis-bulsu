@@ -70,7 +70,6 @@ class PurchaseRequestController extends Controller
                 ->where('branches_id', '=', $user->branches_id)
                 ->where('year', '=', $user->ppmp_year)
                 ->get();
-
             $return_value = $return_value->with('pr_records', $pr_records);
         }
         return $return_value;
