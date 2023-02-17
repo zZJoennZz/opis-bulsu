@@ -20,6 +20,7 @@ use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\BacResoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -206,6 +207,10 @@ Route::middleware('procurement.office')->group(function () {
     Route::post('/quotations/add', [QuotationController::class, 'new_request'])->name('quotation.new');
     Route::get('/quotations/single/{quotation_id?}', [QuotationController::class, 'get_single'])->name('quotation.single.api');
     Route::get('/quotations/summary', [QuotationController::class, 'get_summary'])->name('quotation.summary');
+    Route::get('/company-quotations/{company_id?}', [QuotationController::class, 'get_company_quotations'])->name('company-quotation.single');
+
+    //BAC reso
+    Route::get('/bac-reso/add', [BacResoController::class, 'add_new'])->name('bac-reso.add');
 
     //settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
