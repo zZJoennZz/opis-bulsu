@@ -20,18 +20,17 @@ class QuotationController extends Controller
         $pryears = PurchaseRequest::where('year', '=', getPpmpYear())->get();
         // return $quotations;
         // return view('po-dashboard/quotation-list')->with('quotations', $quotations);
-        return view('po-dashboard.quotation-list',compact('quotations','pryears'));
+        return view('po-dashboard.quotation-list', compact('quotations', 'pryears'));
     }
 
     public function add()
     {
         $company_profiles = Company::all();
-        $quotation_items = QuotationItem::select('pro_pro_man_plans_id')
-            ->whereIn('quotations_id', function ($query) {
-                $query->select('id')->from('quotations')->where('year', '=', Auth::user()->ppmp_year);
-            })->get();
+        // $quotation_items = QuotationItem::select('pro_pro_man_plans_id')
+        //     ->whereIn('quotations_id', function ($query) {
+        //         $query->select('id')->from('quotations')->where('year', '=', Auth::user()->ppmp_year);
+        //     })->get();
         $pr_items = PurchaseRequestItem::select('purchase_requests_id')
-            ->whereNotIn('pro_pro_man_plans_id', $quotation_items)
             ->whereIn('purchase_requests_id', function ($query) {
                 $query->select('id')->from('purchase_requests')->where('year', '=', Auth::user()->ppmp_year);
             })->get();
@@ -123,5 +122,32 @@ class QuotationController extends Controller
             ->get();
         // return $quotation_summaries;
         return view('po-dashboard/quotation-summary')->with('quotation_summaries', $quotation_summaries);
+    }
+
+    public function get_company_quotations($company_id)
+    {
+
+        try {
+            $company_quotations = Company::where('id', '=', $company_id)->whereHas('quotations', function ($query) {
+                $query->where('year', '=', Auth::user()->ppmp_year);
+            })->with('quotations', 'quotations.items', 'quotations.items.ppmp', 'quotations.items.ppmp.item_detail', 'quotations.items.ppmp.item_detail.unit')->get();
+
+            if (count($company_quotations) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $company_quotations
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No records found for this company.'
+                ], 404);
+            }
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Cannot process your request.'
+            ], 500);
+        }
     }
 }
