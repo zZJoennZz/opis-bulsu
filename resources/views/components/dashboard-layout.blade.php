@@ -59,50 +59,50 @@
         </script>
         
         <script>
-              function status(id, status){
+            function status(id, status){
                 // alert(id+"-"+status);
                 let confirmStatus = confirm("Are you sure to change the status?");
-                  if (confirmStatus) {
-                    var stp = document.getElementById('status'+id).title;
-                    
-                    // alert(stp);
-                    if(stp == 'off'){
-                      stf = 0;
-                    }
-                    if(stp == 'on'){
-                      stf = 1;
-                    }
-                
-                    $.ajax({
-                        type: 'GET',
-                        url: "/users/update-status/"+id+"/"+stf,
-                
-                        success:function(response){
-                            
-                          if(response.status == "1")
-                          {
-                            document.getElementById('status'+ adid).innerHTML = "OFF";
-                          }
-                
-                          if(response.status == "0")
-                          {
-                            document.getElementById('status'+ adid).innerHTML = "ON";
-                          }
+                    if (confirmStatus) {
+                        var stp = document.getElementById('status'+id).title;
+                        
+                        // alert(stp);
+                        if(stp == 'off'){
+                        stf = 0;
                         }
-                
-                    });
+                        if(stp == 'on'){
+                        stf = 1;
+                        }
+                    
+                        $.ajax({
+                            type: 'GET',
+                            url: "/users/update-status/"+id+"/"+stf,
+                    
+                            success:function(response){
+                                if(response.status == "1")
+                                {
+                                    document.getElementById('status'+ adid).innerHTML = "OFF";
+                                }
+                        
+                                if(response.status == "0")
+                                {
+                                    document.getElementById('status'+ adid).innerHTML = "ON";
+                                }
+                            }
+                        });
                     location.reload();
                 }
             }
         </script>
-            <script>
-              $('form').on('submit', function (e) {
-                  $('button[type=submit], input[type=submit]', $(this)).blur().addClass('disabled is-submited');
-                  $('button[type=submit], input[type=submit]', $(this)).attr("disabled","disabled");
-              });
-              $(document).on('click', 'button[type=submit].is-submited, input[type=submit].is-submited', function(e) {
-                    e.preventDefault();
-                });
+        <script>
+            $('form').on('submit', function (e) {
+                $('button[type=submit], input[type=submit]', $(this)).blur().addClass('disabled is-submited');
+                $('button[type=submit], input[type=submit]', $(this)).attr("disabled","disabled");
+            });
+            $(document).on('click', 'button[type=submit].is-submited, input[type=submit].is-submited', function(e) {
+                e.preventDefault();
+            });
         </script>
+
+        {{$additional_script ?? ''}}
     </body>
 </html>

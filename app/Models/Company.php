@@ -27,4 +27,9 @@ class Company extends Model
     {
         return $this->hasMany(Quotation::class, 'companies_id', 'id');
     }
+
+    public function canvass_abstract()
+    {
+        return $this->hasMany(CanvassAbstract::class, 'companies_id', 'id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CanvassAbstractItem;
 use App\Models\Company;
 use App\Models\PurchaseRequest;
 use App\Models\PurchaseRequestItem;
@@ -126,11 +127,40 @@ class QuotationController extends Controller
 
     public function get_company_quotations($company_id)
     {
-
+        // $canvassed_items = CanvassAbstractItem::with('quotation_item')
+        //     ->with('quotation_item.quotation', function ($query) {
+        //         $query->where('')
+        //     });
         try {
-            $company_quotations = Company::where('id', '=', $company_id)->whereHas('quotations', function ($query) {
-                $query->where('year', '=', Auth::user()->ppmp_year);
-            })->with('quotations', 'quotations.items', 'quotations.items.ppmp', 'quotations.items.ppmp.item_detail', 'quotations.items.ppmp.item_detail.unit')->get();
+            $company_quotations = Company::where('id', '=', $company_id)
+                ->whereHas('quotations', function ($query) {
+                    $query->where('year', '=', Auth::user()->ppmp_year);
+                })
+                ->whereDoesntHave('canvass_abstract', function ($query) {
+                    $query->where('year', '=', Auth::user()->ppmp_year);
+                })
+                ->with('quotations.items.ppmp.item_detail', function ($query) {
+                    $query->whereNotIn('item_details.id', function ($innerQuery) {
+                        $innerQuery
+                            ->select('item_details.id')
+                            ->from('canvass_abstract_items')
+                            ->leftJoin('quotation_items as q2', 'canvass_abstract_items.quotation_items_id', '=', 'q2.id')
+                            ->leftJoin('pro_pro_man_plans', 'q2.pro_pro_man_plans_id', '=', 'pro_pro_man_plans.id')
+                            ->leftJoin('item_details', 'pro_pro_man_plans.item_details_id', '=', 'item_details.id');
+                    });
+                })
+                // ->with('quotations.items', function ($query1) {
+                //     $query1->whereDoesntHave('ppmp.item_detail', function ($query2) {
+                //         $query2->whereNotIn('item_details.id', function ($query3) {
+                //             $query3->select('item_details.id')
+                //                 ->from('canvass_abstract_items')
+                //                 ->leftJoin('quotation_items as q2', 'canvass_abstract_items.quotation_items_id', '=', 'q2.id')
+                //                 ->leftJoin('pro_pro_man_plans', 'q2.pro_pro_man_plans_id', '=', 'pro_pro_man_plans.id')
+                //                 ->leftJoin('item_details', 'pro_pro_man_plans.item_details_id', '=', 'item_details.id');
+                //         });
+                //     })->with('ppmp.item_detail.unit');
+                // })
+                ->get();
 
             if (count($company_quotations) > 0) {
                 return response()->json([
@@ -141,6 +171,37 @@ class QuotationController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'No records found for this company.'
+                ], 404);
+            }
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Cannot process your request.'
+            ], 500);
+        }
+    }
+
+    public function get_item_for_comparison($item_id)
+    {
+        try {
+            $items = QuotationItem::whereIn('quotations_id', function ($query) {
+                $query->where('year', '=', Auth::user()->ppmp_year)->select('id')->from('quotations')->get();
+            })
+                ->whereHas('ppmp.item_detail', function ($query) use ($item_id) {
+                    $query->where('id', '=', $item_id);
+                })
+                ->with('quotation', 'quotation.company', 'ppmp', 'ppmp.item_detail', 'ppmp.item_detail.unit')
+                ->get();
+
+            if (count($items) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'data' => $items
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No records found for this item.'
                 ], 404);
             }
         } catch (Throwable $e) {

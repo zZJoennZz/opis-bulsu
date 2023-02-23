@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ProProManPlan;
+use App\Models\PurchaseRequest;
 use App\Models\PurchaseRequestMode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -46,10 +47,15 @@ class ConsolidateController extends Controller
     {
         DB::beginTransaction();
         try {
-            ProProManPlan::where('is_consolidate', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 0]);
-            PurchaseRequestMode::where('year', '=', Auth::user()->ppmp_year)->update(['mode' => 'DISABLED']);
-            DB::commit();
-            return redirect()->route('consolidated.show')->with('success', 'Successfully reset the consolidation for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
+            $isOkayToConsolidate = count(PurchaseRequest::where('year', '=', getPpmpYear())->get()) > 0 ? false : true;
+            if ($isOkayToConsolidate) {
+                ProProManPlan::where('is_consolidate', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 0]);
+                PurchaseRequestMode::where('year', '=', Auth::user()->ppmp_year)->update(['mode' => 'DISABLED']);
+                DB::commit();
+                return redirect()->route('consolidated.show')->with('success', 'Successfully reset the consolidation for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
+            } else {
+                return redirect()->route('consolidated.show')->withErrors(['Sorry, not allowed to reset consolidated PPMP with existing PRs, quotations, BAC resolution, and purchase order.']);
+            }
         } catch (Throwable $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(["Consolidation failed. Please try again. If the problem persists, contact website administrator."]);

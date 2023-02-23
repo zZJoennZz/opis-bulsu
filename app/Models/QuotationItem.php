@@ -25,4 +25,9 @@ class QuotationItem extends Model
     {
         return $this->belongsTo(Quotation::class, 'quotations_id', 'id');
     }
+
+    public function canvass_abstract_item()
+    {
+        return $this->hasOne(CanvassAbstractItem::class, 'id', 'quotation_items_id');
+    }
 }

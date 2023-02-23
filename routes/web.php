@@ -208,9 +208,14 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/quotations/single/{quotation_id?}', [QuotationController::class, 'get_single'])->name('quotation.single.api');
     Route::get('/quotations/summary', [QuotationController::class, 'get_summary'])->name('quotation.summary');
     Route::get('/company-quotations/{company_id?}', [QuotationController::class, 'get_company_quotations'])->name('company-quotation.single');
+    Route::get('/quotations/comparison/{item_id?}', [QuotationController::class, 'get_item_for_comparison'])->name('quotation-comparison.single');
 
     //BAC reso
-    Route::get('/bac-reso/add', [BacResoController::class, 'add_new'])->name('bac-reso.add');
+    Route::get('/bac-reso/', [BacResoController::class, 'bac_reso_list'])->name('bac-reso.all');
+    Route::get('/bac-reso/view/{company_id?}', [BacResoController::class, 'view_bac'])->name('bac-reso.single');
+    Route::get('/bac-reso/add', [BacResoController::class, 'prepare_bac'])->name('bac-reso.add');
+    Route::post('/bac-reso/add', [BacResoController::class, 'create_bac'])->name('bac-reso.perform');
+    Route::get('/bac-reso/test', [BacResoController::class, 'test'])->name('test.bac-reso');
 
     //settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
