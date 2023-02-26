@@ -17,7 +17,7 @@ class QuotationController extends Controller
 {
     public function all()
     {
-        $quotations = Quotation::with(['items', 'company', 'items.ppmp', 'items.ppmp.milestones'])->where('year', '=', getPpmpYear())->get();
+        $quotations = Quotation::with(['items', 'company', 'items.pr_item', 'items.pr_item.ppmp.milestones'])->where('year', '=', getPpmpYear())->get();
         $pryears = PurchaseRequest::where('year', '=', getPpmpYear())->get();
         // return $quotations;
         // return view('po-dashboard/quotation-list')->with('quotations', $quotations);
@@ -64,8 +64,9 @@ class QuotationController extends Controller
                 $new_quotation_item = new QuotationItem();
                 $new_quotation_item->item_number = $item['item_number'];
                 $new_quotation_item->quotations_id = $quote_id;
-                $ppmp = PurchaseRequestItem::where('id', '=', $item['purchase_requests_id'])->get();
-                $new_quotation_item->pro_pro_man_plans_id = $ppmp[0]->pro_pro_man_plans_id;
+                $new_quotation_item->purchase_request_items_id = $item['purchase_requests_id'];
+                // $ppmp = PurchaseRequestItem::where('id', '=', $item['purchase_requests_id'])->get();
+                // $new_quotation_item->pro_pro_man_plans_id = $ppmp[0]->pro_pro_man_plans_id; //no need since we will connect quotation items to purchase request items instead of PPMP
                 $new_quotation_item->brand_and_model_offered = $item['brand_and_model_offered'];
                 $new_quotation_item->offered_unit_price = $item['offered_unit_price'];
                 $new_quotation_item->save();
@@ -88,7 +89,7 @@ class QuotationController extends Controller
     {
         try {
             $quotation = Quotation::where('id', '=', $quotation_id)
-                ->with(['items', 'items.ppmp', 'items.ppmp.item_detail', 'items.ppmp.item_detail.unit', 'items.ppmp.item_purpose', 'items.ppmp.pr_item', 'items.ppmp.pr_item.pr', 'items.ppmp.milestones', 'company'])
+                ->with(['items.pr_item.ppmp.item_detail.unit', 'items.pr_item.ppmp.item_purpose', 'items.pr_item.ppmp.milestones', 'items.pr_item.pr', 'company'])
                 ->get();
             if (count($quotation) === 0) {
                 return redirect()->route('quotation.all');
@@ -107,19 +108,10 @@ class QuotationController extends Controller
 
     public function get_summary()
     {
-        $quotation_summaries = Company::whereHas('quotations.items.ppmp', function ($query) {
-            $query->where('year', '=', getPpmpYear());
+        $quotation_summaries = Company::whereHas('quotations', function ($query) {
+            return $query->where('year', '=', getPpmpYear());
         })
-            ->with('quotations', function ($query) {
-                // return $query->leftJoin('quotation_items', 'quotation_items.quotations_id', '=', 'quotations.id')->leftJoin('pro_pro_man_plans', 'pro_pro_man_plans.id', '=', 'quotation_items.pro_pro_man_plans_id')->where('pro_pro_man_plans.year', '=', getPpmpYear());
-                return $query->where('year', '=', getPpmpYear());
-            })
-            ->with('quotations.items', function ($query) {
-                return $query->leftJoin('pro_pro_man_plans', 'quotation_items.pro_pro_man_plans_id', '=', 'pro_pro_man_plans.id')->where('pro_pro_man_plans.year', '=', getPpmpYear());
-            })
-            ->with('quotations.items.ppmp', function ($query) {
-                return $query->where('pro_pro_man_plans.year', '=', getPpmpYear())->with('item_detail');
-            })
+            ->with(['quotations.items.pr_item.pr', 'quotations.items.pr_item.ppmp.item_detail.unit'])
             ->get();
         // return $quotation_summaries;
         return view('po-dashboard/quotation-summary')->with('quotation_summaries', $quotation_summaries);
@@ -181,16 +173,14 @@ class QuotationController extends Controller
         }
     }
 
-    public function get_item_for_comparison($item_id)
+    public function get_item_for_comparison($pr_id)
     {
         try {
             $items = QuotationItem::whereIn('quotations_id', function ($query) {
                 $query->where('year', '=', Auth::user()->ppmp_year)->select('id')->from('quotations')->get();
             })
-                ->whereHas('ppmp.item_detail', function ($query) use ($item_id) {
-                    $query->where('id', '=', $item_id);
-                })
-                ->with('quotation', 'quotation.company', 'ppmp', 'ppmp.item_detail', 'ppmp.item_detail.unit')
+                ->where('purchase_request_items_id', '=', $pr_id)
+                ->with(['quotation', 'quotation.company', 'pr_item.ppmp.item_detail.unit'])
                 ->get();
 
             if (count($items) > 0) {

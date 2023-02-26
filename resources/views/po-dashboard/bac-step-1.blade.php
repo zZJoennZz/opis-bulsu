@@ -6,7 +6,7 @@
     @php
         $breadcrumb = [
             ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-            ['name' => 'BAC Resolution', 'route' => 'dashboard.show'],
+            ['name' => 'BAC Resolution', 'route' => 'bac-reso.all'],
             ['name' => 'Prepare BAC']
         ]
     @endphp

@@ -240,29 +240,31 @@ class PurchaseRequestController extends Controller
         $pr_records = PurchaseRequest::where('id', '=', $pr_id)
             ->where('year', '=', Auth::user()->ppmp_year)
             ->where('is_approve', '=', 1)
-            ->with('pr_items', function ($query) {
-                $query->whereNotIn('pro_pro_man_plans_id', function ($query1) {
-                    $query1->select('pro_pro_man_plans_id')->from('quotation_items');
-                })->with(['ppmp', 'ppmp.source_of_fund', 'ppmp.item_detail', 'ppmp.item_detail.unit', 'ppmp.item_purpose', 'ppmp.milestones']);
-            })
+            // ->with('pr_items', function ($query) use ($company_id) {
+            //     $query->whereNotIn('purchase_requests_id ', function ($query1) use ($company_id) {
+            //         $query1->select('quotation_items.purchase_request_items')->from('quotation_items')->leftJoin('quotations', 'quotation_items.quotions_id', 'quotations.id')->where('quotations.companies_id', '=', $company_id);
+            //     });
+            // })
             ->with('branch')
             ->with(['pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
             ->get();
         return response()->json($pr_records, 200);
     }
 
-    public function pr_single_quotation($pr_id)
+    public function pr_single_quotation($pr_id, $company_id)
     {
         $pr_records = PurchaseRequest::where('id', '=', $pr_id)
             ->where('year', '=', Auth::user()->ppmp_year)
             ->where('is_approve', '=', 1)
-            // ->with('pr_items', function ($query) {
-            //     $query->whereNotIn('pro_pro_man_plans_id', function ($query1) {
-            //         $query1->select('pro_pro_man_plans_id')->from('quotation_items');
-            //     })->with(['ppmp', 'ppmp.source_of_fund', 'ppmp.item_detail', 'ppmp.item_detail.unit', 'ppmp.item_purpose', 'ppmp.milestones']);
-            // })
+            ->with(['pr_items' => function ($query) use ($company_id) {
+                // $query->whereNotIn('purchase_requests_id ', function ($query1) use ($company_id) {
+                //     $query1->select('quotation_items.purchase_request_items')->from('quotation_items')->leftJoin('quotations', 'quotation_items.quotions_id', 'quotations.id')->where('quotations.companies_id', '=', $company_id);
+                // });
+                $query->whereDoesntHave('quotations.quotation', function ($query1) use ($company_id) {
+                    $query1->where('year', '=', getPpmpYear())->where('companies_id', '=', $company_id);
+                });
+            }, 'pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
             ->with('branch')
-            ->with(['pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
             ->get();
         return response()->json($pr_records, 200);
     }

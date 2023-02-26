@@ -34,7 +34,27 @@ class SettingSeeder extends Seeder
         ]);
         Setting::create([
             'name' => 'university_president',
-            'value' => 'CECILIA N. GASCON, Ph. D.',
+            'value' => 'Prof. CECILIA N. GASCON, Ph. D.',
+        ]);
+        Setting::create([
+            'name' => 'vice_chair',
+            'value' => 'Dr. DOLLY P. MAROMA',
+        ]);
+        Setting::create([
+            'name' => 'vice_chair',
+            'value' => 'Dr. MARVIN R. TULLAO',
+        ]);
+        Setting::create([
+            'name' => 'member',
+            'value' => 'YOLANDA ROBERTO',
+        ]);
+        Setting::create([
+            'name' => 'member',
+            'value' => 'Engr. NOEMI P. REYES',
+        ]);
+        Setting::create([
+            'name' => 'member',
+            'value' => 'Engr. DONALD M. LAPIGUERA',
         ]);
     }
 }

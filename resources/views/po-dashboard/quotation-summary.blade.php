@@ -58,10 +58,10 @@
                                             </tr>
                                             @foreach ($summary->quotations as $quote)
                                                 @foreach ($quote->items as $item)
-                                                    @if ($item->ppmp !== null)
+                                                    @if ($item->pr_item->ppmp !== null)
                                                         <tr>
                                                             <td></td>
-                                                            <td>{{ $item->ppmp->item_detail->description }}</td>
+                                                            <td>{{ $item->pr_item->ppmp->item_detail->description }}</td>
                                                             <td>₱ {{ number_format($item->offered_unit_price, 2) }}</td>
                                                         </tr>
                                                     @endif

@@ -23,4 +23,9 @@ class PurchaseRequestItem extends Model
     {
         return $this->belongsTo(ProProManPlan::class, 'pro_pro_man_plans_id', 'id');
     }
+
+    public function quotations()
+    {
+        return $this->hasMany(QuotationItem::class, 'purchase_request_items_id', 'id');
+    }
 }

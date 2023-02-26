@@ -40,7 +40,7 @@
                                         @php
                                             $totalAmount = 0;
                                             foreach($quotation->items as $item) {
-                                                foreach($item->ppmp->milestones as $milestone) {
+                                                foreach($item->pr_item->ppmp->milestones as $milestone) {
                                                     $totalAmount += floatval($item->offered_unit_price) * intval($milestone->milestone_value);
                                                 }
                                             }
@@ -189,24 +189,26 @@
         await axios.get(`{{ route('quotation.single.api') }}/${quotationId}`)
             .then(res => {
                 let quoteData = res.data.data[0];
+                // console.log(quoteData);
+                // return;
                 $('#name').html(quoteData.company.name);
                 $('#full_address').html(quoteData.company.full_address);
                 $('#contact_number').html(quoteData.company.contact_number);
                 $('#tin').html(quoteData.company.tin);
                 $('#email_address').html(quoteData.company.email_address);
                 $('#quotation_number').html(quoteData.quotation_number);
-                $('#purchase_requests_number').html(quoteData.items[0].ppmp.pr_item.pr.pr_number);
+                $('#purchase_requests_number').html(quoteData.items[0].pr_item.pr.pr_number);
                 let itemPurpose = '';
                 let quoteItems = ``;
                 quoteData.items.map(item => {
-                    itemPurpose += (itemPurpose === '' ? '' : ',') + item.ppmp.item_purpose.description;
+                    itemPurpose += (itemPurpose === '' ? '' : ',') + item.pr_item.ppmp.item_purpose.description;
                     let totalQty = 0;
-                    item.ppmp.milestones.map(milestone => totalQty += milestone.milestone_value)
+                    item.pr_item.ppmp.milestones.map(milestone => totalQty += milestone.milestone_value)
                     quoteItems += `
                         <tr>
                             <td>${item.item_number}</td>
-                            <td>${item.ppmp.item_detail.description}</td>
-                            <td>${totalQty} ${item.ppmp.item_detail.unit.uom}</td>
+                            <td>${item.pr_item.ppmp.item_detail.description}</td>
+                            <td>${totalQty} ${item.pr_item.ppmp.item_detail.unit.uom}</td>
                             <td>${item.brand_and_model_offered}</td>
                             <td>₱ ${item.offered_unit_price}</td>
                             <td>₱ ${(item.offered_unit_price * totalQty).toFixed(2)}</td>

@@ -11,14 +11,20 @@ class QuotationItem extends Model
     protected $fillable = [
         'item_number',
         'quotations_id',
-        'pro_pro_man_plans_id',
+        // 'pro_pro_man_plans_id', //instead of ppmp, will connect to the PR instead
+        'purchase_request_items_id',
         'brand_and_model_offered',
         'offered_unit_price'
     ];
 
-    public function ppmp()
+    // public function ppmp() //no need since we will connect quotation items to purchase request items instead of PPMP
+    // {
+    //     return $this->hasOne(ProProManPlan::class, 'id', 'pro_pro_man_plans_id');
+    // }
+
+    public function pr_item()
     {
-        return $this->hasOne(ProProManPlan::class, 'id', 'pro_pro_man_plans_id');
+        return $this->belongsTo(PurchaseRequestItem::class, 'purchase_request_items_id', 'id');
     }
 
     public function quotation()
@@ -28,6 +34,6 @@ class QuotationItem extends Model
 
     public function canvass_abstract_item()
     {
-        return $this->hasOne(CanvassAbstractItem::class, 'id', 'quotation_items_id');
+        return $this->hasOne(CanvassAbstractItem::class, 'quotation_items_id', 'id');
     }
 }

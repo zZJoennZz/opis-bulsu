@@ -6,7 +6,7 @@
     @php
         $breadcrumb = [
             ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-            ['name' => 'BAC Resolution', 'route' => 'dashboard.show'],
+            ['name' => 'BAC Resolution', 'route' => 'bac-reso.all'],
             ['name' => 'Prepare BAC']
         ]
     @endphp
@@ -18,9 +18,10 @@
     
     <div>
         <div>
-            @if (count($company_quotations) === 0)
+            {{-- @if (count($company_quotations) === 0) --}}
+            @if ($company_quotations === null)
                 <div class="alert alert-warning" role="alert">
-                    <em class="bi bi-exclamation-diamond-fill"></em> No items available.
+                    <em class="bi bi-exclamation-diamond-fill"></em> No items available or already have BAC.
                 </div>
             @else
                 <div class="modal modal-lg fade" id="compare-price-modal" tabindex="-1" aria-labelledby="compareItemModal" aria-hidden="true">
@@ -42,20 +43,21 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-sm border-dark caption-top" style="min-width: 500px;">
-                        <caption><span class="badge bg-primary">{{$company_quotations[0]->name}}</span> - Available Items</caption>
+                    <table id="available-items-for-bac" class="table table-bordered table-sm border-dark caption-top" style="min-width: 500px;">
+                        <caption><span class="badge bg-primary">{{$company_quotations->name}}</span> - Available Items</caption>
                         <thead>
                             <tr>
                                 <th>Add</th>
                                 <th style="width: 30%">Item</th>
-                                <th style="width: 30%">Brand and Model Offered</th>
-                                <th style="width: 25%">Offered Unit Price per Unit</th>
+                                <th style="width: 20%">Brand and Model Offered</th>
+                                <th style="width: 15%">Purchase Request #</th>
+                                <th style="width: 20%">Offered Unit Price per Unit</th>
                                 <th></th>
                             </tr>
                         </thead>
-                        @foreach ($company_quotations[0]->quotations as $quotation)
+                        @foreach ($company_quotations->quotations as $quotation)
                             @foreach ($quotation->items as $item)
-                                @if ($item->ppmp->item_detail !== null)
+                                @if ($item->pr_item !== null && $item->pr_item->ppmp->item_detail !== null)
                                     <tr>
                                         <td class="bg-dark">
                                             <div class="form-check form-switch mx-auto">
@@ -64,11 +66,12 @@
                                                 </label>
                                             </div>
                                         </td>
-                                        <td>{{ $item->ppmp->item_detail->description }}</td>
+                                        <td>{{ $item->pr_item->ppmp->item_detail->description }}</td>
                                         <td>{{ $item->brand_and_model_offered }}</td>
-                                        <td>₱{{ number_format($item->offered_unit_price, 2) }} / {{$item->ppmp->item_detail->unit->uom}}</td>
+                                        <td>{{ $item->pr_item->pr->pr_number }}</td>
+                                        <td>₱{{ number_format($item->offered_unit_price, 2) }} / {{$item->pr_item->ppmp->item_detail->unit->uom}}</td>
                                         <td>
-                                            <button class="btn btn-primary btn-sm" onclick="showComparison({{$item->ppmp->item_detail->id}})">
+                                            <button class="btn btn-primary btn-sm" onclick="showComparison({{$item->pr_item->id}})">
                                                 <em class="bi bi-table"></em> Compare
                                             </button>
                                         </td>
@@ -174,7 +177,7 @@
                             }
                             
                             let payload = {
-                                companyId: '{{$company_quotations[0]->id}}',
+                                companyId: '{{$company_quotations->id}}',
                                 items: selectedItems,
                                 abcVal
                             };
@@ -196,11 +199,12 @@
                                 </div> Loading
                             `;
 
-                            await axios.get(getItemComparison + '/' + item_id)
+                            try {
+                                await axios.get(getItemComparison + '/' + item_id)
                                 .then((res) => {
                                     let data = res.data;
-                                    
-                                    $('#compareItemModal').html(`Compare <span class="badge bg-primary">${data.data[0].ppmp.item_detail.description}'s</span> prices from other suppliers/companies`);
+                                    console.log(data);
+                                    $('#compareItemModal').html(`Compare <span class="badge bg-primary">${data.data[0].pr_item.ppmp.item_detail.description}'s</span> prices from other suppliers/companies`);
                                     let comparisonContent = `
                                         <table class="table table-sm table-bordered table-hover">
                                             <thead>
@@ -216,9 +220,9 @@
                                     data.data.forEach(item => {
                                         comparisonContent += `
                                             <tr>
-                                                <td>${item.ppmp.item_detail.description}</td>
+                                                <td>${item.pr_item.ppmp.item_detail.description}</td>
                                                 <td>${item.brand_and_model_offered}</td>
-                                                <td>${item.offered_unit_price} / ${item.ppmp.item_detail.unit.uom}</td>
+                                                <td>${item.offered_unit_price} / ${item.pr_item.ppmp.item_detail.unit.uom}</td>
                                                 <td>${item.quotation.company.name}</td>
                                             </tr>
                                         `;
@@ -230,11 +234,15 @@
                                     $('#compare-modal').html(comparisonContent);
                                     $('#compare-price-modal').modal('toggle');
                                 });
+                            } catch (err) {
+                                console.log(err);
+                            }
 
                             currBtn.target.innerHTML = oldContent;
                             currBtn.target.disabled = false;
                         }
                     </script>
+                    @include('layout/datatable', ['tableId' => 'available-items-for-bac'])
                 </x-slot>
             @endif
         </div>

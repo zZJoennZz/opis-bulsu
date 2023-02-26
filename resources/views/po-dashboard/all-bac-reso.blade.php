@@ -10,6 +10,7 @@
         ]
     @endphp
 
+    <a href="{{ route('bac-reso.add') }}?step=1" class="float-end btn btn-sm btn-primary"><em class="bi bi-file-earmark-text-fill"></em> Generate BAC</a>
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     
     <div class="table-responsive">
@@ -29,7 +30,7 @@
                         <td>{{date_format($bac->created_at, 'Y/m/d h:i:s A')}}</td>
                         <td class="text-end">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{{ route('bac-reso.single') }}/{{$bac->id}}" target="_blank" rel="noreferrer" class="btn btn-sm btn-primary"><em class="bi bi-folder2-open"></em> View</a>
+                                <a href="{{ route('bac-reso.single') }}/{{$bac->id}}" class="btn btn-sm btn-primary"><em class="bi bi-folder2-open"></em> View</a>
                                 <button type="button" class="btn btn-sm btn-danger"><em class="bi bi-trash-fill"></em> Delete</button>
                             </div>
                         </td>

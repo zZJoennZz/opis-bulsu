@@ -58,37 +58,23 @@ class BacResoController extends Controller
             $company_list = Company::all();
             return view('po-dashboard/bac-step-2')->with('company_list', $company_list);
         } elseif ($step === 3 && $companyId !== 0) {
+            $company_quotations = Company::where('id', '=', $companyId)
+                ->whereHas('quotations', function ($query) {
+                    $query->where('year', '=', getPpmpYear());
+                })
+                ->whereDoesntHave('canvass_abstract', function ($query) {
+                    $query->where('year', '=', getPpmpYear());
+                })
+                ->whereHas('quotations', function ($query) {
+                    $query->where('year', '=', getPpmpYear());
+                })
+                ->with(['quotations.items.pr_item' => function ($query) {
+                    $query->doesntHave('quotations.canvass_abstract_item');
+                }, 'quotations.items.pr_item.ppmp.item_detail.unit', 'quotations.items', 'quotations.items.pr_item.pr'])
+                ->first();
             try {
-                $company_quotations = Company::where('id', '=', $companyId)
-                    ->whereHas('quotations', function ($query) {
-                        $query->where('year', '=', Auth::user()->ppmp_year);
-                    })
-                    ->whereDoesntHave('canvass_abstract', function ($query) {
-                        $query->where('year', '=', Auth::user()->ppmp_year);
-                    })
-                    ->with('quotations.items.ppmp.item_detail', function ($query) {
-                        $query->whereNotIn('item_details.id', function ($innerQuery) {
-                            $innerQuery
-                                ->select('item_details.id')
-                                ->from('canvass_abstract_items')
-                                ->leftJoin('quotation_items as q2', 'canvass_abstract_items.quotation_items_id', '=', 'q2.id')
-                                ->leftJoin('pro_pro_man_plans', 'q2.pro_pro_man_plans_id', '=', 'pro_pro_man_plans.id')
-                                ->leftJoin('item_details', 'pro_pro_man_plans.item_details_id', '=', 'item_details.id');
-                        });
-                    })
-                    // ->with('quotations.items', function ($query1) {
-                    //     $query1->whereDoesntHave('ppmp.item_detail', function ($query2) {
-                    //         $query2->whereNotIn('item_details.id', function ($query3) {
-                    //             $query3->select('item_details.id')
-                    //                 ->from('canvass_abstract_items')
-                    //                 ->leftJoin('quotation_items as q2', 'canvass_abstract_items.quotation_items_id', '=', 'q2.id')
-                    //                 ->leftJoin('pro_pro_man_plans', 'q2.pro_pro_man_plans_id', '=', 'pro_pro_man_plans.id')
-                    //                 ->leftJoin('item_details', 'pro_pro_man_plans.item_details_id', '=', 'item_details.id');
-                    //         });
-                    //     })->with('ppmp.item_detail.unit');
-                    // })
-                    ->get();
-                // return $company_quotations;
+
+                // return response()->json($company_quotations, 200);
                 return view('po-dashboard/bac-step-3')
                     ->with('company_quotations', $company_quotations);
             } catch (Throwable $e) {
@@ -157,19 +143,33 @@ class BacResoController extends Controller
     {
         $bac_record = CanvassAbstract::where('companies_id', '=', $company_id)
             ->where('year', '=', getPpmpYear())
-            ->with(['company', 'items', 'items.quotation_item', 'items.quotation_item.ppmp', 'items.quotation_item.ppmp.milestones', 'items.quotation_item.ppmp.item_detail', 'items.quotation_item.ppmp.item_detail.unit'])
+            ->with(['company', 'items.quotation_item.pr_item.ppmp.milestones', 'items.quotation_item.pr_item.ppmp.item_detail.unit'])
             ->first();
-        $quotation_ids = [];
+
+        // $companies = Company::whereIn('id');
+        $pr_items_id = [];
         foreach ($bac_record->items as $item) {
-            array_push($quotation_ids, $item->quotation_item->id);
+            array_push($pr_items_id, $item->quotation_item->pr_item->id);
         }
-        $companies = Company::whereHas('quotations', function ($query) use ($quotation_ids) {
-            return $query->where('year', '=', getPpmpYear())->whereHas('items', function ($query1) use ($quotation_ids) {
-                $query1->whereIn('id', $quotation_ids);
-            });
+        // $companies = Company::whereHas('quotations', function ($query) use ($quotation_ids) {
+        //     return $query->where('year', '=', getPpmpYear())->whereHas('items', function ($query1) use ($quotation_ids) {
+        //         $query1->whereIn('id', $quotation_ids);
+        //     });
+        // })
+        //     ->get();
+        // $companies = Company::whereIn('id', )
+        // $canvasses = CanvassAbstract::with(['items.quotation_item.pr_item' => function ($query) use ($quotation_ids) {
+        //     $query->whereIn('quotation_items_id', $quotation_ids);
+        // }])->get();
+
+        $companies = Company::whereHas('quotations.items.pr_item', function ($query) use ($pr_items_id) {
+            $query->whereIn('id', $pr_items_id);
         })
             ->get();
-        return response()->json($companies, 200);
+        // return response()->json($companies);
+        return view('po-dashboard/view-bac')
+            ->with('bac_record', $bac_record)
+            ->with('companies', $companies);
     }
 
     public function test()

@@ -191,7 +191,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/purchase-request', [PurchaseRequestController::class, 'pr_admin'])->name('pr-admin.show');
     Route::post('/toggle-purchase-request', [PurchaseRequestController::class, 'toggle_pr_mode'])->name('pr.toggle');
     Route::get('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'pr_single'])->name('pr-single.api');
-    Route::get('/purchase-request-quotation/{pr_id?}', [PurchaseRequestController::class, 'pr_single_quotation'])->name('pr-single-quotation.api');
+    Route::get('/purchase-request-quotation/{pr_id?}/{company_id?}', [PurchaseRequestController::class, 'pr_single_quotation'])->name('pr-single-quotation.api');
     Route::post('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'approve_pr'])->name('pr-approve.api');
 
     //companies
@@ -208,7 +208,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/quotations/single/{quotation_id?}', [QuotationController::class, 'get_single'])->name('quotation.single.api');
     Route::get('/quotations/summary', [QuotationController::class, 'get_summary'])->name('quotation.summary');
     Route::get('/company-quotations/{company_id?}', [QuotationController::class, 'get_company_quotations'])->name('company-quotation.single');
-    Route::get('/quotations/comparison/{item_id?}', [QuotationController::class, 'get_item_for_comparison'])->name('quotation-comparison.single');
+    Route::get('/quotations/comparison/{pr_id?}', [QuotationController::class, 'get_item_for_comparison'])->name('quotation-comparison.single');
 
     //BAC reso
     Route::get('/bac-reso/', [BacResoController::class, 'bac_reso_list'])->name('bac-reso.all');

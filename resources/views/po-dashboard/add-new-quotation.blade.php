@@ -44,9 +44,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div>
-                                    <span class="text-danger"><span class="fw-bold">Delivery Period:</span> 7 calendar days upon receipt of <span class="fw-bold fst-italic">purchase order</span>.</span>
-                                </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <h2 class="h6 fst-italic text-secondary">Company Profile</h2>
@@ -249,6 +246,12 @@
     }
 
     async function get_company_details(event) {
+        prItems = [];
+        quoteItems = [];
+        selectedItems = [];
+        mapPrItems();
+        mapQuoteItems();
+        $('#purchase_requests_id').val('Select purchase request');
         await axios.get(`${comSingApi}/${event.target.value}`)
             .then(res => {
                 let companyDetails = res.data.data[0];
@@ -272,7 +275,12 @@
     }
 
     async function get_pr_record(event) {
-        await axios.get(`${prSingQApi}/${event.target.value}`)
+        let companyId = $('#companies_id').val();
+        if (companyId === '' || companyId === null || companyId === undefined || companyId === 0 || companyId === "Select company") {
+            alert('Please select a company first.');
+            event.target.value = "Select purchase request";
+        }
+        await axios.get(`${prSingQApi}/${event.target.value}/${companyId}`)
             .then(res => {
                 prItems = res.data[0].pr_items;
                 itemsMaster = prItems;
@@ -281,7 +289,7 @@
                 mapQuoteItems();
             })
             .catch(err => {
-                alert(`Cannot fetch PR record. Please reload the page.`);
+                // alert(`Cannot fetch PR record. Please reload the page.`);
                 $('#quote-item-details').html(``);
                 $('#pr-item-details').html(``);
             });

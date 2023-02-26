@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'email' => 'joenn.shift101@gmail.com',
             'account_type' => 'admin',
             'password' => 'admin',
-            'ppmp_year' => date('Y'),
+            'ppmp_year' => '2022',
             'branches_id' => 1,
             'is_active' => 1,
         ]);
@@ -44,7 +44,7 @@ class UserSeeder extends Seeder
             'email' => 'enduser1@admin.com',
             'account_type' => 'END_USER',
             'password' => 'admin',
-            'ppmp_year' => date('Y'),
+            'ppmp_year' => '2022',
             'branches_id' => 7,
             'is_active' => 1,
         ]);
@@ -65,7 +65,7 @@ class UserSeeder extends Seeder
             'email' => 'enduser2@admin.com',
             'account_type' => 'END_USER',
             'password' => 'admin',
-            'ppmp_year' => date('Y'),
+            'ppmp_year' => '2022',
             'branches_id' => 8,
             'is_active' => 1,
         ]);
@@ -81,7 +81,7 @@ class UserSeeder extends Seeder
             'email' => 'joennsa@gmail.com',
             'account_type' => 'END_USER',
             'password' => 'admin',
-            'ppmp_year' => date('Y'),
+            'ppmp_year' => '2022',
             'branches_id' => 9,
             'is_active' => 1,
         ]);
