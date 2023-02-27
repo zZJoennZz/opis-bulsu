@@ -55,7 +55,7 @@
         <div class="email_body">  
             <div class="body_content">
                 <img src="{{ asset('img/reset-password.png') }}" alt="Password Reset image" class="reset_pass-img">
-                <h1>Forget Password Email</h1>
+                <h1>Reset Password</h1>
                 <p> You can reset password from below link </p> 
                 <a href="{{ route('reset-password.show', $token) }}">Reset Password</a>
             </div>
