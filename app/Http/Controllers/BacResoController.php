@@ -172,6 +172,17 @@ class BacResoController extends Controller
             ->with('companies', $companies);
     }
 
+    public function get_single($bac_reso_id)
+    {
+        $bac_reso = CanvassAbstract::where('id', '=', $bac_reso_id)
+            ->with(['items.quotation_item.pr_item.ppmp.milestones', 'items.quotation_item.pr_item.ppmp.item_detail.unit'])
+            ->get();
+        return response()->json([
+            'status' => true,
+            'data' => $bac_reso
+        ], 200);
+    }
+
     public function test()
     {
         return Company::with(['canvass_abstract'])->get();

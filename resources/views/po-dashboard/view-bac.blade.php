@@ -48,9 +48,6 @@
                 $rowCtr = 1;
             @endphp
             @foreach ($bac_record->items as $item)
-                @php
-                    $rowCtr += 1;
-                @endphp
                 <tr>
                     <td>{{ $item->quotation_item->pr_item->ppmp->item_detail->description }}</div>
                     <td>₱{{ number_format($item->quotation_item->offered_unit_price, 2) }}</td>
@@ -68,11 +65,14 @@
                     @php
                         $extendedAmt += $item->quotation_item->pr_item->ppmp->item_detail->price_catalogue * $totalQty;
                     @endphp
-                    @if ($rowCtr === count($bac_record->items) ||  count($bac_record->items) === 1)
-                        <td rowspan="{{$rowCtr}}" class="text-center" style="vertical-align: middle;">₱{{ number_format($extendedAmt, 2) }}</td>
-                        <td rowspan="{{$rowCtr}}" class="text-center" style="vertical-align: middle;">{{ $bac_record->company->name }}</td>
+                    @if ($rowCtr === 1 || count($bac_record->items) === 1)
+                        <td rowspan="{{count($bac_record->items)}}" class="text-center" style="vertical-align: middle;">₱{{ number_format($extendedAmt, 2) }}</td>
+                        <td rowspan="{{count($bac_record->items)}}" class="text-center" style="vertical-align: middle;">{{ $bac_record->company->name }}</td>
                     @endif
                 </tr>
+                @php
+                    $rowCtr += 1;
+                @endphp
             @endforeach
         </table>
         <div class="mb-3">

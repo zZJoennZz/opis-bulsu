@@ -68,7 +68,7 @@
                             </div>
                         @endif
                         <div class="table-responsive">
-                            <table class="table table-small table-bordered border-dark">
+                            <table class="table table-small table-bordered border-dark caption-top">
                                 <caption>Purchase Requests for the Year <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
                                 <thead>
                                     <tr class="small">

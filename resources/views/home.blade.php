@@ -42,11 +42,11 @@
                                     @endif
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="text" class="form-control" id="floatingInput" name="username" placeholder="Username" required />
+                                    <input autocomplete="username" type="text" class="form-control" id="floatingInput" name="username" placeholder="Username" required />
                                     <label for="floatingInput">Username / Email Address</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required />
+                                    <input autocomplete="current-password" type="password" class="form-control" id="floatingPassword" name="password" placeholder="Password" required />
                                     <label for="floatingPassword">Password</label>
                                 </div>
                                 <button class="mb-3 w-100 btn btn-lg btn-primary" type="submit">Login</button>

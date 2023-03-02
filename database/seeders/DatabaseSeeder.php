@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
             MilestoneFormatSeeder::class,
             ItemPurposeSeeder::class,
             SourceOfFundSeeder::class,
-            SettingSeeder::class
+            SettingSeeder::class,
+            PurchaseOrderModeOfPaymentSeeder::class,
         ]);
     }
 }

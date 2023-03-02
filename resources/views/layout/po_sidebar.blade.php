@@ -27,7 +27,7 @@
             <a href="{{ route('bac-reso.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-envelope-check-fill float-start"></em> BAC Resolution</a>
         </div>
         <div class="mb-2">
-            <a class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-cart-check-fill float-start"></em> Purchase Order</a>
+            <a href="{{ route('po.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-cart-check-fill float-start"></em> Purchase Order</a>
         </div>
         <div>
             <a class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-bag-check-fill float-start"></em> Inspection & Acceptance</a>

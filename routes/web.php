@@ -21,6 +21,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\BacResoController;
+use App\Http\Controllers\PurchaseOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -211,11 +212,18 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/quotations/comparison/{pr_id?}', [QuotationController::class, 'get_item_for_comparison'])->name('quotation-comparison.single');
 
     //BAC reso
-    Route::get('/bac-reso/', [BacResoController::class, 'bac_reso_list'])->name('bac-reso.all');
+    Route::get('/bac-reso', [BacResoController::class, 'bac_reso_list'])->name('bac-reso.all');
     Route::get('/bac-reso/view/{company_id?}', [BacResoController::class, 'view_bac'])->name('bac-reso.single');
     Route::get('/bac-reso/add', [BacResoController::class, 'prepare_bac'])->name('bac-reso.add');
     Route::post('/bac-reso/add', [BacResoController::class, 'create_bac'])->name('bac-reso.perform');
     Route::get('/bac-reso/test', [BacResoController::class, 'test'])->name('test.bac-reso');
+    Route::get('/bac-reso/single/{bac_reso_id?}', [BacResoController::class, 'get_single'])->name('bac-reso.by-id');
+
+    //purchase order
+    Route::get('/purchase-order', [PurchaseOrderController::class, 'get_all'])->name('po.all');
+    Route::get('/purchase-order/add', [PurchaseOrderController::class, 'add_new'])->name('po.add');
+    Route::post('/purchase-order/add', [PurchaseOrderController::class, 'generate_po'])->name('po.perform');
+    Route::get('/purchase-order/view/{po_id?}', [PurchaseOrderController::class, 'view_po'])->name('po.single');
 
     //settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');

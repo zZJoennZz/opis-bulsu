@@ -30,4 +30,9 @@ class CanvassAbstract extends Model
     {
         return $this->hasOne(Company::class, 'id', 'companies_id');
     }
+
+    public function purchase_order()
+    {
+        return $this->hasOne(PurchaseOrder::class, 'canvass_abstracts_id', 'id');
+    }
 }
