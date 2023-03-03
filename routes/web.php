@@ -22,6 +22,7 @@ use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\BacResoController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\InspectionAndAcceptanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -224,6 +225,12 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/purchase-order/add', [PurchaseOrderController::class, 'add_new'])->name('po.add');
     Route::post('/purchase-order/add', [PurchaseOrderController::class, 'generate_po'])->name('po.perform');
     Route::get('/purchase-order/view/{po_id?}', [PurchaseOrderController::class, 'view_po'])->name('po.single');
+
+    //inspection and acceptance
+    Route::get('/inspection-and-acceptance', [InspectionAndAcceptanceController::class, 'all'])->name('ia.all');
+    Route::get('/inspection-and-acceptance/add', [InspectionAndAcceptanceController::class, 'add_new'])->name('ia.add');
+    Route::post('/inspection-and-acceptance/add', [InspectionAndAcceptanceController::class, 'post_new'])->name('ia.post');
+    Route::get('/inspection-and-acceptance/view/{ia_id?}', [InspectionAndAcceptanceController::class, 'view_single'])->name('ia.single');
 
     //settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
