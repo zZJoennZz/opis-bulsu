@@ -12,6 +12,9 @@
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
 
+    <div class="mb-3">
+        <a href="{{ route('ia.add') }}" class="btn btn-primary"><em class="bi bi-card-text"></em> Add New Report</a>
+    </div>
     <table class="table table-sm border-dark caption-top">
         <caption>Inspection and Acceptance Reports List <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
         <thead>
