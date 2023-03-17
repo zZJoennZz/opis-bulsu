@@ -38,6 +38,10 @@ class ProcurementOffice
             return redirect()->route('bo-dashboard.show');
         }
 
+        if (Auth::user()->account_type === "SUPPLY_OFFICE") {
+            return redirect()->route('so-dashboard.show');
+        }
+
         if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE") {
             return $next($request);
         }

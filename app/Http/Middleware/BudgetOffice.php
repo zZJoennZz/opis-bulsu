@@ -38,6 +38,10 @@ class BudgetOffice
             return redirect()->route('po-dashboard.show');
         }
 
+        if (Auth::user()->account_type === "SUPPLY_OFFICE") {
+            return redirect()->route('so-dashboard.show');
+        }
+
         if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "BUDGET_OFFICE") {
             return $next($request);
         }

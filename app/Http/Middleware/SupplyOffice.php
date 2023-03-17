@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class EndUser
+class SupplyOffice
 {
     /**
      * Handle an incoming request.
@@ -34,15 +34,15 @@ class EndUser
             return redirect()->route('bo-dashboard.show');
         }
 
+        if (Auth::user()->account_type === "END_USER") {
+            return redirect()->route('dashboard.show');
+        }
+
         if (Auth::user()->account_type === "PROCUREMENT_OFFICE") {
             return redirect()->route('po-dashboard.show');
         }
 
-        if (Auth::user()->account_type === "SUPPLY_OFFICE") {
-            return redirect()->route('so-dashboard.show');
-        }
-
-        if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "END_USER") {
+        if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "SUPPLY_OFFICE") {
             return $next($request);
         }
 
