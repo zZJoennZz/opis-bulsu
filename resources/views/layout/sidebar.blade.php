@@ -87,6 +87,13 @@
             </ul>
             <hr />
         @endif
+
+        @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "SUPPLY_OFFICE")
+            <ul class="nav flex-column">
+                @include('layout/so_sidebar')
+            </ul>
+            <hr />
+        @endif
         <ul class="nav flex-column">
             <li class="nav-link">
                 <div class="mb-3 mb-md-0 small text-muted">
