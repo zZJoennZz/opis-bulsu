@@ -18,6 +18,7 @@ class InspectionAndAcceptanceController extends Controller
             ->whereHas('canvass_abstract', function ($query) {
                 $query->where('year', '=', Auth::user()->ppmp_year);
             })
+            ->doesntHave('iaa')
             ->where('is_delete', '=', 0)
             ->get();
 
