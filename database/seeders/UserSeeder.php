@@ -133,5 +133,26 @@ class UserSeeder extends Seeder
             'last_name' => 'User 1',
             'positions_id' => 4,
         ]);
+
+        User::create([
+            'username' => 'souser',
+            'email' => 'supply@admin.com',
+            'account_type' => 'SUPPLY_OFFICE',
+            'password' => 'admin',
+            'ppmp_year' => '2022',
+            'branches_id' => 4,
+            'is_active' => 1,
+        ]);
+        Position::create([
+            'description' => 'Supply Office Staff',
+            'is_delete' => 0,
+            'added_by' => 1,
+        ]);
+        UserProfile::create([
+            'users_id' => 7,
+            'first_name' => 'Supply',
+            'last_name' => 'Office',
+            'positions_id' => 5,
+        ]);
     }
 }
