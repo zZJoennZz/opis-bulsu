@@ -25,4 +25,9 @@ class PurchaseOrder extends Model
     {
         return $this->hasOne(PurchaseOrderModeOfPayment::class, 'id', 'purchase_order_mode_of_payments_id');
     }
+
+    public function iaa()
+    {
+        return $this->belongsTo(InspectionAndAcceptance::class, 'id', 'purchase_orders_id');
+    }
 }
