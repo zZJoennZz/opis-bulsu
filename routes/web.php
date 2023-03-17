@@ -23,6 +23,9 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\BacResoController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\InspectionAndAcceptanceController;
+use App\Http\Controllers\InventoryCustodianController;
+use App\Http\Controllers\SupplyEndUserController;
+use App\Http\Controllers\SupplyEmployeeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -234,6 +237,19 @@ Route::middleware('procurement.office')->group(function () {
 
     //settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+});
+
+Route::middleware('supply.office')->group(function () {
+    Route::get('/so-dashboard', [DashboardController::class, 'show'])->name('so-dashboard.show');
+
+    //manage end users
+    Route::get('/manage-end-user', [SupplyEndUserController::class, 'all'])->name('supply-end-user.all');
+    Route::post('/manage-end-user', [SupplyEndUserController::class, 'post_add'])->name('supply-end-user.post_add');
+
+    Route::get('/manage-supply-employee', [SupplyEmployeeController::class, 'all'])->name('supply-employee.all');
+    Route::post('/manage-supply-employee', [SupplyEmployeeController::class, 'post_add'])->name('supply-employee.post_add');
+
+    Route::get('/inventory-custodian-form', [InventoryCustodianController::class, 'show'])->name('icf.show');
 });
 
 //ADMIN ONLY

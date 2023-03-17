@@ -72,6 +72,10 @@ class DashboardController extends Controller
                 ->with('ppmp_records_count', $ppmpRecordsCount);
         }
 
+        if ($user->account_type === "SUPPLY_OFFICE" || $user->account_type === "admin") {
+            $viewToReturn = $viewToReturn->with('tasdest', "HEY!");
+        }
+
         return $viewToReturn;
     }
 }
