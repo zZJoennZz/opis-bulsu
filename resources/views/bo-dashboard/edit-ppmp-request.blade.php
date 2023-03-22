@@ -64,6 +64,7 @@
                                     <div class="row">
                                         <div class="col-12 mb-3">
                                             <div class="fs-3 fw-bold">Unit: {{ $ppmp_record->branch_name }}</div>
+                                            <div class="text-secondary small">Note: Editing an approved record will require approval again.</div>
                                         </div>
                                         <div class="col-lg-4 col-md-12 mb-3">
                                             <div class="mb-3">
