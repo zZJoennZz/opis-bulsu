@@ -269,7 +269,7 @@ class PPMPController extends Controller
         $estimated_budget = $request->estimated_budget;
         $is_priority = $request->is_priority === "yes" ? 1 : 0;
         $remarks = $request->remarks;
-        $ppmpRecord = ProProManPlan::where('year', '=', $user->ppmp_year)->find($ppmp_id);
+        $ppmpRecord = ProProManPlan::where('year', '=', $user->ppmp_year)->doesntHave('pr_item')->find($ppmp_id);
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
         $newMilestones = [];
 
