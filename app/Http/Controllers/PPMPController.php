@@ -13,6 +13,7 @@ use App\Models\SourceOfFund;
 use App\Models\ItemPurpose;
 use App\Models\ProProManPlanHistory;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -26,7 +27,7 @@ class PPMPController extends Controller
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
         $ppmpFormat = json_decode($ppmpFormat->format);
         $user = Auth::user();
-        $ppmpDrafts = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('submitted_by', '=', $user->id)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $user->branches_id)->get();
+        $ppmpDrafts = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('submitted_by', '=', $user->id)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $user->branches_id)->with(['pr_item'])->get();
 
         $ppmpIds = [];
         foreach ($ppmpDrafts as $draft) {
@@ -220,13 +221,18 @@ class PPMPController extends Controller
     public function get_ppmp_record($ppmp_id)
     {
         $user = Auth::user();
-        if ($user->account_type === "BUDGET_OFFICE" && $user->account_type === "admin") {
-            $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_bo_approve', '<>', 1)->where('pro_pro_man_plans.is_pr_approve', '<>', 1)->select($this->select_all_ppmp, 'branches.branch_name')->find($ppmp_id);
-        } else {
-            $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_pr_approve', '<>', 1)->select($this->select_all_ppmp, 'branches.branch_name')->find($ppmp_id);
-        }
+        // if ($user->account_type === "BUDGET_OFFICE" || $user->account_type === "admin") {
+        //     $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_bo_approve', '<>', 1)->where('pro_pro_man_plans.is_pr_approve', '<>', 1)->select($this->select_all_ppmp, 'branches.branch_name')->find($ppmp_id);
+        // } else {
+        //     $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->where('pro_pro_man_plans.is_pr_approve', '<>', 1)->select($this->select_all_ppmp, 'branches.branch_name')->find($ppmp_id);
+        // }
+        $ppmpRecord = ProProManPlan::leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->where('year', '=', $user->ppmp_year)->select($this->select_all_ppmp, 'branches.branch_name')->doesntHave('pr_item')->find($ppmp_id);
 
         if (!empty($ppmpRecord)) {
+            if ($ppmpRecord->submitted_by !== $user->id && $user->account_type !== "admin" && $user->account_type !== "PROCUREMENT_OFFICE" && $user->account_type !== "BUDGET_OFFICE") {
+                return redirect()->back()->withErrors(['You are not allowed to edit this.']);
+            } 
+
             $itemDetail = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')
                 ->leftJoin('units', 'units.id', '=', 'item_details.unit_id')
                 ->where('item_details.id', '=', $ppmpRecord->item_details_id)
@@ -246,7 +252,7 @@ class PPMPController extends Controller
                 ->with('ppmp_record', $ppmpRecord)
                 ->with('milestone_values', $ppmpRecord->milestones);
         } else {
-            return redirect()->route('dashboard.show');
+            return redirect()->route('dashboard.show')->withErrors(['Already have PR or the record does not exist.']);
         }
     }
 
@@ -266,6 +272,10 @@ class PPMPController extends Controller
         $ppmpRecord = ProProManPlan::where('year', '=', $user->ppmp_year)->find($ppmp_id);
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
         $newMilestones = [];
+
+        if ($ppmpRecord->submitted_by !== $user->id && $user->account_type !== "admin" && $user->account_type !== "PROCUREMENT_OFFICE" && $user->account_type !== "BUDGET_OFFICE") {
+            return redirect()->back()->withErrors(['You are not allowed to edit this.']);
+        } 
 
         foreach (json_decode($ppmpFormat->format) as $field) {
             array_push(
@@ -352,6 +362,12 @@ class PPMPController extends Controller
             $ppmpRecord->is_priority = $is_priority;
             $ppmpRecord->remarks = $remarks;
 
+            if ($user->account_type === "END_USER" || $ppmpRecord->is_consolidate === 1) {
+                $ppmpRecord->is_bo_approve = 0;
+                $ppmpRecord->is_pr_approve = 0;
+                $ppmpRecord->is_consolidate = 0;
+            }
+
             $ppmpRecord->save();
 
             foreach (json_decode($ppmpFormat->format) as $field) {
@@ -370,13 +386,17 @@ class PPMPController extends Controller
             $ppmpNewHistory->record_by = $user->id;
 
             $ppmpNewHistory->save();
-
-            if ($ppmpRecord->is_pr_approve === 0) {
-                DB::commit();
-            } else {
-                DB::rollBack();
-                return redirect()->back()->withErrors(["message" => "You are not allowed to edit this record."]);
+            
+            //send notifications to budget office users
+            if ($user->account_type === "END_USER") {
+                $bousers = User::where('account_type', '=', "BUDGET_OFFICE")->orWhere('account_type', '=', 'admin')->get();
+                
+                foreach($bousers as $bo) {
+                    sendNotification($bo->id, "New Revision", "PPMP record has been revised and requires you to review. Check here!", "/new-ppmp-request/" . $user->branches_id);
+                }
             }
+
+            DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(["message" => "Something went wrong! Your update isn't submitted."]);

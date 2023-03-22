@@ -20,7 +20,11 @@ class ConsolidateController extends Controller
             return $data->item_detail;
         });
 
-        return view('po-dashboard/view-consolidate')->with('consolidated_records', $getConsolidated);
+        $notConsolidated = ProProManPlan::where('year', '=', Auth::user()->ppmp_year)->where('is_consolidate', '=', 0)->get();
+
+        return view('po-dashboard/view-consolidate')
+            ->with('consolidated_records', $getConsolidated)
+            ->with('not_consolidated', $notConsolidated);
     }
 
     public function consolidate()
@@ -49,12 +53,12 @@ class ConsolidateController extends Controller
         try {
             $isOkayToConsolidate = count(PurchaseRequest::where('year', '=', getPpmpYear())->get()) > 0 ? false : true;
             if ($isOkayToConsolidate) {
-                ProProManPlan::where('is_consolidate', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 0]);
-                PurchaseRequestMode::where('year', '=', Auth::user()->ppmp_year)->update(['mode' => 'DISABLED']);
+                ProProManPlan::where('is_consolidate', '=', 0)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 1]);
+                // PurchaseRequestMode::where('year', '=', Auth::user()->ppmp_year)->update(['mode' => 'DISABLED']);
                 DB::commit();
-                return redirect()->route('consolidated.show')->with('success', 'Successfully reset the consolidation for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
+                return redirect()->route('consolidated.show')->with('success', 'Successfully consolidated pending revisions for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
             } else {
-                return redirect()->route('consolidated.show')->withErrors(['Sorry, not allowed to reset consolidated PPMP with existing PRs, quotations, BAC resolution, and purchase order.']);
+                return redirect()->route('consolidated.show')->withErrors(['Sorry, not allowed to add revised PPMP with existing PRs, quotations, BAC resolution, and purchase order.']);
             }
         } catch (Throwable $e) {
             DB::rollBack();

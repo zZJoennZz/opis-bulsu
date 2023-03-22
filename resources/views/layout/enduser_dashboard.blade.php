@@ -5,10 +5,11 @@
     </div>
 </div>
 <div class="mb-3">
-    <div class="mb-3 fs-3 fw-bold"><em class="bi bi-tags-fill"></em> All Items</div>
+    <div class="mb-3 fs-2 fw-bold"><em class="bi bi-tags-fill"></em> All Items</div>
     @if($is_consolidated)
-        <div class="alert alert-warning mb-3 fs-4" role="alert">
-            PPMP items for the year <div class="badge bg-primary">{{ Auth::user()->ppmp_year }}</div> is already consolidated. You are not allowed to add more items.
+        <div class="alert alert-warning mb-3 fs-5" role="alert">
+            {{-- PPMP items for the year <div class="badge bg-primary">{{ Auth::user()->ppmp_year }}</div> is already consolidated. You are not allowed to add more items. --}}
+            <strong>Warning!</strong>  Items are already consolidated.
         </div>
     @endif
     <div class="mb-3">
@@ -55,11 +56,13 @@
                             <p class="card-text">
                                 ${item["cat_desc"]}
                             </p>
-                            @if($is_consolidated)
+                            {{-- @if($is_consolidated)
                                 <button disabled class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</button>
                             @else
                                 <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</a>
-                            @endif
+                            @endif --}}
+                            <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</a>
+
                         </div>
                     </div>
                 </div>

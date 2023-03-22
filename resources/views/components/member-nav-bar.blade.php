@@ -13,6 +13,9 @@
                 <img src="{{ asset("img/bsu-small-logo.png") }}" alt="BSU Small Logo" class="d-block mb-3 m-auto" />
                 <label for="ppmp_year" class="form-label">Enter PPMP year</label>
                 <input type="number" min="1990" max="9999" value="{{ Auth::user()->ppmp_year }}" class="form-control fs-2" id="ppmp_year" name="ppmp_year" placeholder="1996">
+                @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE")
+                    <div class="small text-secondary">This will also update the PPMP year for all the users.</div>
+                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>

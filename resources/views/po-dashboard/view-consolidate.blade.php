@@ -26,12 +26,17 @@
                             <div class="mb-3">
                                 <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($consolidated_records) }}</span></span>
                             </div>
-                            <form onsubmit="return confirm('Are you sure to reset the consolidated records?')" action="{{ route('consolidate.reset') }}" method="POST">
+                            @if (count($not_consolidated) > 0)
+                                <div class="alert alert-warning" role="alert">
+                                    <strong>Warning!</strong> There {{ count($not_consolidated) === 1 ? "is" : "are" }} <strong><em>{{ count($not_consolidated) }}</em></strong> pending {{ count($not_consolidated) === 1 ? "revision" : "revisions" }} and {{ count($not_consolidated) === 1 ? "is" : "are" }} not included to this consolidation. Make sure the budget office and procurement office approve them first before redoing the consolidation.
+                                </div>
+                            @endif
+                            <form onsubmit="return confirm('Are you sure to consolidate pending records?')" action="{{ route('consolidate.reset') }}" method="POST">
                                 @csrf
                                 <div class="btn-group" role="toolbar" aria-label="Consolidated PPMP Records Tools">
                                     <button onclick="window.print()" type="button" class="btn btn-outline-success"><em class="bi bi-printer-fill"></em> Print</button>
                                     <button onclick="printConsolidated()" type="button" class="btn btn-outline-success"><em class="bi bi-file-earmark-pdf-fill"></em> Save as PDF</button>
-                                    <button type="submit" class="btn btn-outline-danger"><em class="bi bi-arrow-clockwise"></em> Reset</button>
+                                    <button type="submit" class="btn btn-outline-danger"><em class="bi bi-arrow-clockwise"></em> Consolidate Pending</button>
                                 </div>
                             </form>
                             <div class="table-responsive mt-3">
