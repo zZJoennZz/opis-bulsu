@@ -24,6 +24,9 @@
             <a href="{{ route('quotation.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-chat-left-quote-fill float-start"></em> Price Quotation</a>
         </div>
         <div class="mb-2">
+            <a href="{{ route('aoc.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-ruled-fill float-start"></em> Abstract of Canvass</a>
+        </div>
+        <div class="mb-2">
             <a href="{{ route('bac-reso.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-envelope-check-fill float-start"></em> BAC Resolution</a>
         </div>
         <div class="mb-2">

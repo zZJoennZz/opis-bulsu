@@ -26,6 +26,7 @@ use App\Http\Controllers\InspectionAndAcceptanceController;
 use App\Http\Controllers\InventoryCustodianController;
 use App\Http\Controllers\SupplyEndUserController;
 use App\Http\Controllers\SupplyEmployeeController;
+use App\Http\Controllers\AbstractOfCanvassController;
 
 /*
 |--------------------------------------------------------------------------
@@ -214,6 +215,10 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/quotations/summary', [QuotationController::class, 'get_summary'])->name('quotation.summary');
     Route::get('/company-quotations/{company_id?}', [QuotationController::class, 'get_company_quotations'])->name('company-quotation.single');
     Route::get('/quotations/comparison/{pr_id?}', [QuotationController::class, 'get_item_for_comparison'])->name('quotation-comparison.single');
+
+    //abstract of canvass pages
+    Route::get('/abstract-of-canvass', [AbstractOfCanvassController::class, 'all'])->name('aoc.all');
+    Route::get('/abstract-of-canvass/add', [AbstractOfCanvassController::class, 'add'])->name('aoc.add');
 
     //BAC reso
     Route::get('/bac-reso', [BacResoController::class, 'bac_reso_list'])->name('bac-reso.all');

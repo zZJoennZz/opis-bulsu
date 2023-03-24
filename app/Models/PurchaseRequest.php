@@ -32,4 +32,8 @@ class PurchaseRequest extends Model
     {
         return $this->hasMany(PurchaseRequestItem::class, 'purchase_requests_id', 'id');
     }
+
+    public function abstract_of_canvass() {
+        return $this->hasOne(AbstractOfCanvass::class, 'purchase_requests_id', 'id');
+    }
 }
