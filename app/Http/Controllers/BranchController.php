@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Branch;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
@@ -22,6 +23,20 @@ class BranchController extends Controller
         $newBranch = new Branch();
         DB::beginTransaction();
         try {
+            
+            $validator = Validator::make($request->all(), [
+                'branch_name' => ['required', 'regex:/^[a-zA-Z\s\'\-]+$/','min:8'],
+                'type' => ['required', 'string', 'max:20'],
+                'contact_number' => ['required', 'regex:/^(09[1-9]7|09[2-8]\d|099[0-7])\d{7}$/'],
+                'email_address' => ['required', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
+                'address' => ['required']
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
             $newBranch->branch_name = $request->branch_name;
             $newBranch->type = $request->type;
             $newBranch->address = $request->address;
@@ -56,6 +71,19 @@ class BranchController extends Controller
     {
         $getBranch = Branch::find($branch_id);
         DB::beginTransaction();
+
+        $validator = Validator::make($request->all(), [
+            'branch_name' => ['required', 'regex:/^[a-zA-Z\s\'\-]+$/','min:8'],
+            'type' => ['required', 'string', 'max:20'],
+            'contact_number' => ['required', 'regex:/^(09[1-9]7|09[2-8]\d|099[0-7])\d{7}$/'],
+            'email_address' => ['required', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
+            'address' => ['required', 'string', 'min:8']
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return redirect()->back()->withErrors($errors);
+        }
 
         // try {
         $getBranch->branch_name = $request->branch_name;
