@@ -252,9 +252,18 @@ Route::middleware('supply.office')->group(function () {
     //manage end users
     Route::get('/manage-end-user', [SupplyEndUserController::class, 'all'])->name('supply-end-user.all');
     Route::post('/manage-end-user', [SupplyEndUserController::class, 'post_add'])->name('supply-end-user.post_add');
+    Route::get('/manage-end-user/{enduser_id}', [SupplyEndUserController::class, 'get'])->name('enduser.single');
+    Route::put('/manage-end-user/{enduser_id}', [SupplyEndUserController::class, 'update']);
+    Route::delete('/manage-end-user/single/{enduser_id}', [SupplyEndUserController::class, 'delete_single']);
+    Route::post('/manage-end-user/batch', [SupplyEndUserController::class, 'delete_batch'])->name('enduser.delete_batch');
 
+    //manage supply employee
     Route::get('/manage-supply-employee', [SupplyEmployeeController::class, 'all'])->name('supply-employee.all');
     Route::post('/manage-supply-employee', [SupplyEmployeeController::class, 'post_add'])->name('supply-employee.post_add');
+    Route::get('/manage-supply-employee/{enduser_id}', [SupplyEmployeeController::class, 'get'])->name('supplyemployee.single');
+    Route::put('/manage-supply-employee/{enduser_id}', [SupplyEmployeeController::class, 'update']);
+    Route::delete('/manage-supply-employee/single/{enduser_id}', [SupplyEmployeeController::class, 'delete_single']);
+    Route::post('/manage-supply-employee/batch', [SupplyEmployeeController::class, 'delete_batch'])->name('supplyemployee.delete_batch');
 
     Route::get('/inventory-custodian-form', [InventoryCustodianController::class, 'show'])->name('icf.show');
 });
