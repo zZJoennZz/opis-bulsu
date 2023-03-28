@@ -22,11 +22,18 @@ class AbstractOfCanvass extends Model
         'is_delete',
     ];
 
-    public function pr() {
+    public function pr()
+    {
         return $this->hasOne(PurchaseRequest::class, 'id', 'purchase_requests_id');
     }
 
-    public function added_by() {
+    public function user()
+    {
         return $this->hasOne(User::class, 'id', 'added_by');
+    }
+
+    public function bac_reso()
+    {
+        return $this->belongsTo(BACReso::class, 'id', 'abstract_of_canvasses_id');
     }
 }

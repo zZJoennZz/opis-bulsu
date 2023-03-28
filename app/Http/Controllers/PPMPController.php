@@ -231,7 +231,7 @@ class PPMPController extends Controller
         if (!empty($ppmpRecord)) {
             if ($ppmpRecord->submitted_by !== $user->id && $user->account_type !== "admin" && $user->account_type !== "PROCUREMENT_OFFICE" && $user->account_type !== "BUDGET_OFFICE") {
                 return redirect()->back()->withErrors(['You are not allowed to edit this.']);
-            } 
+            }
 
             $itemDetail = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')
                 ->leftJoin('units', 'units.id', '=', 'item_details.unit_id')
@@ -275,7 +275,7 @@ class PPMPController extends Controller
 
         if ($ppmpRecord->submitted_by !== $user->id && $user->account_type !== "admin" && $user->account_type !== "PROCUREMENT_OFFICE" && $user->account_type !== "BUDGET_OFFICE") {
             return redirect()->back()->withErrors(['You are not allowed to edit this.']);
-        } 
+        }
 
         foreach (json_decode($ppmpFormat->format) as $field) {
             array_push(
@@ -362,11 +362,9 @@ class PPMPController extends Controller
             $ppmpRecord->is_priority = $is_priority;
             $ppmpRecord->remarks = $remarks;
 
-            if ($user->account_type === "END_USER" || $ppmpRecord->is_consolidate === 1) {
-                $ppmpRecord->is_bo_approve = 0;
-                $ppmpRecord->is_pr_approve = 0;
-                $ppmpRecord->is_consolidate = 0;
-            }
+            $ppmpRecord->is_bo_approve = 0;
+            $ppmpRecord->is_pr_approve = 0;
+            $ppmpRecord->is_consolidate = 0;
 
             $ppmpRecord->save();
 
@@ -386,12 +384,12 @@ class PPMPController extends Controller
             $ppmpNewHistory->record_by = $user->id;
 
             $ppmpNewHistory->save();
-            
+
             //send notifications to budget office users
             if ($user->account_type === "END_USER") {
                 $bousers = User::where('account_type', '=', "BUDGET_OFFICE")->orWhere('account_type', '=', 'admin')->get();
-                
-                foreach($bousers as $bo) {
+
+                foreach ($bousers as $bo) {
                     sendNotification($bo->id, "New Revision", "PPMP record has been revised and requires you to review. Check here!", "/new-ppmp-request/" . $user->branches_id);
                 }
             }

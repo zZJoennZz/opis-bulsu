@@ -76,7 +76,7 @@
             <tfoot>
                 <tr>
                     <td></td>
-                    <td colspan="{{ count($ppmp_format) + 4 }}" class="fs-3 text-uppercase text-end">
+                    <td colspan="{{ count($ppmp_format) + 5 }}" class="fs-3 text-uppercase text-end">
                         <strong>Total Amount</strong>
                     </td>
                     <td colspan="2" class="fs-3 text-uppercase text-start">

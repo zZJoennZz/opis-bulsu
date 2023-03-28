@@ -79,7 +79,7 @@
     function onChangeText() {
         let priceCat = document.getElementById('price_catalogue');
         let priceCatSel = document.getElementById('item-search-text');
-        let itemListObj = priceCatSel.value.trim() === "" ? itemList : itemList.filter(item => item.description.toLowerCase().includes(priceCatSel.value));
+        let itemListObj = priceCatSel.value.trim() === "" ? itemList : itemList.filter(item => item.description.toLowerCase().includes(priceCatSel.value.toLowerCase()));
         priceCat.innerHTML = "";
         itemListObj.map(item => {
             priceCat.innerHTML += `

@@ -37,8 +37,6 @@
                                             <th>Total Cost</th>
                                             <th>Estimated Budget</th>
                                             <th>Fund Cluster</th>
-                                            <th>Responsibility Center</th>
-                                            <th>Status</th>
                                             <th>Print</th>
                                         </tr>
                                     </thead>
@@ -49,14 +47,14 @@
                                                 <td>{{ $pr->branch->branch_name }}</td>
                                                 <td>{{ $pr->requester->profile->first_name }} {{ $pr->requester->profile->last_name }}</td>
                                                 <td>{{ date("m-d-Y", strtotime($pr->created_at)) }}</td>
-                                                <td colspan="6"></td>
-                                                <td>
+                                                <td colspan="5"></td>
+                                                {{-- <td>
                                                     @if ($pr->is_approve === 1)
                                                         <button class="btn btn-success" type="button" disabled><em class="bi bi-check-circle"></em></button>
                                                     @else
                                                         <button class="btn btn-secondary" type="button" disabled><em class="bi bi-arrow-counterclockwise"></em></button>
                                                     @endif
-                                                </td>
+                                                </td> --}}
                                                 <td>
                                                     @if ($pr->is_approve === 1)
                                                         <button onclick="getPr({{$pr->id}})" class="btn btn-primary" type="button"><em class="bi bi-printer-fill"></em></button>
@@ -81,8 +79,7 @@
                                                     <td>{{ number_format($item->ppmp->item_detail->price_catalogue * $total_qty, 2) }}</td>
                                                     <td>{{ number_format($item->ppmp->estimated_budget, 2) }}</td>
                                                     <td>{{ $item->ppmp->source_of_fund->source_of_fund }}</td>
-                                                    <td><span class="text-secondary fst-italic">Placeholder</span></td>
-                                                    <td colspan="2"></td>
+                                                    <td></td>
                                             @endforeach
                                         @endforeach
                                     </tbody>

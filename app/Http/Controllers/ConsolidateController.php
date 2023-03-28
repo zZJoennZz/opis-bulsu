@@ -20,7 +20,7 @@ class ConsolidateController extends Controller
             return $data->item_detail;
         });
 
-        $notConsolidated = ProProManPlan::where('year', '=', Auth::user()->ppmp_year)->where('is_consolidate', '=', 0)->get();
+        $notConsolidated = ProProManPlan::where('year', '=', Auth::user()->ppmp_year)->where('is_consolidate', '=', 0)->where('is_draft', '=', 0)->get();
 
         return view('po-dashboard/view-consolidate')
             ->with('consolidated_records', $getConsolidated)
@@ -29,7 +29,7 @@ class ConsolidateController extends Controller
 
     public function consolidate()
     {
-        $getConsolidated = ProProManPlan::get()->where('is_consolidate', '=', 0)->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1);
+        $getConsolidated = ProProManPlan::where('is_consolidate', '=', 0)->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
 
         $toConsolidate = [];
         foreach ($getConsolidated as $ppmp) {
@@ -51,15 +51,19 @@ class ConsolidateController extends Controller
     {
         DB::beginTransaction();
         try {
-            $isOkayToConsolidate = count(PurchaseRequest::where('year', '=', getPpmpYear())->get()) > 0 ? false : true;
-            if ($isOkayToConsolidate) {
-                ProProManPlan::where('is_consolidate', '=', 0)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 1]);
-                // PurchaseRequestMode::where('year', '=', Auth::user()->ppmp_year)->update(['mode' => 'DISABLED']);
-                DB::commit();
-                return redirect()->route('consolidated.show')->with('success', 'Successfully consolidated pending revisions for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
-            } else {
-                return redirect()->route('consolidated.show')->withErrors(['Sorry, not allowed to add revised PPMP with existing PRs, quotations, BAC resolution, and purchase order.']);
-            }
+            // $isOkayToConsolidate = count(PurchaseRequest::where('year', '=', getPpmpYear())->get()) > 0 ? false : true;
+            // if ($isOkayToConsolidate) {
+            //     ProProManPlan::where('is_consolidate', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 1]);
+            //     // PurchaseRequestMode::where('year', '=', Auth::user()->ppmp_year)->update(['mode' => 'DISABLED']);
+            //     DB::commit();
+            //     return redirect()->route('consolidated.show')->with('success', 'Successfully consolidated pending revisions for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
+            // } else {
+            //     return redirect()->route('consolidated.show')->withErrors(['Sorry, not allowed to add revised PPMP with existing PRs, quotations, BAC resolution, and purchase order.']);
+            // }
+            ProProManPlan::where('is_consolidate', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->update(['is_consolidate' => 1]);
+            // PurchaseRequestMode::where('year', '=', Auth::user()->ppmp_year)->update(['mode' => 'DISABLED']);
+            DB::commit();
+            return redirect()->route('consolidated.show')->with('success', 'Successfully consolidated pending revisions for the year <span class="badge bg-primary">' . Auth::user()->ppmp_year . '</span>!');
         } catch (Throwable $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(["Consolidation failed. Please try again. If the problem persists, contact website administrator."]);

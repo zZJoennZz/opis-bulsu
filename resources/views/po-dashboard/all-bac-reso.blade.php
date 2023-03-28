@@ -6,37 +6,48 @@
     @php
         $breadcrumb = [
             ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-            ['name' => 'BAC Resolution'],
+            ['name' => 'BAC Resolution <span class="badge bg-primary">' . getPpmpYear() . '</span>'],
         ]
     @endphp
 
-    <a href="{{ route('bac-reso.add') }}?step=1" class="float-end btn btn-sm btn-primary"><em class="bi bi-file-earmark-text-fill"></em> Generate BAC</a>
+    <div class="h5 card-title"> <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($bac_resos) }}</span></span></div>
+
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     
+    <div class="mb-3">
+        <a href="{{ route('bac-reso.add') }}" class="btn btn-primary"><em class="bi bi-file-spreadsheet-fill"></em> Generate BAC Resolution</a>
+    </div>
+
     <div class="table-responsive">
-        <table id="bac-reso-table" class="table table-sm caption-top">
+        <table id="bac-reso-table" class="table table-sm caption-top border-dark">
             <caption>BAC Resolution List <span class="badge bg-primary">{{ getPpmpYear() }}</span></caption>
             <thead>
                 <tr>
-                    <th style="width: 50%;">Company</th>
-                    <th>Date/Time Created</th>
-                    <th class="text-end">Action</th>
+                    <th class="text-start"></th>
+                    <th style="width: 5%;">Status</th>
+                    <th style="width: 5%;">Type</th>
+                    <th style="width: 30%;">BAC Resolution No.</th>
+                    <th style="width: 30%;">Purchase Request No.</th>
+                    <th style="width: 25%;">Date Created</th>
                 </tr>
             </thead>
-            @foreach ($bac_reso as $bac)
-                <tbody>
+            <tbody>
+                @foreach ($bac_resos as $bac_reso)
                     <tr>
-                        <td>{{$bac->name}}</td>
-                        <td>{{date_format($bac->created_at, 'Y/m/d h:i:s A')}}</td>
-                        <td class="text-end">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{{ route('bac-reso.single') }}/{{$bac->id}}" class="btn btn-sm btn-primary"><em class="bi bi-folder2-open"></em> View</a>
-                                <button type="button" class="btn btn-sm btn-danger"><em class="bi bi-trash-fill"></em> Delete</button>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="{{ $bac_reso->b_a_c_reso_number }} options">
+                                <a href="{{ route('bac-reso.single', ['id' => $bac_reso->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
+                                <a href="#" class="btn btn-outline-danger btn-sm"><em class="bi bi-trash"></em></a>
                             </div>
                         </td>
+                        <td><span class="badge bg-{{ $bac_reso->is_draft ? "secondary" : "primary" }}">{{ $bac_reso->is_draft ? "Draft" : "Done" }}</span></td>
+                        <td><span class="badge bg-primary">{{ $bac_reso->type === "BY_ITEM" ? 'By Item' : 'By Lot' }}</span></td>
+                        <td>{{ $bac_reso->b_a_c_reso_number }}</td>
+                        <td>{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</td>
+                        <td>{{ date("Y-m-d h:i A", strtotime($bac_reso->created_at)) }}</td>
                     </tr>
-                </tbody>
-            @endforeach
+                @endforeach
+            </tbody>
         </table>
     </div>
     

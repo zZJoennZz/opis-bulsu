@@ -219,12 +219,14 @@ Route::middleware('procurement.office')->group(function () {
     //abstract of canvass pages
     Route::get('/abstract-of-canvass', [AbstractOfCanvassController::class, 'all'])->name('aoc.all');
     Route::get('/abstract-of-canvass/add', [AbstractOfCanvassController::class, 'add'])->name('aoc.add');
+    Route::post('/abstract-of-canvass/save', [AbstractOfCanvassController::class, 'save'])->name('aoc.perform');
+    Route::get('/abstract-of-canvass/{id?}', [AbstractOfCanvassController::class, 'single'])->name('aoc.single');
 
     //BAC reso
-    Route::get('/bac-reso', [BacResoController::class, 'bac_reso_list'])->name('bac-reso.all');
-    Route::get('/bac-reso/view/{company_id?}', [BacResoController::class, 'view_bac'])->name('bac-reso.single');
-    Route::get('/bac-reso/add', [BacResoController::class, 'prepare_bac'])->name('bac-reso.add');
+    Route::get('/bac-reso', [BacResoController::class, 'all'])->name('bac-reso.all');
+    Route::get('/bac-reso/add', [BacResoController::class, 'add'])->name('bac-reso.add');
     Route::post('/bac-reso/add', [BacResoController::class, 'create_bac'])->name('bac-reso.perform');
+    Route::get('/bac-reso/{id?}', [BacResoController::class, 'single'])->name('bac-reso.single');
     Route::get('/bac-reso/test', [BacResoController::class, 'test'])->name('test.bac-reso');
     Route::get('/bac-reso/single/{bac_reso_id?}', [BacResoController::class, 'get_single'])->name('bac-reso.by-id');
 

@@ -15,9 +15,10 @@
         <a href="{{ route('aoc.add') }}" class="btn btn-primary"><em class="bi bi-file-earmark-ruled-fill"></em> Generate</a>
     </div>
     <div class="table-responsive">
-        <table class="table table-sm border-dark" id="aocs-table">
+        <table class="table table-sm border-dark caption-top" id="aocs-table">
+            <caption>Abstract of Canvass <span class="badge bg-primary">{{ getPpmpYear() }}</span></caption>
             <thead>
-                <tr>    
+                <tr>
                     <th></th>
                     <th style="width: 50%;">PR Number</th>
                     <th style="width: 45%;" class="text-end">Date Created</th>
@@ -26,7 +27,12 @@
             <tbody>
                 @foreach($aocs as $aoc)
                     <tr>
-                        <td><a href="#" class="btn btn-success btn-sm"><em class="bi bi-pencil-square"></em></a></td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="{{ $aoc->pr->pr_number }} options">
+                                <a href="{{ route('aoc.single', ['id' => $aoc->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
+                                <a href="#" class="btn btn-outline-danger btn-sm"><em class="bi bi-trash"></em></a>
+                            </div>
+                        </td>
                         <td>{{ $aoc->pr->pr_number }}</td>
                         <td class="text-end">{{ $aoc->created_at }}</td>
                     </tr>

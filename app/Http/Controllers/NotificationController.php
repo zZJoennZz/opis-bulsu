@@ -52,16 +52,16 @@ class NotificationController extends Controller
 
         // DB::beginTransaction();
         // try {
-            Notification::whereIn('id', $request->id)->update(["is_read" => 1]);
+        Notification::whereIn('id', $request->id)->update(["is_read" => 1]);
 
-            DB::commit();
-            $userNotifAll = Notification::where('sent_to', '=', $user->id)->get();
-            dd($userNotifAll);
-            return redirect()->route($this->route)->with('user_notif', $userNotifAll);
+        DB::commit();
+        $userNotifAll = Notification::where('sent_to', '=', $user->id)->get();
+        dd($userNotifAll);
+        return redirect()->route($this->route)->with('user_notif', $userNotifAll);
 
-            return response()->json([
-                "success" => true,
-            ], 200);
+        return response()->json([
+            "success" => true,
+        ], 200);
         // } catch (Throwable $e) {
         //     DB::rollBack();
         //     redirect()->back()->withErrors("Something went wrong. Position is not deleted. Please contact website administrator.");

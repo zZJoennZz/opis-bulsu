@@ -20,8 +20,7 @@ class PurchaseRequestController extends Controller
         $checkIfConsolidated = ProProManPlan::where('year', '=', $user->ppmp_year)->where('is_consolidate', '=', 1)->get();
         if (count($checkIfConsolidated) >= 1) {
             $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
-                return $query->where('is_draft', '=', 0)
-                    ->where('is_bo_approve', '=', 1)
+                return $query->where('is_bo_approve', '=', 1)
                     ->where('is_pr_approve', '=', 1)
                     ->where('is_consolidate', '=', 1)
                     ->where('is_delete', '=', 0)
@@ -56,8 +55,7 @@ class PurchaseRequestController extends Controller
             ->with('is_pr_enabled', $is_enabled);
         if ($is_enabled) {
             $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
-                return $query->where('is_draft', '=', 0)
-                    ->where('is_bo_approve', '=', 1)
+                return $query->where('is_bo_approve', '=', 1)
                     ->where('is_pr_approve', '=', 1)
                     ->where('is_consolidate', '=', 1)
                     ->where('is_delete', '=', 0)
@@ -145,7 +143,7 @@ class PurchaseRequestController extends Controller
             $new_purchase_request->year = $user->ppmp_year;
             $new_purchase_request->pr_number = 1;
             $new_purchase_request->is_draft = 0;
-            $new_purchase_request->is_approve = 0;
+            $new_purchase_request->is_approve = 1;
             $new_purchase_request->is_delete = 0;
             $new_purchase_request->branches_id = $user->branches_id;
             $new_purchase_request->requested_by = $user->id;

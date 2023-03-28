@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AbstractOfCanvass;
 use Illuminate\Http\Request;
+use App\Models\BACReso;
 use App\Models\CanvassAbstract;
 use App\Models\CanvassAbstractItem;
 use App\Models\Quotation;
@@ -16,6 +18,42 @@ use Throwable;
 class BacResoController extends Controller
 {
     //
+    public function all()
+    {
+        $bac_resos = BACReso::where('year', '=', getPpmpYear())
+            ->where('is_delete', '=', 0)
+            ->has('abstract_of_canvass')
+            ->with(['abstract_of_canvass.pr'])
+            ->get();
+
+        // return $bac_reso;
+        return view('po-dashboard/all-bac-reso')
+            ->with('bac_resos', $bac_resos);
+    }
+
+    public function add()
+    {
+        $purchase_requests = AbstractOfCanvass::whereHas('pr', function ($builder) {
+            $builder->where('year', '=', getPpmpYear())->where('is_delete', '=', 0);
+        })
+            ->has('pr.pr_items.quotations')
+            ->with(['pr'])
+            ->doesntHave('bac_reso')
+            ->get();
+        // return $purchase_requests;
+        return view('po-dashboard/add-bac-reso')
+            ->with('purchase_requests', $purchase_requests);
+    }
+
+    public function single($id)
+    {
+        $bac_reso = BACReso::with(['bac_reso_items.quotation.pr_item.pr', 'bac_reso_items.quotation.pr_item.ppmp.item_detail.unit'])
+            ->where('id', '=', $id)
+            ->where('is_delete', '=', 0)
+            ->get();
+        return $bac_reso;
+    }
+
     public function bac_reso_list()
     {
         $bac_reso = Company::whereHas('canvass_abstract', function ($query) {

@@ -14,6 +14,7 @@ class Company extends Model
         'tin',
         'contact_number',
         'email_address',
+        'is_in_philgeps',
         'is_delete',
         'added_by'
     ];

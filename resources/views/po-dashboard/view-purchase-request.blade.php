@@ -81,8 +81,6 @@
                                         <th>Total Cost</th>
                                         <th>Estimated Budget</th>
                                         <th>Fund Cluster</th>
-                                        <th>Responsibility Center</th>
-                                        <th>Approve</th>
                                         <th>Print</th>
                                     </tr>
                                 </thead>
@@ -93,8 +91,8 @@
                                             <td>{{ $pr->branch->branch_name }}</td>
                                             <td>{{ $pr->requester->profile->first_name }} {{ $pr->requester->profile->last_name }}</td>
                                             <td>{{ date("m-d-Y", strtotime($pr->created_at)) }}</td>
-                                            <td colspan="6"></td>
-                                            <td>
+                                            <td colspan="5"></td>
+                                            {{-- <td>
                                                 <div class="d-flex justify-content-center align-items-center">
                                                     @if ($pr->is_approve === 0)
                                                         <button
@@ -114,7 +112,7 @@
                                                         </button>
                                                     @endif
                                                 </div>
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 <div class="d-flex justify-content-center align-items-center">
                                                     @if ($pr->is_approve === 1)
@@ -153,8 +151,7 @@
                                                 <td>{{ number_format($item->ppmp->item_detail->price_catalogue * $total_qty, 2) }}</td>
                                                 <td>{{ number_format($item->ppmp->estimated_budget, 2) }}</td>
                                                 <td>{{ $item->ppmp->source_of_fund->source_of_fund }}</td>
-                                                <td><span class="text-secondary fst-italic">Placeholder</span></td>
-                                                <td colspan="2"></td>
+                                                <td></td>
                                         @endforeach
                                     @endforeach
                                 </tbody>
