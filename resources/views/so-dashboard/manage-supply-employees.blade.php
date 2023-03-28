@@ -134,6 +134,7 @@
             </div>
         </div>
     </div>
+    <x-supplier-header />
     <x-slot:additional_script>
         @include('layout/datatable', ['tableId' => 'end-users-table'])
         <script src="{{ asset('build/assets/app.b487754a.js') }}"></script>

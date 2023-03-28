@@ -45,7 +45,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="contact_number" class="form-label">Contact Number</label>
-                        <input type="number" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number" required>
+                        <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number" required>
+                        <span class="text-danger">Landline number valid format: 0XX-XXXXXX</span>
                         @error('contact_number')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -91,7 +92,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="contact_number" class="form-label">Contact Number</label>
-                        <input type="number" class="form-control" id="edit_contact_number" name="contact_number" placeholder="Contact Number">
+                        <input type="text" class="form-control" id="edit_contact_number" name="contact_number" placeholder="Contact Number">
+                        <span class="text-danger">Landline number valid format: 0XX-XXXXXX</span>
                     </div>
                 </div>
                 <div class="modal-footer">

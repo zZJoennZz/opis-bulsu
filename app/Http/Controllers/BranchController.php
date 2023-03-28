@@ -27,9 +27,9 @@ class BranchController extends Controller
             $validator = Validator::make($request->all(), [
                 'branch_name' => ['required', 'regex:/^[a-zA-Z\s\'\-]+$/','min:8'],
                 'type' => ['required', 'string', 'max:20'],
-                'contact_number' => ['required', 'regex:/^(09[1-9]7|09[2-8]\d|099[0-7])\d{7}$/'],
-                'email_address' => ['required', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
-                'address' => ['required']
+                'contact_number' => ['required', 'regex:/^(02|\+63)[0-9]{7,10}$|^(\+639|09)[0-9]{9}$|^([0-9]{2,4}-)?[0-9]{6,8}$/'],
+                'email_address' => ['required', 'email'],
+                'address' => ['required', 'min:8']
             ]);
 
             if ($validator->fails()) {
@@ -75,9 +75,9 @@ class BranchController extends Controller
         $validator = Validator::make($request->all(), [
             'branch_name' => ['required', 'regex:/^[a-zA-Z\s\'\-]+$/','min:8'],
             'type' => ['required', 'string', 'max:20'],
-            'contact_number' => ['required', 'regex:/^(09[1-9]7|09[2-8]\d|099[0-7])\d{7}$/'],
-            'email_address' => ['required', 'regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/'],
-            'address' => ['required', 'string', 'min:8']
+            'contact_number' => ['required', 'regex:/^(02|\+63)[0-9]{7,10}$|^(\+639|09)[0-9]{9}$|^([0-9]{2,4}-)?[0-9]{6,8}$/'],
+            'email_address' => ['required', 'email'],
+            'address' => ['required', 'min:8']
         ]);
 
         if ($validator->fails()) {
@@ -85,7 +85,7 @@ class BranchController extends Controller
             return redirect()->back()->withErrors($errors);
         }
 
-        // try {
+        try {
         $getBranch->branch_name = $request->branch_name;
         $getBranch->type = $request->type;
         $getBranch->address = $request->address;
@@ -99,12 +99,12 @@ class BranchController extends Controller
         return response()->json([
             'success' => true,
         ], 200);
-        // } catch (Throwable $e) {
-        //     DB::rollBack();
-        //     return response()->json([
-        //         'success' => false,
-        //     ], 400);
-        // }
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+            ], 400);
+        }
     }
 
     public function delete_single($branch_id)
