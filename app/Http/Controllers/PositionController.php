@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Position;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class PositionController extends Controller
@@ -23,6 +25,17 @@ class PositionController extends Controller
         $newPosition = new Position();
         DB::beginTransaction();
         try {
+
+            $validator = Validator::make($request->all(), [
+                'description' => ['required', 'unique:positions,description'],
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
+
             $newPosition->description = $request->description;
             $newPosition->added_by = Auth::user()->id;
             $newPosition->save();
@@ -55,6 +68,21 @@ class PositionController extends Controller
         DB::beginTransaction();
 
         try {
+
+            $validator = Validator::make($request->all(), [
+                'description' => [
+                    'required', 
+                    Rule::unique('positions', 'description')->ignore($getPosition)
+                ],
+                
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
+
             $getPosition->description = $request->description;
             $getPosition->save();
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\ItemPurpose;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 
@@ -23,6 +25,16 @@ class ItemPurposeController extends Controller
         $newPurpose = new ItemPurpose();
         DB::beginTransaction();
         try {
+
+            $validator = Validator::make($request->all(), [
+                'description' => ['required', 'unique:item_purposes,description'],
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
             $newPurpose->description = $request->description;
             $newPurpose->added_by = Auth::user()->id;
             $newPurpose->save();
@@ -53,6 +65,19 @@ class ItemPurposeController extends Controller
         DB::beginTransaction();
 
         try {
+            $validator = Validator::make($request->all(), [
+                'description' => [
+                    'required', 
+                    Rule::unique('item_purposes', 'description')->ignore($getPurpose)
+                ],
+                
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
             $getPurpose->description = $request->description;
             $getPurpose->save();
 
@@ -110,4 +135,3 @@ class ItemPurposeController extends Controller
         }
     }
 }
-//Create a laravel input number validation that accepts landline number?

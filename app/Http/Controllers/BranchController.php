@@ -7,6 +7,7 @@ use App\Models\Branch;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class BranchController extends Controller
@@ -25,10 +26,10 @@ class BranchController extends Controller
         try {
             
             $validator = Validator::make($request->all(), [
-                'branch_name' => ['required', 'regex:/^[a-zA-Z\s\'\-]+$/','min:8'],
+                'branch_name' => ['required', 'regex:/^[a-zA-Z\s\'\-]+$/','min:8', 'unique:branches,branch_name'],
                 'type' => ['required', 'string', 'max:20'],
                 'contact_number' => ['required', 'regex:/^(02|\+63)[0-9]{7,10}$|^(\+639|09)[0-9]{9}$|^([0-9]{2,4}-)?[0-9]{6,8}$/'],
-                'email_address' => ['required', 'email'],
+                'email_address' => ['required', 'email', 'unique:branches,email_address'],
                 'address' => ['required', 'min:8']
             ]);
 
@@ -73,11 +74,21 @@ class BranchController extends Controller
         DB::beginTransaction();
 
         $validator = Validator::make($request->all(), [
-            'branch_name' => ['required', 'regex:/^[a-zA-Z\s\'\-]+$/','min:8'],
+            'branch_name' => [
+                'required',
+                'regex:/^[a-zA-Z\s\'\-]+$/',
+                'min:8',
+                Rule::unique('branches', 'branch_name')->ignore($getBranch),
+            ],
             'type' => ['required', 'string', 'max:20'],
             'contact_number' => ['required', 'regex:/^(02|\+63)[0-9]{7,10}$|^(\+639|09)[0-9]{9}$|^([0-9]{2,4}-)?[0-9]{6,8}$/'],
-            'email_address' => ['required', 'email'],
-            'address' => ['required', 'min:8']
+            'email_address' => [
+                'required',
+                'email',
+                Rule::unique('branches', 'email_address')->ignore($getBranch),
+            ],
+            'address' => ['required', 'min:8'],
+            
         ]);
 
         if ($validator->fails()) {
