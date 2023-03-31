@@ -59,12 +59,11 @@ class SupplyEmployeeController extends Controller
 
     public function update(Request $request, $enduser_id)
     {
-
         $validator = Validator::make($request->all(), [
-            'first_name' => ['required'],
-            'middle_name' => ['required'],
-            'last_name' => ['required'],
-            'position' => ['required']
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'position' => ['required', 'string', 'max:255']
         ]);
 
         if ($validator->fails()) {
@@ -85,7 +84,7 @@ class SupplyEmployeeController extends Controller
 
         DB::commit();
 
-        session(['success' => 'Supply Enduser successfully updated!']);
+        session(['success' => 'Supply Employee successfully updated!']);
         return response()->json([
             'success' => true,
         ], 200);
@@ -106,13 +105,13 @@ class SupplyEmployeeController extends Controller
             $getSupplyOfficeEmployee->is_delete = 1;
             $getSupplyOfficeEmployee->save();
             DB::commit();
-            redirect()->back()->with('success', 'Supply Office Employee successfully deleted!');
+            redirect()->back()->with('success', 'Supply Employee successfully deleted!');
             return response()->json([
                 "success" => true,
             ], 200);
         } catch (Throwable $e) {
             DB::rollBack();
-            redirect()->back()->withErrors("Something went wrong. Supply Office Employee is not deleted. Please contact website administrator.");
+            redirect()->back()->withErrors("Something went wrong. Supply Employee is not deleted. Please contact website administrator.");
             return response()->json([
                 "success" => false,
             ], 400);
@@ -126,7 +125,7 @@ class SupplyEmployeeController extends Controller
         try {
             SupplyOfficeEmployee::whereIn('id', $request->id)->update(["is_delete" => 1]);
             DB::commit();
-            redirect()->back()->with('success', 'Supply Office Employee successfully deleted!');
+            redirect()->back()->with('success', 'Supply Employee successfully deleted!');
             return response()->json([
                 "success" => true,
             ], 200);
