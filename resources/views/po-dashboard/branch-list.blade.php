@@ -12,7 +12,10 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="branch_name" class="form-label">Branch Name</label>
-                        <input type="text" class="form-control" id="branch_name" name="branch_name" placeholder="Branch Name" required>
+                        <input type="text" class="form-control" id="branch_name" name="branch_name" placeholder="Branch Name" required>                       
+                        @error('branch_name')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="type" class="form-label">Type</label>
@@ -22,18 +25,30 @@
                             <option value="DEVELOPER" id="developer">DEVELOPER</option>
                             <option value="OFFICE" id="office">OFFICE</option>
                         </select>
+                        @error('type')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">Address</label>
                         <input type="text" class="form-control" id="address" name="address" placeholder="Address" required>
+                        @error('address')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="email_address" class="form-label">Email Address</label>
                         <input type="text" class="form-control" id="email_address" name="email_address" placeholder="Email Address" required>
+                        @error('email_address')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="contact_number" class="form-label">Contact Number</label>
                         <input type="number" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number" required>
+                        @error('contact_number')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="modal-footer">

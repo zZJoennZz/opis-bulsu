@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ItemCategory;
 use App\Models\ItemCategoryGroup;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Throwable;
 
@@ -26,6 +27,15 @@ class ItemCategoryController extends Controller
         $newCategory = new ItemCategory();
         DB::beginTransaction();
         try {
+            $validator = Validator::make($request->all(), [
+                'description' => ['required'],
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
             $newCategory->description = $request->description;
             $newCategory->under_of_group = $request->under_of_group;
             $newCategory->added_by = Auth::user()->id;
@@ -61,6 +71,15 @@ class ItemCategoryController extends Controller
         DB::beginTransaction();
 
         try {
+            $validator = Validator::make($request->all(), [
+                'description' => ['required'],
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+            
             $getCategory->description = $request->description;
             $getCategory->under_of_group = $request->under_of_group;
             $getCategory->save();

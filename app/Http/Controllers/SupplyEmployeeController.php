@@ -7,6 +7,7 @@ use App\Models\SupplyPosition;
 use App\Models\SupplyOfficeEmployee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class SupplyEmployeeController extends Controller
 {
@@ -47,6 +48,94 @@ class SupplyEmployeeController extends Controller
             DB::rollBack();
 
             return redirect()->back()->withErrors(['Something went wrong! Supply employee is not saved. Please contact website administrator.']);
+        }
+    }
+    public function get($enduser_id)
+    {
+        $enduser = SupplyOfficeEmployee::find($enduser_id);
+
+        return response()->json($enduser, 200);
+    }
+
+    public function update(Request $request, $enduser_id)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'first_name' => ['required'],
+            'middle_name' => ['required'],
+            'last_name' => ['required'],
+            'position' => ['required']
+        ]);
+
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return redirect()->back()->withErrors($errors);
+        }
+
+
+        $UpdateSupplyEmployee = SupplyOfficeEmployee::find($enduser_id);
+        DB::beginTransaction();
+        try {
+
+        $UpdateSupplyEmployee->first_name = $request->first_name;
+        $UpdateSupplyEmployee->middle_name = $request->middle_name;
+        $UpdateSupplyEmployee->last_name = $request->last_name; 
+        $UpdateSupplyEmployee->supply_positions_id = $request->position;        
+        $UpdateSupplyEmployee->save();
+
+        DB::commit();
+
+        session(['success' => 'Supply Enduser successfully updated!']);
+        return response()->json([
+            'success' => true,
+        ], 200);
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+            ], 400);
+        }
+    }
+
+    public function delete_single($branch_id)
+    {
+        $getSupplyOfficeEmployee = SupplyOfficeEmployee::find($branch_id);
+        DB::beginTransaction();
+        try {
+            $getSupplyOfficeEmployee->is_delete = 1;
+            $getSupplyOfficeEmployee->save();
+            DB::commit();
+            redirect()->back()->with('success', 'Supply Office Employee successfully deleted!');
+            return response()->json([
+                "success" => true,
+            ], 200);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            redirect()->back()->withErrors("Something went wrong. Supply Office Employee is not deleted. Please contact website administrator.");
+            return response()->json([
+                "success" => false,
+            ], 400);
+        }
+    }
+
+
+    public function delete_batch(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            SupplyOfficeEmployee::whereIn('id', $request->id)->update(["is_delete" => 1]);
+            DB::commit();
+            redirect()->back()->with('success', 'Supply Office Employee successfully deleted!');
+            return response()->json([
+                "success" => true,
+            ], 200);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            redirect()->back()->withErrors("Something went wrong. Supply Office Employee is not deleted. Please contact website administrator.");
+            return response()->json([
+                "success" => false,
+            ], 400);
         }
     }
 }
