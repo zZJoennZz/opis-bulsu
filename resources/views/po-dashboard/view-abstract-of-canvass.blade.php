@@ -13,89 +13,88 @@
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     
+    <div class="mb-1">
+        <strong>Purpose:</strong> {{ $aoc[0]->purpose }}
+    </div>
+    <div class="mb-3">
+        <strong>ABC:</strong> ₱ {{ number_format($aoc[0]->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($aoc[0]->abc) }}</span> )
+    </div>
     <div class="table-responsive">
-        <table class="table table-sm table-bordered border-dark">
-            <thead class="text-center">
+        <table class="table table-sm table-bordered border-dark caption-top">
+            <caption>PR NUMBER: <span class="badge bg-primary">{{ $aoc[0]->pr->pr_number }}</span></caption>
+            <thead class="text-uppercase text-center align-middle">
                 <tr>
-                    <th rowspan="3">Item No.</th>
-                    <th rowspan="3">NAME OF ARTICLES BEING REQUISITIONED</th>
-                    <th rowspan="3">Unit</th>
-                    <th rowspan="3">Qty.</th>
-                    <th rowspan="3">Unit Price</th>
-                    <th rowspan="3">Extended Amount</th>
-                    <th colspan="{{ count($companies) * 3 }}">NAME OF BIDDERS/DEALERS</th>
+                    <th scope="col" style="width: 50px;" rowspan="3">Item No.</th>
+                    <th scope="col" rowspan="3">Name of Articles Being Requisitioned</th>
+                    <th scope="col" style="width: 80px;" rowspan="3">Unit</th>
+                    <th scope="col" style="width: 80px;" rowspan="3">Qty.</th>
+                    <th scope="col" style="width: 130px;" rowspan="3">Unit Price</th>
+                    <th scope="col" style="width: 130px;" rowspan="3">Extended Amount</th>
+                    <th scope="col" colspan="{{ count($companies) * 3 }}">Name of the Bidders / Dealers</th>
+                </tr>
+                <tr>
+                    @foreach ($companies as $c)
+                        <th scope="col" colspan="3" class="text-primary">{{ $c->name }}</th>
+                    @endforeach
                 </tr>
                 <tr>
                     @for ($i = 0; $i < count($companies); $i++)
-                        <th colspan="3">{{ $companies[$i]->name }}</th>
-                    @endfor
-                </tr>
-                <tr>
-                    @for ($i = 0; $i < count($companies); $i++)
-                        <th>Unit Price</th>
-                        <th>Brand</th>
-                        <th>Extended Amount</th>
+                        <th scope="col" style="width: 70px; font-size: 12px">Unit Price</th>
+                        <th scope="col" style="width: 70px; font-size: 12px">Brand</th>
+                        <th scope="col" style="width: 100px; font-size: 12px">Extended Amount</th>
                     @endfor
                 </tr>
             </thead>
-
             <tbody>
                 @php
-                    $itemNo = 1;
+                    $ctr = 1;
                 @endphp
                 @foreach ($aoc[0]->pr->pr_items as $item)
                     <tr>
-                        <td>{{ $itemNo }}</td>
-                        @php
-                            $itemNo += 1;
-                        @endphp
+                        <td>{{ $ctr }}</td>
                         <td>{{ $item->ppmp->item_detail->description }}</td>
                         <td>{{ $item->ppmp->item_detail->unit->uom }}</td>
+                        {{-- COMPUTING THE QTY --}}
                         @php
-                            $qty = 0;
-                            foreach($item->ppmp->milestones as $milestone) {
-                                $qty += $milestone->milestone_value;
-                            }
+                            $itemQty = 0;
                         @endphp
-                        <td>{{ $qty }}</td>
-                        <td>{{ number_format($item->ppmp->item_detail->price_catalogue, 2) }}</td>
-                        <td>{{ number_format($item->ppmp->item_detail->price_catalogue * $qty, 2) }}</td>
-                        @for ($i = 0; $i < count($companies); $i++)
-                            @foreach ($companies[$i]->quotations as $quote)
-                                @php
-                                    $ctr = 0;
-                                @endphp
-                                @foreach ($quote->items as $qitem)
-                                    @if ($qitem->pr_item->id === $item->id)
-                                        <td>
-                                            {{ number_format($qitem->offered_unit_price, 2) }}
-                                        </td>
+                        @foreach ($item->ppmp->milestones as $m)
+                            @php
+                                $itemQty += $m->milestone_value;
+                            @endphp
+                        @endforeach
+                        <td>{{ $itemQty }}</td>
+                        <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue, 2) }}</div></td>
+                        <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue * $itemQty, 2) }}</div></td>
+                        
+                        {{-- LISTING COMPANY QUOTATIONS --}}
+                        @foreach ($companies as $c)
+                            @php
+                                $itemsFound = 0;
+                            @endphp
+                            @foreach ($c->quotations as $q)
+                                @foreach ($q->items as $i)
+                                    @if ($i->pr_item->id === $item->id)
+                                        <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price, 2) }}</td>
+                                        <td>{{ $i->brand_and_model_offered }}</td>
+                                        <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price * $itemQty, 2) }}</div></td>
                                         @php
-                                            $ctr += 1;
-                                        @endphp
-                                    @endif
-                                    @if ($qitem->pr_item->id === $item->id)
-                                        <td>
-                                            {{ $qitem->brand_and_model_offered }}
-                                        </td>
-                                        @php
-                                            $ctr += 1;
-                                        @endphp
-                                    @endif
-                                    @if ($qitem->pr_item->id === $item->id)
-                                        <td>
-                                            {{ number_format($qitem->offered_unit_price * $qty, 2) }}
-                                        </td>
-                                        @php
-                                            $ctr += 1;
+                                            $itemsFound += 1;
                                         @endphp
                                     @endif
                                 @endforeach
-                                @if ($ctr === 0)
-                                    <td colspan="3">N/A</td>
-                                @endif
                             @endforeach
-                        @endfor
+                            @if ($itemsFound === 0)
+                                <td class="text-center" style="font-size: 11px;">N/A</td>
+                                <td class="text-center" style="font-size: 11px;">N/A</td>
+                                <td class="text-center" style="font-size: 11px;">N/A</td>
+                            @endif
+                        @endforeach
+
+                        @php
+                            $ctr += 1;
+                            $itemQty = 0;
+                        @endphp
                     </tr>
                 @endforeach
             </tbody>

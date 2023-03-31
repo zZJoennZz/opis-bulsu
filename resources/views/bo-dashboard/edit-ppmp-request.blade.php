@@ -59,7 +59,7 @@
                         <div class="fs-3 fw-bold">Unit: {{ $ppmp_record->branch_name }}</div>
                         <div class="text-secondary small">Note: Editing an approved record will require approval again.</div>
                     </div>
-                    <div class="col-lg-4 col-md-12 mb-3">
+                    {{-- <div class="col-lg-4 col-md-12 mb-3">
                         <div class="mb-3">
                             <label for="source_of_funds_id" class="form-label">Source of Fund:</label>
                             <select class="form-select" id="source_of_funds_id" name="source_of_funds_id" aria-label="Purpose of the item">
@@ -72,8 +72,9 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
-                    <div class="col-lg-8 col-md-12 mb-3">
+                    </div> --}}
+                    {{-- <div class="col-lg-8 col-md-12 mb-3"> replaced the div below --}}
+                    <div class="col-12 mb-3">
                         <div class="mb-3">
                             <label for="item_purposes_id" class="form-label">Purpose:</label>
                             <select class="form-select" id="item_purposes_id" name="item_purposes_id" aria-label="Purpose of the item">

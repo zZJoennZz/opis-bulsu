@@ -31,8 +31,12 @@
         </div>
         <div class="row mb-3">
             <div class="col-12">
-                <label for="purpose" class="form-label">Purpose</label>
-                <input type="text" class="form-control" id="purpose" name="purpose" required>
+                <label for="type" class="form-label">Type</label>
+                <select name="type" id="type" class="form-select" aria-label="Select type">
+                    <option value="0" disabled selected>Select type</option>
+                    <option value="BY_LOT">By lot</option>
+                    <option value="BY_ITEM">By item</option>
+                </select>
             </div>
         </div>
         <div class="row mb-3">
@@ -69,6 +73,22 @@
             <div class="col-sm-12 col-md-6 col-md-6">
                 <label for="member_4" class="form-label">Member</label>
                 <input type="text" class="form-control" id="member_4" name="member_4" value="{{ getSettingValue("member_4") }}" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6 col-md-6">
+                <label for="technical_resource_person" class="form-label">Technical Resource Person</label>
+                <input type="text" class="form-control" id="technical_resource_person" name="technical_resource_person" value="{{ getSettingValue("technical_resource_person") }}" required>
+            </div>
+            <div class="col-sm-12 col-md-6 col-md-6">
+                <label for="end_user" class="form-label">End User</label>
+                <input type="text" class="form-control" id="end_user" name="end_user" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-12">
+                <label for="procurement_office_rep" class="form-label">Procurement Office's Representative</label>
+                <input type="text" class="form-control" id="procurement_office_rep" name="procurement_office_rep" value="{{ Auth::user()->profile->first_name . ' ' . Auth::user()->profile->last_name }}" required>
             </div>
         </div>
         <div class="row">

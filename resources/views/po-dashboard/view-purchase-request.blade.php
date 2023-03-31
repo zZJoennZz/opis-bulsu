@@ -76,11 +76,11 @@
                                         <th>Entity Name</th>
                                         <th>Requested By</th>
                                         <th>Date</th>
+                                        <th>Fund Cluster</th>
                                         <th>Item Description</th>
                                         <th>Quantity</th>
                                         <th>Total Cost</th>
                                         <th>Estimated Budget</th>
-                                        <th>Fund Cluster</th>
                                         <th>Print</th>
                                     </tr>
                                 </thead>
@@ -91,7 +91,8 @@
                                             <td>{{ $pr->branch->branch_name }}</td>
                                             <td>{{ $pr->requester->profile->first_name }} {{ $pr->requester->profile->last_name }}</td>
                                             <td>{{ date("m-d-Y", strtotime($pr->created_at)) }}</td>
-                                            <td colspan="5"></td>
+                                            <td>{{ $pr->pr_items[0]->ppmp->source_of_fund->source_of_fund }}</td>
+                                            <td colspan="4"></td>
                                             {{-- <td>
                                                 <div class="d-flex justify-content-center align-items-center">
                                                     @if ($pr->is_approve === 0)
@@ -137,7 +138,7 @@
                                         </tr>
                                         @foreach ($pr->pr_items as $item)
                                             <tr>
-                                                <td colspan="4"></td>
+                                                <td colspan="5"></td>
                                                 <td>{{ $item->ppmp->item_detail->description }}</td>
                                                 <td>
                                                     @php
@@ -148,9 +149,8 @@
                                                     @endphp
                                                     {{ $total_qty }}
                                                 </td>
-                                                <td>{{ number_format($item->ppmp->item_detail->price_catalogue * $total_qty, 2) }}</td>
-                                                <td>{{ number_format($item->ppmp->estimated_budget, 2) }}</td>
-                                                <td>{{ $item->ppmp->source_of_fund->source_of_fund }}</td>
+                                                <td>₱ {{ number_format($item->ppmp->item_detail->price_catalogue * $total_qty, 2) }}</td>
+                                                <td>₱ {{ number_format($item->ppmp->estimated_budget, 2) }}</td>
                                                 <td></td>
                                         @endforeach
                                     @endforeach
@@ -319,13 +319,6 @@
                         totalQty += m.milestone_value;
                     });
 
-                    
-                    if (itemPurposes === '') {
-                        itemPurposes += item.ppmp.item_purpose.description;
-                    } else {
-                        itemPurposes += ', ' + item.ppmp.item_purpose.description;
-                    }
-
                     prTableContent += `
                         <tr>
                             <td>1</td>
@@ -343,7 +336,7 @@
                 $('#pr_number').html(prData.pr_number);
                 $('#source_of_fund').html(sourceOfFund);
                 $('#pr_items_body').html(prTableContent);
-                $('#item_purposes').html(itemPurposes);
+                $('#item_purposes').html(prData.purpose);
                 $('#printPr').modal('toggle');
             })
             .catch(err => alert('Cannot fetch purchase request record.'));

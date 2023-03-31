@@ -48,7 +48,7 @@
                                         <form action="{{ route('item-detail-single.add', request()->segment(count(request()->segments()))) }}" method="POST">
                                             @csrf
                                             <div class="row">
-                                                <div class="col-lg-4 col-md-12 mb-3">
+                                                {{-- <div class="col-lg-4 col-md-12 mb-3">
                                                     <div class="mb-3">
                                                         <label for="source_of_funds_id" class="form-label fw-bold">Source of Fund:</label>
                                                         <select class="form-select" id="source_of_funds_id" name="source_of_funds_id" aria-label="Purpose of the item">
@@ -57,8 +57,9 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                </div>
-                                                <div class="col-lg-8 col-md-12 mb-3">
+                                                </div> --}}
+                                                {{-- <div class="col-lg-8 col-md-12 mb-3"> replaced by div below --}}
+                                                <div class="col-12 mb-3">
                                                     <div class="mb-3">
                                                         <label for="item_purposes_id" class="form-label fw-bold">Purpose:</label>
                                                         <select class="form-select" id="item_purposes_id" name="item_purposes_id" aria-label="Purpose of the item">
@@ -74,14 +75,14 @@
                                                     <p class="fw-bold">Milestone of Activities:</p>
                                                 </div>
                                             </div>
-                                            @foreach (json_decode($ppmp_format) as $format)
                                             <div class="row mb-3">
-                                                <div class="col-lg-4 col-md-12 mb-1 d-flex" style="align-items: center; justify-content: center;">
-                                                    <label class="me-2"  style="max-width:50px;width:100%;" for="{{ $format->id }}">{{ $format->name }}:</label>
-                                                    <input class="w-100 form-control py-1" type="number" id="{{ $format->id }}" name="{{ $format->id }}" value="0" min="0" required />
-                                                </div>
+                                                @foreach (json_decode($ppmp_format) as $format)
+                                                    <div class="col-lg-4 col-md-12 mb-1 d-flex" style="align-items: center; justify-content: center;">
+                                                        <label class="me-2"  style="max-width:50px;width:100%;" for="{{ $format->id }}">{{ $format->name }}:</label>
+                                                        <input class="w-100 form-control py-1" type="number" id="{{ $format->id }}" name="{{ $format->id }}" value="0" min="0" required />
+                                                    </div>
+                                                @endforeach
                                             </div>
-                                            @endforeach
                                             <div class="row">
                                                 <div class="col-12 mb-3">
                                                     <label for="estimated_budget" class="form-label fw-bold">Estimated Budget:</label>

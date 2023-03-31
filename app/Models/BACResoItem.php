@@ -19,4 +19,9 @@ class BACResoItem extends Model
     {
         return $this->hasOne(QuotationItem::class, 'id', 'quotation_items_id');
     }
+
+    public function bac_reso()
+    {
+        return $this->belongsTo(BACReso::class, 'b_a_c_resos_id', 'id');
+    }
 }

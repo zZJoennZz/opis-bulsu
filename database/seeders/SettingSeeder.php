@@ -60,5 +60,9 @@ class SettingSeeder extends Seeder
             'name' => 'member_4',
             'value' => 'Engr. DONALD M. LAPIGUERA',
         ]);
+        Setting::create([
+            'name' => 'technical_resource_person',
+            'value' => 'Test',
+        ]);
     }
 }

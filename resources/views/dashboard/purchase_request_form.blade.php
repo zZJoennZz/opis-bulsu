@@ -70,6 +70,10 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="purpose" class="form-label">Purpose</label>
+                                            <input type="text" class="form-control" name="purpose" id="purpose">
+                                        </div>
                                         <div>
                                             <button id="submitBtn" disabled class="btn btn-primary"><em class="bi bi-file-earmark-fill"></em> Submit Purchase Request</button>
                                         </div>
@@ -125,6 +129,7 @@
     let masterList;
     let allItems;
     let selectedItems = [];
+    let prPurpose = '';
 
     function addToList(id) {
         selectedItems.push(id);
@@ -177,8 +182,13 @@
 
     async function submitForm(e) {
         e.preventDefault();
+        if (prPurpose.trim() === '' || prPurpose === undefined || prPurpose === null) {
+            alert('Please enter the purpose of this PR.');
+            return;
+        }
         let frmData = new FormData();
         frmData.append('id', JSON.stringify(selectedItems));
+        frmData.append('purpose', prPurpose);
         await axios.post(`{{ route('new-pr.perform') }}`, frmData)
             .then(res => {
                 window.location.href = `{{ route('pr-list.show') }}`;
@@ -192,6 +202,9 @@
     }
 
     $(document).ready(async function() {
+        $("#purpose").on('change', function (e) {
+            prPurpose = e.target.value;
+        })
         await axios.get(`{{ route('pr-items.show') }}`)
             .then(res => {
                 allItems = res.data.data;

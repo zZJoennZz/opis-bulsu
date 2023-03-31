@@ -102,7 +102,7 @@ Route::middleware('budget.office')->group(function () {
     Route::get('/bo-dashboard', [DashboardController::class, 'show'])->name('bo-dashboard.show');
 
     Route::get('/new-ppmp-request/{branch_id}', [PPMPController::class, 'new_ppmp_request'])->name('bo-new-ppmp-request.show');
-    Route::post('/new-ppmp-request', [PPMPController::class, 'approve_ppmp_request'])->name('bo-approve-ppmp-request.perform');
+    Route::put('/new-ppmp-request', [PPMPController::class, 'approve_ppmp_request'])->name('bo-approve-ppmp-request.perform');
 
     Route::get('/approved-ppmp-request/{branch_id}', [PPMPController::class, 'approved_ppmp_request'])->name('approved-ppmp-request.show');
     Route::post('/send-back-ppmp-request/{user_id}', [PPMPController::class, 'send_back'])->name('send-bank-ppmp.perform');
@@ -225,9 +225,13 @@ Route::middleware('procurement.office')->group(function () {
     //BAC reso
     Route::get('/bac-reso', [BacResoController::class, 'all'])->name('bac-reso.all');
     Route::get('/bac-reso/add', [BacResoController::class, 'add'])->name('bac-reso.add');
-    Route::post('/bac-reso/add', [BacResoController::class, 'create_bac'])->name('bac-reso.perform');
+    Route::post('/bac-reso/add', [BacResoController::class, 'save'])->name('bac-reso.save');
     Route::get('/bac-reso/{id?}', [BacResoController::class, 'single'])->name('bac-reso.single');
-    Route::get('/bac-reso/test', [BacResoController::class, 'test'])->name('test.bac-reso');
+    Route::get('/bac-reso/compare/{pr_item_id?}', [BacResoController::class, 'get_quotations_by_pr'])->name('bac-reso.compare');
+    Route::post('/bac-reso/item/add', [BacResoController::class, 'add_bac_reso_item'])->name('bac-reso-item.new');
+    Route::delete('/bac-reso/{bac_reso_item_id?}', [BacResoController::class, 'remove_bac_reso_item'])->name('bac-reso.delete');
+    Route::delete('/bac-reso/delete-by-lot/del', [BacResoController::class, 'remove_items_by_lot'])->name('bac-reso.delete-batch');
+    Route::put('/bac-reso/complete', [BacResoController::class, 'complete_bac_reso'])->name('bac-reso.complete');
     Route::get('/bac-reso/single/{bac_reso_id?}', [BacResoController::class, 'get_single'])->name('bac-reso.by-id');
 
     //purchase order

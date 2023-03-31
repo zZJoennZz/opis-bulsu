@@ -74,7 +74,6 @@ class ItemDetailController extends Controller
     {
         //
         $request->validate([
-            'source_of_funds_id' => 'required|numeric|min:1',
             'item_purposes_id' => 'required|numeric|min:1',
             'estimated_budget' => 'required|numeric',
         ]);
@@ -93,7 +92,7 @@ class ItemDetailController extends Controller
         $is_draft = true;
         $is_bo_approve = false;
         $is_pr_approve = false;
-        $source_of_funds_id = $request->source_of_funds_id;
+        $source_of_funds_id = 1;
         $item_purposes_id = $request->item_purposes_id;
         $estimated_budget = $request->estimated_budget;
         $is_priority = $request->is_priority === "yes" ? 1 : 0;

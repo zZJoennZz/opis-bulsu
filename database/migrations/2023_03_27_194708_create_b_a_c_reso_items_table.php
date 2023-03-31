@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('b_a_c_resos_id');
             $table->unsignedBigInteger('quotation_items_id');
             $table->boolean('is_select')->default(0);
-            $table->string('note');
+            $table->string('note')->nullable();
             $table->timestamps();
 
             $table->foreign('b_a_c_resos_id')->references('id')->on('b_a_c_resos');

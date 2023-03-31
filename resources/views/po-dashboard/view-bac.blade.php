@@ -1,171 +1,431 @@
 <x-dashboard-layout>
     <x-slot:title>
-        Prepare BAC Step 3
+        BAC Resolution {{ $bac_reso->b_a_c_reso_number }}
     </x-slot>
 
     @php
         $breadcrumb = [
             ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-            ['name' => 'BAC Resolution', 'route' => 'bac-reso.all'],
-            ['name' => 'Prepare BAC']
+            ['name' => 'BAC Resolution <span class="badge bg-primary">' . getPpmpYear() . '</span>', 'route' => 'bac-reso.all'],
+            ['name' => 'BAC Resolution']
         ]
     @endphp
+    <div class="modal fade" id="compareItemPrice" tabindex="-1" aria-labelledby="compareItemPriceLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="h1 modal-title fs-5" id="compareItemPriceLabel">Compare <span class="badge bg-primary" id="modalTitle">#</span> prices</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-bordered border-dark">
+                        <thead>
+                            <th>Company</th>
+                            <th>Item Number</th>
+                            <th>Brand / Model</th>
+                            <th>Offered Unit Price</th>
+                            <th>Select</th>
+                        </thead>
+                        <tbody id="compare-table">
 
+                        </tbody>
+                    </table>
+                </div>
+                {{-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div> --}}
+            </div>
+        </div>
+    </div>
     <div class="float-end">
         <button class="btn btn-sm btn-secondary" onclick="Popup()"><em class="bi bi-printer-fill"></em> Print</button>
     </div>
     <x-breadcrumb :breadcrumb="$breadcrumb" />
-    
-    <div id="bac-reso-print">
-        <div class="d-flex">
-            <img src="{{ asset('img/bsu-small-logo.png') }}" alt="BSU Logo" class="mx-auto" width="100px" />
-        </div>
-        <div class="text-center">
-            <div>Republic of the Philippines</div>
-            <div>Bulacan State University</div>
-            <div class="fw-bold">Bids and Awards Committee for Goods and Services</div>
-            <div>City of Malolos, Bulacan</div>
-            <div class="text-uppercase fw-bold">Abstract of Canvass and BAC Resolution</div>
-            <div class="text-uppercase fw-bold">Resolution Recommending to Award of the Procurement of Medical & Dental Supply</div>
-            <div class="text-uppercase fw-bold">For COVID-19 Preventive Measure Through Small Value Procurement-By Lot</div>
-        </div>
-        <div class="mb-3"><strong>ABC: ₱{{ number_format($bac_record->abc, 2) }}</strong> <span class="float-end">Date: {{ date('d') }} {{ date('M') }} {{ date('Y') }}</span></div>
-        <table class="table table-sm table-bordered border-dark mb-5">
-            <thead>
-                <tr class="text-uppercase text-center">
-                    <th style="width: 30%;">Name and Description of Articles Being Requisitioned</th>
-                    <th style="width: 10%;">Approved Unit Price per Item</th>
-                    <th style="width: 10%;">Quantity and Unit</th>
-                    <th style="width: 10%;">Unit Price</th>
-                    <th style="width: 20%;">Extended Amount</th>
-                    <th style="width: 20%;">Supplier/Company Name</th>
-                </tr>
-            </thead>
-            @php
-                $extendedAmt = 0;
-            @endphp
-            @php
-                $rowCtr = 1;
-            @endphp
-            @foreach ($bac_record->items as $item)
-                <tr>
-                    <td>{{ $item->quotation_item->pr_item->ppmp->item_detail->description }}</div>
-                    <td>₱{{ number_format($item->quotation_item->offered_unit_price, 2) }}</td>
-                    @php
-                        $totalQty = 0;
-                    @endphp
-                    @foreach ($item->quotation_item->pr_item->ppmp->milestones as $milestone)
-                        @php
-                            $totalQty += $milestone->milestone_value
-                        @endphp
-                    @endforeach
-                    
-                    <td>{{ $totalQty }} {{ $item->quotation_item->pr_item->ppmp->item_detail->unit->uom }}</td>
-                    <td>₱{{ number_format($item->quotation_item->pr_item->ppmp->item_detail->price_catalogue, 2) }}</td>
-                    @php
-                        $extendedAmt += $item->quotation_item->pr_item->ppmp->item_detail->price_catalogue * $totalQty;
-                    @endphp
-                    @if ($rowCtr === 1 || count($bac_record->items) === 1)
-                        <td rowspan="{{count($bac_record->items)}}" class="text-center" style="vertical-align: middle;">₱{{ number_format($extendedAmt, 2) }}</td>
-                        <td rowspan="{{count($bac_record->items)}}" class="text-center" style="vertical-align: middle;">{{ $bac_record->company->name }}</td>
-                    @endif
-                </tr>
-                @php
-                    $rowCtr += 1;
-                @endphp
-            @endforeach
-        </table>
-        <div class="mb-3">
-            <strong>WHEREAS,</strong> the items to be procured are included in the Annual Procurement Plan for the year {{ $bac_record->year }} of the Bulacan State University with an Approved
-            Budget for the Contract of <span class="fw-bold"><span class="text-uppercase">{{ translateToWords($bac_record->abc) }} (₱{{number_format($bac_record->abc, 2)}})</span></span>
-        </div>
-        <div class="mb-3">
-            <strong>WHEREAS, Section 10</strong> of <strong>Republic Act No. 9184</strong> entitled "Government Procurement Reform Act" provides that all procurement shall be done through competitive bidding, except as provided for in Article XVI (Alternative Methods of Procurement) of the act, namely: Limited Source Bidding, Direct Contracting, Repeat Order, Shopping and Negotiated Procurement.
-        </div>
-        <div class="mb-1">
-            <strong>WHEREAS, Section 53.9</strong> of the <strong>2016 Revised Implementing Rules and Regulations (IRR)</strong> of the said act provides that "where the procurement does not fall under shopping in Section 52 of the IRR and the amount involved does not exceed the thresholds prescribed in Annex "H" of the IRR:"
-        </div>
-        <div class="ps-5 mb-3">
-            <div class="text-uppercase fw-bold">Thresholds for small value procurement:</div>
-            <div class="ps-5">
-                2. <strong>Small Value Procurement</strong> shall not exceed the following:
-                <div class="ps-5">a.) For NGAs, GOCCS, GFIs, and SUCs, One Million Pesos (₱1,000,000.00)</div>
+    @if ($bac_reso->is_draft === 1)
+        @if ($bac_reso->type === "BY_ITEM")
+            <div class="mb-3 mt-3">
+                <div class="fs-4 fw-bold text-secondary">Select supplier / dealer per item</div>
             </div>
+            <div>
+                <table class="table table-sm table-hover border-dark caption-top">
+                    <caption>
+                        <div class="border p-2 rounded-4 border-secondary">
+                            <div class="float-end">
+                                <span class="badge bg-primary text-uppercase">{{ $bac_reso->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
+                            </div>
+                            <div class="mb-1">
+                                <small class="text-uppercase fw-bold text-secondary">Information:</small>
+                            </div>
+                            <div class="mb-1">
+                                <strong>PR #:</strong> <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
+                            </div>
+                            <div class="mb-1">
+                                <strong>Purpose:</strong> {{ $bac_reso->abstract_of_canvass->purpose }}
+                            </div>
+                            <div>
+                                <strong>ABC:</strong> ₱ {{ number_format($bac_reso->abstract_of_canvass->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> )
+                            </div>
+                        </div>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Unit</th>
+                            <th>Qty.</th>
+                            <th>Unit Price</th>
+                            <th>Extended Amount</th>
+                            <th class="text-end">Suppliers / Dealers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($bac_reso->abstract_of_canvass->pr->pr_items as $item)
+                            @php
+                                $isViable = 0;
+                                $companyName = "";
+                                $bacResoItemId = 0;
+                                foreach ($item->quotations as $quote) {
+                                    if ($quote->bac_reso_item !== null) {
+                                        $isViable += 1;
+                                        $companyName = $quote->quotation->company->name;
+                                        $bacResoItemId = $quote->bac_reso_item->id;
+                                    }
+                                }
+                            @endphp
+                            <tr>
+                                <td>{{ $item->ppmp->item_detail->description }}</td>
+                                <td>{{ $item->ppmp->item_detail->unit->uom }}</td>
+                                @php
+                                    $itemQty = 0;
+                                    foreach ($item->ppmp->milestones as $m) {
+                                        $itemQty += $m->milestone_value;
+                                    }
+                                @endphp
+                                <td>{{ $itemQty }}</td>
+                                <td>₱ {{ number_format($item->ppmp->item_detail->price_catalogue, 2) }}</td>
+                                <td>₱ {{ number_format($item->ppmp->item_detail->price_catalogue * $itemQty, 2) }}</td>
+                                <td class="text-end">
+                                    @if ($isViable === 0)
+                                        <button class="btn btn-sm btn-primary" type="button" onclick="getComparison({{$item->id}}, '{{$item->ppmp->item_detail->description}}')"><em class="bi bi-cash-stack"></em> View Quotations</button>
+                                    @else
+                                        {{ $companyName }}
+                                        <form action="{{ route('bac-reso.delete', ['bac_reso_item_id' => $bacResoItemId]) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger" type="submit"><em class="bi bi-x"></em></button>
+                                        </form>
+                                    @endif
+                                    
+                                    {{-- <a href="{{ route('bac-reso.compare', ['pr_item_id' => $item->id]) }}" target="_blank" class="btn btn-secondary">Test Me</a> --}}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="table-responsive">
+                <table class="table table-bordered table-sm border-dark caption-top">
+                    <caption>
+                        <div class="border p-2 rounded-4 border-secondary">
+                            <div class="float-end">
+                                <span class="badge bg-primary text-uppercase">{{ $bac_reso->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
+                            </div>
+                            <div class="mb-1">
+                                <small class="text-uppercase fw-bold text-secondary">Information:</small>
+                            </div>
+                            <div class="mb-1">
+                                <strong>PR #:</strong> <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
+                            </div>
+                            <div class="mb-1">
+                                <strong>Purpose:</strong> {{ $bac_reso->abstract_of_canvass->purpose }}
+                            </div>
+                            <div>
+                                <strong>ABC:</strong> ₱ {{ number_format($bac_reso->abstract_of_canvass->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> )
+                            </div>
+                        </div>
+                    </caption>
+                    <thead class="text-uppercase text-center align-middle">
+                        <tr>
+                            <th scope="col" rowspan="3">Item</th>
+                            <th scope="col" style="width: 80px;" rowspan="3">Unit</th>
+                            <th scope="col" style="width: 80px;" rowspan="3">Qty.</th>
+                            <th scope="col" style="width: 130px;" rowspan="3">Unit Price</th>
+                            <th scope="col" style="width: 130px;" rowspan="3">Extended Amount</th>
+                            <th scope="col" colspan="{{ count($companies) * 3 }}">Name of the Bidders / Dealers</th>
+                        </tr>
+                        <tr>
+                            @foreach ($companies as $c)
+                                <th scope="col" colspan="3" class="text-primary">{{ $c->name }}</th>
+                            @endforeach
+                        </tr>
+                        <tr>
+                            @for ($i = 0; $i < count($companies); $i++)
+                                <th scope="col" style="width: 70px; font-size: 12px">Unit Price</th>
+                                <th scope="col" style="width: 70px; font-size: 12px">Brand</th>
+                                <th scope="col" style="width: 100px; font-size: 12px">Extended Amount</th>
+                            @endfor
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($bac_reso->abstract_of_canvass->pr->pr_items as $item)
+                            <tr>
+                                <td>{{ $item->ppmp->item_detail->description }}</td>
+                                <td>{{ $item->ppmp->item_detail->unit->uom }}</td>
+                                {{-- COMPUTING THE QTY --}}
+                                @php
+                                    $itemQty = 0;
+                                @endphp
+                                @foreach ($item->ppmp->milestones as $m)
+                                    @php
+                                        $itemQty += $m->milestone_value;
+                                    @endphp
+                                @endforeach
+                                <td>{{ $itemQty }}</td>
+                                <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue, 2) }}</div></td>
+                                <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue * $itemQty, 2) }}</div></td>
+                
+                                {{-- LISTING COMPANY QUOTATIONS --}}
+                                @foreach ($companies as $c)
+                                    @php
+                                        $itemsFound = 0;
+                                    @endphp
+                                    @foreach ($c->quotations as $q)
+                                        @foreach ($q->items as $i)
+                                            @if ($i->pr_item->id === $item->id)
+                                                <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price, 2) }}</td>
+                                                <td>{{ $i->brand_and_model_offered }}</td>
+                                                <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price * $itemQty, 2) }}</div></td>
+                                                @php
+                                                    $itemsFound += 1;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                    @endforeach
+                                    @if ($itemsFound === 0)
+                                        <td class="text-center" style="font-size: 11px;">N/A</td>
+                                        <td class="text-center" style="font-size: 11px;">N/A</td>
+                                        <td class="text-center" style="font-size: 11px;">N/A</td>
+                                    @endif
+                                @endforeach
+                                @php
+                                    $itemQty = 0;
+                                @endphp
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="text-end fw-bold text-uppercase">Select supplier</td>
+                            @foreach ($companies as $c)
+                                @php
+                                    $itemsFound = 1;
+                                @endphp
+                                @foreach ($c->quotations as $q)
+                                    @foreach ($q->items as $i)
+                                        @if ($i->pr_item->id === $item->id)
+                                            @php
+                                                $itemsFound += 1;
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                                @if ($itemsFound !== count($bac_reso->abstract_of_canvass->pr->pr_items))
+                                    <td class="text-center" colspan="3" style="font-size: 11px;">
+                                        Does not meet 'by lot' requirement.
+                                    </td>
+                                @else
+                                    <td class="text-center" colspan="3">
+                                        @if (count($sel_company) > 0)
+                                            @if ($sel_company[0]->id === $c->id)
+                                                <span class="badge rounded-pill fs-6 bg-success text-uppercase"><em class="bi bi-check-circle-fill"></em> Selected</span>
+                                                <form method="POST" action="{{ route('bac-reso.delete-batch') }}" class="d-inline">
+                                                    @csrf
+                                                    @method("DELETE")
+                                                    <input type="hidden" name="b_a_c_resos_id" id="b_a_c_resos_id" value="{{ $bac_reso->id }}">
+                                                    <button class="badge bg-danger rounded-pill fs-6" style="border: none;"><em class="bi bi-x"></em></button>
+                                                </form>
+                                            @else
+                                                <span class="badge rounded-pill fs-6 bg-secondary text-uppercase"><em class="bi bi-x-circle-fill"></em> Not selected</span>
+                                            @endif
+                                        @else
+                                            <form action="{{ route('bac-reso-item.new') }}"  method="POST">
+                                                @csrf
+                                                <input type="hidden" value="{{ $bac_reso->id }}" name="bacId" id="bacId{{$c->id}}">
+                                                <input type="hidden" value="{{ $c->id }}" name="company" id="company{{$c->id}}">
+                                                <button type="submit" class="btn btn-primary w-100 fw-bold text-uppercase"><em class="bi bi-bag-check-fill"></em> Select</button>
+                                            </form>
+                                        @endif
+                                    </td>
+                                @endif
+                            @endforeach
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        @endif
+        
+        <form action="{{ route('bac-reso.complete') }}" method="POST">
+            <div class="row mb-3">
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="chair" class="form-label">Chair:</label>
+                        <input required type="text" class="form-control" id="chair" name="chair" value="{{ $bac_reso->chair }}">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="vice_chair" class="form-label">Vice Chair:</label>
+                        <input required type="text" class="form-control" id="vice_chair" name="vice_chair" value="{{ $bac_reso->chair }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="member_1" class="form-label">Member:</label>
+                        <input required type="text" class="form-control" id="member_1" name="member_1" value="{{ $bac_reso->member_1 }}">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="member_2" class="form-label">Member:</label>
+                        <input required type="text" class="form-control" id="member_2" name="member_2" value="{{ $bac_reso->member_2 }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="member_3" class="form-label">Member:</label>
+                        <input required type="text" class="form-control" id="member_3" name="member_3" value="{{ $bac_reso->member_3 }}">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="member_4" class="form-label">Member:</label>
+                        <input required type="text" class="form-control" id="member_4" name="member_4" value="{{ $bac_reso->member_4 }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="end_user" class="form-label">End User:</label>
+                        <input required type="text" class="form-control" id="end_user" name="end_user" value="{{ $bac_reso->end_user }}">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="technical_resource_person" class="form-label">Technical Resource Person:</label>
+                        <input required type="text" class="form-control" id="technical_resource_person" name="technical_resource_person" value="{{ $bac_reso->technical_resource_person }}">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div>
+                        <label for="president" class="form-label">President:</label>
+                        <input required type="text" class="form-control" id="president" name="president" value="{{ $bac_reso->president }}">
+                    </div>
+                </div>
+            </div>
+            <div class="text-end">
+                @method("PUT")
+                @csrf
+                <input type="hidden" name="bac_resos_id" id="bac_resos_id" value="{{ $bac_reso->id }}">
+                <button type="submit" class="btn text-uppercase fw-bold btn-primary">
+                    Complete <em class="bi bi-chevron-double-right"></em>
+                </button>
+            </div>
+        </form>
+    @else
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered border-dark caption-top">
+                <caption>PR NUMBER: <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span></caption>
+                <thead class="text-uppercase text-center align-middle">
+                    <tr>
+                        <th scope="col" style="width: 50px;" rowspan="3">Item No.</th>
+                        <th scope="col" rowspan="3">Name of Articles Being Requisitioned</th>
+                        <th scope="col" style="width: 80px;" rowspan="3">Unit</th>
+                        <th scope="col" style="width: 80px;" rowspan="3">Qty.</th>
+                        <th scope="col" style="width: 130px;" rowspan="3">Unit Price</th>
+                        <th scope="col" style="width: 130px;" rowspan="3">Extended Amount</th>
+                        <th scope="col" colspan="{{ count($companies) * 3 }}">Name of the Bidders / Dealers</th>
+                    </tr>
+                    <tr>
+                        @foreach ($companies as $c)
+                            <th scope="col" colspan="3" class="text-primary">{{ $c->name }}</th>
+                        @endforeach
+                    </tr>
+                    <tr>
+                        @for ($i = 0; $i < count($companies); $i++)
+                            <th scope="col" style="width: 70px; font-size: 12px">Unit Price</th>
+                            <th scope="col" style="width: 70px; font-size: 12px">Brand</th>
+                            <th scope="col" style="width: 100px; font-size: 12px">Extended Amount</th>
+                        @endfor
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $ctr = 1;
+                    @endphp
+                    @foreach ($bac_reso->abstract_of_canvass->pr->pr_items as $item)
+                        <tr>
+                            <td>{{ $ctr }}</td>
+                            <td>{{ $item->ppmp->item_detail->description }}</td>
+                            <td>{{ $item->ppmp->item_detail->unit->uom }}</td>
+                            {{-- COMPUTING THE QTY --}}
+                            @php
+                                $itemQty = 0;
+                            @endphp
+                            @foreach ($item->ppmp->milestones as $m)
+                                @php
+                                    $itemQty += $m->milestone_value;
+                                @endphp
+                            @endforeach
+                            <td>{{ $itemQty }}</td>
+                            <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue, 2) }}</div></td>
+                            <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue * $itemQty, 2) }}</div></td>
+                            
+                            {{-- LISTING COMPANY QUOTATIONS --}}
+                            @foreach ($companies as $c)
+                                @php
+                                    $itemsFound = 0;
+                                @endphp
+                                @foreach ($c->quotations as $q)
+                                    @foreach ($q->items as $i)
+                                        @if ($i->pr_item->id === $item->id)
+                                            <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price, 2) }}</td>
+                                            <td>{{ $i->brand_and_model_offered }}</td>
+                                            <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price * $itemQty, 2) }}</div></td>
+                                            @php
+                                                $itemsFound += 1;
+                                            @endphp
+                                        @endif
+                                    @endforeach
+                                @endforeach
+                                @if ($itemsFound === 0)
+                                    <td class="text-center" style="font-size: 11px;">N/A</td>
+                                    <td class="text-center" style="font-size: 11px;">N/A</td>
+                                    <td class="text-center" style="font-size: 11px;">N/A</td>
+                                @endif
+                            @endforeach
+
+                            @php
+                                $ctr += 1;
+                                $itemQty = 0;
+                            @endphp
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
-        <div class="mb-3">
-            <strong>WHEREAS,</strong> the BAC decided to procure the said items on a lot basis; secured Request for Quotations and submitted their respective proposals to the Bids and Awards Committee, to wit:
-            <ul>
-                @foreach ($companies as $company)
-                    <li>{{ $company->name }}</li>
-                @endforeach
-            </ul>
-        </div>
-        <div class="mb-3">
-            <strong>WHEREAS, {{$bac_record->company->name}}</strong> submitted the <strong>lowest obtainable proposal</strong> items to be procured;
-        </div>
-        <div class="mb-3">
-            <strong>NOW THEREFORE,</strong> after meticulous perusal, validation and verification, we, the members of Bids and Awards Committee hereby certify that the foregoing abstract of canvass is true and correct and that we have reviewed and evaluated the quotation and hereby recommend to the University President to procure the items from {{$bac_record->company->name}}. amounting to WINNING BID AMOUNT (bid amount);
-        </div>
-        <div class="mb-3">
-            <strong>RESOLVED,</strong> at the Bulacan State University, City of Malolos, Bulacan, this <strong>{{ ordinal(date('d')) }} of {{ date('M') }} {{ date('Y') }}</strong>
-        </div>
-        <table class="table table-bordered border-dark w-75 mx-auto mb-0">
-            <tr class="small">
-                <td style="width: 25%">
-                    <div class="text-center">
-                        <div class="fw-bold">{{ getSettingValue('bac_chairman') }}</div>
-                        Chair
-                    </div>
-                </td>
-                <td style="width: 25%">
-                    <div class="text-center">
-                        <div class="fw-bold">{{ getSettingValue('vice_chair_1') }}</div>
-                        Vice Chair
-                    </div>
-                </td>
-                <td style="width: 25%">
-                    <div class="text-center">
-                        <div class="fw-bold">{{ getSettingValue('vice_chair_2') }}</div>
-                        Vice Chair
-                    </div>
-                </td>
-                <td style="width: 25%">
-                    <div class="text-center">
-                        <div class="fw-bold pt-1">_____________</div>
-                        End User
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <table class="table table-bordered border-dark w-50 mx-auto">
-            <tr class="small">
-                <td style="width: 33.33%">
-                    <div class="text-center">
-                        <div class="fw-bold">{{ getSettingValue('member_1') }}</div>
-                        Member
-                    </div>
-                </td>
-                <td style="width: 33.33%">
-                    <div class="text-center">
-                        <div class="fw-bold">{{ getSettingValue('member_2') }}</div>
-                        Member
-                    </div>
-                </td>
-                <td style="width: 33.33%">
-                    <div class="text-center">
-                        <div class="fw-bold">{{ getSettingValue('member_3') }}</div>
-                        Member
-                    </div>
-                </td>
-            </tr>
-        </table>
-        <div class="border border-dark py-5 text-center">
-            <div class="small mb-4">Approved:</div>
-            <div class="fw-bold">{{ getSettingValue('university_president') }}</div>
-            <div>President</div>
-        </div>
-    </div>
+    @endif
     <x-slot:additional_script>
+        @vite('resources/js/app.js')
+
+
         <script>
             function Popup() {
                 let data = $('#bac-reso-print').html();
@@ -181,6 +441,46 @@
                 setTimeout(function(){mywindow.print();},1000);
 
                 return true;
+            }
+
+            async function getComparison(pr_item_id, item_name) {
+                let btnState = window.event.target
+                btnState.disabled = true;
+                $('#modalTitle').html(item_name);
+                await axios.get(`{{ route('bac-reso.compare') }}/${pr_item_id}`)
+                    .then((res) => {
+                        const data = res.data.data;
+                        let tblContent = ``;
+                        data.map((item) => {
+                            tblContent += `
+                                <tr>
+                                    <td>${item.quotation.company.name}</td>
+                                    <td>${item.item_number}</td>
+                                    <td>${item.brand_and_model_offered}</td>
+                                    <td>${item.offered_unit_price}</td>
+                                    <td>
+                                        <form method="POST" action="{{ route('bac-reso-item.new') }}">
+                                            <input type="hidden" value="${item.id}" name="item" id="item${item.id}">
+                                            <input type="hidden" value="{{ $bac_reso->id }}" name="bacId" id="bacId${item.id}">
+                                            @csrf
+                                            <button class="btn btn-sm btn-primary" type="submit">Select</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            `;
+                        })
+                        $('#compare-table').html(tblContent);
+                        $('#compareItemPrice').modal('show');
+                        btnState.disabled = false;
+                    })
+                    .catch((err) => {
+                        if (err.response.status === 404) {
+                            alert('Item not found!');
+                        } else {
+                            alert('Something went wrong. Cannot fetch data.');
+                        }
+                        btnState.disabled = false;
+                    });
             }
         </script>
     </x-slot>

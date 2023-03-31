@@ -9,7 +9,8 @@ class AbstractOfCanvass extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'purpose',
+        'year',
+        'type',
         'abc',
         'purchase_requests_id',
         'bac_chairman',
@@ -18,6 +19,9 @@ class AbstractOfCanvass extends Model
         'member_2',
         'member_3',
         'member_4',
+        'technical_resource_person',
+        'end_user',
+        'procurement_office_rep',
         'added_by',
         'is_delete',
     ];

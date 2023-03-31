@@ -17,6 +17,11 @@ class SourceOfFundSeeder extends Seeder
     {
         //
         SourceOfFund::create([
+            'source_of_fund' => 'N/A',
+            'is_delete' => 0,
+            'added_by' => 1,
+        ]);
+        SourceOfFund::create([
             'source_of_fund' => 'GAA',
             'is_delete' => 0,
             'added_by' => 1,

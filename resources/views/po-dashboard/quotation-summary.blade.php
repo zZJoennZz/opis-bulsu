@@ -60,7 +60,7 @@
                                                 @foreach ($quote->items as $item)
                                                     @if ($item->pr_item->ppmp !== null)
                                                         <tr>
-                                                            <td></td>
+                                                            <td class="text-end">PR #: <span class="badge bg-secondary">{{ $item->pr_item->pr->pr_number }}</span></td>
                                                             <td>{{ $item->pr_item->ppmp->item_detail->description }}</td>
                                                             <td>₱ {{ number_format($item->offered_unit_price, 2) }}</td>
                                                         </tr>

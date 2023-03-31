@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('abstract_of_canvasses', function (Blueprint $table) {
             $table->id();
-            $table->string('purpose');
+            $table->string('year');
+            $table->string('type');
             $table->string('abc');
             $table->unsignedBigInteger('purchase_requests_id');
             $table->string('bac_chairman');
@@ -24,6 +25,9 @@ return new class extends Migration
             $table->string('member_2');
             $table->string('member_3');
             $table->string('member_4');
+            $table->string('technical_resource_person');
+            $table->string('end_user');
+            $table->string('procurement_office_rep');
             $table->unsignedBigInteger('added_by');
             $table->boolean('is_delete')->default(0);
             $table->timestamps();

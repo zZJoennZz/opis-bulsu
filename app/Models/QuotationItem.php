@@ -32,6 +32,11 @@ class QuotationItem extends Model
         return $this->belongsTo(Quotation::class, 'quotations_id', 'id');
     }
 
+    public function bac_reso_item()
+    {
+        return $this->hasOne(BACResoItem::class, 'quotation_items_id', 'id');
+    }
+
     public function canvass_abstract_item()
     {
         return $this->hasOne(CanvassAbstractItem::class, 'quotation_items_id', 'id');

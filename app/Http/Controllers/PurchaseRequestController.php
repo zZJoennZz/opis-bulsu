@@ -142,6 +142,7 @@ class PurchaseRequestController extends Controller
             $new_purchase_request = new PurchaseRequest();
             $new_purchase_request->year = $user->ppmp_year;
             $new_purchase_request->pr_number = 1;
+            $new_purchase_request->purpose = $request->purpose;
             $new_purchase_request->is_draft = 0;
             $new_purchase_request->is_approve = 1;
             $new_purchase_request->is_delete = 0;

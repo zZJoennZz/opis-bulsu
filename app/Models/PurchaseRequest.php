@@ -11,6 +11,7 @@ class PurchaseRequest extends Model
     protected $fillable = [
         'pr_number',
         'year',
+        'purpose',
         'is_draft',
         'is_approve',
         'is_delete',
@@ -33,7 +34,8 @@ class PurchaseRequest extends Model
         return $this->hasMany(PurchaseRequestItem::class, 'purchase_requests_id', 'id');
     }
 
-    public function abstract_of_canvass() {
+    public function abstract_of_canvass()
+    {
         return $this->hasOne(AbstractOfCanvass::class, 'purchase_requests_id', 'id');
     }
 }

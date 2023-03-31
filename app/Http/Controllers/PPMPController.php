@@ -61,11 +61,13 @@ class PPMPController extends Controller
         }
 
         $milestoneOfActivities = MilestoneOfActivity::whereIn('pro_pro_man_plans_id', $ppmpIds)->get();
-
+        $sourceOfFunds = SourceOfFund::all();
         return view('bo-dashboard/new-ppmp-budget-request')
             ->with('ppmp_format', $ppmpFormat)
             ->with('ppmp_items', $ppmpNewRequests)
-            ->with('milestones', $milestoneOfActivities);
+            ->with('milestones', $milestoneOfActivities)
+            ->with('source_of_funds', $sourceOfFunds)
+            ->with('branch_id', $branch_id);
     }
 
     public function ppmp_approval($branch_id)
@@ -91,7 +93,8 @@ class PPMPController extends Controller
         return view('po-dashboard/bo-approved-ppmp')
             ->with('ppmp_format', $ppmpFormat)
             ->with('ppmp_items', $ppmpNewRequests)
-            ->with('milestones', $milestoneOfActivities);
+            ->with('milestones', $milestoneOfActivities)
+            ->with('branch_id', $branch_id);
     }
 
     public function po_send_back(Request $request, $user_id)
@@ -184,17 +187,34 @@ class PPMPController extends Controller
         return view('bo-dashboard/approved-ppmp-budget-request')
             ->with('ppmp_format', $ppmpFormat)
             ->with('ppmp_items', $ppmpNewRequests)
-            ->with('milestones', $milestoneOfActivities);
+            ->with('milestones', $milestoneOfActivities)
+            ->with('branch_id', $branch_id);
     }
 
     public function approve_ppmp_request(Request $request)
     {
+        if ($request->source_of_funds_id === "1") {
+            return redirect()->back()->withErrors(['Select source of funds first.']);
+        }
         DB::beginTransaction();
         try {
-            ProProManPlan::whereIn('id', $request->all())->update(['is_bo_approve' => 1]);
-            foreach ($request->all() as $id) {
+            ProProManPlan::where('year', '=', getPpmpYear())
+                ->where('is_draft', '=', 0)
+                ->where('is_bo_approve', '=', 0)
+                ->where('is_pr_approve', '=', 0)
+                ->where('branches_id', '=', $request->branch)
+                ->update(['is_bo_approve' => 1, 'source_of_funds_id' => $request->source_of_funds_id]);
+
+            //to record history log
+            $getAll = ProProManPlan::where('year', '=', getPpmpYear())
+                ->where('is_draft', '=', 0)
+                ->where('is_bo_approve', '=', 1)
+                ->where('is_pr_approve', '=', 0)
+                ->where('branches_id', '=', $request->branch)
+                ->get();
+            foreach ($getAll as $ppmp) {
                 $ppmpNewHistory = new ProProManPlanHistory();
-                $ppmpNewHistory->pro_pro_man_plans_id = $id;
+                $ppmpNewHistory->pro_pro_man_plans_id = $ppmp->id;
                 $ppmpNewHistory->before_state = json_encode(['state' => 'SAME']);
                 $ppmpNewHistory->after_state = json_encode(['state' => 'SAME']);
                 $ppmpNewHistory->remarks = 'Approved';
@@ -204,18 +224,23 @@ class PPMPController extends Controller
 
                 $ppmpNewHistory->save();
             }
+
             DB::commit();
+            session('success', 'Budget approved.');
+            return redirect()->route('dashboard.show');
         } catch (Throwable $e) {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => "Something went wrong. Please contact website administrator.",
-            ], 400);
+            // return response()->json([
+            //     'success' => false,
+            //     'message' => "Something went wrong. Please contact website administrator.",
+            // ], 400);
+
+            return redirect()->back()->withErrors(['Something went wrong. Please contact website administrator.']);
         }
-        return response()->json([
-            'success' => true,
-            'message' => 'PPMP successfully approved.'
-        ], 200);
+        // return response()->json([
+        //     'success' => true,
+        //     'message' => 'PPMP successfully approved.'
+        // ], 200);
     }
 
     public function get_ppmp_record($ppmp_id)
