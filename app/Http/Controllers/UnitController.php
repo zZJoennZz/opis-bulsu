@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Unit;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 use Throwable;
 
 class UnitController extends Controller
@@ -22,6 +25,17 @@ class UnitController extends Controller
         $newUnit = new Unit();
         DB::beginTransaction();
         try {
+
+            $validator = Validator::make($request->all(), [
+                'uom' => ['required', 'unique:units,uom'],
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
+
             $newUnit->uom = $request->uom;
             $newUnit->added_by = Auth::user()->id;
             $newUnit->save();
@@ -53,6 +67,20 @@ class UnitController extends Controller
         DB::beginTransaction();
 
         try {
+
+            $validator = Validator::make($request->all(), [
+                'uom' => [
+                    'required', 
+                    Rule::unique('units', 'uom')->ignore($getUnit)
+                ],
+                
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
             $getUnit->uom = $request->uom;
             $getUnit->save();
 

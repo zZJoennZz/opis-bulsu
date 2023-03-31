@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\SourceOfFund;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class SourceofFundsController extends Controller
@@ -22,6 +24,16 @@ class SourceofFundsController extends Controller
         $newSourceOfFund = new SourceOfFund();
         DB::beginTransaction();
         try {
+
+            $validator = Validator::make($request->all(), [
+                'source_of_fund' => ['required', 'unique:source_of_funds,source_of_fund'],
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
             $newSourceOfFund->source_of_fund = $request->source_of_fund;
             $newSourceOfFund->added_by = Auth::user()->id;
             $newSourceOfFund->save();
@@ -53,6 +65,19 @@ class SourceofFundsController extends Controller
         DB::beginTransaction();
 
         try {
+            $validator = Validator::make($request->all(), [
+                'source_of_fund' => [
+                    'required', 
+                    Rule::unique('source_of_funds', 'source_of_fund')->ignore($getSourceOfFund)
+                ],
+                
+            ]);
+
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
             $getSourceOfFund->source_of_fund = $request->source_of_fund;
             $getSourceOfFund->save();
 
