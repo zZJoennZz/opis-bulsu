@@ -102,4 +102,32 @@ class CompanyController extends Controller
             return redirect()->back()->withErrors(['Something went wrong. Updates failed to process.']);
         }
     }
+
+    public function status_change($id, $isChecked){
+
+        DB::beginTransaction();
+        try {
+            $company = Company::find($id);
+            $company->is_in_philgeps = $isChecked;
+
+            $company->save();
+
+            DB::commit();
+            back()
+                ->with('success', 'User status successfully updated.');
+            return response()->json([
+                "success" => true
+            ], 200);
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            back()
+                ->withErrors(['Something went wrong! User changes is not saved.']);
+            return response()->json([
+                "success" => false
+            ], 400);
+        }
+
+    }
+
 }

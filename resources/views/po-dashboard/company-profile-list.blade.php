@@ -122,6 +122,7 @@
                                 <caption>List of company profiles</caption>
                                 <thead>
                                     <tr>
+                                        <th style="width: 5%;"></th>
                                         <th style="width: 25%;">Company Name</th>
                                         <th style="width: 25%;">Address</th>
                                         <th>TIN #</th>
@@ -133,6 +134,9 @@
                                 <tbody>
                                     @foreach ($company_profiles as $profile)
                                         <tr>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="is_in_philgeps" id="is_in_philgeps" value="{{$profile->is_in_philgeps}}" @if($profile->is_in_philgeps == 1) checked @endif onclick="status_change('{{$profile->id}}', this.checked)">
+                                            </td>
                                             <td class="fs-5 fw-bold">{{ $profile->name }}</td>
                                             <td>{{ $profile->full_address }}</td>
                                             <td>{{ $profile->tin }}</td>
@@ -205,6 +209,39 @@
         event.preventDefault();
         return false;
     }
+
+    function status_change(id, checked){
+        let confirmStatus = confirm("Are you sure to change the status?");
+        if (confirmStatus) {
+
+        var isChecked = checked ? 1 : 0;
+        var url = '/company-profiles/update/'+ id +'/'+ isChecked;
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: {
+                '_token': '{{ csrf_token() }}',
+                'isChecked': isChecked
+            },
+            success: function(response) {
+                if (response !== '') {
+                    console.log(response);
+                }
+            },
+            error: function(xhr) {
+                console.log('Error:', xhr);
+            }
+        });
+
+        location.reload();
+
+        }
+    }
+
+
+
+
+
 </script>
 @include('layout/datatable', ['tableId' => 'company-profile-table'])
 @include('layout/footer')

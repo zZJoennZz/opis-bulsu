@@ -206,6 +206,8 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/company-profiles/{company_id?}', [CompanyController::class, 'single_api'])->name('company.single.api');
     Route::put('/company-profiles/{company_id?}', [CompanyController::class, 'update'])->name('company.update');
     Route::delete('/company-profiles/{company_id?}', [CompanyController::class, 'toggleDelete'])->name('company.delete');
+    
+    Route::get('/company-profiles/update/{id}/{isChecked}', [CompanyController::class, 'status_change'])->name('status.change');
 
     //price quotations
     Route::get('/quotations', [QuotationController::class, 'all'])->name('quotation.all');
