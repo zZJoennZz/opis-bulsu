@@ -44,16 +44,26 @@
                                                 <div class="mb-3 col-12">
                                                     <label for="tin" class="col-form-label">TIN #</label>
                                                     <input type="text" class="form-control" id="tin" name="tin" required>
+                                                    @error('tin')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="contact_number" class="col-form-label">Contact Number</label>
                                                     <input type="text" class="form-control" id="contact_number" name="contact_number" required>
+                                                    <span class="text-danger">Landline number valid format: 0XX-XXXXXX</span>
+                                                    @error('contact_number')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="email_address" class="col-form-label">Email Address</label>
                                                     <input type="email" class="form-control" id="email_address" name="email_address" required>
+                                                    @error('email_address')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -93,16 +103,26 @@
                                                 <div class="mb-3 col-12">
                                                     <label for="edit_tin" class="col-form-label">TIN #</label>
                                                     <input type="text" class="form-control" id="edit_tin" name="tin" required>
+                                                    @error('tin')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="edit_contact_number" class="col-form-label">Contact Number</label>
                                                     <input type="text" class="form-control" id="edit_contact_number" name="contact_number" required>
+                                                    <span class="text-danger">Landline number valid format: 0XX-XXXXXX</span>
+                                                    @error('contact_number')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="edit_email_address" class="col-form-label">Email Address</label>
                                                     <input type="email" class="form-control" id="edit_email_address" name="email_address" required>
+                                                    @error('email_address')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -210,7 +230,7 @@
         return false;
     }
 
-    function status_change(id, checked){
+    async function status_change(id, checked){
         let confirmStatus = confirm("Are you sure to change the status?");
         if (confirmStatus) {
 
@@ -237,10 +257,6 @@
 
         }
     }
-
-
-
-
 
 </script>
 @include('layout/datatable', ['tableId' => 'company-profile-table'])
