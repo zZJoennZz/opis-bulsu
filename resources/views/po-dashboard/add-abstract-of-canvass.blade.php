@@ -27,7 +27,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-sm-12 col-md-2 p-1 text-center"><a href="#" class="btn btn-success btn-sm"><em class="bi bi-eye-fill"></em> View Items</a></div>
+            <div class="col-sm-12 col-md-2 p-1 text-center"><button type="button" id="view_pr" class="btn btn-success btn-sm"><em class="bi bi-eye-fill"></em> View Items</butt></div>
         </div>
         <div class="row mb-3">
             <div class="col-12">
@@ -86,9 +86,13 @@
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col-12">
+            <div class="col-sm-12 col-md-6">
                 <label for="procurement_office_rep" class="form-label">Procurement Office's Representative</label>
                 <input type="text" class="form-control" id="procurement_office_rep" name="procurement_office_rep" value="{{ Auth::user()->profile->first_name . ' ' . Auth::user()->profile->last_name }}" required>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <label for="president" class="form-label">University President</label>
+                <input type="text" class="form-control" id="president" name="president" value="{{ getSettingValue("university_president") }}" required>
             </div>
         </div>
         <div class="row">
@@ -97,8 +101,99 @@
             </div>
         </div>
     </form>
-
+    <div class="modal fade" id="itemModal" tabindex="-1" aria-labelledby="itemModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title fs-5" id="itemModalLabel">Items</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-bordered border-dark">
+                        <caption>List of items under the selected purchase request.</caption>
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Price Catalogue</th>
+                                <th>Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="view_item_table"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <x-slot:additional_script>
+        @vite('resources/js/app.js')
         
+        <script>
+            async function getProducts() {
+                let prId = $('#purchase_requests_id').val();
+                if (prId === '' || prId === 0 || prId === null) {
+                    alert('Select purchase request to view.');
+                    return;
+                }
+                await axios.get(`{{ route('pr-single.api') }}/${prId}`)
+                    .then((res) => {
+                        let items = res.data[0].pr_items;
+                        let tableContent = ``;
+                        let totalAmount = 0;
+                        items.forEach((el) => {
+                            let itemQty = 0;
+                            el.ppmp.milestones.forEach((m) => {
+                                itemQty += m.milestone_value;
+                            });
+
+                            totalAmount += el.ppmp.item_detail.price_catalogue * itemQty;
+                            tableContent += `
+                                <tr>
+                                    <td>
+                                        ${el.ppmp.item_detail.description}
+                                    </td>
+                                    <td>
+                                        ${itemQty}
+                                    </td>
+                                    <td>
+                                        ${el.ppmp.item_detail.unit.uom}
+                                    </td>
+                                    <td>
+                                        ₱ ${parseInt(el.ppmp.item_detail.price_catalogue).toFixed(2)}
+                                    </td>
+                                    <td>
+                                        ₱ ${(el.ppmp.item_detail.price_catalogue * itemQty).toFixed(2)}
+                                    </td>
+                                </tr>
+                            `;
+                            $('#itemModal').modal('toggle');
+                        })
+                        tableContent += `
+                            <tr>
+                                <td colspan="4" class="text-end fw-bold">
+                                    Total Amount
+                                </td>
+                                <td>
+                                    ${totalAmount.toFixed(2)}
+                                </td>
+                            </tr>
+                        `;
+                        $('#view_item_table').html(tableContent);
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+            }
+
+            $(window).on('load', function() {
+                $('#view_pr').on('click', function() {
+                    getProducts();
+                });
+            });
+        </script>
     </x-slot>
 </x-dashboard-layout>

@@ -64,5 +64,9 @@ class SettingSeeder extends Seeder
             'name' => 'technical_resource_person',
             'value' => 'Test',
         ]);
+        Setting::create([
+            'name' => 'chief_accountant',
+            'value' => 'DR. FELICITAS G. MIRABUENOS',
+        ]);
     }
 }

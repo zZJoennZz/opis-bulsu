@@ -5,7 +5,7 @@
 
     @php
         $breadcrumb = [
-            ['name' => '<em class="bi bi-house-fill"></em>'],
+            ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
             ['name' => 'Abstract of Canvasses <span class="badge bg-primary">'. Auth::user()->ppmp_year .'</span>'],
         ]
     @endphp

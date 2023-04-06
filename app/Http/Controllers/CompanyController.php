@@ -102,4 +102,36 @@ class CompanyController extends Controller
             return redirect()->back()->withErrors(['Something went wrong. Updates failed to process.']);
         }
     }
+
+    public function get_company_by_bac_reso($bac_reso_id)
+    {
+        $companies = Company::whereHas('quotations.items.pr_item.pr.abstract_of_canvass.bac_reso', function ($builder) use ($bac_reso_id) {
+            $builder->where('id', $bac_reso_id);
+        })
+            // ->doesntHave('purchase_orders')
+            // ->with(['quotations.items.bac_reso_item'])
+            ->whereHas('quotations.items.bac_reso_item', function ($builder) use ($bac_reso_id) {
+                $builder->where('b_a_c_resos_id', $bac_reso_id);
+            })
+            ->get();
+
+        try {
+            if (count($companies) <= 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Companies not found.'
+                ], 404);
+            } else {
+                return response()->json([
+                    'success' => true,
+                    'data' => $companies
+                ], 200);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Cannot fetch companies.'
+            ], 400);
+        }
+    }
 }

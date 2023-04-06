@@ -70,10 +70,10 @@ class UnitController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'uom' => [
-                    'required', 
+                    'required',
                     Rule::unique('units', 'uom')->ignore($getUnit)
                 ],
-                
+
             ]);
 
             if ($validator->fails()) {

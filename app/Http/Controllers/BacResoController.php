@@ -11,6 +11,7 @@ use App\Models\CanvassAbstractItem;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
 use App\Models\Company;
+use App\Models\PurchaseOrder;
 use App\Models\PurchaseRequest;
 use App\Models\PurchaseRequestItem;
 use Exception;
@@ -23,9 +24,10 @@ class BacResoController extends Controller
     //
     public function all()
     {
-        $bac_resos = BACReso::where('year', '=', getPpmpYear())
-            ->where('is_delete', '=', 0)
-            ->has('abstract_of_canvass')
+        $bac_resos = BACReso::where('is_delete', '=', 0)
+            ->whereHas('abstract_of_canvass', function ($builder) {
+                $builder->where('year', '=', getPpmpYear());
+            })
             ->with(['abstract_of_canvass.pr'])
             ->get();
 
@@ -52,22 +54,27 @@ class BacResoController extends Controller
     {
         $aoc = AbstractOfCanvass::where('id', '=', $request->purchase_request)->with(['pr.requester.profile'])->first();
 
+        //BAC Reso Number Builder
+        $latest_bac_reso = BACReso::where(DB::raw('SUBSTR(b_a_c_reso_number, 1, 4)'), '=', getPpmpYear())
+            ->latest()
+            ->first();
+
+        $bac_reso_ctr = $latest_bac_reso === null ? 1 : intval(substr($latest_bac_reso->b_a_c_reso_number, 5, 4)) + 1;
+        // $bac_year = substr($latest_bac_reso->b_a_c_reso_number, 0, 4);
+
+        $bac_reso_number = sprintf(
+            '%s-%s',
+            getPpmpYear(),
+            str_pad($bac_reso_ctr, 3, '0', STR_PAD_LEFT),
+        );
+
+        // return $bac_reso_number;
+
         DB::beginTransaction();
         try {
             $new_bac = new BACReso();
-            $new_bac->b_a_c_reso_number = "ASDSDSDSSD";
-            $new_bac->year = getPpmpYear();
-            $new_bac->type = $request->type;
+            $new_bac->b_a_c_reso_number = $bac_reso_number;
             $new_bac->abstract_of_canvasses_id = $request->purchase_request;
-            $new_bac->chair = $aoc->bac_chairman;
-            $new_bac->vice_chair = $aoc->vice_chairman;
-            $new_bac->member_1 = $aoc->member_1;
-            $new_bac->member_2 = $aoc->member_2;
-            $new_bac->member_3 = $aoc->member_3;
-            $new_bac->member_4 = $aoc->member_4;
-            $new_bac->end_user = $aoc->pr->requester->profile->first_name . ' ' . $aoc->pr->requester->profile->last_name;
-            $new_bac->technical_resource_person = getSettingValue('technical_resource_person');
-            $new_bac->president = getSettingValue('university_president');
             $new_bac->is_draft = 1;
             $new_bac->added_by = Auth::user()->id;
             $new_bac->save();
@@ -110,13 +117,14 @@ class BacResoController extends Controller
             ->get();
         $sel_company = [];
         $view_bac_view = 'po-dashboard/view-bac';
-        if ($bac_reso->type === "BY_LOT") {
+        if ($bac_reso->abstract_of_canvass->type === "BY_LOT") {
             $sel_company = Company::has('quotations.items.bac_reso_item')
                 ->whereHas('quotations.items', function ($builder) use ($bac_reso_items) {
                     $builder->whereIn('id', $bac_reso_items);
                 })
                 ->get();
 
+            // return $bac_reso_items;
             return view($view_bac_view)
                 ->with('bac_reso', $bac_reso)
                 ->with('purchase_request_items', $purchase_request_items)
@@ -203,7 +211,7 @@ class BacResoController extends Controller
             $bac_reso = BACReso::find($request->bacId);
 
             $success_message = "";
-            if ($bac_reso->type === "BY_ITEM") {
+            if ($bac_reso->abstract_of_canvass->type === "BY_ITEM") {
                 $new_bac_item = new BACResoItem();
                 $new_bac_item->b_a_c_resos_id = $request->bacId;
                 $new_bac_item->quotation_items_id = $request->item;
@@ -257,15 +265,6 @@ class BacResoController extends Controller
         try {
             $bac_rec = BACReso::find($request->bac_resos_id);
             $bac_rec->is_draft = 0;
-            $bac_rec->chair = $request->chair;
-            $bac_rec->vice_chair = $request->vice_chair;
-            $bac_rec->member_1 = $request->member_1;
-            $bac_rec->member_2 = $request->member_2;
-            $bac_rec->member_3 = $request->member_3;
-            $bac_rec->member_4 = $request->member_4;
-            $bac_rec->end_user = $request->end_user;
-            $bac_rec->technical_resource_person = $request->technical_resource_person;
-            $bac_rec->president = $request->president;
             $bac_rec->save();
             DB::commit();
 
@@ -433,15 +432,26 @@ class BacResoController extends Controller
             ->with('companies', $companies);
     }
 
-    public function get_single($bac_reso_id)
+    public function get_single($bac_reso_id, $company_id)
     {
-        $bac_reso = CanvassAbstract::where('id', '=', $bac_reso_id)
-            ->with(['items.quotation_item.pr_item.ppmp.milestones', 'items.quotation_item.pr_item.ppmp.item_detail.unit'])
+        $bac_reso = BACReso::where('id', '=', $bac_reso_id)
+            ->whereHas('bac_reso_items.quotation.quotation', function ($builder) use ($company_id) {
+                $builder->where('companies_id', '=', $company_id);
+            })
+            ->with(['abstract_of_canvass', 'bac_reso_items.quotation.pr_item.ppmp.milestones', 'bac_reso_items.quotation.pr_item.ppmp.item_detail.unit', 'bac_reso_items.quotation.quotation'])
             ->get();
-        return response()->json([
-            'status' => true,
-            'data' => $bac_reso
-        ], 200);
+
+        if (count($bac_reso) === 0) {
+            return response()->json([
+                'status' => false,
+                'message' => "Data not found."
+            ], 404);
+        } else {
+            return response()->json([
+                'status' => true,
+                'data' => $bac_reso
+            ], 200);
+        }
     }
 
     public function test()

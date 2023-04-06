@@ -16,7 +16,8 @@ return new class extends Migration
         Schema::create('item_details', function (Blueprint $table) {
             $table->id();
             $table->text("description");
-            $table->text("article");
+            $table->text("article")->nullable();
+            $table->text("extra_article")->nullable();
             $table->decimal("price_catalogue");
             $table->unsignedBigInteger("category_id");
             $table->unsignedBigInteger("unit_id");

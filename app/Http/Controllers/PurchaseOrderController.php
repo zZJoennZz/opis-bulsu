@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CanvassAbstract;
+use App\Models\BACReso;
+use App\Models\ModeOfProcurement;
 use Illuminate\Http\Request;
-use App\Models\Company;
 use App\Models\PurchaseOrder;
 use App\Models\PurchaseOrderModeOfPayment;
 use Illuminate\Support\Facades\Auth;
@@ -16,10 +16,10 @@ class PurchaseOrderController extends Controller
     //
     public function get_all()
     {
-        $po_list = PurchaseOrder::with(['canvass_abstract.company', 'mop'])
-            ->whereHas('canvass_abstract', function ($query) {
-                $query->where('year', '=', Auth::user()->ppmp_year);
-            })
+        $po_list = PurchaseOrder::whereHas('bac_reso.abstract_of_canvass', function ($builder) {
+            $builder->where('year', '=', getPpmpYear());
+        })
+            ->with(['mop'])
             ->where('is_delete', '=', 0)
             ->get();
         // return $po_list;
@@ -28,37 +28,64 @@ class PurchaseOrderController extends Controller
 
     public function add_new()
     {
-        $bac_reso = CanvassAbstract::with(['company'])
+        $bac_reso = BACReso::with(['purchase_order'])
             ->where('is_delete', '=', 0)
-            ->doesntHave('purchase_order')
+            ->where('is_draft', '=', 0)
             ->get();
+
         // return $bac_reso;
         $mode_of_payment = PurchaseOrderModeOfPayment::all();
+        $mode_of_procurement = ModeOfProcurement::all();
         return view('po-dashboard/new-purchase-order')
             ->with('bac_reso', $bac_reso)
+            ->with('mode_of_procurement', $mode_of_procurement)
             ->with('mode_of_payment', $mode_of_payment);
     }
 
     public function generate_po(Request $request)
     {
         $request->validate([
-            'bac_reso' => 'numeric|exists:canvass_abstracts,id',
-            'mop' => 'numeric|exists:purchase_order_mode_of_payments,id',
+            'bac_reso' => 'required|numeric|exists:b_a_c_resos,id',
+            'company' => 'required|numeric|exists:companies,id',
+            'mode_of_procurement' => 'required|numeric|exists:mode_of_procurements,id',
+            'mode_of_payment' => 'required|numeric|exists:purchase_order_mode_of_payments,id',
+            'place_of_delivery' => 'required',
+            'date_of_delivery' => 'required',
+            'for_inquiry' => 'required',
+            'delivery_term' => 'required'
         ]);
 
         DB::beginTransaction();
-        try {
-            $new_po = new PurchaseOrder();
-            $new_po->canvass_abstracts_id = $request->bac_reso;
-            $new_po->purchase_order_mode_of_payments_id = $request->mop;
-            $new_po->po_number = 1;
-            $new_po->added_by = Auth::user()->id;
-            $new_po->save();
+        $new_po = new PurchaseOrder();
+        $new_po->b_a_c_resos_id = $request->bac_reso;
+        $new_po->companies_id = $request->company;
+        $new_po->year = getPpmpYear();
+        $new_po->purchase_order_mode_of_payments_id = $request->mode_of_payment;
+        $new_po->mode_of_procurements_id  = $request->mode_of_procurement;
+        $new_po->place_of_delivery  = $request->place_of_delivery;
+        $new_po->date_of_delivery  = $request->date_of_delivery;
+        $new_po->for_inquiry  = $request->for_inquiry;
+        $new_po->delivery_term  = $request->delivery_term;
+        $new_po->added_by = Auth::user()->id;
 
-            $last_po = PurchaseOrder::find($new_po->id);
-            $po_num_hash = "PO" . crc32($new_po->id);
-            $last_po->po_number = $po_num_hash;
-            $last_po->save();
+        $latest_po = PurchaseOrder::where('year', getPpmpYear())
+            ->latest()
+            ->first();
+
+        $po_num_ctr = $latest_po === null ? 1 : intval(substr($latest_po->po_number, 8, 4)) + 1;
+
+        $po_number = sprintf(
+            '%s-%s-%s',
+            getPpmpYear(),
+            date('m'),
+            str_pad($po_num_ctr, 4, '0', STR_PAD_LEFT)
+        );
+
+        $new_po->po_number = $po_number;
+
+        $new_po->save();
+        try {
+
 
             DB::commit();
             back()->with('success', 'Purchase order generated.');
@@ -78,10 +105,18 @@ class PurchaseOrderController extends Controller
 
     public function view_po($po_id)
     {
+        $company = PurchaseOrder::select('companies_id')->where('id', '=', $po_id)->first();
+
+        // return $company;
         $po = PurchaseOrder::where('id', '=', $po_id)
-            ->with(['canvass_abstract.company', 'mop', 'canvass_abstract.items.quotation_item.pr_item.ppmp.milestones', 'canvass_abstract.items.quotation_item.pr_item.ppmp.item_detail.unit'])
+            ->with(['mode_of_procurement', 'mop', 'bac_reso.abstract_of_canvass.pr', 'bac_reso.bac_reso_items.quotation.quotation' => function ($builder) use ($company) {
+                $builder->where('companies_id', '=', $company->companies_id);
+            }, 'company'])
             ->first();
         // return $po;
+        if ($po === null) {
+            return redirect()->route('po.all')->withErrors(['No purchase order found.']);
+        }
         return view('po-dashboard/view-po')->with('po', $po);
     }
 }

@@ -28,8 +28,10 @@ class DatabaseSeeder extends Seeder
             SourceOfFundSeeder::class,
             SettingSeeder::class,
             PurchaseOrderModeOfPaymentSeeder::class,
+            ModeOfProcurementSeeder::class,
             SupplyPositionSeeder::class,
             EquipmentCodeSeeder::class,
+            CompanySeeder::class,
         ]);
     }
 }

@@ -43,11 +43,20 @@ class AbstractOfCanvassController extends Controller
             ->where('is_delete', '=', 0)
             ->get();
 
-        $companies = Company::whereHas('quotations.items.pr_item.pr', function ($builder) use ($aoc) {
-            $builder->where('id', '=', $aoc[0]->pr->id);
-        })
-            ->with(['quotations.items.pr_item.pr', 'quotations.items.pr_item.ppmp.item_detail.unit'])
-            ->get();
+        if ($aoc[0]->type === "BY_LOT") {
+            $companies = Company::whereHas('quotations.items.pr_item.pr', function ($builder) use ($aoc) {
+                $builder->where('id', '=', $aoc[0]->pr->id);
+            })
+                ->has('quotations.items', '=', count($aoc[0]->pr->pr_items))
+                ->with(['quotations.items.pr_item.pr', 'quotations.items.pr_item.ppmp.item_detail.unit'])
+                ->get();
+        } else {
+            $companies = Company::whereHas('quotations.items.pr_item.pr', function ($builder) use ($aoc) {
+                $builder->where('id', '=', $aoc[0]->pr->id);
+            })
+                ->with(['quotations.items.pr_item.pr', 'quotations.items.pr_item.ppmp.item_detail.unit'])
+                ->get();
+        }
 
         // return $companies;
         return view('po-dashboard/view-abstract-of-canvass')
@@ -77,6 +86,7 @@ class AbstractOfCanvassController extends Controller
             $new_aoc->member_4 = $request->member_4;
             $new_aoc->technical_resource_person = $request->technical_resource_person;
             $new_aoc->end_user = $request->end_user;
+            $new_aoc->president = $request->president;
             $new_aoc->procurement_office_rep = $request->procurement_office_rep;
             $new_aoc->added_by = Auth::user()->id;
             $new_aoc->save();

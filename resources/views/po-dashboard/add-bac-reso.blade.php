@@ -25,15 +25,6 @@
             </select>
         </div>
 
-        <div class="mb-3">
-            <label for="type" class="form-label">BAC Resolution Type</label>
-            <select name="type" id="type" class="form-select" aria-label="Select BAC resolution type">
-                <option value="0" disabled selected>Select BAC resolution type</option>
-                <option value="BY_LOT">By lot</option>
-                <option value="BY_ITEM">By item</option>
-            </select>
-        </div>
-
         <div class="text-end">
             <button type="submit" class="btn btn-primary">
                 Generate <em class="bi bi-chevron-double-right"></em>

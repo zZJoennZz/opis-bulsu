@@ -192,6 +192,7 @@
         await axios.post(`{{ route('new-pr.perform') }}`, frmData)
             .then(res => {
                 window.location.href = `{{ route('pr-list.show') }}`;
+                // console.log(res)
             })
             .catch(err => {
                 if (err.name && err.name === 'AxiosError') {

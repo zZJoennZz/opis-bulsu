@@ -39,6 +39,11 @@ use App\Http\Controllers\AbstractOfCanvassController;
 |
 */
 
+//
+Route::get('/test', function () {
+    return view('test');
+});
+
 //ONLY AVAILABLE TO PUBLIC
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [AuthController::class, 'show'])->name('login');
@@ -206,6 +211,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/company-profiles/{company_id?}', [CompanyController::class, 'single_api'])->name('company.single.api');
     Route::put('/company-profiles/{company_id?}', [CompanyController::class, 'update'])->name('company.update');
     Route::delete('/company-profiles/{company_id?}', [CompanyController::class, 'toggleDelete'])->name('company.delete');
+    Route::get('/company-profiles/bac-reso/{company_id?}', [CompanyController::class, 'get_company_by_bac_reso'])->name('company-bac.get');
 
     //price quotations
     Route::get('/quotations', [QuotationController::class, 'all'])->name('quotation.all');
@@ -232,7 +238,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::delete('/bac-reso/{bac_reso_item_id?}', [BacResoController::class, 'remove_bac_reso_item'])->name('bac-reso.delete');
     Route::delete('/bac-reso/delete-by-lot/del', [BacResoController::class, 'remove_items_by_lot'])->name('bac-reso.delete-batch');
     Route::put('/bac-reso/complete', [BacResoController::class, 'complete_bac_reso'])->name('bac-reso.complete');
-    Route::get('/bac-reso/single/{bac_reso_id?}', [BacResoController::class, 'get_single'])->name('bac-reso.by-id');
+    Route::get('/bac-reso/single/{bac_reso_id?}/{company_id?}', [BacResoController::class, 'get_single'])->name('bac-reso.by-id');
 
     //purchase order
     Route::get('/purchase-order', [PurchaseOrderController::class, 'get_all'])->name('po.all');

@@ -112,6 +112,7 @@ class PurchaseRequestController extends Controller
 
     public function new_submission(Request $request)
     {
+        // return $request->all();
         $request->validate([
             'id' => 'required|min:3'
         ], [
@@ -139,9 +140,41 @@ class PurchaseRequestController extends Controller
 
         DB::beginTransaction();
         if ($is_ppmp_valid_for_pr) {
+            //PR NUMBER BUILDER
+            // $source_of_fund = ProProManPlan::where('id', '=', $ppmp_id[0])->with(['source_of_fund'])->first();
+            // $latest_pr = PurchaseRequest::with(['pr_items.ppmp'])->whereHas('pr_items.ppmp.source_of_fund', function ($builder) use ($source_of_fund) {
+            //     $builder->where('id', '=', $source_of_fund->source_of_fund->id);
+            // })->orderBy('id', 'desc')->where('year', '=', getPpmpYear())->first();
+            // $pr_num_ctr = $latest_pr === null ? 1 : intval(substr($latest_pr->pr_number, 10, 4)) + 1;
+            // $ctr_zero = "0000";
+            // $pr_number = substr($source_of_fund->source_of_fund->source_of_fund, 0, 1) . '-' . getPpmpYear() . '-' . date('m', strtotime($source_of_fund->created_at)) . '-' . substr($ctr_zero, strlen($pr_num_ctr)) . $pr_num_ctr;
+
+            $source_of_fund = ProProManPlan::where('id', $ppmp_id[0])
+                ->with('source_of_fund')
+                ->first();
+
+            $latest_pr = PurchaseRequest::with(['pr_items.ppmp'])
+                ->whereHas('pr_items.ppmp.source_of_fund', function ($builder) use ($source_of_fund) {
+                    $builder->where('id', '=', $source_of_fund->source_of_fund->id);
+                })
+                ->where('year', getPpmpYear())
+                ->latest()
+                ->first();
+
+            $pr_num_ctr = $latest_pr === null ? 1 : intval(substr($latest_pr->pr_number, 10, 4)) + 1;
+
+            $pr_number = sprintf(
+                '%s-%s-%s-%s%s',
+                substr($source_of_fund->source_of_fund->source_of_fund, 0, 1),
+                getPpmpYear(),
+                date('m'),
+                str_pad($pr_num_ctr, 4, '0', STR_PAD_LEFT),
+                ''
+            );
+
             $new_purchase_request = new PurchaseRequest();
             $new_purchase_request->year = $user->ppmp_year;
-            $new_purchase_request->pr_number = 1;
+            $new_purchase_request->pr_number = $pr_number;
             $new_purchase_request->purpose = $request->purpose;
             $new_purchase_request->is_draft = 0;
             $new_purchase_request->is_approve = 1;
@@ -149,11 +182,6 @@ class PurchaseRequestController extends Controller
             $new_purchase_request->branches_id = $user->branches_id;
             $new_purchase_request->requested_by = $user->id;
             $new_purchase_request->save();
-
-            $pr_num_hash = "PR" . crc32($new_purchase_request->id);
-            $store_pr_num = PurchaseRequest::find($new_purchase_request->id);
-            $store_pr_num->pr_number = $pr_num_hash;
-            $store_pr_num->save();
 
             foreach ($ppmp_id as $ppmp) {
                 $pr_item = new PurchaseRequestItem();

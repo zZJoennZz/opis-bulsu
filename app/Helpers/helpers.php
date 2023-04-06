@@ -96,15 +96,18 @@ if (!function_exists('translateToWords')) {
         $num = (int) $num;
         $words = array();
         $list1 = array(
-            '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven',
-            'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
+            '', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven',
+            'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'
         );
-        $list2 = array('', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'hundred');
+
+        $list2 = array('', 'Ten', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety', 'Hundred');
+
         $list3 = array(
-            '', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion',
-            'octillion', 'nonillion', 'decillion', 'undecillion', 'duodecillion', 'tredecillion', 'quattuordecillion',
-            'quindecillion', 'sexdecillion', 'septendecillion', 'octodecillion', 'novemdecillion', 'vigintillion'
+            '', 'Thousand', 'Million', 'Billion', 'Trillion', 'Quadrillion', 'Quintillion', 'Sextillion', 'Septillion',
+            'Octillion', 'Nonillion', 'Decillion', 'Undecillion', 'Duodecillion', 'Tredecillion', 'Quattuordecillion',
+            'Quindecillion', 'Sexdecillion', 'Septendecillion', 'Octodecillion', 'Novemdecillion', 'Vigintillion'
         );
+
         $num_length = strlen($num);
         $levels = (int) (($num_length + 2) / 3);
         $max_length = $levels * 3;
@@ -113,7 +116,7 @@ if (!function_exists('translateToWords')) {
         for ($i = 0; $i < count($num_levels); $i++) {
             $levels--;
             $hundreds = (int) ($num_levels[$i] / 100);
-            $hundreds = ($hundreds ? ' ' . $list1[$hundreds] . ' hundred' . ' ' : '');
+            $hundreds = ($hundreds ? ' ' . $list1[$hundreds] . ' Hundred' . ' ' : '');
             $tens = (int) ($num_levels[$i] % 100);
             $singles = '';
             if ($tens < 20) {
@@ -130,7 +133,7 @@ if (!function_exists('translateToWords')) {
         if ($commas > 1) {
             $commas = $commas - 1;
         }
-        return implode(' ', $words) . " pesos";
+        return implode(' ', $words) . " Pesos";
     }
 }
 
