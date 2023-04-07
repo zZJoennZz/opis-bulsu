@@ -22,25 +22,15 @@
             <thead>
                 <tr>
                     <th>PO No.</th>
-                    <th>Supplier</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Contact No.</th>
-                    <th>TIN</th>
                     <th>PO Date</th>
                     <th>MOP</th>
-                    <th>Actions</th>
+                    <th class="text-end">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($po_list as $po)
                     <tr>
                         <td>{{ $po->po_number }}</td>
-                        <td>{{ $po->canvass_abstract->company->name }}</td>
-                        <td>{{ $po->canvass_abstract->company->full_address }}</td>
-                        <td>{{ $po->canvass_abstract->company->email_address }}</td>
-                        <td>{{ $po->canvass_abstract->company->contact_number }}</td>
-                        <td>{{ $po->canvass_abstract->company->tin }}</td>
                         <td>{{ $po->created_at }}</td>
                         <td>{{ $po->mop->name }}</td>
                         <td class="text-end">

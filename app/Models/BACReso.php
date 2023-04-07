@@ -25,4 +25,9 @@ class BACReso extends Model
     {
         return $this->hasMany(BACResoItem::class, 'b_a_c_resos_id', 'id');
     }
+
+    public function purchase_order()
+    {
+        return $this->hasOne(PurchaseOrder::class, 'b_a_c_resos_id', 'id');
+    }
 }

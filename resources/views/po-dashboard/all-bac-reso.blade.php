@@ -41,7 +41,7 @@
                             </div>
                         </td>
                         <td><span class="badge bg-{{ $bac_reso->is_draft ? "secondary" : "primary" }}">{{ $bac_reso->is_draft ? "Draft" : "Done" }}</span></td>
-                        <td><span class="badge bg-primary">{{ $bac_reso->type === "BY_ITEM" ? 'By Item' : 'By Lot' }}</span></td>
+                        <td><span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->type === "BY_ITEM" ? 'By Item' : 'By Lot' }}</span></td>
                         <td>{{ $bac_reso->b_a_c_reso_number }}</td>
                         <td>{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</td>
                         <td>{{ date("Y-m-d h:i A", strtotime($bac_reso->created_at)) }}</td>

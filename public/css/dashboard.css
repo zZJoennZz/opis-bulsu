@@ -1557,6 +1557,11 @@ a {
         overflow: visible;
     }
 
+    @page {
+        size: auto;
+        margin: 0mm 0mm 0mm 0mm;
+    }
+
     .for-print {
         display: block !important;
     }
@@ -1565,11 +1570,13 @@ a {
     .for-print * {
         visibility: visible;
         height: auto;
+        padding: 0;
+        margin: 0;
     }
 
     .for-q-print {
         display: block !important;
-        width: 95% !important;
+        width: 100% !important;
         margin: auto;
     }
 

@@ -284,12 +284,10 @@ class PPMPController extends Controller
     public function update_ppmp(Request $request, $ppmp_id)
     {
         $request->validate([
-            'source_of_funds_id' => 'required|numeric|min:1',
             'item_purposes_id' => 'required|numeric|min:1',
             'estimated_budget' => 'required|numeric',
         ]);
         $user = Auth::user();
-        $source_of_funds_id = $request->source_of_funds_id;
         $item_purposes_id = $request->item_purposes_id;
         $estimated_budget = $request->estimated_budget;
         $is_priority = $request->is_priority === "yes" ? 1 : 0;
@@ -333,9 +331,6 @@ class PPMPController extends Controller
         ];
 
         $summaryLog = [];
-        if (intval($oldState["source_of_funds_id"]) !== intval($newState["source_of_funds_id"])) {
-            array_push($summaryLog, "Source of fund was changed from " . SourceOfFund::find($oldState["source_of_funds_id"])->source_of_fund . " to " . SourceOfFund::find($newState["source_of_funds_id"])->source_of_fund . ".");
-        }
         if (intval($oldState["item_purposes_id"]) !== intval($newState["item_purposes_id"])) {
             array_push($summaryLog, "Item purpose was changed from " . ItemPurpose::find($oldState["item_purposes_id"])->description . " to " . ItemPurpose::find($newState["item_purposes_id"])->description . ".");
         }
@@ -381,7 +376,6 @@ class PPMPController extends Controller
 
         DB::beginTransaction();
         try {
-            $ppmpRecord->source_of_funds_id = $source_of_funds_id;
             $ppmpRecord->item_purposes_id = $item_purposes_id;
             $ppmpRecord->estimated_budget = $estimated_budget;
             $ppmpRecord->is_priority = $is_priority;

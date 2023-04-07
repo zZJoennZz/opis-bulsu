@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('member_4');
             $table->string('technical_resource_person');
             $table->string('end_user');
+            $table->string('president');
             $table->string('procurement_office_rep');
             $table->unsignedBigInteger('added_by');
             $table->boolean('is_delete')->default(0);

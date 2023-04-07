@@ -53,8 +53,6 @@
                                     </thead>
                                     <tbody>
                                         @php($grandTotalAmt = 0)
-                                        @php($grandTotalQty = 0)
-                                        @php($grandPriceCat = 0)
                                         @foreach ($consolidated_records as $record => $ppmp)
                                             <tr>
                                                 <td>{{ json_decode($record)->description }}</td>
@@ -65,12 +63,10 @@
                                                         @php($totalQty += $rec->milestone_value)
                                                     @endforeach
                                                     {{ $totalQty }}
-                                                    @php($grandTotalQty += $totalQty)
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="float-start">₱</div>
                                                     {{ number_format(json_decode($record)->price_catalogue, 2) }}
-                                                    @php($grandPriceCat += json_decode($record)->price_catalogue)
                                                 </td>
                                                 <td class="text-end">
                                                     <div class="float-start">₱</div>
@@ -84,12 +80,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr class="fs-4 fw-bold">
-                                            <td class="text-end" colspan="2">Grand Total</td>
-                                            <td class="text-center">{{ $grandTotalQty }}</td>
-                                            <td class="text-end">
-                                                <div class="float-start">₱</div>
-                                                {{ number_format($grandPriceCat, 2) }}
-                                            </td>
+                                            <td class="text-end" colspan="4">Grand Total</td>
                                             <td class="text-end">
                                                 <div class="float-start">₱</div>
                                                 {{ number_format($grandTotalAmt, 2) }}

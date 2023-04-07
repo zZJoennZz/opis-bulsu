@@ -22,6 +22,7 @@ class AbstractOfCanvass extends Model
         'technical_resource_person',
         'end_user',
         'procurement_office_rep',
+        'president',
         'added_by',
         'is_delete',
     ];

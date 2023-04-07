@@ -43,7 +43,7 @@
     </div>
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     @if ($bac_reso->is_draft === 1)
-        @if ($bac_reso->type === "BY_ITEM")
+        @if ($bac_reso->abstract_of_canvass->type === "BY_ITEM")
             <div class="mb-3 mt-3">
                 <div class="fs-4 fw-bold text-secondary">Select supplier / dealer per item</div>
             </div>
@@ -52,7 +52,7 @@
                     <caption>
                         <div class="border p-2 rounded-4 border-secondary">
                             <div class="float-end">
-                                <span class="badge bg-primary text-uppercase">{{ $bac_reso->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
+                                <span class="badge bg-primary text-uppercase">{{ $bac_reso->abstract_of_canvass->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
                             </div>
                             <div class="mb-1">
                                 <small class="text-uppercase fw-bold text-secondary">Information:</small>
@@ -147,12 +147,12 @@
                     </caption>
                     <thead class="text-uppercase text-center align-middle">
                         <tr>
-                            <th scope="col" rowspan="3">Item</th>
+                            <th scope="col" style="min-width: 400px;" rowspan="3">Item</th>
                             <th scope="col" style="width: 80px;" rowspan="3">Unit</th>
                             <th scope="col" style="width: 80px;" rowspan="3">Qty.</th>
                             <th scope="col" style="width: 130px;" rowspan="3">Unit Price</th>
                             <th scope="col" style="width: 130px;" rowspan="3">Extended Amount</th>
-                            <th scope="col" colspan="{{ count($companies) * 3 }}">Name of the Bidders / Dealers</th>
+                            <th scope="col" style="min-width: 50%;" colspan="{{ count($companies) * 3 }}">Name of the Bidders / Dealers</th>
                         </tr>
                         <tr>
                             @foreach ($companies as $c)
@@ -219,17 +219,18 @@
                             <td colspan="5" class="text-end fw-bold text-uppercase">Select supplier</td>
                             @foreach ($companies as $c)
                                 @php
-                                    $itemsFound = 1;
+                                    $itemsFound = 0;
                                 @endphp
                                 @foreach ($c->quotations as $q)
                                     @foreach ($q->items as $i)
-                                        @if ($i->pr_item->id === $item->id)
-                                            @php
+                                        @php
+                                            if ($i->pr_item->pr->id === $bac_reso->abstract_of_canvass->pr->id) {
                                                 $itemsFound += 1;
-                                            @endphp
-                                        @endif
+                                            }
+                                        @endphp
                                     @endforeach
                                 @endforeach
+                                {{-- {{ $itemsFound . '|' . count($bac_reso->abstract_of_canvass->pr->pr_items) }} --}}
                                 @if ($itemsFound !== count($bac_reso->abstract_of_canvass->pr->pr_items))
                                     <td class="text-center" colspan="3" style="font-size: 11px;">
                                         Does not meet 'by lot' requirement.
@@ -270,13 +271,13 @@
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="chair" class="form-label">Chair:</label>
-                        <input required type="text" class="form-control" id="chair" name="chair" value="{{ $bac_reso->chair }}">
+                        <input required type="text" class="form-control" id="chair" name="chair" value="{{ $bac_reso->abstract_of_canvass->bac_chairman }}">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="vice_chair" class="form-label">Vice Chair:</label>
-                        <input required type="text" class="form-control" id="vice_chair" name="vice_chair" value="{{ $bac_reso->chair }}">
+                        <input required type="text" class="form-control" id="vice_chair" name="vice_chair" value="{{ $bac_reso->abstract_of_canvass->vice_chairman }}">
                     </div>
                 </div>
             </div>
@@ -284,13 +285,13 @@
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="member_1" class="form-label">Member:</label>
-                        <input required type="text" class="form-control" id="member_1" name="member_1" value="{{ $bac_reso->member_1 }}">
+                        <input required type="text" class="form-control" id="member_1" name="member_1" value="{{ $bac_reso->abstract_of_canvass->member_1 }}">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="member_2" class="form-label">Member:</label>
-                        <input required type="text" class="form-control" id="member_2" name="member_2" value="{{ $bac_reso->member_2 }}">
+                        <input required type="text" class="form-control" id="member_2" name="member_2" value="{{ $bac_reso->abstract_of_canvass->member_2 }}">
                     </div>
                 </div>
             </div>
@@ -298,13 +299,13 @@
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="member_3" class="form-label">Member:</label>
-                        <input required type="text" class="form-control" id="member_3" name="member_3" value="{{ $bac_reso->member_3 }}">
+                        <input required type="text" class="form-control" id="member_3" name="member_3" value="{{ $bac_reso->abstract_of_canvass->member_3 }}">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="member_4" class="form-label">Member:</label>
-                        <input required type="text" class="form-control" id="member_4" name="member_4" value="{{ $bac_reso->member_4 }}">
+                        <input required type="text" class="form-control" id="member_4" name="member_4" value="{{ $bac_reso->abstract_of_canvass->member_4 }}">
                     </div>
                 </div>
             </div>
@@ -312,13 +313,13 @@
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="end_user" class="form-label">End User:</label>
-                        <input required type="text" class="form-control" id="end_user" name="end_user" value="{{ $bac_reso->end_user }}">
+                        <input required type="text" class="form-control" id="end_user" name="end_user" value="{{ $bac_reso->abstract_of_canvass->end_user }}">
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="technical_resource_person" class="form-label">Technical Resource Person:</label>
-                        <input required type="text" class="form-control" id="technical_resource_person" name="technical_resource_person" value="{{ $bac_reso->technical_resource_person }}">
+                        <input required type="text" class="form-control" id="technical_resource_person" name="technical_resource_person" value="{{ $bac_reso->abstract_of_canvass->technical_resource_person }}">
                     </div>
                 </div>
             </div>
@@ -326,7 +327,7 @@
                 <div class="col-12">
                     <div>
                         <label for="president" class="form-label">President:</label>
-                        <input required type="text" class="form-control" id="president" name="president" value="{{ $bac_reso->president }}">
+                        <input required type="text" class="form-control" id="president" name="president" value="{{ $bac_reso->abstract_of_canvass->president }}">
                     </div>
                 </div>
             </div>

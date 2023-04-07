@@ -13,15 +13,22 @@
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     
-    <div class="mb-1">
-        <strong>Purpose:</strong> {{ $aoc[0]->purpose }}
-    </div>
-    <div class="mb-3">
-        <strong>ABC:</strong> ₱ {{ number_format($aoc[0]->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($aoc[0]->abc) }}</span> )
-    </div>
     <div class="table-responsive">
-        <table class="table table-sm table-bordered border-dark caption-top">
-            <caption>PR NUMBER: <span class="badge bg-primary">{{ $aoc[0]->pr->pr_number }}</span></caption>
+        <table class="table table-sm table-bordered caption-top">
+            <caption>
+                <div class="mb-2">
+                    <span class="badge bg-primary text-uppercase">{{ $aoc[0]->type === "BY_ITEM" ? "By Item" : "By Lot" }}</span>
+                </div>
+                <div class="mb-1 border-bottom pb-1 border-secondary">
+                    <strong>PR Number:</strong> <span class="badge bg-primary">{{ $aoc[0]->pr->pr_number }}</span>
+                </div>
+                <div class="mb-1 border-bottom pb-1 border-secondary">
+                    <strong>Purpose:</strong> {{ $aoc[0]->pr->purpose }}
+                </div>
+                <div>
+                    <strong>ABC:</strong> ₱ {{ number_format($aoc[0]->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($aoc[0]->abc) }}</span> )
+                </div>
+            </caption>
             <thead class="text-uppercase text-center align-middle">
                 <tr>
                     <th scope="col" style="width: 50px;" rowspan="3">Item No.</th>
