@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('tin')->nullable();
             $table->string('contact_number')->nullable();
             $table->string('email_address')->nullable();
+            $table->string('philgeps_number')->nullable();
             $table->boolean('is_in_philgeps')->default(0);
             $table->boolean('is_delete')->default(0);
             $table->unsignedBigInteger('added_by');
