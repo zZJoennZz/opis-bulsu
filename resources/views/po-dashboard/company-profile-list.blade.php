@@ -65,6 +65,13 @@
                                                         <span class="text-danger">{{$message}}</span>
                                                     @enderror
                                                 </div>
+                                                <div class="col-sm-12 col-md-6">
+                                                    <label for="philgeps_number" class="col-form-label">Philgeps Number</label>
+                                                    <input type="number" class="form-control" id="philgeps_number" name="philgeps_number" required>
+                                                    @error('philgeps_number')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -124,6 +131,13 @@
                                                         <span class="text-danger">{{$message}}</span>
                                                     @enderror
                                                 </div>
+                                                <div class="col-sm-12 col-md-6">
+                                                    <label for="philgeps_number" class="col-form-label">Philgeps Number</label>
+                                                    <input type="number" class="form-control" id="philgeps_number" name="philgeps_number" required>
+                                                    @error('philgeps_number')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -148,6 +162,7 @@
                                         <th>TIN #</th>
                                         <th>Contact #</th>
                                         <th>Email Address</th>
+                                        <th>Philgeps Number</th>
                                         <th style="width: 5%;"></th>
                                     </tr>
                                 </thead>
@@ -162,6 +177,7 @@
                                             <td>{{ $profile->tin }}</td>
                                             <td>{{ $profile->contact_number }}</td>
                                             <td>{{ $profile->email_address }}</td>
+                                            <td>{{ $profile->philgeps_number }}</td>
                                             <td>
                                                 <div class="d-flex justify-content-center align-items-center w-100">
                                                     <form data-is-delete="{{$profile->is_delete}}" onsubmit="return submitDelete(event, {{ $profile->id }})" method="POST" id="delete-form-{{$profile->id}}">
