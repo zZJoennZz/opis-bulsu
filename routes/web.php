@@ -211,6 +211,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/company-profiles/{company_id?}', [CompanyController::class, 'single_api'])->name('company.single.api');
     Route::put('/company-profiles/{company_id?}', [CompanyController::class, 'update'])->name('company.update');
     Route::delete('/company-profiles/{company_id?}', [CompanyController::class, 'toggleDelete'])->name('company.delete');
+    Route::get('/company-profiles/update/{id}/{isChecked}', [CompanyController::class, 'status_change'])->name('status.change');
     Route::get('/company-profiles/bac-reso/{company_id?}', [CompanyController::class, 'get_company_by_bac_reso'])->name('company-bac.get');
 
     //price quotations

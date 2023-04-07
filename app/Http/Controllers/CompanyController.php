@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Company;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Throwable;
 
 class CompanyController extends Controller
@@ -18,19 +20,37 @@ class CompanyController extends Controller
 
     public function add(Request $request)
     {
-        $request->validate([
-            'name' => 'required|min:3|max:255',
-            'address' => 'min:5|max:255',
-            'tin' => 'required|min:9|max:20',
-            'contact_number' => 'required',
-            'email_address' => 'required|email',
+        // $request->validate([
+        //     'name' => 'required|min:3|max:255',
+        //     'full_address' => 'required|min:5|max:255',
+        //     'tin' => 'required|min:9|max:20',
+        //     'contact_number' => 'required',
+        //     'email_address' => 'required|email',
+        // ], [
+        //     'tin.min' => 'Please enter a valid TIN number.',
+        //     'tin.max' => 'Please enter a valid TIN number.',
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            'name' => ['required','min:3','max:255'],
+            'full_address' => ['required','min:5', 'max:255'],
+            'tin' => ['required' ,' min:9' , 'max:20', 'unique:companies,tin'],
+            'contact_number' => ['required','regex:/^(02|\+63)[0-9]{7,10}$|^(\+639|09)[0-9]{9}$|^([0-9]{2,4}-)?[0-9]{6,8}$/', 'unique:companies,contact_number'],
+            'email_address' => ['required', 'email', 'unique:companies,email_address'],
         ], [
             'tin.min' => 'Please enter a valid TIN number.',
             'tin.max' => 'Please enter a valid TIN number.',
         ]);
 
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return redirect()->back()->withErrors($errors);
+        }
+
+
+
         DB::beginTransaction();
-        try {
+        try {            
             $new_company_profile = new Company();
             $new_company_profile->name = $request->name;
             $new_company_profile->full_address = $request->full_address;
@@ -41,11 +61,10 @@ class CompanyController extends Controller
             $new_company_profile->added_by = Auth::user()->id;
             $new_company_profile->save();
             DB::commit();
-
             return redirect()->back()->with('success', 'Successfully saved ' . $new_company_profile->name);
+
         } catch (Throwable $e) {
             DB::rollBack();
-
             return redirect()->back()->withErrors(['Something went wrong. ' . $request->name . ' is not saved. Refresh the page and try again. If the problem persists, please report to website administrator.']);
         }
 
@@ -74,6 +93,33 @@ class CompanyController extends Controller
         DB::beginTransaction();
         try {
             $company_profile = Company::find($company_id);
+            $validator = Validator::make($request->all(), [
+                'name' => ['required','min:3','max:255'],
+                'full_address' => ['required','min:5', 'max:255'],
+                'tin' => [
+                    'required' ,
+                    'min:9' , 
+                    'max:20', 
+                    Rule::unique('companies', 'tin')->ignore($company_profile)],
+                'contact_number' => [
+                    'required',
+                    'regex:/^(02|\+63)[0-9]{7,10}$|^(\+639|09)[0-9]{9}$|^([0-9]{2,4}-)?[0-9]{6,8}$/',
+                    Rule::unique('companies', 'contact_number')->ignore($company_profile)],
+                'email_address' => [
+                    'required',
+                     'email',
+                    Rule::unique('companies', 'email_address')->ignore($company_profile)],
+            ], [
+                'tin.min' => 'Please enter a valid TIN number.',
+                'tin.max' => 'Please enter a valid TIN number.',
+            ]);
+    
+            if ($validator->fails()) {
+                $errors = $validator->errors();
+                return redirect()->back()->withErrors($errors);
+            }
+
+
             $company_profile->name = $request->name;
             $company_profile->full_address = $request->full_address;
             $company_profile->tin = $request->tin;
@@ -101,6 +147,32 @@ class CompanyController extends Controller
             DB::rollBack();
             return redirect()->back()->withErrors(['Something went wrong. Updates failed to process.']);
         }
+    }
+
+    public function status_change($id, $isChecked){
+
+        DB::beginTransaction();
+        try {
+            $company = Company::find($id);
+            $company->is_in_philgeps = $isChecked;
+            $company->save();
+
+            DB::commit();
+            back()
+                ->with('success', 'User status successfully updated.');
+            return response()->json([
+                "success" => true
+            ], 200);
+
+        } catch (Throwable $e) {
+            DB::rollBack();
+            back()
+                ->withErrors(['Something went wrong! User changes is not saved.']);
+            return response()->json([
+                "success" => false
+            ], 400);
+        }
+
     }
 
     public function get_company_by_bac_reso($bac_reso_id)

@@ -44,16 +44,26 @@
                                                 <div class="mb-3 col-12">
                                                     <label for="tin" class="col-form-label">TIN #</label>
                                                     <input type="text" class="form-control" id="tin" name="tin" required>
+                                                    @error('tin')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="contact_number" class="col-form-label">Contact Number</label>
                                                     <input type="text" class="form-control" id="contact_number" name="contact_number" required>
+                                                    <span class="text-danger">Landline number valid format: 0XX-XXXXXX</span>
+                                                    @error('contact_number')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="email_address" class="col-form-label">Email Address</label>
                                                     <input type="email" class="form-control" id="email_address" name="email_address" required>
+                                                    @error('email_address')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -93,16 +103,26 @@
                                                 <div class="mb-3 col-12">
                                                     <label for="edit_tin" class="col-form-label">TIN #</label>
                                                     <input type="text" class="form-control" id="edit_tin" name="tin" required>
+                                                    @error('tin')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="edit_contact_number" class="col-form-label">Contact Number</label>
                                                     <input type="text" class="form-control" id="edit_contact_number" name="contact_number" required>
+                                                    <span class="text-danger">Landline number valid format: 0XX-XXXXXX</span>
+                                                    @error('contact_number')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="edit_email_address" class="col-form-label">Email Address</label>
                                                     <input type="email" class="form-control" id="edit_email_address" name="email_address" required>
+                                                    @error('email_address')
+                                                        <span class="text-danger">{{$message}}</span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -122,6 +142,7 @@
                                 <caption>List of company profiles</caption>
                                 <thead>
                                     <tr>
+                                        <th style="width: 5%;"></th>
                                         <th style="width: 25%;">Company Name</th>
                                         <th style="width: 25%;">Address</th>
                                         <th>TIN #</th>
@@ -133,6 +154,9 @@
                                 <tbody>
                                     @foreach ($company_profiles as $profile)
                                         <tr>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="is_in_philgeps" id="is_in_philgeps" value="{{$profile->is_in_philgeps}}" @if($profile->is_in_philgeps == 1) checked @endif onclick="status_change('{{$profile->id}}', this.checked)">
+                                            </td>
                                             <td class="fs-5 fw-bold">{{ $profile->name }}</td>
                                             <td>{{ $profile->full_address }}</td>
                                             <td>{{ $profile->tin }}</td>
@@ -205,6 +229,35 @@
         event.preventDefault();
         return false;
     }
+
+    async function status_change(id, checked){
+        let confirmStatus = confirm("Are you sure to change the status?");
+        if (confirmStatus) {
+
+        var isChecked = checked ? 1 : 0;
+        var url = '/company-profiles/update/'+ id +'/'+ isChecked;
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: {
+                '_token': '{{ csrf_token() }}',
+                'isChecked': isChecked
+            },
+            success: function(response) {
+                if (response !== '') {
+                    console.log(response);
+                }
+            },
+            error: function(xhr) {
+                console.log('Error:', xhr);
+            }
+        });
+
+        location.reload();
+
+        }
+    }
+
 </script>
 @include('layout/datatable', ['tableId' => 'company-profile-table'])
 @include('layout/footer')
