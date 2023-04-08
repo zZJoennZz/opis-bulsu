@@ -64,6 +64,34 @@ class AbstractOfCanvassController extends Controller
             ->with('companies', $companies);
     }
 
+    public function print($id)
+    {
+        $aoc = AbstractOfCanvass::where('id', '=', $id)
+            ->with(['pr.pr_items.ppmp.item_detail.unit', 'pr.pr_items.ppmp.milestones'])
+            ->where('is_delete', '=', 0)
+            ->get();
+
+        if ($aoc[0]->type === "BY_LOT") {
+            $companies = Company::whereHas('quotations.items.pr_item.pr', function ($builder) use ($aoc) {
+                $builder->where('id', '=', $aoc[0]->pr->id);
+            })
+                ->has('quotations.items', '=', count($aoc[0]->pr->pr_items))
+                ->with(['quotations.items.pr_item.pr', 'quotations.items.pr_item.ppmp.item_detail.unit'])
+                ->get();
+        } else {
+            $companies = Company::whereHas('quotations.items.pr_item.pr', function ($builder) use ($aoc) {
+                $builder->where('id', '=', $aoc[0]->pr->id);
+            })
+                ->with(['quotations.items.pr_item.pr', 'quotations.items.pr_item.ppmp.item_detail.unit'])
+                ->get();
+        }
+
+        // return $companies;
+        return view('po-dashboard/print-abstract-of-canvass')
+            ->with('aoc', $aoc)
+            ->with('companies', $companies);
+    }
+
     public function save(Request $request)
     {
         // $request->validate([

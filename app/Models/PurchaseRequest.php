@@ -12,6 +12,8 @@ class PurchaseRequest extends Model
         'pr_number',
         'year',
         'purpose',
+        'office',
+        'responsibility_center_code',
         'is_draft',
         'is_approve',
         'is_delete',

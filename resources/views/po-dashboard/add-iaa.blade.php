@@ -34,7 +34,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label for="branch" class="form-label">Branch:</label>
                     <select id="branch" name="branch" class="form-select" aria-label="Select branch">
                         <option disabled selected>Select branch</option>
@@ -46,7 +46,7 @@
                 <div class="mb-3">
                     <label for="rcc" class="form-label">Responsibility Center Code:</label>
                     <input type="text" class="form-control" id="rcc" name="rcc" placeholder="Please enter responsibility center code here.">
-                </div>
+                </div> --}}
                 <div>
                     <button class="btn btn-primary" type="submit"><em class="bi bi-save2"></em> Save Report</button>
                     <button class="btn btn-danger float-end" type="submit"><em class="bi bi-x-lg"></em> Cancel</button>

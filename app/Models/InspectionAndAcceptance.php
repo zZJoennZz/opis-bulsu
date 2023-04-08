@@ -11,7 +11,6 @@ class InspectionAndAcceptance extends Model
     protected $fillable = [
         'iar_no',
         'purchase_orders_id',
-        'branches_id',
         'iar_date',
         'responsibility_center_code',
         'is_delete',
@@ -21,11 +20,6 @@ class InspectionAndAcceptance extends Model
     public function user()
     {
         return $this->hasOne(User::class, 'id', 'added_by');
-    }
-
-    public function branch()
-    {
-        return $this->hasOne(Branch::class, 'id', 'branches_id');
     }
 
     public function purchase_order()

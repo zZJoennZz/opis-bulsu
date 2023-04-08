@@ -12,6 +12,8 @@
     @endphp
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
+
+    <a href="{{ route('aoc.print') }}/{{$aoc[0]->id}}" target="_blank" class="btn btn-secondary btn-sm">Print</a>
     
     <div class="table-responsive">
         <table class="table table-sm table-bordered caption-top">

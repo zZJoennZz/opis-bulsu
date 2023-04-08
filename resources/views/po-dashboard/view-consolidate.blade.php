@@ -35,7 +35,7 @@
                                 @csrf
                                 <div class="btn-group" role="toolbar" aria-label="Consolidated PPMP Records Tools">
                                     <button onclick="window.print()" type="button" class="btn btn-outline-success"><em class="bi bi-printer-fill"></em> Print</button>
-                                    <button onclick="printConsolidated()" type="button" class="btn btn-outline-success"><em class="bi bi-file-earmark-pdf-fill"></em> Save as PDF</button>
+                                    <button onclick="printDoc()" type="button" class="btn btn-outline-success"><em class="bi bi-file-earmark-pdf-fill"></em> Save as PDF</button>
                                     <button type="submit" class="btn btn-outline-danger"><em class="bi bi-arrow-clockwise"></em> Consolidate Pending</button>
                                 </div>
                             </form>

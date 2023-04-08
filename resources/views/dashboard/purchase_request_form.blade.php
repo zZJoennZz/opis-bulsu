@@ -74,6 +74,14 @@
                                             <label for="purpose" class="form-label">Purpose</label>
                                             <input type="text" class="form-control" name="purpose" id="purpose">
                                         </div>
+                                        <div class="mb-3">
+                                            <label for="office" class="form-label">Office/Section</label>
+                                            <input type="text" class="form-control" name="office" id="office">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="responsibility_center_code" class="form-label">Responsibility Center Code</label>
+                                            <input type="text" class="form-control" name="responsibility_center_code" id="responsibility_center_code">
+                                        </div>
                                         <div>
                                             <button id="submitBtn" disabled class="btn btn-primary"><em class="bi bi-file-earmark-fill"></em> Submit Purchase Request</button>
                                         </div>
@@ -124,12 +132,14 @@
 </div>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
 @include('layout/datatable', ['tableId' => 'available-items-table'])
-<script src="{{asset('build/assets/app.b487754a.js')}}"></script>
+@vite('resources/js/app.js')
 <script>
     let masterList;
     let allItems;
     let selectedItems = [];
     let prPurpose = '';
+    let prOffice = '';
+    let prResCenCode = '';
 
     function addToList(id) {
         selectedItems.push(id);
@@ -186,9 +196,19 @@
             alert('Please enter the purpose of this PR.');
             return;
         }
+        if (prOffice.trim() === '' || prOffice === undefined || prOffice === null) {
+            alert('Please enter the office/section of this PR.');
+            return;
+        }
+        if (prResCenCode.trim() === '' || prResCenCode === undefined || prResCenCode === null) {
+            alert('Please enter the responsibility center code of this PR.');
+            return;
+        }
         let frmData = new FormData();
         frmData.append('id', JSON.stringify(selectedItems));
         frmData.append('purpose', prPurpose);
+        frmData.append('office', prOffice);
+        frmData.append('responsibility_center_code', prResCenCode);
         await axios.post(`{{ route('new-pr.perform') }}`, frmData)
             .then(res => {
                 window.location.href = `{{ route('pr-list.show') }}`;
@@ -205,6 +225,12 @@
     $(document).ready(async function() {
         $("#purpose").on('change', function (e) {
             prPurpose = e.target.value;
+        })
+        $("#office").on('change', function (e) {
+            prOffice = e.target.value;
+        })
+        $("#responsibility_center_code").on('change', function (e) {
+            prResCenCode = e.target.value;
         })
         await axios.get(`{{ route('pr-items.show') }}`)
             .then(res => {

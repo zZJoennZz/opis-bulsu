@@ -228,6 +228,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/abstract-of-canvass/add', [AbstractOfCanvassController::class, 'add'])->name('aoc.add');
     Route::post('/abstract-of-canvass/save', [AbstractOfCanvassController::class, 'save'])->name('aoc.perform');
     Route::get('/abstract-of-canvass/{id?}', [AbstractOfCanvassController::class, 'single'])->name('aoc.single');
+    Route::get('/abstract-of-canvass/print/{id?}', [AbstractOfCanvassController::class, 'print'])->name('aoc.print');
 
     //BAC reso
     Route::get('/bac-reso', [BacResoController::class, 'all'])->name('bac-reso.all');

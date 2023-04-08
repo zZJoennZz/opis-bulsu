@@ -30,9 +30,9 @@
             <tr>
                 <td>{{ $i->iar_no }}</td>
                 <td>{{ $i->iar_date }}</td>
-                <td>{{ $i->purchase_order->canvass_abstract->company->name }}</td>
+                <td>{{ $i->purchase_order->company->name }}</td>
                 <td>{{ $i->purchase_order->po_number }}</td>
-                <td class="text-end"><a href="{{ route('ia.single') }}/{{ $i->id }}" class="btn btn-primary"><em class="bi bi-printer-fill"></em></a></td>
+                <td class="text-end"><a target="_blank" href="{{ route('ia.single') }}/{{ $i->id }}" class="btn btn-primary"><em class="bi bi-printer-fill"></em></a></td>
             </tr>
         @endforeach
     </table>

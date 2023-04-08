@@ -14,20 +14,17 @@ class InspectionAndAcceptanceController extends Controller
     //
     public function add_new()
     {
-        $po_list = PurchaseOrder::with(['canvass_abstract.company', 'mop'])
-            ->whereHas('canvass_abstract', function ($query) {
+        $po_list = PurchaseOrder::with(['bac_reso', 'mop', 'mode_of_procurement'])
+            ->whereHas('bac_reso', function ($query) {
                 $query->where('year', '=', Auth::user()->ppmp_year);
             })
             ->doesntHave('iaa')
             ->where('is_delete', '=', 0)
             ->get();
 
-        $branches = Branch::all();
-
         // return $po_list;
         return view('po-dashboard/add-iaa')
-            ->with('po_list', $po_list)
-            ->with('branches', $branches);
+            ->with('po_list', $po_list);
     }
 
     public function post_new(Request $request)
@@ -36,8 +33,6 @@ class InspectionAndAcceptanceController extends Controller
             'iar_number' => 'required',
             'iar_date' => 'required|date',
             'purchase_order' => 'required|exists:purchase_orders,id',
-            'branch' => 'required|exists:branches,id',
-            'rcc' => 'required',
         ]);
 
         DB::beginTransaction();
@@ -45,7 +40,7 @@ class InspectionAndAcceptanceController extends Controller
             $new_iaa = new InspectionAndAcceptance();
             $new_iaa->iar_no = $request->iar_number;
             $new_iaa->purchase_orders_id = $request->purchase_order;
-            $new_iaa->branches_id = $request->branch;
+            // $new_iaa->branches_id = $request->branch;
             $new_iaa->iar_date = $request->iar_date;
             $new_iaa->responsibility_center_code = $request->rcc;
             $new_iaa->added_by = Auth::user()->id;
@@ -61,7 +56,7 @@ class InspectionAndAcceptanceController extends Controller
 
     public function all()
     {
-        $iaa = InspectionAndAcceptance::with(['branch', 'purchase_order.canvass_abstract.company'])->whereHas('purchase_order.canvass_abstract', function ($query) {
+        $iaa = InspectionAndAcceptance::with(['purchase_order'])->whereHas('purchase_order.bac_reso.abstract_of_canvass', function ($query) {
             $query->where('year', '=', Auth::user()->ppmp_year);
         })->get();
 
@@ -72,7 +67,7 @@ class InspectionAndAcceptanceController extends Controller
     public function view_single($ia_id)
     {
         $iaa = InspectionAndAcceptance::where('id', '=', $ia_id)
-            ->with(['branch', 'purchase_order.canvass_abstract.company', 'purchase_order.canvass_abstract.items.quotation_item.pr_item.ppmp.item_detail.unit', 'purchase_order.canvass_abstract.items.quotation_item.pr_item.ppmp.milestones'])
+            ->with(['purchase_order'])
             ->get();
 
         if (count($iaa) === 0) {

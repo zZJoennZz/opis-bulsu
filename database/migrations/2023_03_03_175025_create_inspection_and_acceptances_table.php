@@ -17,15 +17,13 @@ return new class extends Migration
             $table->id();
             $table->string('iar_no')->nullable();
             $table->unsignedBigInteger('purchase_orders_id');
-            $table->unsignedBigInteger('branches_id');
             $table->date('iar_date');
             $table->string('responsibility_center_code');
             $table->boolean('is_delete')->default(0);
             $table->unsignedBigInteger('added_by');
             $table->timestamps();
 
-            $table->foreign('purchase_orders_id')->references('id')->on('purchase_orders');
-            $table->foreign('branches_id')->references('id')->on('branches');
+            $table->foreign('purchase_orders_id')->references('id')->on('purchase_orders');;
             $table->foreign('added_by')->references('id')->on('users');
         });
     }

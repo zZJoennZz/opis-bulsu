@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('pr_number');
             $table->string('year');
+            $table->string('office')->nullable();
+            $table->string('responsibility_center_code')->nullable();
             $table->string('purpose')->nullable();
             $table->boolean('is_draft')->default(1); //tbh, this might not be needed but I'll still leave this on because users might want to save their record but not ready to submit yet
             $table->boolean('is_approve')->default(0);

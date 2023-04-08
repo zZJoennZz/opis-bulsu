@@ -14,6 +14,7 @@
         <style>
             * {
                 font-family: 'Book Antiqua', Times, serif;
+                font-size: 12px;
             }
         </style>
     </head>
@@ -80,12 +81,12 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>1</td>
+                                    <td class="text-center">1</td>
                                     <td>Phlebotomy Kit / Extraction Arm Kit</td>
-                                    <td>Unit</td>
-                                    <td>2</td>
-                                    <td>60,000.00</td>
-                                    <td>120,000.00</td>
+                                    <td class="text-center">Unit</td>
+                                    <td class="text-center">2</td>
+                                    <td class="text-end">60,000.00</td>
+                                    <td class="text-end">120,000.00</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -104,25 +105,83 @@
                                     <td style="border: 0px !important;"></td>
                                     <td style="border: 0px !important;"></td>
                                     <td style="border: 0px !important;"">TOTAL</td>
-                                    <td style="border: 0px !important;">120,000.00</td>
+                                    <td style="border: 0px !important;" class="text-end">120,000.00</td>
                                     <td style="border: 0px !important;"></td>
                                     <td style="border: 0px !important;"></td>
+                                    <td style="border: 0px !important;" class="text-end">-</td>
                                     <td style="border: 0px !important;"></td>
                                     <td style="border: 0px !important;"></td>
+                                    <td style="border: 0px !important;" class="text-end">-</td>
                                     <td style="border: 0px !important;"></td>
                                     <td style="border: 0px !important;"></td>
-                                    <td style="border: 0px !important;"></td>
-                                    <td style="border: 0px !important;"></td>
-                                    <td style="border: 0px !important;"></td>
+                                    <td style="border: 0px !important;" class="text-end">-</td>
                                 </tr>
                             </tfoot>
                         </table>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-12 text-center">
                         We the undersigned hereby certify that the foregoing abstract of canvass is true and correct and that we have reviewed and evaluated the quotations and hereby recommended the following  proposed award:
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-8"><strong>ITEMS:</strong> _____________________________________________________________________________</div>
+                    <div class="col-4"><strong>AWARD IS GIVEN TO:</strong></div>
+
+                    <div class="col-12">
+                        THE PRICE ARE THE LOWEST OBTAINABLE OFFER DURING THE TIME OF CANVASS AND THESE ARE DETERMINED TO BE REASONABLE AND ADVANTAGEOUS TO THE UNIVERSITY.
+                    </div>
+                </div>
+
+                <div class="row text-center container-fluid mb-5">
+                    <div class="col-2 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">BAC Chairman</div>
+                    </div>
+                    
+                    <div class="col-2 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">Vice Chairman</div>
+                    </div>
+                    
+                    <div class="col-2 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">Member</div>
+                    </div>
+
+                    <div class="col-2 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">Member</div>
+                    </div>
+
+                    <div class="col-2 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">Member</div>
+                    </div>
+
+                    <div class="col-2 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">Member</div>
+                    </div>
+                </div>
+
+                <div class="row text-center m-auto w-75">
+                    <div class="col-4 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">Requesting Officer / End-User</div>
+                    </div>
+                    
+                    <div class="col-4 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">Technical Resource Person</div>
+                    </div>
+                    
+                    <div class="col-4 fw-bold">
+                        <div class="border-bottom border-dark w-100">DASDADS</div>
+                        <div class="w-100">Procurement Office's Representative</div>
                     </div>
                 </div>
             </div>
