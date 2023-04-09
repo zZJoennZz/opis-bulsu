@@ -28,8 +28,8 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="companies_id" class="form-label">Company</label>
-                                    <select onchange="get_company_details(event)" id="companies_id" name="companies_id" class="form-select" aria-label="Company name">
-                                        <option selected>Select company</option>
+                                    <select onchange="get_company_details(event)" id="companies_id" name="companies_id" class="form-select" aria-label="Company name" required>
+                                        <option selected value="">Select company</option>
                                         @foreach ($company_profiles as $profile)
                                             <option value="{{$profile->id}}">{{$profile->name}}</option>
                                         @endforeach
