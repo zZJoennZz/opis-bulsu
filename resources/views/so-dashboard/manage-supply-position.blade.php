@@ -114,6 +114,7 @@
 
     <x-slot:additional_script>
         @include('layout/datatable', ['tableId' => 'supplier-position-table' , 'columnId' => '3'])
+        
         <script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
         <script>
             let selectedEndUser = 0;
