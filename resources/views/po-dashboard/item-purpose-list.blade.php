@@ -22,9 +22,6 @@
                         <div class="mb-3">
                             <label for="description" class="form-label">Description</label>
                             <input type="text" class="form-control" id="description" name="description" placeholder="Description">
-                            @error('description')
-                                <span class="text-danger">{{$message}}</span>
-                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
