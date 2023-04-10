@@ -54,9 +54,10 @@
                         <caption class="small text-secondary">Supply Position List</caption>
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th></th>
                                 <th>Position</th>
                                 <th></th>
+                                <th style="disply: none;">Created at</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,6 +75,7 @@
                                             @if($position->is_delete===1) <span class="badge bg-secondary rounded-0 rounded-end d-flex align-items-center">Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$position->id}})"><em class="bi bi-trash-fill"></em></button> @endif
                                         </div>
                                     </td>
+                                    <td style="display: none;">{{ $position->created_at }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -111,7 +113,7 @@
     </div>
 
     <x-slot:additional_script>
-        @include('layout/datatable', ['tableId' => 'supplier-position-table'])
+        @include('layout/datatable', ['tableId' => 'supplier-position-table' , 'columnId' => '3'])
         <script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
         <script>
             let selectedEndUser = 0;
