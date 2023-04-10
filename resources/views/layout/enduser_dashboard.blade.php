@@ -9,9 +9,24 @@
     @if($is_consolidated)
         <div class="alert alert-warning mb-3 fs-5" role="alert">
             {{-- PPMP items for the year <div class="badge bg-primary">{{ Auth::user()->ppmp_year }}</div> is already consolidated. You are not allowed to add more items. --}}
-            <strong>Warning!</strong>  Items are already consolidated.
+            <strong>Warning!</strong> Items are already consolidated.
         </div>
     @endif
+    @php
+        $dueDate = new DateTime(date("Y") . '/' . getSettingValue("ppmp_due_month") . '/' . getSettingValue('ppmp_due_day') . ' ' . date('H:i:s'));
+        $todayDate = new DateTime(date('Y-m-d H:i:s'));
+    @endphp
+    {{-- @if ($dueDate)
+        <div class="alert alert-danger mb-3 fs-5" role="alert">
+            <strong>DUE DATE!</strong> Make sure your PPMP is completed today!
+        </div>
+    @endif --}}
+    @if ($dueDate < $todayDate)
+        <div class="alert alert-danger mb-3 fs-5" role="alert">
+            <strong>PASS DUE DATE!</strong> Make sure your PPMP is completed today!
+        </div>
+    @endif
+
     <div class="mb-3">
         <input type="text" class="form-control fs-4" id="item-search-text" oninput="onChangeText()" placeholder="Search..." />
     </div>

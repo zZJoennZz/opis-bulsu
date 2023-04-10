@@ -53,23 +53,23 @@ class PurchaseRequestController extends Controller
         $is_enabled = $this->isPrEnabled();
         $return_value = view('dashboard/purchase_request_list')
             ->with('is_pr_enabled', $is_enabled);
-        if ($is_enabled) {
-            $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
-                return $query->where('is_bo_approve', '=', 1)
-                    ->where('is_pr_approve', '=', 1)
-                    ->where('is_consolidate', '=', 1)
-                    ->where('is_delete', '=', 0)
-                    ->where('year', '=', $user->ppmp_year)
-                    ->where('branches_id', '=', $user->branches_id)
-                    ->with('item_detail');
-            }])
-                ->with('branch')
-                ->with('requester')
-                ->where('branches_id', '=', $user->branches_id)
+        // if ($is_enabled) {
+        $pr_records = PurchaseRequest::with(['pr_items', 'pr_items.ppmp' => function ($query) use ($user) {
+            return $query->where('is_bo_approve', '=', 1)
+                ->where('is_pr_approve', '=', 1)
+                ->where('is_consolidate', '=', 1)
+                ->where('is_delete', '=', 0)
                 ->where('year', '=', $user->ppmp_year)
-                ->get();
-            $return_value = $return_value->with('pr_records', $pr_records);
-        }
+                ->where('branches_id', '=', $user->branches_id)
+                ->with('item_detail');
+        }])
+            ->with('branch')
+            ->with('requester')
+            ->where('branches_id', '=', $user->branches_id)
+            ->where('year', '=', $user->ppmp_year)
+            ->get();
+        $return_value = $return_value->with('pr_records', $pr_records);
+        // }
         return $return_value;
     }
 
@@ -278,6 +278,34 @@ class PurchaseRequestController extends Controller
             ->with(['pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
             ->get();
         return response()->json($pr_records, 200);
+    }
+
+    public function print($pr_id)
+    {
+        $pr = [];
+
+        if (Auth::user()->account_type !== "PROCUREMENT_OFFICE") {
+            $pr = PurchaseRequest::where('id', '=', $pr_id)
+                ->where('requested_by', '=', Auth::user()->id)
+                ->where('year', '=', Auth::user()->ppmp_year)
+                ->where('is_approve', '=', 1)
+                ->with('branch')
+                ->with(['pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
+                ->first();
+        } else {
+            $pr = PurchaseRequest::where('id', '=', $pr_id)
+                ->where('year', '=', Auth::user()->ppmp_year)
+                ->where('is_approve', '=', 1)
+                ->with('branch')
+                ->with(['pr_items', 'branch', 'pr_items.ppmp', 'pr_items.ppmp.source_of_fund', 'pr_items.ppmp.item_detail', 'pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.item_purpose', 'pr_items.ppmp.milestones'])
+                ->first();
+        }
+
+        if (empty($pr)) {
+            return redirect()->route('pr-list.show')->withErrors(['Invalid record.']);
+        }
+        return view('po-dashboard/print-purchase-request')
+            ->with('pr', $pr);
     }
 
     public function pr_single_quotation($pr_id, $company_id)

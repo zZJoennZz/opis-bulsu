@@ -24,7 +24,7 @@
                         </div>
                         
                         <div class="table-responsive">
-                            <table class="table table-sm table-bordered" id="quotation-list-table">
+                            <table class="table table-sm border-dark" id="quotation-list-table">
                                 <caption>List of quotations</caption>
                                 <thead>
                                     <tr>
@@ -32,7 +32,7 @@
                                         <th>Company</th>
                                         <th>Total Price</th>
                                         <th>Date Added</th>
-                                        <th style="width: 5%;">View</th>
+                                        <th style="width: 5%;" class="text-end">View</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -50,8 +50,8 @@
                                             <td>{{ $quotation->company->name }}</td>
                                             <td>₱ {{ number_format($totalAmount, 2) }}</td>
                                             <td>{{ date_format($quotation->created_at,"m/d/Y H:i A") }}</td>
-                                            <td>
-                                                <button class="btn btn-primary" onclick="getQuotation({{ $quotation->id }})">
+                                            <td class="text-end">
+                                                <button class="btn btn-sm btn-primary" onclick="getQuotation({{ $quotation->id }})">
                                                     <em class="bi bi-eye-fill"></em>
                                                 </button>
                                             </td>

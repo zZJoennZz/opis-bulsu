@@ -28,6 +28,14 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-md-6">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" name="email" id="email" value="{{$account_details->email}}" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
                                     <div class="mb-3 text-muted fst-italic">
                                         To change your password, please logout and use the reset password form.
                                     </div>
@@ -45,8 +53,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-12">
-                                    <label for="position" class="form-label">Position</label>
-                                    <input type="text" class="form-control" id="position" value="{{ $account_details->profile->position->description }}" disabled>
+                                    Position: <em>{{ $account_details->profile->position->description }}</em>
                                 </div>
                             </div>
                             <div class="row">

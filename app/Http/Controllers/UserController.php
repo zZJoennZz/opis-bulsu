@@ -171,9 +171,15 @@ class UserController extends Controller
 
     public function change_user_details(Request $request)
     {
+        $request->validate([
+            'first_name' => 'required|min:3',
+            'last_name' => 'required|min:3',
+            'email' => 'email|required|min:3',
+        ]);
         DB::beginTransaction();
         try {
             UserProfile::where('users_id', '=', Auth::user()->id)->update(['first_name' => $request->first_name, 'last_name' => $request->last_name]);
+            User::where('id', '=', Auth::user()->id)->update(['email' => $request->email]);
             DB::commit();
             return redirect()->back()->with('success', 'Account details updated.');
         } catch (Throwable $e) {

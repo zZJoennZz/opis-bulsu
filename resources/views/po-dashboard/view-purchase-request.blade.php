@@ -113,13 +113,13 @@
                         <td>
                             <div class="d-flex justify-content-center align-items-center">
                                 @if ($pr->is_approve === 1)
-                                    <button
-                                        class="btn btn-secondary"
-                                        type="button"
-                                        onclick="getPr({{$pr->id}})"
+                                    <a
+                                        class="btn btn-sm btn-secondary"
+                                        target="_blank"
+                                        href="{{ route('pr.get', ['pr_id' => $pr->id]) }}"
                                     >
                                         <em class="bi bi-printer-fill"></em>
-                                    </button>
+                                    </a>
                                 @else
                                     <button
                                         class="btn btn-secondary"
@@ -155,7 +155,7 @@
     </div>
     
     {{-- FOR PRINT --}}
-    <div class="modal fade" id="printPr" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="printPrLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="printPr" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="printPrLabel" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
@@ -267,7 +267,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
     <x-slot:additional_script>
         @vite('resources/js/app.js')

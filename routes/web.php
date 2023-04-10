@@ -96,6 +96,7 @@ Route::middleware('end.user')->group(function () {
 
     //purchase request list
     Route::get('/purchase-requests-list', [PurchaseRequestController::class, 'pr_list'])->name('pr-list.show');
+    Route::get('/purchase-requests-list/{pr_id?}', [PurchaseRequestController::class, 'print'])->name('pr-print.user');
     Route::get('/purchase-request-form', [PurchaseRequestController::class, 'pr_form'])->name('pr-form.show');
     Route::get('/available-items-for-pr', [PurchaseRequestController::class, 'pr_available_items_api'])->name('pr-items.show');
     Route::post('/new-purchase-request', [PurchaseRequestController::class, 'new_submission'])->name('new-pr.perform');
@@ -201,7 +202,8 @@ Route::middleware('procurement.office')->group(function () {
     //Purchase request
     Route::get('/purchase-request', [PurchaseRequestController::class, 'pr_admin'])->name('pr-admin.show');
     Route::post('/toggle-purchase-request', [PurchaseRequestController::class, 'toggle_pr_mode'])->name('pr.toggle');
-    Route::get('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'pr_single'])->name('pr-single.api');
+    Route::get('/purchase-request/api/{pr_id?}', [PurchaseRequestController::class, 'pr_single'])->name('pr-single.api');
+    Route::get('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'print'])->name('pr.get');
     Route::get('/purchase-request-quotation/{pr_id?}/{company_id?}', [PurchaseRequestController::class, 'pr_single_quotation'])->name('pr-single-quotation.api');
     Route::post('/purchase-request/{pr_id?}', [PurchaseRequestController::class, 'approve_pr'])->name('pr-approve.api');
 
