@@ -21,7 +21,7 @@
         <div class="row mb-3">
             <div class="col-sm-12 col-md-10">
                 <select class="form-select" id="purchase_requests_id" name="purchase_requests_id" aria-label="Select purchase request" required>
-                    <option disabled selected>Select purchase request</option>
+                    <option value="" disabled selected>Select purchase request</option>
                     @foreach ($pr_without_abstract as $pr)
                         <option value="{{ $pr->id }}">{{ $pr->pr_number }}</option>
                     @endforeach
@@ -32,7 +32,7 @@
         <div class="row mb-3">
             <div class="col-12">
                 <label for="type" class="form-label">Type</label>
-                <select name="type" id="type" class="form-select" aria-label="Select type">
+                <select name="type" id="type" class="form-select" aria-label="Select type" required>
                     <option value="0" disabled selected>Select type</option>
                     <option value="BY_LOT">By lot</option>
                     <option value="BY_ITEM">By item</option>
@@ -42,7 +42,7 @@
         <div class="row mb-3">
             <div class="col-12">
                 <label for="abc" class="form-label">ABC</label>
-                <input type="text" class="form-control" id="abc" name="abc" required>
+                <input type="number" class="form-control" id="abc" name="abc" title="number" placeholder="Type amount" required>
             </div>
         </div>
         <div class="row mb-3">

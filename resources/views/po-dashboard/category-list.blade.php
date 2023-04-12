@@ -13,9 +13,6 @@
                     <div class="mb-3">
                         <label for="description" class="form-label">Category Name</label>
                         <input type="text" class="form-control" id="description" name="description" placeholder="Category name">
-                        @error('description')
-                            <span class="text-danger">{{$message}}</span>
-                        @enderror
                     </div>
                     <div>
                         <label for="description" class="form-label">Under of what group (for reports)</label>
