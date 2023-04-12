@@ -37,6 +37,7 @@ class CompanyController extends Controller
             'tin' => ['required' ,' min:9' , 'max:20', 'unique:companies,tin'],
             'contact_number' => ['required','regex:/^(02|\+63)[0-9]{7,10}$|^(\+639|09)[0-9]{9}$|^([0-9]{2,4}-)?[0-9]{6,8}$/', 'unique:companies,contact_number'],
             'email_address' => ['required', 'email', 'unique:companies,email_address'],
+            'philgeps_number' => ['required']
         ], [
             'tin.min' => 'Please enter a valid TIN number.',
             'tin.max' => 'Please enter a valid TIN number.',
@@ -57,6 +58,7 @@ class CompanyController extends Controller
             $new_company_profile->tin = $request->tin;
             $new_company_profile->contact_number = $request->contact_number;
             $new_company_profile->email_address = $request->email_address;
+            $new_company_profile->philgeps_number = $request->philgeps_number;
             $new_company_profile->is_delete = 0;
             $new_company_profile->added_by = Auth::user()->id;
             $new_company_profile->save();
@@ -109,6 +111,7 @@ class CompanyController extends Controller
                     'required',
                      'email',
                     Rule::unique('companies', 'email_address')->ignore($company_profile)],
+                'philgeps_number' => ['required']
             ], [
                 'tin.min' => 'Please enter a valid TIN number.',
                 'tin.max' => 'Please enter a valid TIN number.',
@@ -125,6 +128,7 @@ class CompanyController extends Controller
             $company_profile->tin = $request->tin;
             $company_profile->contact_number = $request->contact_number;
             $company_profile->email_address = $request->email_address;
+            $company_profile->philgeps_number = $request->philgeps_number;
             $company_profile->save();
             DB::commit();
             return redirect()->back()->with('success', 'Company profile successfully updated.');
