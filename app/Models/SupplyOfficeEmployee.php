@@ -21,4 +21,5 @@ class SupplyOfficeEmployee extends Model
     {
         return $this->hasOne(SupplyPosition::class, 'id', 'supply_positions_id');
     }
+
 }
