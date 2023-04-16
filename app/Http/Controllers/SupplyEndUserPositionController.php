@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\SupplyEndUserPositions;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Models\SupplyPosition;
 
 class SupplyEndUserPositionController extends Controller
 {
     //
     public function all(){
-        $supply_enduser_positions = SupplyEndUserPositions::all();
+        $supply_enduser_positions = SupplyPosition::all();
         return view('so-dashboard/manage-end-user-position')
             ->with('supply_enduser_positions', $supply_enduser_positions);
     }
@@ -23,8 +23,9 @@ class SupplyEndUserPositionController extends Controller
 
         DB::beginTransaction();
 
-            $new_enduser_position = new SupplyEndUserPositions();
-            $new_enduser_position->position_name = $request->position_name;
+            $new_enduser_position = new SupplyPosition();
+            $new_enduser_position->name = $request->name;
+            $new_enduser_position->type = $request->type;
             $new_enduser_position->added_by = Auth::user()->id;
             $new_enduser_position->save();
             DB::commit();
@@ -38,7 +39,7 @@ class SupplyEndUserPositionController extends Controller
     }
     public function get($enduser_position_id)
     {
-        $equipment_code = SupplyEndUserPositions::find($enduser_position_id);
+        $equipment_code = SupplyPosition::find($enduser_position_id);
 
         return response()->json($equipment_code, 200);
     }
@@ -46,7 +47,8 @@ class SupplyEndUserPositionController extends Controller
     public function update(Request $request, $enduser_position_id)
     {
         $validator = Validator::make($request->all(), [
-            'position_name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -55,10 +57,11 @@ class SupplyEndUserPositionController extends Controller
         }
 
 
-        $UpdateEquipmentCode = SupplyEndUserPositions::find($enduser_position_id);
+        $UpdateEquipmentCode = SupplyPosition::find($enduser_position_id);
             DB::beginTransaction();
             try {
-            $UpdateEquipmentCode->position_name = $request->position_name;
+            $UpdateEquipmentCode->name = $request->name;
+            $UpdateEquipmentCode->type = $request->type;
             $UpdateEquipmentCode->save();
 
             DB::commit();
@@ -77,7 +80,7 @@ class SupplyEndUserPositionController extends Controller
     }
     public function delete_single($enduser_position_id)
     {
-        $getSupplyPosition = SupplyEndUserPositions::find($enduser_position_id);
+        $getSupplyPosition = SupplyPosition::find($enduser_position_id);
         DB::beginTransaction();
         try {
             $getSupplyPosition->is_delete = 1;
@@ -100,7 +103,7 @@ class SupplyEndUserPositionController extends Controller
     {
         DB::beginTransaction();
         try {
-            SupplyEndUserPositions::whereIn('id', $request->id)->update(["is_delete" => 1]);
+            SupplyPosition::whereIn('id', $request->id)->update(["is_delete" => 1]);
             DB::commit();
             redirect()->back()->with('success', 'Position successfully deleted!');
             return response()->json([

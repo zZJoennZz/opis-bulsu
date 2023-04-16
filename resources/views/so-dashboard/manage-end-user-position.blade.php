@@ -29,8 +29,16 @@
                         <form action="{{ route('supply-end-user-position.post_add') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="position_name" class="form-label">Position Name</label>
-                                <input type="text" class="form-control" id="position_name" name="position_name" placeholder="Enter a position name" required>
+                                <label for="name" class="form-label">Position Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter a position name" required>
+                            </div>
+                            <div class="mb-3 d-none">
+                                <label for="type" class="form-label">Type</label>
+                                <select class="form-select" id="edit_type" name="type" aria-label="Select type">
+                                    <option disabled>Select type here</option>
+                                    <option value="END_USER" selected>END USER</option>
+                                    <option value="SUPPLY_OFFICE_EMPLOYEE" >SUPPLY_OFFICE_EMPLOYEE</option>
+                                </select>
                             </div>
                             <div>
                                 <button class="btn btn-primary"><em class="bi bi-save2"></em> Save</button>
@@ -54,6 +62,7 @@
                         </thead>
                         <tbody>
                             @foreach ($supply_enduser_positions as $enduser_position)
+                                 @if($enduser_position->type === "END_USER")
                                 <tr class="small">
                                     <td class="py-3">
                                         <div class="form-check w-100 d-flex align-items-center justify-content-center">
@@ -61,7 +70,7 @@
                                         </div>
                                     </td>
 
-                                    <td class="py-3">{{ $enduser_position->position_name }} </td>
+                                    <td class="py-3">{{ $enduser_position->name }} </td>
                                     <td class="text-end py-3">
                                         <div class="btn-group" role="group" aria-label="End user actions">
                                             <button onclick="openEditForm({{ $enduser_position->id }})" type="button" class="btn btn-primary btn-sm"><em class="bi bi-pencil-square"></em></button>
@@ -70,6 +79,8 @@
                                     </td>
                                     <td style="display: none;">{{ $enduser_position->created_at }}</td>
                                 </tr>
+                                @endif
+
                             @endforeach
                         </tbody>
                     </table>
@@ -89,8 +100,16 @@
                     <form onsubmit="return saveChanges(event)">
                         @csrf
                         <div class="mb-3">
-                            <label for="position_name" class="form-label">Position Name</label>
-                            <input type="text" class="form-control" id="edit_position_name" name="position_name">
+                            <label for="name" class="form-label">Position Name</label>
+                            <input type="text" class="form-control" id="edit_name" name="name">
+                        </div>
+                        <div class="mb-3 d-none">
+                            <label for="type" class="form-label">Type</label>
+                            <select class="form-select" id="edit_type" name="edit_type" aria-label="Select type">
+                                <option disabled>Select type here</option>
+                                <option value="END_USER" selected>END_USER</option>
+                                <option value="SUPPLY_OFFICE_EMPLOYEE" >SUPPLY_OFFICE_EMPLOYEE</option>
+                            </select>
                         </div>
                         <div>
                             <button  type="submit" class="btn btn-primary"><em class="bi bi-save2"></em> Save</button>
@@ -112,7 +131,8 @@
                 selectedEndUserPosition = id;
                 await axios.get(`{{ url('/manage-end-user-position') }}/${id}`)
                     .then(res => {
-                        $('#edit_position_name').val(res.data.position_name);
+                        $('#edit_name').val(res.data.name);
+                        $('#edit_type').val(res.data.type);
                         $('#editEndUserPosition').modal('toggle');
                     })
                     .catch(err => alert("Could not fetch the data. Please contact website administrator."));
@@ -122,7 +142,8 @@
             async function saveChanges(e) {
                 e.preventDefault();
                 const data = {
-                    "position_name" : $('#edit_position_name').val(),
+                    "name" : $('#edit_name').val(),
+                    "type" : $('#edit_type').val(),
                 };
                 await axios.put(`{{ url('/manage-end-user-position') }}/${selectedEndUserPosition}`, data)
                     .then(res => {

@@ -32,12 +32,12 @@
                                 <label for="position" class="form-label">Position</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter position here." required>
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3 d-none">
                                 <label for="type" class="form-label">Type</label>
-                                <select class="form-select" id="edit_college" name="type" aria-label="Select type">
-                                    <option disabled selected>Select type here</option>
-                                    <option value="END USER">END USER</option>
-                                    <option value="SUPPLY_OFFICE_EMPLOYEE">SUPPLY_OFFICE_EMPLOYEE</option>
+                                <select class="form-select" id="edit_type" name="type" aria-label="Select type">
+                                    <option disabled>Select type here</option>
+                                    <option value="END_USER" >END USER</option>
+                                    <option value="SUPPLY_OFFICE_EMPLOYEE" selected>SUPPLY_OFFICE_EMPLOYEE</option>
                                 </select>
                             </div>
                             <div>
@@ -62,6 +62,7 @@
                         </thead>
                         <tbody>
                             @foreach ($supply_positions as $position)
+                                @if($position->type === "SUPPLY_OFFICE_EMPLOYEE")
                                 <tr class="small">
                                     <td class="py-3">
                                         <div class="form-check w-100 d-flex align-items-center justify-content-center">
@@ -77,6 +78,7 @@
                                     </td>
                                     <td style="display: none;">{{ $position->created_at }}</td>
                                 </tr>
+                                @endif
                             @endforeach
                         </tbody>
                     </table>
@@ -99,9 +101,13 @@
                                 <label for="name" class="form-label">Position</label>
                                 <input type="text" class="form-control" id="edit_name" name="name">
                             </div>
-                            <div class="mb-3">
+                            <div class="mb-3 d-none">
                                 <label for="type" class="form-label">Type</label>
-                                <input type="text" class="form-control" id="edit_type" name="type">
+                                <select class="form-select" id="edit_type" name="type" aria-label="Select type">
+                                    <option disabled>Select type here</option>
+                                    <option value="END_USER" >END USER</option>
+                                    <option value="SUPPLY_OFFICE_EMPLOYEE" selected>SUPPLY_OFFICE_EMPLOYEE</option>
+                                </select>
                             </div>
                             <div>
                                 <button  type="submit" class="btn btn-primary"><em class="bi bi-save2"></em> Save</button>

@@ -31,8 +31,7 @@ class DatabaseSeeder extends Seeder
             ModeOfProcurementSeeder::class,
             SupplyPositionSeeder::class,
             EquipmentCodeSeeder::class,
-            CompanySeeder::class,
-            SupplyEndUserPositionSeeder::class,
+            CompanySeeder::class
         ]);
     }
 }
