@@ -49,6 +49,9 @@ class PPMPController extends Controller
 
         $user = Auth::user();
 
+        $getSourceOfFund = ProProManPlan::where('year', $user->ppmp_year)->where('branches_id', $branch_id)->first()->source_of_funds_id;
+        $getSourceOfFund = $getSourceOfFund === null || $getSourceOfFund === "" || $getSourceOfFund === 0 ? 1 : $getSourceOfFund;
+
         $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue', 'pro_pro_man_plans.submitted_by')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 0)->get();
 
         if (count($ppmpNewRequests) <= 0) {
@@ -67,7 +70,8 @@ class PPMPController extends Controller
             ->with('ppmp_items', $ppmpNewRequests)
             ->with('milestones', $milestoneOfActivities)
             ->with('source_of_funds', $sourceOfFunds)
-            ->with('branch_id', $branch_id);
+            ->with('branch_id', $branch_id)
+            ->with('currentSourceOfFund', $getSourceOfFund);
     }
 
     public function ppmp_approval($branch_id)

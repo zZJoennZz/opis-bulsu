@@ -38,9 +38,6 @@
             </div>
         </div>
     </div>
-    <div class="float-end">
-        <button class="btn btn-sm btn-secondary" onclick="Popup()"><em class="bi bi-printer-fill"></em> Print</button>
-    </div>
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     @if ($bac_reso->is_draft === 1)
         @if ($bac_reso->abstract_of_canvass->type === "BY_ITEM")
@@ -270,6 +267,34 @@
             <div class="row mb-3">
                 <div class="col-sm-12 col-md-6">
                     <div>
+                        <label for="opening_quotation_date" class="form-label">Opening Quotation Date:</label>
+                        <input required type="date" class="form-control" id="opening_quotation_date" name="opening_quotation_date">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="opening_quotation_location" class="form-label">Opening Quotation Location:</label>
+                        <input required type="text" class="form-control" id="opening_quotation_location" name="opening_quotation_location">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="rfq_date" class="form-label">Request for Quotations Date:</label>
+                        <input required type="date" class="form-control" id="rfq_date" name="rfq_date">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    <div>
+                        <label for="rfq_reference_numbers" class="form-label">Request for Quotation Reference Number (PhilGEPS):</label>
+                        <input required type="text" class="form-control" id="rfq_reference_numbers" name="rfq_reference_numbers">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-sm-12 col-md-6">
+                    <div>
                         <label for="chair" class="form-label">Chair:</label>
                         <input required type="text" class="form-control" id="chair" name="chair" value="{{ $bac_reso->abstract_of_canvass->bac_chairman }}">
                     </div>
@@ -341,9 +366,19 @@
             </div>
         </form>
     @else
+        <div>
+            <div class="float-end">
+                <a class="btn btn-sm btn-secondary" target="_blank" href="{{ route($bac_reso->abstract_of_canvass->type === "BY_ITEM" ? 'bac-reso.print-by-item' : '', ['id' => $bac_reso->id]) }}"><em class="bi bi-printer-fill"></em> Print</a>
+            </div>
+            <span class="badge bg-primary text-uppercase">{{ $bac_reso->abstract_of_canvass->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
+        </div>
         <div class="table-responsive">
             <table class="table table-sm table-bordered border-dark caption-top">
-                <caption>PR NUMBER: <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span></caption>
+                <caption>
+                    <div>
+                        PR NUMBER: <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
+                    </div>
+                </caption>
                 <thead class="text-uppercase text-center align-middle">
                     <tr>
                         <th scope="col" style="width: 50px;" rowspan="3">Item No.</th>

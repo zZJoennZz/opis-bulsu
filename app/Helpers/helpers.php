@@ -148,3 +148,72 @@ if (!function_exists('ordinal')) {
         }
     }
 }
+
+if (!function_exists('convertNumberToWords')) {
+    function convertNumberToWords($number)
+    {
+        $words = array(
+            'zero',
+            'one',
+            'two',
+            'three',
+            'four',
+            'five',
+            'six',
+            'seven',
+            'eight',
+            'nine',
+            'ten',
+            'eleven',
+            'twelve',
+            'thirteen',
+            'fourteen',
+            'fifteen',
+            'sixteen',
+            'seventeen',
+            'eighteen',
+            'nineteen'
+        );
+
+        $tens = array(
+            '',
+            '',
+            'twenty',
+            'thirty',
+            'forty',
+            'fifty',
+            'sixty',
+            'seventy',
+            'eighty',
+            'ninety'
+        );
+
+        if (!is_numeric($number)) {
+            return 'Not a number';
+        }
+
+        $number = (int)$number;
+
+        if ($number < 0) {
+            return 'minus ' . convertNumberToWords(abs($number));
+        }
+
+        if ($number < 20) {
+            return $words[$number];
+        }
+
+        if ($number < 100) {
+            return $tens[floor($number / 10)] . (($number % 10 > 0) ? '-' . $words[$number % 10] : '');
+        }
+
+        if ($number < 1000) {
+            return $words[floor($number / 100)] . ' hundred' . (($number % 100 > 0) ? ' and ' . convertNumberToWords($number % 100) : '');
+        }
+
+        if ($number < 1000000) {
+            return convertNumberToWords(floor($number / 1000)) . ' thousand' . (($number % 1000 > 0) ? ' ' . convertNumberToWords($number % 1000) : '');
+        }
+
+        return 'number too large';
+    }
+}

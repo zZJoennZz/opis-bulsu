@@ -48,7 +48,7 @@ class ProProManPlan extends Model
 
     public function branch()
     {
-        return $this->hasOne(Branch::class, 'branches_id', 'id');
+        return $this->hasOne(Branch::class, 'id', 'branches_id');
     }
 
     public function user()

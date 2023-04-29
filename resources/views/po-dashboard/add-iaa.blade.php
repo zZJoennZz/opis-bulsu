@@ -49,7 +49,7 @@
                 </div> --}}
                 <div>
                     <button class="btn btn-primary" type="submit"><em class="bi bi-save2"></em> Save Report</button>
-                    <button class="btn btn-danger float-end" type="submit"><em class="bi bi-x-lg"></em> Cancel</button>
+                    <a class="btn btn-danger float-end" href="{{ route('ia.all') }}"><em class="bi bi-x-lg"></em> Cancel</a>
                 </div>
             </form>
         </div>

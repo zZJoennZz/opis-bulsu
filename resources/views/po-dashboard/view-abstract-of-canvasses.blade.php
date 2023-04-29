@@ -12,7 +12,7 @@
     <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($aocs) }}</span></span>
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     <div class="mb-3">
-        <a href="{{ route('aoc.add') }}" class="btn btn-primary"><em class="bi bi-file-earmark-ruled-fill"></em> Generate</a>
+        <a href="{{ route('aoc.add') }}" class="btn btn-primary"><em class="bi bi-file-earmark-ruled-fill"></em> Generate Abstract of Canvass</a>
     </div>
     <div class="table-responsive">
         <table class="table table-sm border-dark caption-top" id="aocs-table">

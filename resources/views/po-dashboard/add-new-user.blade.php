@@ -29,9 +29,9 @@
                                             @if (Auth::user()->account_type === 'admin')
                                                 <option value="admin">Admin</option>
                                             @endif
-                                            <option value="PROCUREMENT_OFFICE">Procurement Office</option>
-                                            <option value="BUDGET_OFFICE">Budget Office</option>
-                                            <option value="SUPPLY_OFFICE">Supply Office</option>
+                                            <option value="PROCUREMENT_OFFICE">Procurement User</option>
+                                            <option value="BUDGET_OFFICE">Budget User</option>
+                                            <option value="SUPPLY_OFFICE">Supply User</option>
                                             <option value="END_USER">User</option>
                                         </select>
                                     </div>
@@ -116,6 +116,7 @@
     ];
 
     async function accountTypeOnChange(e) {
+        console.log(e);
         let deptDiv = $('#dept-div');
         let pos = $('#positions_id');
         deptDiv[0].innerHTML = "ASD";
@@ -149,10 +150,10 @@
             position = Positions.filter(dx => dx.description === "Procurement Staff");
             pos.html( `
                     ${
-                        position.map(dx => 
+                        position.map(dx =>
                             `<option value="${dx.id}" selected>${dx.description}</option>`
                         )
-                    }                              
+                    }
             `);
         } else if(e === "BUDGET_OFFICE"){
             branches = allBranches.filter(d => d.branch_name === "Budget Office");

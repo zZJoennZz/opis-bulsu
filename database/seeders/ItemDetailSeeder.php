@@ -25,7 +25,7 @@ class ItemDetailSeeder extends Seeder
             ['description' => 'Coffee Maker',        'article' => 'A001',        'price_catalogue' => 59.99,        'category_id' => 2,        'unit_id' => 6,        'added_by' => 1,        'is_approve' => 1],
             ['description' => 'Microwave Oven',        'article' => 'A002',        'price_catalogue' => 129.99,        'category_id' => 2,        'unit_id' => 6,        'added_by' => 1,        'is_approve' => 1],
             ['description' => 'Electric Kettle',        'article' => 'A003',        'price_catalogue' => 24.99,        'category_id' => 2,        'unit_id' => 6,        'added_by' => 1,        'is_approve' => 1],
-            array(
+            [
                 'description' => 'Microwave',
                 'article' => 'P004',
                 'price_catalogue' => 99.99,
@@ -33,8 +33,8 @@ class ItemDetailSeeder extends Seeder
                 'unit_id' => 6,
                 'added_by' => 1,
                 'is_approve' => 1
-            ),
-            array(
+            ],
+            [
                 'description' => 'Sofa',
                 'article' => 'P005',
                 'price_catalogue' => 499.99,
@@ -42,8 +42,8 @@ class ItemDetailSeeder extends Seeder
                 'unit_id' => 6,
                 'added_by' => 1,
                 'is_approve' => 1
-            ),
-            array(
+            ],
+            [
                 'description' => 'Laptop',
                 'article' => 'P006',
                 'price_catalogue' => 799.99,
@@ -51,8 +51,8 @@ class ItemDetailSeeder extends Seeder
                 'unit_id' => 6,
                 'added_by' => 1,
                 'is_approve' => 1
-            ),
-            array(
+            ],
+            [
                 'description' => 'Refrigerator',
                 'article' => 'P007',
                 'price_catalogue' => 899.99,
@@ -60,8 +60,8 @@ class ItemDetailSeeder extends Seeder
                 'unit_id' => 6,
                 'added_by' => 1,
                 'is_approve' => 1
-            ),
-            array(
+            ],
+            [
                 'description' => 'Bed',
                 'article' => 'P008',
                 'price_catalogue' => 699.99,
@@ -69,52 +69,52 @@ class ItemDetailSeeder extends Seeder
                 'unit_id' => 6,
                 'added_by' => 1,
                 'is_approve' => 1
-            ),
-            array(
+            ],
+            [
                 'description' => "Smart TV",
-                "article"      => "P009",
-                "price_catalogue"   => "899.99",
-                "category_id"      => "7",
-                "unit_id"          => "6",
-                "added_by"         => "1",
-                "is_approve"       => "1"
-            ),
-            array(
-                "description"     => "Washing Machine",
-                "article"         => "P010",
-                "price_catalogue"   => "799.99",
-                "category_id"      => "4",
-                "unit_id"          => "6",
-                "added_by"         => "1",
-                "is_approve"       => "1"
-            ),
-            array(
-                "description"     => "Dining Table Set",
-                "article"         => "P011",
-                "price_catalogue"   => "399.99",
-                "category_id"      => "5",
-                "unit_id"          => "6",
-                "added_by"         => "1",
-                "is_approve"       => "1"
-            ),
-            array(
-                "description"     => "Air Conditioner",
-                "article"         => "P012",
-                "price_catalogue"   => "699.99",
-                "category_id"      => "4",
-                "unit_id"          => "6",
-                "added_by"         => "1",
-                "is_approve"       => "1"
-            ),
-            array(
-                "description"     => 'Smartphone',
+                "article" => "P009",
+                "price_catalogue" => "899.99",
+                "category_id" => "7",
+                "unit_id" => "6",
+                "added_by" => "1",
+                "is_approve" => "1"
+            ],
+            [
+                "description" => "Washing Machine",
+                "article" => "P010",
+                "price_catalogue" => "799.99",
+                "category_id" => "4",
+                "unit_id" => "6",
+                "added_by" => "1",
+                "is_approve" => "1"
+            ],
+            [
+                "description" => "Dining Table Set",
+                "article" => "P011",
+                "price_catalogue" => "399.99",
+                "category_id" => "5",
+                "unit_id" => "6",
+                "added_by" => "1",
+                "is_approve" => "1"
+            ],
+            [
+                "description" => "Air Conditioner",
+                "article" => "P012",
+                "price_catalogue" => "699.99",
+                "category_id" => "4",
+                "unit_id" => "6",
+                "added_by" => "1",
+                "is_approve" => "1"
+            ],
+            [
+                "description" => 'Smartphone',
                 'article' => 'P013',
                 'price_catalogue' => 599.99,
                 'category_id' => 6,
                 'unit_id' => 6,
                 'added_by' => 1,
                 "is_approve" => 1
-            )
+            ]
         ];
 
         foreach ($products as $p) {

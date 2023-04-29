@@ -65,6 +65,9 @@
                                                 @if ($user->account_type === "END_USER")
                                                     <span class="badge text-bg-secondary"><em class="bi bi-person-fill"></em> End User</span>
                                                 @endif
+                                                @if ($user->account_type === "SUPPLY_OFFICE")
+                                                    <span class="badge text-bg-warning"><em class="bi bi-truck"></em> Supply</span>
+                                                @endif
                                             </td>
                                             <td class="p-2 small">
                                                 {{ date_format($user->created_at,"M d, Y h:i:s A")}}

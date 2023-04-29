@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('ics_number_series')->nullable();
             $table->date('date_acquired');
             $table->unsignedBigInteger('inspection_and_acceptances_id');
-            $table->unsignedBigInteger('canvass_abstract_items_id');
+            $table->unsignedBigInteger('abstract_of_canvasses_id');
             $table->string('serial_number');
             $table->unsignedBigInteger('received_from');
             $table->unsignedBigInteger('received_by');
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('inspection_and_acceptances_id')->references('id')->on('inspection_and_acceptances');
-            $table->foreign('canvass_abstract_items_id')->references('id')->on('canvass_abstract_items');
+            $table->foreign('abstract_of_canvasses_id')->references('id')->on('abstract_of_canvasses');
             $table->foreign('received_from')->references('id')->on('supply_office_employees');
             $table->foreign('received_by')->references('id')->on('supply_end_users');
             $table->foreign('delivered_by')->references('id')->on('companies');

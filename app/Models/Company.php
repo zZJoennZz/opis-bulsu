@@ -30,11 +30,6 @@ class Company extends Model
         return $this->hasMany(Quotation::class, 'companies_id', 'id');
     }
 
-    public function canvass_abstract()
-    {
-        return $this->hasMany(CanvassAbstract::class, 'companies_id', 'id');
-    }
-
     public function purchase_orders()
     {
         return $this->hasMany(PurchaseOrder::class, 'companies_id', 'id');

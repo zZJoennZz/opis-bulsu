@@ -39,7 +39,7 @@
                     </tr>
                     <tr class="border-bottom border-dark">
                         <th style="font-weight: normal !important;">Entity Name:</th>
-                        <th colspan="2">Meneses Campush</th>
+                        <th colspan="2">{{ $pr->pr_items[0]->ppmp->branch->branch_name }}</th>
                         <th style="font-weight: normal !important;">Fund Cluster:</th>
                         <th colspan="2">{{ $pr->pr_items[0]->ppmp->source_of_fund->source_of_fund }}</th>
                     </tr>

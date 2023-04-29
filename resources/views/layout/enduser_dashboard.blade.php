@@ -76,7 +76,7 @@
                             @else
                                 <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</a>
                             @endif --}}
-                            <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</a>
+                            <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Add to cart</a>
 
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                             <p class="card-text">
                                 ${item["cat_desc"]}
                             </p>
-                            <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</a>
+                            <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Add to cart</a>
                         </div>
                     </div>
                 </div>

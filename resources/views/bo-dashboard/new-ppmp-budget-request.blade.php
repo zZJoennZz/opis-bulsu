@@ -24,9 +24,10 @@
             <label for="source_of_funds_id" class="form-label">Source of Fund:</label>
             <select class="form-select" id="source_of_funds_id" name="source_of_funds_id" aria-label="Purpose of the item">
                 @foreach ($source_of_funds as $source)
-                <option value="{{$source->id}}">{{$source->source_of_fund}}</option>
+                <option value="{{$source->id}}" @php echo $currentSourceOfFund === $source->id ? "selected" : "" @endphp>{{$source->source_of_fund}}</option>
                 @endforeach
             </select>
+            <div class="text-danger text-uppercase" style="margin-top: 1rem;">Changing the value here will update the source of fund of this year's PPMP of this branch.</div>
         </div>
     </form>
     <div class="table-responsive mb-3">

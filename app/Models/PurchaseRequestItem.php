@@ -10,6 +10,7 @@ class PurchaseRequestItem extends Model
     use HasFactory;
 
     protected $fillable = [
+        'item_number',
         'purchase_requests_id',
         'pro_pro_man_plans_id',
     ];

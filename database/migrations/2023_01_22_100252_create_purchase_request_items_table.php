@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('purchase_request_items', function (Blueprint $table) {
             $table->id();
+            $table->integer('item_number');
             $table->unsignedBigInteger('purchase_requests_id');
             $table->unsignedBigInteger('pro_pro_man_plans_id');
             $table->timestamps();

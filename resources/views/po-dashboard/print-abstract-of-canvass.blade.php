@@ -25,6 +25,34 @@
     </head>
     <body>
         <div class="to-print" id="print-abs">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="text-center">
+                            <div>Republic of the Philippines</div>
+                            <div class="fw-bold">BULACAN STATE UNIVERSITY</div>
+                            <div class="fst-italic">City of Malolos, Bulacan</div>
+                            <div class="fw-bold">ABSTRACT OF CANVASS</div>
+                            <div class="fw-bold text-light">-</div>
+                            <div class="fw-bold">
+                                <span class="border-top border-dark">Date and Time of Opening</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <span class="fw-bold">
+                            Purpose: {{ $aoc[0]->pr->purpose }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-6 fw-bold">ABC: {{ number_format($aoc[0]->abc, 2) }}</div>
+                    <div class="col-6 text-end fw-bold">PR NUMBER: {{ $aoc[0]->pr->pr_number }}</div>
+                </div>
             @php
                 $currCompany = 0;
                 $currCompany1 = 0;
@@ -34,34 +62,7 @@
                     $companyId = [];
                     $compExtendedTotal = [0, 0, 0];
                 @endphp
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="text-center">
-                                <div>Republic of the Philippines</div>
-                                <div class="fw-bold">BULACAN STATE UNIVERSITY</div>
-                                <div class="fst-italic">City of Malolos, Bulacan</div>
-                                <div class="fw-bold">ABSTRACT OF CANVASS</div>
-                                <div class="fw-bold text-light">-</div>
-                                <div class="fw-bold">
-                                    <span class="border-top border-dark">Date and Time of Opening</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-12">
-                            <span class="fw-bold">
-                                Purpose: {{ $aoc[0]->pr->purpose }}
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6 fw-bold">ABC: {{ number_format($aoc[0]->abc, 2) }}</div>
-                        <div class="col-6 text-end fw-bold">PR NUMBER: {{ $aoc[0]->pr->pr_number }}</div>
-                    </div>
+                
 
                     <div class="row">
                         <div class="col-12">
@@ -196,7 +197,7 @@
                                         </tr>
                                     @endforeach
 
-                                    @for ($i4 = 0; $i4 < 10 - count($aoc[0]->pr->pr_items); $i4++)
+                                    {{-- @for ($i4 = 0; $i4 < 10 - count($aoc[0]->pr->pr_items); $i4++)
                                         <tr>
                                             <td class="text-light">-</td>
                                             <td></td>
@@ -214,7 +215,7 @@
                                             <td></td>
                                             <td></td>
                                         </tr>
-                                    @endfor
+                                    @endfor --}}
                                 </tbody>
                                 <tfoot>
                                     <tr style="border: 0px !important;" class="fw-bold">
@@ -238,72 +239,71 @@
                             </table>
                         </div>
                     </div>
-
-                    <div class="row mb-2">
-                        <div class="col-12 text-center">
-                            We the undersigned hereby certify that the foregoing abstract of canvass is true and correct and that we have reviewed and evaluated the quotations and hereby recommended the following  proposed award:
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-8"><strong>ITEMS:</strong> _____________________________________________________________________________</div>
-                        <div class="col-4"><strong>AWARD IS GIVEN TO:</strong></div>
-
-                        <div class="col-12">
-                            THE PRICE ARE THE LOWEST OBTAINABLE OFFER DURING THE TIME OF CANVASS AND THESE ARE DETERMINED TO BE REASONABLE AND ADVANTAGEOUS TO THE UNIVERSITY.
-                        </div>
-                    </div>
-
-                    <div class="row text-center container-fluid mb-5">
-                        <div class="col-2 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->bac_chairman }}</div>
-                            <div class="w-100">BAC Chairman</div>
-                        </div>
-                        
-                        <div class="col-2 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->vice_chairman }}</div>
-                            <div class="w-100">Vice Chairman</div>
-                        </div>
-                        
-                        <div class="col-2 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->member_1 }}</div>
-                            <div class="w-100">Member</div>
-                        </div>
-
-                        <div class="col-2 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->member_2 }}</div>
-                            <div class="w-100">Member</div>
-                        </div>
-
-                        <div class="col-2 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->member_3 }}</div>
-                            <div class="w-100">Member</div>
-                        </div>
-
-                        <div class="col-2 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->member_4 }}</div>
-                            <div class="w-100">Member</div>
-                        </div>
-                    </div>
-
-                    <div class="row text-center m-auto w-75 mb-5">
-                        <div class="col-4 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->end_user }}</div>
-                            <div class="w-100">Requesting Officer / End-User</div>
-                        </div>
-                        
-                        <div class="col-4 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->technical_resource_person }}</div>
-                            <div class="w-100">Technical Resource Person</div>
-                        </div>
-                        
-                        <div class="col-4 fw-bold">
-                            <div class="border-bottom border-dark w-100">{{ $aoc[0]->procurement_office_rep }}</div>
-                            <div class="w-100">Procurement Office's Representative</div>
-                        </div>
-                    </div>
-                </div>
             @endfor
+            <div class="row mb-2">
+                <div class="col-12 text-center">
+                    We the undersigned hereby certify that the foregoing abstract of canvass is true and correct and that we have reviewed and evaluated the quotations and hereby recommended the following  proposed award:
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-8"><strong>ITEMS:</strong> _____________________________________________________________________________</div>
+                <div class="col-4"><strong>AWARD IS GIVEN TO:</strong></div>
+
+                <div class="col-12">
+                    THE PRICE ARE THE LOWEST OBTAINABLE OFFER DURING THE TIME OF CANVASS AND THESE ARE DETERMINED TO BE REASONABLE AND ADVANTAGEOUS TO THE UNIVERSITY.
+                </div>
+            </div>
+
+            <div class="row text-center container-fluid mb-5">
+                <div class="col-2 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->bac_chairman }}</div>
+                    <div class="w-100">BAC Chairman</div>
+                </div>
+                
+                <div class="col-2 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->vice_chairman }}</div>
+                    <div class="w-100">Vice Chairman</div>
+                </div>
+                
+                <div class="col-2 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->member_1 }}</div>
+                    <div class="w-100">Member</div>
+                </div>
+
+                <div class="col-2 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->member_2 }}</div>
+                    <div class="w-100">Member</div>
+                </div>
+
+                <div class="col-2 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->member_3 }}</div>
+                    <div class="w-100">Member</div>
+                </div>
+
+                <div class="col-2 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->member_4 }}</div>
+                    <div class="w-100">Member</div>
+                </div>
+            </div>
+
+            <div class="row text-center m-auto w-75 mb-5">
+                <div class="col-4 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->end_user }}</div>
+                    <div class="w-100">Requesting Officer / End-User</div>
+                </div>
+                
+                <div class="col-4 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->technical_resource_person }}</div>
+                    <div class="w-100">Technical Resource Person</div>
+                </div>
+                
+                <div class="col-4 fw-bold">
+                    <div class="border-bottom border-dark w-100">{{ $aoc[0]->procurement_office_rep }}</div>
+                    <div class="w-100">Procurement Office's Representative</div>
+                </div>
+            </div>
+        </div>
         </div>
         <script>
             window.addEventListener('load', function () {

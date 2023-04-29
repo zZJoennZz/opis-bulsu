@@ -185,11 +185,15 @@ class PurchaseRequestController extends Controller
             $new_purchase_request->requested_by = $user->id;
             $new_purchase_request->save();
 
+            $ctr = 1;
             foreach ($ppmp_id as $ppmp) {
                 $pr_item = new PurchaseRequestItem();
+                $pr_item->item_number = $ctr;
                 $pr_item->pro_pro_man_plans_id = $ppmp;
                 $pr_item->purchase_requests_id = $new_purchase_request->id;
                 $pr_item->save();
+
+                $ctr += 1;
             }
 
             DB::commit();
