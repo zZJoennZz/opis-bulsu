@@ -27,6 +27,7 @@ use App\Http\Controllers\InventoryCustodianController;
 use App\Http\Controllers\SupplyEndUserController;
 use App\Http\Controllers\SupplyEmployeeController;
 use App\Http\Controllers\AbstractOfCanvassController;
+use App\Http\Controllers\SupplyPositionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -279,6 +280,14 @@ Route::middleware('supply.office')->group(function () {
     Route::put('/manage-supply-employee/{enduser_id}', [SupplyEmployeeController::class, 'update']);
     Route::delete('/manage-supply-employee/single/{enduser_id}', [SupplyEmployeeController::class, 'delete_single']);
     Route::post('/manage-supply-employee/batch', [SupplyEmployeeController::class, 'delete_batch'])->name('supplyemployee.delete_batch');
+
+    //manage supply position
+    Route::get('/manage-supply-position', [SupplyPositionController::class, 'all'])->name('supply-position.all');
+    Route::post('/manage-supply-position', [SupplyPositionController::class, 'post_add'])->name('supply-position.post_add');
+    Route::get('/manage-supply-position/{position_id}', [SupplyPositionController::class, 'get'])->name('supplyposition.single');
+    Route::put('/manage-supply-position/{position_id}', [SupplyPositionController::class, 'update']);
+    Route::delete('/manage-supply-position/single/{position_id}', [SupplyPositionController::class, 'delete_single']);
+    Route::post('/manage-supply-position/batch', [SupplyPositionController::class, 'delete_batch'])->name('supplyposition.delete_batch');
 
     Route::get('/inventory-custodian-form', [InventoryCustodianController::class, 'show'])->name('icf.show');
 });

@@ -32,7 +32,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('users-list.show') }}">
+    <a class="nav-link" aria-current="page" href="{{ route('supply-position.all') }}">
         <em class="bi bi-person-fill-gear"></em> Manage Supply Positions
     </a>
 </li>
