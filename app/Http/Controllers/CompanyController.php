@@ -60,6 +60,11 @@ class CompanyController extends Controller
             $new_company_profile->email_address = $request->email_address;
             $new_company_profile->philgeps_number = $request->philgeps_number;
             $new_company_profile->is_delete = 0;
+            if( $request->is_in_philgeps == "on"){
+                $new_company_profile->is_in_philgeps = 1;
+            }else{
+                $new_company_profile->is_in_philgeps = 0;
+            }
             $new_company_profile->added_by = Auth::user()->id;
             $new_company_profile->save();
             DB::commit();
@@ -129,6 +134,9 @@ class CompanyController extends Controller
             $company_profile->contact_number = $request->contact_number;
             $company_profile->email_address = $request->email_address;
             $company_profile->philgeps_number = $request->philgeps_number;
+            $company_profile->is_in_philgeps = $request->input('is_in_philgeps') ? 1 : 0;
+
+
             $company_profile->save();
             DB::commit();
             return redirect()->back()->with('success', 'Company profile successfully updated.');
