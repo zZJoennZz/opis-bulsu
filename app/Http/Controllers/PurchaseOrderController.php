@@ -117,6 +117,6 @@ class PurchaseOrderController extends Controller
         if ($po === null) {
             return redirect()->route('po.all')->withErrors(['No purchase order found.']);
         }
-        return view('po-dashboard/view-po')->with('po', $po);
+        return view('po-dashboard/print-purchase-order')->with('po', $po);
     }
 }

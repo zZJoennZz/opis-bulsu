@@ -35,7 +35,7 @@
                         <td>{{ $po->mop->name }}</td>
                         <td class="text-end">
                             <div class="btn-group" role="group" aria-label="Basic example">
-                                <a href="{{ route('po.single') }}/{{$po->id}}" class="btn btn-sm btn-primary"><em class="bi bi-printer-fill"></em></a>
+                                <a target="_blank" href="{{ route('po.single') }}/{{$po->id}}" class="btn btn-sm btn-primary"><em class="bi bi-printer-fill"></em></a>
                                 <button type="button" class="btn btn-sm btn-danger"><em class="bi bi-trash-fill"></em></button>
                             </div>
                         </td>
