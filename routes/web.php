@@ -64,6 +64,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/notifications/{notif_id}', [NotificationController::class, 'read'])->name('notification.read');
 
     Route::get('/ppmp-update-activity-log/{branch_id}', [PPMPController::class, 'ppmp_activity_log'])->name('ppmp-activity-log.show');
+    Route::get('/print-ppmp-update-activity-log/{branch_id}', [PPMPController::class, 'print_activity_log'])->name('ppmp-activity-log.print');
     Route::get('/update-ppmp-record/{ppmp_id}', [PPMPController::class, 'get_ppmp_record'])->name('get-ppmp-record.show');
     Route::post('/update-ppmp-record/{ppmp_id}', [PPMPController::class, 'update_ppmp'])->name('update-ppmp-record.perform');
 

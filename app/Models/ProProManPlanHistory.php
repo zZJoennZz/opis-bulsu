@@ -16,10 +16,16 @@ class ProProManPlanHistory extends Model
         'remarks',
         'is_confirm',
         'changes_summary',
+        'record_by',
     ];
 
     public function ppmp()
     {
-        return $this->belongsTo(ProProManPlan::class, 'pro_pro_man_plans_id');
+        return $this->belongsTo(ProProManPlan::class, 'pro_pro_man_plans_id', 'id');
+    }
+
+    public function changes_record_by()
+    {
+        return $this->hasOne(User::class, 'id', 'record_by');
     }
 }

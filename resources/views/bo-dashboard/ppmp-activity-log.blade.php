@@ -1,160 +1,70 @@
-@include('layout/header', ['title' => 'PPMP Activity Log | OPIS - BulSU e-PROCUREMENT'])
-@if (count($ppmp_histories) > 0)
-<div class="for-print d-none d-print-none">
-    <div class="row mb-3">
-        <div class="col-2"></div>
-        <div class="col-8 text-center fw-bold">
-            <img src="{{ asset('img/bsu-small-logo.png') }}" alt="bsu logo" width="100" style="float: left;" />
-            <div class="h-100 d-flex align-content-center flex-column justify-content-center">
-                <div>Republic of Philippines</div>
-                <div class="fs-5">Bulacan State University</div>
-            </div>
-        </div>
-        <div class="col-2"></div>
+<x-dashboard-layout>
+    <x-slot:title>
+        PPMP Activity Log
+    </x-slot>
+
+    @php
+        $bc = [];
+        if (Auth::user()->account_type === 'admin' || Auth::user()->account_type === 'PROCUREMENT_OFFICE') {
+            $bc = [
+                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                ['name' => 'New PPMP Requests', 'url' => '/ppmp-approval/' . $branch_id],
+                ['name' => 'PPMP Activity Log']
+            ];
+        } else if (Auth::user()->account_type === 'END_USER') {
+            $bc = [
+                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                ['name' => 'PPMP Cart', 'route' => 'ppmp-cart.get'],
+                ['name' => 'PPMP Activity Log']
+            ];
+        } else if (Auth::user()->account_type === 'BUDGET_OFFICE') {
+            $bc = [
+                ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+                ['name' => 'PPMP Activity Log'],
+            ];
+        }
+        $breadcrumb = $bc
+    @endphp
+
+    <x-breadcrumb :breadcrumb="$breadcrumb" />
+
+    <div class="mb-3">
+        <a class="btn btn-success @if(count($ppmp_histories) <= 0) d-none @endif" href="{{ route('ppmp-activity-log.print', ['branch_id' => $branch_id]) }}" target="_blank"><em class="bi bi-printer"></em> Print this log</a>
     </div>
-    <div class="row mb-5">
-        <div class="col-12 text-center fs-4 fw-bold">
-            PPMP Request Change Logs of {{ $ppmp_histories[0]->branch_name }}
-        </div>
+    <div class="my-3">
+        <div class="fs-3 fw-bold">{{ $ppmp_histories[0]->ppmp->branch->branch_name }} PPMP Activity Logs <span class="badge bg-primary">{{ getPpmpYear() }}</span></div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-sm table-bordered border-dark">
-                <thead>
+    <div class="table-responsive">
+        <table id="ppmp-activity-log" class="table table-sm caption-top">
+            <caption>PPMP Activity Log</caption>
+            <thead>
+                <tr>
+                    <th style="width: 50%;">Activity</th>
+                    <th style="width: 30%;" class="text-end">Date and Time</th>
+                    {{-- <th style="width: 20%;">Show Changes</th> --}}
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($ppmp_histories as $history)
                     <tr>
-                        <th style="width: 60%; padding: 0.8rem;" class="text-center">HISTORY</th>
-                        <th style="width: 20%; padding: 0.8rem;" class="text-center">Date and Time</th>
-                        <th style="width: 20%; padding: 0.8rem;" class="text-center">User</th>
+                        <td>
+                            <div class="fw-bold">PPMP Item: {{ $history->ppmp->item_detail->description }}</div>
+                            @foreach(json_decode($history->changes_summary) as $summary)
+                                <div class="mb-2 border p-1 rounded">{{ $summary }}</div>
+                            @endforeach
+                            <div class="my-2 text-secondary small fst-italic">
+                                <span class="fw-bold">Action by: </span> {{ $history->changes_record_by->profile->first_name }} {{ $history->changes_record_by->profile->last_name }}
+                            </div>
+                        </td>
+                        <td>{{ $history->created_at }}</td>
+                        
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach ($ppmp_histories as $history)
-                        <tr>
-                            <td class="p-2">
-                                <div class="fw-bold">PPMP Item: {{ $history->product_name }}</div>
-                                @foreach(json_decode($history->changes_summary) as $summary)
-                                    <div class="mb-2 border p-1 rounded">{{ $summary }}</div>
-                                @endforeach
-                            </td>
-                            <td class='text-center'>{{ $history->created_at }}</td>
-                            <td class='text-center'>
-                                {{ $history->username }}
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                @endforeach
+            </tbody>
+        </table>
     </div>
-</div>
-@endif
-@include('layout/member_header')
-<div class="container-fluid">
-    <div class="row">
-        @include('layout/sidebar')
 
-
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            <div class="pt-3">
-                <div class="card">
-                    <div class="card-body">
-                        @php
-                            $bc = [];
-                            if (Auth::user()->account_type === 'admin' || Auth::user()->account_type === 'PROCUREMENT_OFFICE') {
-                                $bc = [
-                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-                                    ['name' => 'New PPMP Requests', 'url' => '/ppmp-approval/' . $branch_id],
-                                    ['name' => 'PPMP Activity Log']
-                                ];
-                            } else if (Auth::user()->account_type === 'END_USER') {
-                                $bc = [
-                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-                                    ['name' => 'PPMP Cart', 'route' => 'ppmp-cart.get'],
-                                    ['name' => 'PPMP Activity Log']
-                                ];
-                            } else if (Auth::user()->account_type === 'BUDGET_OFFICE') {
-                                $bc = [
-                                    ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-                                    ['name' => 'PPMP Activity Log'],
-                                ];
-                            }
-                        @endphp
-                        @include('layout/breadcrumb',
-                        [
-                            'breadcrumbs' => $bc
-                        ]
-                        )
-                        <div class="mb-3">
-                            <button class="btn btn-success @if(count($ppmp_histories) <= 0) d-none @endif" onclick="window.print()"><em class="bi bi-printer"></em> Print this log</button>
-                        </div>
-                        <div class="table-responsive">
-                            <table id="ppmp-activity-log" class="table table-sm caption-top">
-                                <caption>PPMP Activity Log</caption>
-                                <thead>
-                                    <tr>
-                                        <th style="width: 50%;">Activity</th>
-                                        <th style="width: 30%;">Date and Time</th>
-                                        <th style="width: 20%;">Show Changes</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($ppmp_histories as $history)
-                                        <tr>
-                                            <td>
-                                                <div class="fw-bold">PPMP Item: {{ $history->product_name }}</div>
-                                                @foreach(json_decode($history->changes_summary) as $summary)
-                                                    <div class="mb-2 border p-1 rounded">{{ $summary }}</div>
-                                                @endforeach
-                                            </td>
-                                            <td>{{ $history->created_at }}</td>
-                                            <td>
-                                                <button type="button" onclick="openComparison()" class="btn btn-info">Show comparison</button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div>
-                            <div class="row border-bottom text-secondary pb-2">
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="fs-4 fw-bold text-secondary">Before Update</div>
-                                </div>
-                                <div class="col-sm-12 col-md-6">
-                                    <div class="fs-4 fw-bold text-secondary">After Update</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal fade" id="showComparisonModal" aria-hidden="true" aria-labelledby="showComparisonModalLabel" tabindex="-1">
-                            <div class="modal-dialog modal-fullscreen modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h1 class="modal-title fs-5" id="showComparisonModalLabel">History Comparison</h1>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Show a second modal and hide this one with the button below.
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-</div>
-<link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-<script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
-<script>
-    async function openComparison() {
-        $('#showComparisonModal').modal('toggle');
-    }
-</script>
-@include('layout/datatable', ['tableId' => 'ppmp-activity-log'])
-@include('layout/footer')
+    <x-slot:additional_script>
+        @include('layout/datatable', ['tableId' => 'ppmp-activity-log'])
+    </x-slot>
+</x-dashboard-layout>

@@ -367,10 +367,10 @@
                 </div>
             </div>
         </div>
-        {{-- <script>
+        <script>
             window.addEventListener('load', function () {
                 window.print();
             })
-        </script> --}}
+        </script>
     </body>
 </html>
