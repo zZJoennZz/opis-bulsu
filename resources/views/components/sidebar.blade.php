@@ -34,6 +34,32 @@
                 <a href="{{ route('account-settings.show') }}" class="text-light"><em class="bi bi-sliders"></em> Account Settings</a>
             </div>
         </div>
+        @php
+            $dueDate = new DateTime(date("Y") . '/' . getSettingValue("ppmp_due_month") . '/' . getSettingValue('ppmp_due_day') . ' ' . date('H:i:s'));
+            $todayDate = new DateTime(date('Y-m-d H:i:s'));
+
+            $dayDiff = daysDiff($dueDate, $todayDate);
+        @endphp
+        @if ($dueDate == $todayDate)
+            <div class="alert alert-danger mb-3 fs-5" role="alert">
+                <div class="fw-bold">PPMP Due Today</div>
+                <div>Just a reminder to complete your pending tasks before the end of the day.</div>
+            </div>
+        @endif
+
+        @if ($dayDiff < 0)
+            <div class="alert alert-danger mb-3 fs-5" role="alert">
+                <div class="fw-bold">PPMP Past Due</div>
+                <div>Just a reminder to complete your pending tasks as soon as possible.</div>
+            </div>
+        @endif
+
+        @if ($dayDiff <= 5)
+            <div class="alert alert-warning mb-3 fs-5" role="alert">
+                <div class="fw-bold">{{$dayDiff}} day{{$dayDiff == 1 ? "" : "s more"}} before due!</div>
+                <div>Just a reminder to complete your pending tasks as soon as possible.</div>
+            </div>
+        @endif
         @if (Auth::user()->account_type === "admin")
             <div class="p-2">
                 <div class="alert alert-primary d-flex align-items-center" role="alert">

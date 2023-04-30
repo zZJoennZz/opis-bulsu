@@ -48,6 +48,7 @@
 
                 <div class="row">
                     <div class="col-12">
+                        <div class="float-end fw-bold">BY LOT</div>
                         <div class="fw-bold">ABC: Php{{ number_format($bac_reso->abstract_of_canvass->abc, 2) }}</div>
                     </div>
                 </div>
@@ -154,7 +155,7 @@
                                                     $totalCtr += 1;
                                                 @endphp
                                             @endforeach
-                                            @for ($i3 = 0; $i3 < 3 -  count($companyId); $i3++)
+                                            @for ($i3 = 0; $i3 < 3 - count($companyId); $i3++)
                                                 <td class="text-center" style="font-size: 11px;">N/A</td>
                                                 <td class="text-center" style="font-size: 11px;">N/A</td>
                                             @endfor
@@ -223,7 +224,7 @@
             
                 <div class="row mb-2">
                     <div class="col-12" style="text-indent: 4rem;">
-                        <span class="fw-bold">WHEREAS</span>, the goods to be procured are included in the Annual Procurement Plan for the year <span class="fw-bold">{{ $bac_reso->abstract_of_canvass->year }}</span> of the Bulacan State University with an Approved Budget for the Contract of <span class="fw-bold text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> <span class="fw-bold">(Php{{ number_format($bac_reso->abstract_of_canvass->abc, 2) }})</span>
+                        <span class="fw-bold">WHEREAS</span>, the goods to be procured are included in the Annual Procurement Plan for the year <span class="fw-bold">{{ $bac_reso->abstract_of_canvass->year }}</span> of the Bulacan State University with an Approved Budget for the Contract of <span class="fw-bold text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> <span class="fw-bold">(Php{{ number_format($bac_reso->abstract_of_canvass->abc, 2) }});</span>
                     </div>
                 </div>
 
@@ -269,11 +270,29 @@
                         @php
                             $totalCompanies = count($companies);
                         @endphp
-                        <span class="fw-bold">WHEREAS, {{ convertNumberToWords($totalCompanies) }} ({{ $totalCompanies }}) suppliers</span> secured RFQ and submitted their respective proposal to the BAC, to wit: <span class="fw-bold">
+                        <span class="fw-bold">WHEREAS</span>, aside from the said advertisement, the Bids and Awards Committee, through its Secretariat, send RFQ to {{ convertNumberToWords($totalCompanies) }} ({{ $totalCompanies }}) suppliers to wit: <span class="fw-bold">
                             @for ($i = 0; $i < $totalCompanies; $i++)
                                 {{ $companies[$i]->name }}@if ($i < $totalCompanies - 1), @endif
                             @endfor
                         </span>;
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-12" style="text-indent: 4rem;">
+                        <span class="fw-bold">WHEREAS,</span> only 
+                        @for ($i = 0; $i < $totalCompanies; $i++)
+                            <span class="fw-bold">{{ $companies[$i]->name }}</span>{{ $i < $totalCompanies - 2 ? ", " : "" }}{{ $i == $totalCompanies - 2 ? " and " : "" }}
+                        @endfor submitted an accomplished Request for Quotation;
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col-12" style="text-indent: 4rem;">
+                        <span class="fw-bold">WHEREAS,</span> Section V, Subsection D, Paragraph 8(b)(ii), Annex H of the IRR of R.A. No. 9184 otherwise known as “Government Procurement Reform Act,” provides that:
+                    </div>
+                    <div class="col-12" style="text-indent: 4rem;">
+                        <div class="float-start">ii.</div> <div style="text-indent: 4rem;"><span class="fw-bold fst-italic">The BAC shall prepare and send the RFQs/RFPs to at least three (3) suppliers, contractors or consultants of known qualifications.</span> This, notwithstanding, those who responded through any of the required postings shall be allowed to participate. <span class="fw-bold fst-italic text-decoration-underline">Receipt of at least one (1) quotation is sufficient to proceed with the evaluation thereof.</span></div>
                     </div>
                 </div>
 
@@ -285,71 +304,13 @@
 
                 <div class="row mb-2">
                     <div class="col-12" style="text-indent: 4rem;">
-                        <span class="fw-bold">WHEREAS,</span> no eligible quotation was submitted for the item numbers <span class="fw-bold">
-                            @php
-                                $bac_reso_items = [];
-                                $bac_reso_items1 = [];
-                                foreach($bac_reso->bac_reso_items as $b_item) {
-                                    array_push($bac_reso_items, $b_item->quotation->pr_item->id);
-                                    array_push($bac_reso_items1, $b_item->quotation_items_id);
-                                }
-                            @endphp
-                            @for ($i = 0; $i < count($bac_reso->abstract_of_canvass->pr->pr_items); $i++)
-                                @if (!in_array($bac_reso->abstract_of_canvass->pr->pr_items[$i]->id, $bac_reso_items))
-                                    {{ $bac_reso->abstract_of_canvass->pr->pr_items[$i]->item_number }} @if ($i < count($bac_reso->abstract_of_canvass->pr->pr_items) - 1), @endif
-                                @endif
-                            @endfor
-                        </span>;
+                        <span class="fw-bold">WHEREAS,</span> <span class="fw-bold">{{ $bac_reso->bac_reso_items[0]->quotation->quotation->company->name }}</span> submitted the lowest calculated and responsive quotation for the goods to be procured;
                     </div>
                 </div>
 
                 <div class="row mb-2">
                     <div class="col-12" style="text-indent: 4rem;">
-                        <span class="fw-bold">NOW THEREFORE,</span> after meticulous perusal, validation and verification, We, the members of Bids and Awards Committee hereby certifies that the foregoing abstract of canvass is true and correct and that we have reviewed and evaluated the quotations and hereby recommend to the University President to:
-                    </div>
-                </div>
-
-                <div class="row mb-2">
-                    <div class="col-12" style="text-indent: 4rem;">
-                        @php
-                            $ctr = 1;
-                            foreach($companies as $c) {
-                                $selItems = [];
-                                $selItemsPrice = [];
-                                $total = 0;
-                                foreach($c->quotations as $cq) {
-                                    foreach($cq->items as $cqi) {
-                                        if (in_array($cqi->id, $bac_reso_items1)) {
-                                            array_push($selItems, $cqi->pr_item->item_number);
-                                            $itemQty = 0;
-                                            foreach($cqi->pr_item->ppmp->milestones as $m) {
-                                                $itemQty += $m->milestone_value;
-                                            }
-                                            $total += $cqi->offered_unit_price * $itemQty;
-                                        }
-                                    }
-                                }
-
-                                if (count($selItems) > 0) {
-                                    echo '<div style="text-indent: 8rem;">'. $ctr .'. procure item number ';
-                                    for($i=0;$i<count($selItems);$i++) {
-                                        $itemExt = $i >= count($selItems) - 1 ? " " : ", ";
-                                        echo $selItems[$i] . $itemExt;
-                                    }
-                                    echo 'from '. $c->name .' amounting to '.translateToWords($total).' (Php'. number_format($total, 2) .');</div>';
-                                    $ctr += 1;
-                                }
-
-                                $selItems = [];
-                            }
-                        @endphp
-                        <div style="text-indent: 8rem;">3. Declare failure of procurement on item number 
-                            @for ($i = 0; $i < count($bac_reso->abstract_of_canvass->pr->pr_items); $i++)
-                                @if (!in_array($bac_reso->abstract_of_canvass->pr->pr_items[$i]->id, $bac_reso_items))
-                                    {{ $bac_reso->abstract_of_canvass->pr->pr_items[$i]->item_number }} @if ($i < count($bac_reso->abstract_of_canvass->pr->pr_items) - 1), @endif
-                                @endif
-                            @endfor
-                        ;</div>
+                        <span class="fw-bold">NOW THEREFORE,</span> after meticulous perusal, validation and verification, We, the members of Bids and Awards Committee hereby certifies that the foregoing abstract of canvass is true and correct and that we have reviewed and evaluated the quotations by lot and hereby recommend to the University President to procure said requested goods from <span class="fw-bold">{{ $bac_reso->bac_reso_items[0]->quotation->quotation->company->name }}</span> amounting to <span class="fw-bold text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> <span class="fw-bold">(Php{{ number_format($bac_reso->abstract_of_canvass->abc, 2) }});</span>
                     </div>
                 </div>
 
@@ -360,19 +321,23 @@
                 </div>
 
                 <div class="row mb-3 text-center">
-                    <div class="col-3">
+                    <div class="col">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->bac_chairman }}</div>
                         <div>Chair</div>
                     </div>
-                    <div class="col-3">
+                    <div class="col">
+                        <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->vice_chairman }}</div>
+                        <div>Vice Chair</div>
+                    </div>
+                    <div class="col">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->member_1 }}</div>
                         <div>Member</div>
                     </div>
-                    <div class="col-3">
+                    <div class="col">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->member_2 }}</div>
                         <div>Member</div>
                     </div>
-                    <div class="col-3">
+                    <div class="col">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->member_3 }}</div>
                         <div>Member</div>
                     </div>
@@ -402,10 +367,10 @@
                 </div>
             </div>
         </div>
-        <script>
+        {{-- <script>
             window.addEventListener('load', function () {
                 window.print();
             })
-        </script>
+        </script> --}}
     </body>
 </html>

@@ -36,7 +36,7 @@
                     <tr>
                         <td>
                             <div class="btn-group" role="group" aria-label="{{ $bac_reso->b_a_c_reso_number }} options">
-                                <a href="{{ route('bac-reso.single', ['id' => $bac_reso->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
+                                <a {{ !$bac_reso->is_draft ? 'target="_blank"' : "" }} href="{{ route('bac-reso.single', ['id' => $bac_reso->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
                                 <a href="#" class="btn btn-outline-danger btn-sm"><em class="bi bi-trash"></em></a>
                             </div>
                         </td>

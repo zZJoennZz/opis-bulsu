@@ -459,6 +459,8 @@ class PPMPController extends Controller
     {
         $ppmpHistories = ProProManPlanHistory::leftJoin('pro_pro_man_plans', 'pro_pro_man_plans.id', '=', 'pro_pro_man_plan_histories.pro_pro_man_plans_id')->leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->leftJoin('users', 'users.id', '=', 'pro_pro_man_plans.submitted_by')->select('pro_pro_man_plan_histories.*', 'pro_pro_man_plans.branches_id', 'item_details.description as product_name', 'branches.branch_name', DB::raw('(SELECT CONCAT(up.first_name, " ", up.last_name) as username FROM users as u LEFT JOIN user_profiles as up on u.id = up.users_id WHERE u.branches_id = pro_pro_man_plans.branches_id ORDER BY u.id DESC LIMIT 1) as username'))->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.year', '=', Auth::user()->ppmp_year)->orderBy('pro_pro_man_plan_histories.created_at', 'DESC')->get();
 
+        // return $ppmpHistories;
+
         return view('bo-dashboard/ppmp-activity-log')->with('ppmp_histories', $ppmpHistories)->with('branch_id', $branch_id);
     }
 

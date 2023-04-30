@@ -239,6 +239,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::post('/bac-reso/add', [BacResoController::class, 'save'])->name('bac-reso.save');
     Route::get('/bac-reso/{id?}', [BacResoController::class, 'single'])->name('bac-reso.single');
     Route::get('/bac-reso-print-by-item/{id?}', [BacResoController::class, 'print_by_item'])->name('bac-reso.print-by-item');
+    Route::get('/bac-reso-print-by-lot/{id?}', [BacResoController::class, 'print_by_lot'])->name('bac-reso.print-by-lot');
     Route::get('/bac-reso/compare/{pr_item_id?}', [BacResoController::class, 'get_quotations_by_pr'])->name('bac-reso.compare');
     Route::post('/bac-reso/item/add', [BacResoController::class, 'add_bac_reso_item'])->name('bac-reso-item.new');
     Route::delete('/bac-reso/{bac_reso_item_id?}', [BacResoController::class, 'remove_bac_reso_item'])->name('bac-reso.delete');

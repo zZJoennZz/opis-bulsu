@@ -121,26 +121,27 @@
                 </table>
             </div>
         @else
-            <div class="table-responsive">
+            <div class="border-bottom p-2 border-secondary mb-3">
+                <div class="float-end">
+                    <span class="badge bg-primary text-uppercase">{{ $bac_reso->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
+                </div>
+                <div class="mb-1">
+                    <small class="text-uppercase fw-bold text-secondary">Information:</small>
+                </div>
+                <div class="mb-1">
+                    <strong>PR #:</strong> <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
+                </div>
+                <div class="mb-1">
+                    <strong>Purpose:</strong> {{ $bac_reso->abstract_of_canvass->purpose }}
+                </div>
+                <div>
+                    <strong>ABC:</strong> ₱ {{ number_format($bac_reso->abstract_of_canvass->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> )
+                </div>
+            </div>
+            <div class="table-responsive border-secondary border p-2">
                 <table class="table table-bordered table-sm border-dark caption-top">
                     <caption>
-                        <div class="border p-2 rounded-4 border-secondary">
-                            <div class="float-end">
-                                <span class="badge bg-primary text-uppercase">{{ $bac_reso->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
-                            </div>
-                            <div class="mb-1">
-                                <small class="text-uppercase fw-bold text-secondary">Information:</small>
-                            </div>
-                            <div class="mb-1">
-                                <strong>PR #:</strong> <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
-                            </div>
-                            <div class="mb-1">
-                                <strong>Purpose:</strong> {{ $bac_reso->abstract_of_canvass->purpose }}
-                            </div>
-                            <div>
-                                <strong>ABC:</strong> ₱ {{ number_format($bac_reso->abstract_of_canvass->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> )
-                            </div>
-                        </div>
+                        
                     </caption>
                     <thead class="text-uppercase text-center align-middle">
                         <tr>
@@ -265,6 +266,14 @@
         
         <form action="{{ route('bac-reso.complete') }}" method="POST">
             <div class="row mb-3">
+                <div class="col-12">
+                    <div>
+                        <label for="header_remarks" class="form-label">Header Remarks:</label>
+                        <input required type="text" value="RESOLUTION RECOMMENDING TO AWARD THE PROCUREMENT OF" class="form-control" id="header_remarks" name="header_remarks">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
                 <div class="col-sm-12 col-md-6">
                     <div>
                         <label for="opening_quotation_date" class="form-label">Opening Quotation Date:</label>
@@ -366,96 +375,106 @@
             </div>
         </form>
     @else
-        <div>
-            <div class="float-end">
-                <a class="btn btn-sm btn-secondary" target="_blank" href="{{ route($bac_reso->abstract_of_canvass->type === "BY_ITEM" ? 'bac-reso.print-by-item' : '', ['id' => $bac_reso->id]) }}"><em class="bi bi-printer-fill"></em> Print</a>
+        <script>
+            window.location.href = '{{ route($bac_reso->abstract_of_canvass->type === "BY_ITEM" ? 'bac-reso.print-by-item' : 'bac-reso.print-by-lot', ['id' => $bac_reso->id]) }}';
+        </script>
+        <div class="text-center">
+            <div class="text-lg text-secondary py-5">
+                Loading...
+            </div>
+        </div>
+        <div class="d-none">
+            <div>
+                <a class="btn btn-sm btn-secondary" target="_blank" href="{{ route($bac_reso->abstract_of_canvass->type === "BY_ITEM" ? 'bac-reso.print-by-item' : 'bac-reso.print-by-lot', ['id' => $bac_reso->id]) }}"><em class="bi bi-printer-fill"></em> Print</a>
             </div>
             <span class="badge bg-primary text-uppercase">{{ $bac_reso->abstract_of_canvass->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
         </div>
-        <div class="table-responsive">
-            <table class="table table-sm table-bordered border-dark caption-top">
-                <caption>
-                    <div>
-                        PR NUMBER: <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
-                    </div>
-                </caption>
-                <thead class="text-uppercase text-center align-middle">
-                    <tr>
-                        <th scope="col" style="width: 50px;" rowspan="3">Item No.</th>
-                        <th scope="col" rowspan="3">Name of Articles Being Requisitioned</th>
-                        <th scope="col" style="width: 80px;" rowspan="3">Unit</th>
-                        <th scope="col" style="width: 80px;" rowspan="3">Qty.</th>
-                        <th scope="col" style="width: 130px;" rowspan="3">Unit Price</th>
-                        <th scope="col" style="width: 130px;" rowspan="3">Extended Amount</th>
-                        <th scope="col" colspan="{{ count($companies) * 3 }}">Name of the Bidders / Dealers</th>
-                    </tr>
-                    <tr>
-                        @foreach ($companies as $c)
-                            <th scope="col" colspan="3" class="text-primary">{{ $c->name }}</th>
-                        @endforeach
-                    </tr>
-                    <tr>
-                        @for ($i = 0; $i < count($companies); $i++)
-                            <th scope="col" style="width: 70px; font-size: 12px">Unit Price</th>
-                            <th scope="col" style="width: 70px; font-size: 12px">Brand</th>
-                            <th scope="col" style="width: 100px; font-size: 12px">Extended Amount</th>
-                        @endfor
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $ctr = 1;
-                    @endphp
-                    @foreach ($bac_reso->abstract_of_canvass->pr->pr_items as $item)
+        <div class="d-none">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered border-dark caption-top">
+                    <caption>
+                        <div>
+                            PR NUMBER: <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
+                        </div>
+                    </caption>
+                    <thead class="text-uppercase text-center align-middle">
                         <tr>
-                            <td>{{ $ctr }}</td>
-                            <td>{{ $item->ppmp->item_detail->description }}</td>
-                            <td>{{ $item->ppmp->item_detail->unit->uom }}</td>
-                            {{-- COMPUTING THE QTY --}}
-                            @php
-                                $itemQty = 0;
-                            @endphp
-                            @foreach ($item->ppmp->milestones as $m)
-                                @php
-                                    $itemQty += $m->milestone_value;
-                                @endphp
-                            @endforeach
-                            <td>{{ $itemQty }}</td>
-                            <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue, 2) }}</div></td>
-                            <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue * $itemQty, 2) }}</div></td>
-                            
-                            {{-- LISTING COMPANY QUOTATIONS --}}
-                            @foreach ($companies as $c)
-                                @php
-                                    $itemsFound = 0;
-                                @endphp
-                                @foreach ($c->quotations as $q)
-                                    @foreach ($q->items as $i)
-                                        @if ($i->pr_item->id === $item->id)
-                                            <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price, 2) }}</td>
-                                            <td>{{ $i->brand_and_model_offered }}</td>
-                                            <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price * $itemQty, 2) }}</div></td>
-                                            @php
-                                                $itemsFound += 1;
-                                            @endphp
-                                        @endif
-                                    @endforeach
-                                @endforeach
-                                @if ($itemsFound === 0)
-                                    <td class="text-center" style="font-size: 11px;">N/A</td>
-                                    <td class="text-center" style="font-size: 11px;">N/A</td>
-                                    <td class="text-center" style="font-size: 11px;">N/A</td>
-                                @endif
-                            @endforeach
-
-                            @php
-                                $ctr += 1;
-                                $itemQty = 0;
-                            @endphp
+                            <th scope="col" style="width: 50px;" rowspan="3">Item No.</th>
+                            <th scope="col" rowspan="3">Name of Articles Being Requisitioned</th>
+                            <th scope="col" style="width: 80px;" rowspan="3">Unit</th>
+                            <th scope="col" style="width: 80px;" rowspan="3">Qty.</th>
+                            <th scope="col" style="width: 130px;" rowspan="3">Unit Price</th>
+                            <th scope="col" style="width: 130px;" rowspan="3">Extended Amount</th>
+                            <th scope="col" colspan="{{ count($companies) * 3 }}">Name of the Bidders / Dealers</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        <tr>
+                            @foreach ($companies as $c)
+                                <th scope="col" colspan="3" class="text-primary">{{ $c->name }}</th>
+                            @endforeach
+                        </tr>
+                        <tr>
+                            @for ($i = 0; $i < count($companies); $i++)
+                                <th scope="col" style="width: 70px; font-size: 12px">Unit Price</th>
+                                <th scope="col" style="width: 70px; font-size: 12px">Brand</th>
+                                <th scope="col" style="width: 100px; font-size: 12px">Extended Amount</th>
+                            @endfor
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php
+                            $ctr = 1;
+                        @endphp
+                        @foreach ($bac_reso->abstract_of_canvass->pr->pr_items as $item)
+                            <tr>
+                                <td>{{ $ctr }}</td>
+                                <td>{{ $item->ppmp->item_detail->description }}</td>
+                                <td>{{ $item->ppmp->item_detail->unit->uom }}</td>
+                                {{-- COMPUTING THE QTY --}}
+                                @php
+                                    $itemQty = 0;
+                                @endphp
+                                @foreach ($item->ppmp->milestones as $m)
+                                    @php
+                                        $itemQty += $m->milestone_value;
+                                    @endphp
+                                @endforeach
+                                <td>{{ $itemQty }}</td>
+                                <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue, 2) }}</div></td>
+                                <td>₱ <div class="float-end">{{ number_format($item->ppmp->item_detail->price_catalogue * $itemQty, 2) }}</div></td>
+                                
+                                {{-- LISTING COMPANY QUOTATIONS --}}
+                                @foreach ($companies as $c)
+                                    @php
+                                        $itemsFound = 0;
+                                    @endphp
+                                    @foreach ($c->quotations as $q)
+                                        @foreach ($q->items as $i)
+                                            @if ($i->pr_item->id === $item->id)
+                                                <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price, 2) }}</td>
+                                                <td>{{ $i->brand_and_model_offered }}</td>
+                                                <td>₱ <div class="float-end">{{ number_format($i->offered_unit_price * $itemQty, 2) }}</div></td>
+                                                @php
+                                                    $itemsFound += 1;
+                                                @endphp
+                                            @endif
+                                        @endforeach
+                                    @endforeach
+                                    @if ($itemsFound === 0)
+                                        <td class="text-center" style="font-size: 11px;">N/A</td>
+                                        <td class="text-center" style="font-size: 11px;">N/A</td>
+                                        <td class="text-center" style="font-size: 11px;">N/A</td>
+                                    @endif
+                                @endforeach
+    
+                                @php
+                                    $ctr += 1;
+                                    $itemQty = 0;
+                                @endphp
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     @endif
     <x-slot:additional_script>

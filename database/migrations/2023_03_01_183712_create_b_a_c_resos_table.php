@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('b_a_c_reso_number');
             $table->unsignedBigInteger('abstract_of_canvasses_id');
+            $table->string('header_remarks')->nullable();
             $table->string('rfq_reference_numbers')->nullable();
             $table->date('rfq_date')->nullable();
             $table->string('opening_quotation_location')->nullable();

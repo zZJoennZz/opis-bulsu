@@ -147,8 +147,8 @@ class BacResoController extends Controller
             ->where('is_delete', '=', 0)
             ->first();
 
-        if ($bac_reso->abstract_of_canvass->type === "BY LOT") {
-            return redirect()->back()->withErrors(['Invalid BAC reso.']);
+        if ($bac_reso->abstract_of_canvass->type === "BY_LOT") {
+            return redirect()->route('bac-reso.all')->withErrors(['Invalid BAC reso.']);
         }
 
         if ($bac_reso === null) {
@@ -173,6 +173,47 @@ class BacResoController extends Controller
             ->get();
 
         return view('po-dashboard/print-bac-reso-by-item')
+            ->with('bac_reso', $bac_reso)
+            ->with('purchase_request_items', $purchase_request_items)
+            ->with('quotations', $quotations)
+            ->with('total_count_products', $total_products)
+            ->with('companies', $companies);
+    }
+
+    public function print_by_lot($id)
+    {
+        $bac_reso = BACReso::with(['bac_reso_items.quotation.pr_item', 'bac_reso_items.quotation.pr_item.ppmp.item_detail.unit', 'abstract_of_canvass.pr.pr_items.quotations.bac_reso_item'])
+            ->where('id', '=', $id)
+            ->where('is_delete', '=', 0)
+            ->first();
+
+        if ($bac_reso->abstract_of_canvass->type === "BY_ITEM") {
+            return redirect()->route('bac-reso.all')->withErrors(['Invalid BAC reso.']);
+        }
+
+        if ($bac_reso === null) {
+            return redirect()->route('bac-reso.all')->withErrors(['BAC Resolution not found!']);
+        }
+
+        $purchase_request_items = PurchaseRequest::where('id', '=', $bac_reso->abstract_of_canvass->purchase_requests_id)->with(['pr_items.ppmp.item_detail.unit', 'pr_items.ppmp.milestones'])->first();
+
+        $total_products = count($purchase_request_items->pr_items);
+
+        $quotations = Quotation::whereHas('items.pr_item.pr', function ($builder) use ($bac_reso) {
+            $builder->where('id', '=', $bac_reso->abstract_of_canvass->purchase_requests_id);
+        })
+            ->with(['items.pr_item.pr'])
+            ->where('year', '=', getPpmpYear())
+            ->get();
+
+        $companies = Company::whereHas('quotations.items.pr_item.pr', function ($builder) use ($bac_reso) {
+            $builder->where('id', '=', $bac_reso->abstract_of_canvass->purchase_requests_id);
+        })
+            ->has('quotations.items', '=', count($bac_reso->abstract_of_canvass->pr->pr_items))
+            ->with('quotations.items.pr_item.pr')
+            ->get();
+
+        return view('po-dashboard/print-bac-reso-by-lot')
             ->with('bac_reso', $bac_reso)
             ->with('purchase_request_items', $purchase_request_items)
             ->with('quotations', $quotations)
@@ -302,6 +343,7 @@ class BacResoController extends Controller
         DB::beginTransaction();
         try {
             $bac_rec = BACReso::find($request->bac_resos_id);
+            $bac_rec->header_remarks = $request->header_remarks;
             $bac_rec->opening_quotation_date = $request->opening_quotation_date;
             $bac_rec->opening_quotation_location = $request->opening_quotation_location;
             $bac_rec->rfq_date = $request->rfq_date;
@@ -310,7 +352,7 @@ class BacResoController extends Controller
             $bac_rec->save();
             DB::commit();
 
-            return redirect()->back()->with('success', 'BAC Resolution created!');
+            return redirect()->route('bac-reso.all')->with('success', 'BAC Resolution created!');
         } catch (\Exception $e) {
 
             DB::rollBack();

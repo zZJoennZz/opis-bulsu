@@ -101,6 +101,7 @@ class AbstractOfCanvassController extends Controller
 
         DB::beginTransaction();
         try {
+            $pr = PurchaseRequest::with(['requester.profile'])->where('id', $request->purchase_requests_id)->first();
             $new_aoc = new AbstractOfCanvass();
             $new_aoc->year = getPpmpYear();
             $new_aoc->purchase_requests_id = $request->purchase_requests_id;
@@ -113,7 +114,7 @@ class AbstractOfCanvassController extends Controller
             $new_aoc->member_3 = $request->member_3;
             $new_aoc->member_4 = $request->member_4;
             $new_aoc->technical_resource_person = $request->technical_resource_person;
-            $new_aoc->end_user = $request->end_user;
+            $new_aoc->end_user = $pr->requester->profile->first_name . ' ' . $pr->requester->profile->last_name;
             $new_aoc->president = $request->president;
             $new_aoc->procurement_office_rep = $request->procurement_office_rep;
             $new_aoc->added_by = Auth::user()->id;

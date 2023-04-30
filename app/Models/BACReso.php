@@ -11,6 +11,7 @@ class BACReso extends Model
     protected $fillable = [
         'b_a_c_reso_number',
         'abstract_of_canvasses_id',
+        'header_remarks',
         'rfq_reference_numbers',
         'rfq_date',
         'opening_quotation_location',

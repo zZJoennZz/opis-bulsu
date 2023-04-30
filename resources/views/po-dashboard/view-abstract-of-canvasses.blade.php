@@ -29,7 +29,7 @@
                     <tr>
                         <td>
                             <div class="btn-group" role="group" aria-label="{{ $aoc->pr->pr_number }} options">
-                                <a href="{{ route('aoc.single', ['id' => $aoc->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
+                                <a target="_blank" href="{{ route('aoc.print', ['id' => $aoc->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-printer-fill"></em></a>
                                 <a href="#" class="btn btn-outline-danger btn-sm"><em class="bi bi-trash"></em></a>
                             </div>
                         </td>

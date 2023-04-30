@@ -80,16 +80,13 @@
                 <label for="technical_resource_person" class="form-label">Technical Resource Person</label>
                 <input type="text" class="form-control" id="technical_resource_person" name="technical_resource_person" value="{{ getSettingValue("technical_resource_person") }}" required>
             </div>
-            <div class="col-sm-12 col-md-6 col-md-6">
-                <label for="end_user" class="form-label">End User</label>
-                <input type="text" class="form-control" id="end_user" name="end_user" required>
-            </div>
-        </div>
-        <div class="row mb-3">
             <div class="col-sm-12 col-md-6">
                 <label for="procurement_office_rep" class="form-label">Procurement Office's Representative</label>
                 <input type="text" class="form-control" id="procurement_office_rep" name="procurement_office_rep" value="{{ Auth::user()->profile->first_name . ' ' . Auth::user()->profile->last_name }}" required>
             </div>
+        </div>
+        <div class="row mb-3">
+            
             <div class="col-sm-12 col-md-6">
                 <label for="president" class="form-label">University President</label>
                 <input type="text" class="form-control" id="president" name="president" value="{{ getSettingValue("university_president") }}" required>

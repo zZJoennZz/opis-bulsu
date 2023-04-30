@@ -217,3 +217,17 @@ if (!function_exists('convertNumberToWords')) {
         return 'number too large';
     }
 }
+
+if (!function_exists('daysDiff')) {
+    function daysDiff(DateTime $date1, DateTime $date2)
+    {
+        // Calculate the difference between the two dates
+        $diff = $date2->diff($date1);
+
+        // Calculate the number of days between the two dates
+        $days = $diff->format('%r%a');
+
+        // Check the order of the dates and mark the days accordingly
+        return $days;
+    }
+}
