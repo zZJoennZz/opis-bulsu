@@ -20,7 +20,7 @@
                         <h1 class="h5 card-title"><span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($company_profiles) }}</span></span></h1>
                         <div class="modal fade" id="add-company-modal" tabindex="-1" aria-labelledby="addCompanyLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content">
+                                <div class="modal-content overflow-auto">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="addCompanyLabel">Add New Company Profile</h1>
                                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="close"></button>
@@ -61,6 +61,10 @@
                                                     <label for="philgeps_number" class="col-form-label">Philgeps Number</label>
                                                     <input type="number" class="form-control" id="philgeps_number" name="philgeps_number" required>
                                                 </div>
+                                               <div class="col-sm-12 col-md-6">
+                                                    <label for="is_in_philgeps" class="col-form-label">Philgeps Status</label>
+                                                    <input type="checkbox" name="is_in_philgeps">
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -74,7 +78,7 @@
                         {{-- FOR EDIT --}}
                         <div class="modal fade" id="edit-company-modal" tabindex="-1" aria-labelledby="editCompanyLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content">
+                                <div class="modal-content overflow-auto">
                                     <div class="modal-header">
                                         <h1 class="modal-title fs-5" id="editCompanyLabel">Edit Company Profile</h1>
                                         <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="close"></button>
@@ -114,7 +118,13 @@
                                                 </div>
                                                 <div class="col-sm-12 col-md-6">
                                                     <label for="philgeps_number" class="col-form-label">Philgeps Number</label>
-                                                    <input type="number" class="form-control" id="philgeps_number" name="philgeps_number" required>
+                                                    <input type="number" class="form-control" id="edit-philgeps_number" name="philgeps_number" required>
+                                                </div>
+                                                <div class="col-sm-12 col-md-6">
+                                                    <label for="is_in_philgeps" class="col-form-label d-block">Philgeps Status</label>
+                                                    <input type="checkbox" name="is_in_philgeps" id="is_in_philgeps" value="this.checked" class="d-inline">
+                                                        <span class="badge text-bg-success float-left" title="" id="status_label"><em class="bi bi-person-fill-check"></em> Active</span>
+                                                        <span class="badge text-bg-warning" title="" id="status_label"><em class="bi bi-person-fill-slash"></em> Inactive</span>                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -134,7 +144,7 @@
                                 <caption>List of company profiles</caption>
                                 <thead>
                                     <tr>
-                                        <th style="width: 5%;"></th>
+                                        <th style="width: 5%; display: none;"></th>
                                         <th style="width: 25%;">Company Name</th>
                                         <th style="width: 25%;">Address</th>
                                         <th>TIN #</th>
@@ -147,7 +157,7 @@
                                 <tbody>
                                     @foreach ($company_profiles as $profile)
                                         <tr>
-                                            <td class="text-center">
+                                            <td class="text-center" style="display: none;">
                                                 <input type="checkbox" name="is_in_philgeps" id="is_in_philgeps" value="{{$profile->is_in_philgeps}}" @if($profile->is_in_philgeps == 1) checked @endif onclick="status_change('{{$profile->id}}', this.checked)">
                                             </td>
                                             <td class="fs-5 fw-bold">{{ $profile->name }}</td>
@@ -201,6 +211,10 @@
                 $('#edit_email_address').val(companyProfile.email_address);
                 $("#edit-company-modal").modal('show');
                 $('button[id^="tool-"]').prop('disabled', false);
+                $('#edit-philgeps_number').val(companyProfile.philgeps_number);
+                $("#is_in_philgeps").attr("value",companyProfile.is_in_philgeps);
+                if(companyProfile.is_in_philgeps == "1"){ $("#is_in_philgeps").attr("checked","true"); $('.badge.text-bg-warning').addClass('d-none'); }else{ $("#is_in_philgeps").removeAttr("checked","true");  $('.badge.text-bg-success').addClass('d-none');  }
+                $('#is_in_philgeps').val(companyProfile.is_in_philgeps);
             })
             .catch(err => {
                 alert('Cannot fetch company profile details. Please try again.');
@@ -224,33 +238,17 @@
         return false;
     }
 
-    async function status_change(id, checked){
-        let confirmStatus = confirm("Are you sure to change the status?");
-        if (confirmStatus) {
-
-        var isChecked = checked ? 1 : 0;
-        var url = '/company-profiles/update/'+ id +'/'+ isChecked;
-        $.ajax({
-            url: url,
-            method: 'GET',
-            data: {
-                '_token': '{{ csrf_token() }}',
-                'isChecked': isChecked
-            },
-            success: function(response) {
-                if (response !== '') {
-                    console.log(response);
-                }
-            },
-            error: function(xhr) {
-                console.log('Error:', xhr);
-            }
-        });
-
-        location.reload();
-
+    $('#is_in_philgeps').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('.badge.text-bg-warning').addClass('d-none');
+            $('.badge.text-bg-success').removeClass('d-none');
+            $('.badge.text-bg-success').addClass('d-inline');
+        } else {
+            $('.badge.text-bg-success').addClass('d-none');
+            $('.badge.text-bg-warning').removeClass('d-none');
+            $('.badge.text-bg-warning').addClass('d-inline');
         }
-    }
+    });
 
 </script>
 @include('layout/datatable', ['tableId' => 'company-profile-table'])
