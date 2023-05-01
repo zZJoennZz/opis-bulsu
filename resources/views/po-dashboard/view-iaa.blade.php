@@ -112,7 +112,7 @@
                                 <td class="text-center"></td>
                             </tr>
                             <tr class="border-bottom border-dark">
-                                <td class="border-end border-dark text-center"></td>
+                                <td class="border-end border-dark text-center text-light">-</td>
                                 <td class="border-end border-dark">{{ $item->quotation->pr_item->ppmp->item_detail->extra_article }}</td>
                                 <td class="border-end border-dark text-center"></td>
                                 <td class="text-center"></td>

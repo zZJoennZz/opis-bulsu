@@ -34,7 +34,7 @@
 @foreach($all_branches as $branch)
 <div class="row border-bottom rounded-5 p-3 mb-3">
     <div class="col-12 col-lg-6 text-start p-3">
-        <div class="fs-3"><span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></div>
+        {{-- <div class="fs-6"><span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></div> --}}
         <div class="fs-1 mb-1 fw-bold">{{$branch->branch_name}}</div>
         <div class="fst-italic text-secondary"><span class="fw-bold">Requested by:</span>
             @if(isset($branch->ppmp[0]) && ($branch->ppmp[0]->is_draft === 0))
