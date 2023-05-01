@@ -226,7 +226,7 @@
                     <tr>
                         <td>${d.ppmp.item_detail.description}</td>
                         <td>${totalQty} ${d.ppmp.item_detail.unit.uom}</td>
-                        <td><input id="item_number_${d.id}" name="item_number_${d.id}" class="form-control"></td>
+                        <td><input id="item_number_${d.id}" name="item_number_${d.id}" value="${d.item_number}" class="form-control" readonly></td>
                         <td><input id="brand_and_model_offered_${d.id}" name="brand_and_model_offered_${d.id}" class="form-control"></td>
                         <td><input onchange="$('#total_${d.id}').val(${totalQty} * this.value)" id="offered_unit_price_${d.id}" name="offered_unit_price_${d.id}" class="form-control"></td>
                         <td><input class="form-control" id="total_${d.id}" disabled></td>
