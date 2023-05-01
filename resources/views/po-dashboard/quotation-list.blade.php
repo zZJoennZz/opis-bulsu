@@ -135,6 +135,7 @@
                 
                                             <div class="row mb-3">
                                                 <table class="table table-bordered">
+                                                    <caption></caption>
                                                     <thead>
                                                         <th class="text-center text-uppercase">Item No.</th>
                                                         <th class="text-center text-uppercase">Item & Specification</th>
