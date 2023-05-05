@@ -196,7 +196,25 @@
                                             @endphp
                                         </tr>
                                     @endforeach
-
+                                    <tr>
+                                        <td class="text-light">-</td>
+                                        <td class="text-center">
+                                            <span class="small fst-italic">*Nothing follows</span>
+                                        </td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
                                     {{-- @for ($i4 = 0; $i4 < 10 - count($aoc[0]->pr->pr_items); $i4++)
                                         <tr>
                                             <td class="text-light">-</td>
