@@ -20,21 +20,25 @@ class SourceOfFundSeeder extends Seeder
             'source_of_fund' => 'N/A',
             'is_delete' => 0,
             'added_by' => 1,
+            'description' => 'description'
         ]);
         SourceOfFund::create([
             'source_of_fund' => 'GAA',
             'is_delete' => 0,
             'added_by' => 1,
+            'description' => 'description'
         ]);
         SourceOfFund::create([
             'source_of_fund' => 'Income',
             'is_delete' => 0,
             'added_by' => 1,
+            'description' => 'description'
         ]);
         SourceOfFund::create([
             'source_of_fund' => 'Fiduciary Fund',
             'is_delete' => 0,
             'added_by' => 1,
+            'description' => 'description'
         ]);
     }
 }

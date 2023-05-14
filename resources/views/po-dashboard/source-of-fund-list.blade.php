@@ -14,6 +14,10 @@
                         <label for="source_of_fund" class="form-label">Source of Fund</label>
                         <input type="text" class="form-control" id="source_of_fund" name="source_of_fund" placeholder="Source of Fund">
                     </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="description" name="description" placeholder="Description">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
@@ -36,6 +40,10 @@
                     <div class="mb-3">
                         <label for="source_of_fund" class="form-label">Source of Fund</label>
                         <input type="text" class="form-control" id="edit_source_of_fund" name="source_of_fund" placeholder="Source of Fund">
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="edit_description" name="description" placeholder="Description">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -74,7 +82,8 @@
                                     <tr>
                                         <th style="width: 5%;"></th>
                                         <th class="text-center" style="width: 5%;">Edit</th>
-                                        <th style="width: 80%;">Source of Fund</th>
+                                        <th style="width: 60%;">Source of Fund</th>
+                                        <th style="width: 20%;">Description</th>
                                         <th>Created at</th>
                                     </tr>
                                 </thead>
@@ -88,6 +97,7 @@
                                             </td>
                                             <td class="text-center"><button class="btn btn-success" onclick="openEdit({{ $source_of_fund->id }})" @if($source_of_fund->is_delete===1) disabled @endif><em class="bi bi-pencil-square"></em></button></td>
                                             <td>{{ $source_of_fund->source_of_fund }} @if($source_of_fund->is_delete===1) <span class="badge bg-secondary">Source of Funds Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$source_of_fund->id}})"><em class="bi bi-trash-fill"></em></button> @endif</td>
+                                            <td>{{$source_of_fund->description}}</td>
                                             <td>{{$source_of_fund->created_at}}</td>
                                         </tr>
                                     @endforeach
@@ -109,6 +119,7 @@
         await axios.get(`{{ url('/source-of-fund') }}/${id}`)
             .then(res => {
                 $('#edit_source_of_fund').val(res.data.source_of_fund);
+                $('#edit_description').val(res.data.description);
                 $('#editSourceofFund').modal('toggle');
             })
             .catch(err => alert("Could not fetch the data. Please contact website administrator."));
@@ -118,6 +129,7 @@
         e.preventDefault();
         const data = {
             "source_of_fund" : $('#edit_source_of_fund').val(),
+            "description" : $('#edit_description').val()
         };
         await axios.put(`{{ url('/source-of-fund') }}/${selectedSourceofFund}`, data)
             .then(res => {
@@ -170,5 +182,5 @@
     }
 </script>
 <link rel="stylesheet" href="{{asset('css/dashboard.css')}}">
-@include('layout/datatable', ['tableId' => 'source-of-fund-table' , 'columnId' => '3'])
+@include('layout/datatable', ['tableId' => 'source-of-fund-table' , 'columnId' => '4'])
 @include('layout/footer')
