@@ -13,14 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('source_of_funds', function (Blueprint $table) {
+        Schema::create('allot_and_obl_slips', function (Blueprint $table) {
             $table->id();
-            $table->text('source_of_fund');
-            $table->text('description')->nullable();
-            $table->boolean('is_delete')->default('0');
+            $table->unsignedBigInteger('purchase_orders_id');
+            $table->unsignedBigInteger('budget_officer_id');
+            $table->boolean('is_draft')->default(1);
+            $table->boolean('is_delete')->default(0);
             $table->unsignedBigInteger('added_by');
             $table->timestamps();
 
+            $table->foreign('purchase_orders_id')->references('id')->on('purchase_orders');
+            $table->foreign('budget_officer_id')->references('id')->on('users');
             $table->foreign('added_by')->references('id')->on('users');
         });
     }
@@ -32,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('source_of_funds');
+        Schema::dropIfExists('allot_and_obl_slips');
     }
 };

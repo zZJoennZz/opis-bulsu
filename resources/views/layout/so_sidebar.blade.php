@@ -10,7 +10,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('icf.show') }}">
+    <a class="nav-link" aria-current="page" href="{{ route('icf.add') }}">
         <em class="bi bi-file-text-fill"></em>
         Inventory Custodian Form
     </a>

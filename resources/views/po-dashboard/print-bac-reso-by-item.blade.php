@@ -343,13 +343,15 @@
                                 $selItems = [];
                             }
                         @endphp
-                        <div style="text-indent: 8rem;">3. Declare failure of procurement on item number 
-                            @for ($i = 0; $i < count($bac_reso->abstract_of_canvass->pr->pr_items); $i++)
-                                @if (!in_array($bac_reso->abstract_of_canvass->pr->pr_items[$i]->id, $bac_reso_items))
-                                    {{ $bac_reso->abstract_of_canvass->pr->pr_items[$i]->item_number }} @if ($i < count($bac_reso->abstract_of_canvass->pr->pr_items) - 1), @endif
-                                @endif
-                            @endfor
-                        ;</div>
+                        @if (count($bac_reso->abstract_of_canvass->pr->pr_items) !== count($bac_reso->bac_reso_items))
+                            <div style="text-indent: 8rem;">{{ $ctr }} Declare failure of procurement on item number 
+                                @for ($i = 0; $i < count($bac_reso->abstract_of_canvass->pr->pr_items); $i++)
+                                    @if (!in_array($bac_reso->abstract_of_canvass->pr->pr_items[$i]->id, $bac_reso_items))
+                                        {{ $bac_reso->abstract_of_canvass->pr->pr_items[$i]->item_number }}@if ($i === count($bac_reso->abstract_of_canvass->pr->pr_items) - 1), @endif
+                                    @endif
+                                @endfor
+                            ;</div>
+                        @endif
                     </div>
                 </div>
 

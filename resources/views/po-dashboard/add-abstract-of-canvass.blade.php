@@ -94,7 +94,7 @@
         </div>
         <div class="row">
             <div class="col-12 text-end">
-                <button class="btn btn-primary" type="submit"><em class="bi bi-save2"></em> Save</button>
+                <button class="btn btn-primary" type="submit">Next <em class="bi bi-chevron-double-right"></em></button>
             </div>
         </div>
     </form>

@@ -20,6 +20,7 @@ class PurchaseOrder extends Model
         'date_of_delivery',
         'for_inquiry',
         'delivery_term',
+        'accountant_name',
         'is_delete',
         'added_by',
     ];

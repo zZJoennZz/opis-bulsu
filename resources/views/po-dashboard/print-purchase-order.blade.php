@@ -228,9 +228,12 @@
                                 </div>
                             </div>
                             <div class="border-bottom border-dark text-center fw-bold">
-                                {{ getSettingValue('chief_accountant') }}
+                                @php
+                                    $selectedAcct = collect(json_decode(json_decode(getSettingValue('accountants'))))->where('id', $po->accountant_name)
+                                @endphp
+                                {{ $selectedAcct[0]->full_name }}
                             </div>
-                            <div class="text-center">Chief Accountant</div>
+                            <div class="text-center">{{ $selectedAcct[0]->position }}</div>
                         </div>
                     </div>
                 </div>
@@ -241,8 +244,7 @@
                 </div>
                 <div class="col-12">
                     <div class="row p-0" style="font-size: 11px;">
-                        <div class="col-1 text-center">Reso#</div>
-                        <div class="col-1 text-center">{{ $po->bac_reso->b_a_c_reso_number }}</div>
+                        <div class="col-2 text-start">Reso# {{ $po->bac_reso->b_a_c_reso_number }}</div>
                         <div class="col-10">
                             PR#: {{ $po->bac_reso->abstract_of_canvass->pr->pr_number }} {{ $po->bac_reso->bac_reso_items[0]->quotation->pr_item->ppmp->source_of_fund->source_of_fund }}
                         </div>
