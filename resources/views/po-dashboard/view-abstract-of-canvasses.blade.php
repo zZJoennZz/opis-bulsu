@@ -28,12 +28,22 @@
                 @foreach($aocs as $aoc)
                     <tr>
                         <td>
-                            <div class="btn-group" role="group" aria-label="{{ $aoc->pr->pr_number }} options">
-                                <a target="_blank" href="{{ route('aoc.print', ['id' => $aoc->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-printer-fill"></em></a>
-                                <a href="#" class="btn btn-outline-danger btn-sm"><em class="bi bi-trash"></em></a>
-                            </div>
+                            <form action="{{ route('aoc.delete') }}/{{ $aoc->id }}" method="POST" onsubmit="return confirm('Are you sure to delete this?')">
+                                <div class="btn-group" role="group" aria-label="{{ $aoc->pr->pr_number }} options">
+                                    @csrf
+                                    @method('DELETE')
+                                    @if ($aoc->is_draft === 1)
+                                        <a href="{{ route('aoc.single', ['id' => $aoc->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
+                                    @else
+                                        <a target="_blank" href="{{ route('aoc.print', ['id' => $aoc->bac_reso->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-printer-fill"></em></a>
+                                    @endif
+                                    <button class="btn btn-outline-danger btn-sm" type="submit">
+                                        <em class="bi bi-trash"></em>
+                                    </button>
+                                </div>
+                            </form>
                         </td>
-                        <td>{{ $aoc->pr->pr_number }}</td>
+                        <td><span class="badge bg-{{ $aoc->is_draft ? "secondary" : "primary" }}">{{ $aoc->is_draft ? "Draft" : "Done" }}</span> {{ $aoc->pr->pr_number }}</td>
                         <td class="text-end">{{ $aoc->created_at }}</td>
                     </tr>
                 @endforeach

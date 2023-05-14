@@ -27,6 +27,7 @@ use App\Http\Controllers\InventoryCustodianController;
 use App\Http\Controllers\SupplyEndUserController;
 use App\Http\Controllers\SupplyEmployeeController;
 use App\Http\Controllers\AbstractOfCanvassController;
+use App\Http\Controllers\AllotAndOblSlipController;
 use App\Http\Controllers\SupplyPositionController;
 
 /*
@@ -232,7 +233,9 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/abstract-of-canvass/add', [AbstractOfCanvassController::class, 'add'])->name('aoc.add');
     Route::post('/abstract-of-canvass/save', [AbstractOfCanvassController::class, 'save'])->name('aoc.perform');
     Route::get('/abstract-of-canvass/{id?}', [AbstractOfCanvassController::class, 'single'])->name('aoc.single');
+    Route::put('/abstract-of-canvass/{id?}', [AbstractOfCanvassController::class, 'complete_aoc'])->name('aoc.complete');
     Route::get('/abstract-of-canvass/print/{id?}', [AbstractOfCanvassController::class, 'print'])->name('aoc.print');
+    Route::delete('/abstract-of-canvass/delete/{id?}', [AbstractOfCanvassController::class, 'delete'])->name('aoc.delete');
 
     //BAC reso
     Route::get('/bac-reso', [BacResoController::class, 'all'])->name('bac-reso.all');
@@ -253,12 +256,21 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/purchase-order/add', [PurchaseOrderController::class, 'add_new'])->name('po.add');
     Route::post('/purchase-order/add', [PurchaseOrderController::class, 'generate_po'])->name('po.perform');
     Route::get('/purchase-order/view/{po_id?}', [PurchaseOrderController::class, 'view_po'])->name('po.single');
+    Route::delete('/purchase-order/{id?}', [PurchaseOrderController::class, 'delete'])->name('po.delete');
 
     //inspection and acceptance
     Route::get('/inspection-and-acceptance', [InspectionAndAcceptanceController::class, 'all'])->name('ia.all');
     Route::get('/inspection-and-acceptance/add', [InspectionAndAcceptanceController::class, 'add_new'])->name('ia.add');
     Route::post('/inspection-and-acceptance/add', [InspectionAndAcceptanceController::class, 'post_new'])->name('ia.post');
-    Route::get('/inspection-and-acceptance/view/{ia_id?}', [InspectionAndAcceptanceController::class, 'view_single'])->name('ia.single');
+    Route::get('/inspection-and-acceptance/print/{ia_id?}', [InspectionAndAcceptanceController::class, 'view_single'])->name('ia.single');
+    Route::get('/inspection-and-acceptance/view/{id?}', [InspectionAndAcceptanceController::class, 'single'])->name('iaa.single');
+    Route::put('/inspection-and-acceptance/update/{id?}', [InspectionAndAcceptanceController::class, 'complete_iaa'])->name('iaa.put');
+
+    //ALOBS
+    Route::get('/alobs', [AllotAndOblSlipController::class, 'all'])->name('alobs.all');
+    Route::get('/alobs/{id?}', [AllotAndOblSlipController::class, 'view'])->name('alobs.single');
+    Route::put('/alobs/{id?}', [AllotAndOblSlipController::class, 'update'])->name('alobs.update');
+    Route::get('/alobs/print/{id?}', [AllotAndOblSlipController::class, 'print'])->name('alobs.print');
 
     //settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
@@ -291,7 +303,7 @@ Route::middleware('supply.office')->group(function () {
     Route::delete('/manage-supply-position/single/{position_id}', [SupplyPositionController::class, 'delete_single']);
     Route::post('/manage-supply-position/batch', [SupplyPositionController::class, 'delete_batch'])->name('supplyposition.delete_batch');
 
-    Route::get('/inventory-custodian-form', [InventoryCustodianController::class, 'show'])->name('icf.show');
+    Route::get('/inventory-custodian-form', [InventoryCustodianController::class, 'add'])->name('icf.add');
 });
 
 //ADMIN ONLY

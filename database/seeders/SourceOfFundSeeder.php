@@ -24,18 +24,21 @@ class SourceOfFundSeeder extends Seeder
         ]);
         SourceOfFund::create([
             'source_of_fund' => 'GAA',
+            'description' => 'Obligation',
             'is_delete' => 0,
             'added_by' => 1,
             'description' => 'description'
         ]);
         SourceOfFund::create([
             'source_of_fund' => 'Income',
+            'description' => 'Budget Utilization',
             'is_delete' => 0,
             'added_by' => 1,
             'description' => 'description'
         ]);
         SourceOfFund::create([
-            'source_of_fund' => 'Fiduciary Fund',
+            'source_of_fund' => 'FF',
+            'description' => 'Fiduciary Fund',
             'is_delete' => 0,
             'added_by' => 1,
             'description' => 'description'

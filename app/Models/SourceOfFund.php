@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class SourceOfFund extends Model
 {
     use HasFactory;
-    protected $fillable = ['source_of_fund', 'added_by', 'is_delete', 'description'];
+    protected $fillable = ['source_of_fund', 'description', 'added_by', 'is_delete'];
 }

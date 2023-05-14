@@ -21,12 +21,12 @@ class PositionSeeder extends Seeder
             'added_by' => 1,
         ]);
         Position::create([
-            'description' => 'Budget Office',
+            'description' => 'Budget Officer',
             'is_delete' => 0,
             'added_by' => 1,
         ]);
         Position::create([
-            'description' => 'Procurement Office',
+            'description' => 'Procurement Officer',
             'is_delete' => 0,
             'added_by' => 1,
         ]);
@@ -36,7 +36,7 @@ class PositionSeeder extends Seeder
             'added_by' => 1,
         ]);
         Position::create([
-            'description' => 'Supplier',
+            'description' => 'Supply Officer',
             'is_delete' => 0,
             'added_by' => 1,
         ]);

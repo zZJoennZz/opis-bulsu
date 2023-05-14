@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\PurchaseOrder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class InspectionAndAcceptanceController extends Controller
 {
@@ -67,6 +68,7 @@ class InspectionAndAcceptanceController extends Controller
     public function view_single($ia_id)
     {
         $iaa = InspectionAndAcceptance::where('id', '=', $ia_id)
+            ->where('is_draft', 0)
             ->with(['purchase_order'])
             ->get();
 
@@ -76,5 +78,48 @@ class InspectionAndAcceptanceController extends Controller
 
         return view('po-dashboard/view-iaa')
             ->with('iaa', $iaa);
+    }
+
+    public function single($id)
+    {
+        $iaa = InspectionAndAcceptance::where('id', $id)
+            ->where('is_draft', 1)
+            ->get();
+
+        if (count($iaa) === 0) {
+            return redirect()->route('ia.all')->withErrors(['Invalid IAR record.']);
+        }
+
+        return view('po-dashboard/edit-iaa')
+            ->with('iaa', $iaa[0]);
+    }
+
+    public function complete_iaa(Request $request, $id)
+    {
+        $request->validate([
+            'iar_number' => 'required',
+            'iar_date' => 'required|date',
+        ]);
+
+        $iaa = InspectionAndAcceptance::where('id', $id)
+            ->where('is_draft', 1)
+            ->get();
+
+        if (count($iaa) === 0) {
+            return redirect()->route('ia.all')->withErrors(['Invalid IAR record.']);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            InspectionAndAcceptance::where('id', $id)
+                ->update(['iar_no' => $request->iar_number, 'iar_date' => $request->iar_date, 'is_draft' => 0]);
+
+            DB::commit();
+            return redirect()->route('ia.all')->with('success', 'IAR successfully processed.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['Cannot process your action.']);
+        }
     }
 }

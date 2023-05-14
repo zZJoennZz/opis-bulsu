@@ -44,6 +44,15 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div class="mb-3">
+                                <label for="accountant_name" class="form-label">Accountant</label>
+                                <select id="accountant_name" name="accountant_name" class="form-select" aria-label="Select mode of procurement">
+                                    <option value="0" disabled selected>Open this to select accountant name</option>
+                                    @foreach (json_decode(json_decode(getSettingValue('accountants')), true) as $acct)
+                                        <option value="{{ $acct['id'] }}">{{ $acct['full_name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-sm-12 col-md 6">
                             <div class="card mb-3">
@@ -121,6 +130,7 @@
                     let date_of_delivery = $('#date_of_delivery').val();
                     let for_inquiry = $('#for_inquiry').val();
                     let delivery_term = $('#delivery_term').val();
+                    let accountant_name = $('#accountant_name').val();
 
                     if (bac_reso === null || bac_reso === undefined || bac_reso === '' || bac_reso === 0 || bac_reso === '0') {
                         alert('Please select BAC resolution first.');
@@ -138,6 +148,8 @@
                         alert('Please enter inquiry channel.');
                     } else if (delivery_term === null || delivery_term === undefined || delivery_term === '' || delivery_term === 0 || delivery_term === '0') {
                         alert('Please enter delivery term.');
+                    } else if (accountant_name === null || accountant_name === undefined || accountant_name === '' || accountant_name === 0 || accountant_name === '0') {
+                        alert('Please select accountant.');
                     } else {
                         let data = {
                             bac_reso,
@@ -148,6 +160,7 @@
                             date_of_delivery,
                             for_inquiry,
                             delivery_term,
+                            accountant_name
                         }
                         await axios.post(BAC_RESO_POST_URL, data)
                             .then(res => {

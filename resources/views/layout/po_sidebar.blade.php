@@ -32,6 +32,9 @@
         <div class="mb-2">
             <a href="{{ route('po.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-cart-check-fill float-start"></em> Purchase Order</a>
         </div>
+        <div class="mb-2">
+            <a href="{{ route('alobs.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-earmark-text-fill float-start"></em> ALOBS</a>
+        </div>
         <div>
             <a href="{{ route('ia.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-bag-check-fill float-start"></em> Inspection & Acceptance</a>
         </div>

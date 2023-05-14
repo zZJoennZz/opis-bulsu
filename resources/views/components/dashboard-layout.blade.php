@@ -93,7 +93,7 @@
                 }
             }
         </script>
-        <script>
+        {{-- <script>
             $('form').on('submit', function (e) {
                 $('button[type=submit], input[type=submit]', $(this)).blur().addClass('disabled is-submited');
                 $('button[type=submit], input[type=submit]', $(this)).attr("disabled","disabled");
@@ -101,7 +101,7 @@
             $(document).on('click', 'button[type=submit].is-submited, input[type=submit].is-submited', function(e) {
                 e.preventDefault();
             });
-        </script>
+        </script> --}}
 
         {{$additional_script ?? ''}}
     </body>

@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('date_of_delivery');
             $table->string('for_inquiry');
             $table->string('delivery_term');
+            $table->string('accountant_name');
             $table->boolean('is_delete')->default(0);
             $table->unsignedBigInteger('added_by');
             $table->timestamps();

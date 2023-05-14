@@ -19,6 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('purchase_orders_id');
             $table->date('iar_date');
             $table->string('responsibility_center_code')->nullable();
+            $table->boolean('is_draft')->default(1);
             $table->boolean('is_delete')->default(0);
             $table->unsignedBigInteger('added_by');
             $table->timestamps();

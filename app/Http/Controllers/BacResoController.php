@@ -209,7 +209,7 @@ class BacResoController extends Controller
         $companies = Company::whereHas('quotations.items.pr_item.pr', function ($builder) use ($bac_reso) {
             $builder->where('id', '=', $bac_reso->abstract_of_canvass->purchase_requests_id);
         })
-            ->has('quotations.items', '=', count($bac_reso->abstract_of_canvass->pr->pr_items))
+            // ->has('quotations.items', '=', count($bac_reso->abstract_of_canvass->pr->pr_items))
             ->with('quotations.items.pr_item.pr')
             ->get();
 

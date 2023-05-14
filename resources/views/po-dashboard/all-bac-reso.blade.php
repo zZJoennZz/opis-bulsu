@@ -14,9 +14,9 @@
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     
-    <div class="mb-3">
+    {{-- <div class="mb-3">
         <a href="{{ route('bac-reso.add') }}" class="btn btn-primary"><em class="bi bi-file-spreadsheet-fill"></em> Generate BAC Resolution</a>
-    </div>
+    </div> --}}
 
     <div class="table-responsive">
         <table id="bac-reso-table" class="table table-sm caption-top border-dark">
@@ -33,19 +33,18 @@
             </thead>
             <tbody>
                 @foreach ($bac_resos as $bac_reso)
-                    <tr>
-                        <td>
-                            <div class="btn-group" role="group" aria-label="{{ $bac_reso->b_a_c_reso_number }} options">
+                    @if ($bac_reso->abstract_of_canvass->is_draft === 0)
+                        <tr>
+                            <td>
                                 <a {{ !$bac_reso->is_draft ? 'target="_blank"' : "" }} href="{{ route('bac-reso.single', ['id' => $bac_reso->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
-                                <a href="#" class="btn btn-outline-danger btn-sm"><em class="bi bi-trash"></em></a>
-                            </div>
-                        </td>
-                        <td><span class="badge bg-{{ $bac_reso->is_draft ? "secondary" : "primary" }}">{{ $bac_reso->is_draft ? "Draft" : "Done" }}</span></td>
-                        <td><span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->type === "BY_ITEM" ? 'By Item' : 'By Lot' }}</span></td>
-                        <td>{{ $bac_reso->b_a_c_reso_number }}</td>
-                        <td>{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</td>
-                        <td>{{ date("Y-m-d h:i A", strtotime($bac_reso->created_at)) }}</td>
-                    </tr>
+                            </td>
+                            <td><span class="badge bg-{{ $bac_reso->is_draft ? "secondary" : "primary" }}">{{ $bac_reso->is_draft ? "Draft" : "Done" }}</span></td>
+                            <td><span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->type === "BY_ITEM" ? 'By Item' : 'By Lot' }}</span></td>
+                            <td>{{ $bac_reso->b_a_c_reso_number }}</td>
+                            <td>{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</td>
+                            <td>{{ date("Y-m-d h:i A", strtotime($bac_reso->created_at)) }}</td>
+                        </tr>
+                    @endif
                 @endforeach
             </tbody>
         </table>

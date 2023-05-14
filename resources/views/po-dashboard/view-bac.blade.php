@@ -45,25 +45,26 @@
                 <div class="fs-4 fw-bold text-secondary">Select supplier / dealer per item</div>
             </div>
             <div>
+                <div class="border p-2 rounded-4 border-secondary">
+                    <div class="float-end">
+                        <span class="badge bg-primary text-uppercase">{{ $bac_reso->abstract_of_canvass->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
+                    </div>
+                    <div class="mb-1">
+                        <small class="text-uppercase fw-bold text-secondary">Information:</small>
+                    </div>
+                    <div class="mb-1">
+                        <strong>PR #:</strong> <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
+                    </div>
+                    <div class="mb-1">
+                        <strong>Purpose:</strong> {{ $bac_reso->abstract_of_canvass->pr->purpose }}
+                    </div>
+                    <div>
+                        <strong>ABC:</strong> ₱ {{ number_format($bac_reso->abstract_of_canvass->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> )
+                    </div>
+                </div>
                 <table class="table table-sm table-hover border-dark caption-top">
                     <caption>
-                        <div class="border p-2 rounded-4 border-secondary">
-                            <div class="float-end">
-                                <span class="badge bg-primary text-uppercase">{{ $bac_reso->abstract_of_canvass->type === "BY_ITEM" ? "By item" : "By lot" }}</span>
-                            </div>
-                            <div class="mb-1">
-                                <small class="text-uppercase fw-bold text-secondary">Information:</small>
-                            </div>
-                            <div class="mb-1">
-                                <strong>PR #:</strong> <span class="badge bg-primary">{{ $bac_reso->abstract_of_canvass->pr->pr_number }}</span>
-                            </div>
-                            <div class="mb-1">
-                                <strong>Purpose:</strong> {{ $bac_reso->abstract_of_canvass->purpose }}
-                            </div>
-                            <div>
-                                <strong>ABC:</strong> ₱ {{ number_format($bac_reso->abstract_of_canvass->abc, 2) }} (<span class="text-uppercase">{{ translateToWords($bac_reso->abstract_of_canvass->abc) }}</span> )
-                            </div>
-                        </div>
+                        
                     </caption>
                     <thead>
                         <tr>
@@ -103,17 +104,16 @@
                                 <td>₱ {{ number_format($item->ppmp->item_detail->price_catalogue * $itemQty, 2) }}</td>
                                 <td class="text-end">
                                     @if ($isViable === 0)
-                                        <button class="btn btn-sm btn-primary" type="button" onclick="getComparison({{$item->id}}, '{{$item->ppmp->item_detail->description}}')"><em class="bi bi-cash-stack"></em> View Quotations</button>
+                                        <span class="text-secondary small fst-italic">n/a</span>
+                                        {{-- <button class="btn btn-sm btn-primary" type="button" onclick="getComparison({{$item->id}}, '{{$item->ppmp->item_detail->description}}')"><em class="bi bi-cash-stack"></em> View Quotations</button> --}}
                                     @else
                                         {{ $companyName }}
-                                        <form action="{{ route('bac-reso.delete', ['bac_reso_item_id' => $bacResoItemId]) }}" method="POST" class="d-inline">
+                                        {{-- <form action="{{ route('bac-reso.delete', ['bac_reso_item_id' => $bacResoItemId]) }}" method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger" type="submit"><em class="bi bi-x"></em></button>
-                                        </form>
+                                        </form> --}}
                                     @endif
-                                    
-                                    {{-- <a href="{{ route('bac-reso.compare', ['pr_item_id' => $item->id]) }}" target="_blank" class="btn btn-secondary">Test Me</a> --}}
                                 </td>
                             </tr>
                         @endforeach
@@ -238,22 +238,22 @@
                                         @if (count($sel_company) > 0)
                                             @if ($sel_company[0]->id === $c->id)
                                                 <span class="badge rounded-pill fs-6 bg-success text-uppercase"><em class="bi bi-check-circle-fill"></em> Selected</span>
-                                                <form method="POST" action="{{ route('bac-reso.delete-batch') }}" class="d-inline">
+                                                {{-- <form method="POST" action="{{ route('bac-reso.delete-batch') }}" class="d-inline">
                                                     @csrf
                                                     @method("DELETE")
                                                     <input type="hidden" name="b_a_c_resos_id" id="b_a_c_resos_id" value="{{ $bac_reso->id }}">
                                                     <button class="badge bg-danger rounded-pill fs-6" style="border: none;"><em class="bi bi-x"></em></button>
-                                                </form>
+                                                </form> --}}
                                             @else
                                                 <span class="badge rounded-pill fs-6 bg-secondary text-uppercase"><em class="bi bi-x-circle-fill"></em> Not selected</span>
                                             @endif
-                                        @else
+                                        {{-- @else
                                             <form action="{{ route('bac-reso-item.new') }}"  method="POST">
                                                 @csrf
                                                 <input type="hidden" value="{{ $bac_reso->id }}" name="bacId" id="bacId{{$c->id}}">
                                                 <input type="hidden" value="{{ $c->id }}" name="company" id="company{{$c->id}}">
                                                 <button type="submit" class="btn btn-primary w-100 fw-bold text-uppercase"><em class="bi bi-bag-check-fill"></em> Select</button>
-                                            </form>
+                                            </form> --}}
                                         @endif
                                     </td>
                                 @endif
@@ -263,7 +263,13 @@
                 </table>
             </div>
         @endif
-        
+        <div class="row mb-3 mt-5">
+            <div class="col-12">
+                <div class="text-uppercase text-secondary small fw-bold">
+                    Complete BAC resolution form
+                </div>
+            </div>
+        </div>
         <form action="{{ route('bac-reso.complete') }}" method="POST">
             <div class="row mb-3">
                 <div class="col-12">
@@ -298,6 +304,13 @@
                     <div>
                         <label for="rfq_reference_numbers" class="form-label">Request for Quotation Reference Number (PhilGEPS):</label>
                         <input required type="text" class="form-control" id="rfq_reference_numbers" name="rfq_reference_numbers">
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3 mt-5">
+                <div class="col-12">
+                    <div class="text-uppercase text-secondary small fw-bold">
+                        Confirm the signatories
                     </div>
                 </div>
             </div>

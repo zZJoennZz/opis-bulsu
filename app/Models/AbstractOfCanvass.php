@@ -25,6 +25,7 @@ class AbstractOfCanvass extends Model
         'president',
         'added_by',
         'is_delete',
+        'is_draft',
     ];
 
     public function pr()

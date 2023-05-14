@@ -30,7 +30,7 @@ class SettingSeeder extends Seeder
         ]);
         Setting::create([
             'name' => 'bac_chairman',
-            'value' => 'Assoc. Prof. JOSEPH ROY F. CELESTINO',
+            'value' => 'DR. DOLLY P. MAROMA',
         ]);
         Setting::create([
             'name' => 'university_president',
@@ -38,35 +38,39 @@ class SettingSeeder extends Seeder
         ]);
         Setting::create([
             'name' => 'vice_chair_1',
-            'value' => 'Dr. DOLLY P. MAROMA',
+            'value' => 'DR. MARVIN R. TULLAO',
         ]);
         Setting::create([
             'name' => 'vice_chair_2',
-            'value' => 'Dr. MARVIN R. TULLAO',
+            'value' => 'DR. MARVIN R. TULLAO',
         ]);
         Setting::create([
             'name' => 'member_1',
-            'value' => 'YOLANDA ROBERTO',
+            'value' => 'PROF. JOSEPH ROY CELESTINO',
         ]);
         Setting::create([
             'name' => 'member_2',
-            'value' => 'Engr. NOEMI P. REYES',
+            'value' => 'ENGR. DONALD M. LAPIGUERA',
         ]);
         Setting::create([
             'name' => 'member_3',
-            'value' => 'Engr. DONALD M. LAPIGUERA',
+            'value' => 'ENGR. NEOMI REYES',
         ]);
         Setting::create([
             'name' => 'member_4',
-            'value' => 'Engr. DONALD M. LAPIGUERA',
+            'value' => 'PROF. YOLANDA ROBERTO',
         ]);
         Setting::create([
             'name' => 'technical_resource_person',
-            'value' => 'Test',
+            'value' => 'Default Technical Resources Person',
         ]);
         Setting::create([
             'name' => 'chief_accountant',
             'value' => 'DR. FELICITAS G. MIRABUENOS',
+        ]);
+        Setting::create([
+            'name' => 'accountants',
+            'valuue' => '"[\r\n    {\r\n        \"id\": 1,\r\n        \"full_name\": \"Joanha Christine T. Borja\",\r\n        \"position\": \"Head - System Accounting Office\"\r\n    },  \r\n    {\r\n        \"id\": 2,\r\n        \"full_name\": \"Ma. Carla V Diño\",\r\n        \"position\": \"Director for Finance - Main Campus\"\r\n    },\r\n    {\r\n        \"id\": 3,\r\n        \"full_name\": \"Sheila Marie Domingo\",\r\n        \"position\": \"Director for Finance - External\"\r\n    }\r\n]"'
         ]);
     }
 }

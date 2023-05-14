@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('procurement_office_rep');
             $table->unsignedBigInteger('added_by');
             $table->boolean('is_delete')->default(0);
+            $table->boolean('is_draft')->default(1);
             $table->timestamps();
 
             $table->foreign('purchase_requests_id')->references('id')->on('purchase_requests');

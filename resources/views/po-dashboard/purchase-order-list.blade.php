@@ -21,24 +21,28 @@
             <caption>Purchase Order <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
             <thead>
                 <tr>
+                    <th style="width: 70px;"></th>
                     <th>PO No.</th>
                     <th>PO Date</th>
                     <th>MOP</th>
-                    <th class="text-end">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($po_list as $po)
                     <tr>
+                        <td>
+                            <form action="{{ route('po.delete') }}/{{ $po->id }}" method="POST" onsubmit="return confirm('Warning: Deleting this purchase order will permanently remove all related ALOBS and inspection and acceptance reports for this record. Proceeding with the deletion cannot be undone. Are you absolutely certain you wish to proceed with this action?')">
+                                @csrf
+                                @method("DELETE")
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <a target="_blank" href="{{ route('po.single') }}/{{$po->id}}" class="btn btn-sm btn-primary"><em class="bi bi-printer-fill"></em></a>
+                                    <button type="submit" class="btn btn-sm btn-danger"><em class="bi bi-trash-fill"></em></button>
+                                </div>
+                            </form>
+                        </td>
                         <td>{{ $po->po_number }}</td>
                         <td>{{ $po->created_at }}</td>
                         <td>{{ $po->mop->name }}</td>
-                        <td class="text-end">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <a target="_blank" href="{{ route('po.single') }}/{{$po->id}}" class="btn btn-sm btn-primary"><em class="bi bi-printer-fill"></em></a>
-                                <button type="button" class="btn btn-sm btn-danger"><em class="bi bi-trash-fill"></em></button>
-                            </div>
-                        </td>
                     </tr>
                 @endforeach
             </tbody>

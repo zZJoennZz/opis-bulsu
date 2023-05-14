@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class InspectionAndAcceptance extends Model
+class AllotAndOblSlip extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'iar_no',
         'purchase_orders_id',
-        'iar_date',
-        'responsibility_center_code',
+        'budget_officer_id',
         'is_draft',
         'is_delete',
         'added_by',
@@ -26,5 +24,10 @@ class InspectionAndAcceptance extends Model
     public function purchase_order()
     {
         return $this->hasOne(PurchaseOrder::class, 'id', 'purchase_orders_id');
+    }
+
+    public function budget_office()
+    {
+        return $this->hasOne(User::class, 'id', 'budget_officer_id');
     }
 }
