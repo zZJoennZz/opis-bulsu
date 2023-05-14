@@ -27,6 +27,7 @@ class SourceofFundsController extends Controller
 
             $validator = Validator::make($request->all(), [
                 'source_of_fund' => ['required', 'unique:source_of_funds,source_of_fund'],
+                'description' => ['required']
             ]);
 
             if ($validator->fails()) {
@@ -35,6 +36,7 @@ class SourceofFundsController extends Controller
             }
 
             $newSourceOfFund->source_of_fund = $request->source_of_fund;
+            $newSourceOfFund->description = $request->description;
             $newSourceOfFund->added_by = Auth::user()->id;
             $newSourceOfFund->save();
             $SourceOfFund = SourceOfFund::all();
@@ -66,10 +68,12 @@ class SourceofFundsController extends Controller
 
         try {
             $validator = Validator::make($request->all(), [
+                'description' => ['required'],
                 'source_of_fund' => [
                     'required', 
                     Rule::unique('source_of_funds', 'source_of_fund')->ignore($getSourceOfFund)
                 ],
+                
                 
             ]);
 
@@ -77,7 +81,7 @@ class SourceofFundsController extends Controller
                 $errors = $validator->errors();
                 return redirect()->back()->withErrors($errors);
             }
-
+            $getSourceOfFund->description = $request->description;
             $getSourceOfFund->source_of_fund = $request->source_of_fund;
             $getSourceOfFund->save();
 
