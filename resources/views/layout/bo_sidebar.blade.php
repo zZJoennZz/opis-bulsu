@@ -9,3 +9,9 @@
         Dashboard
     </a>
 </li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('due-date.show') }}">
+        <em class="bi bi-gear-fill"></em>
+        Settings
+    </a>
+</li>

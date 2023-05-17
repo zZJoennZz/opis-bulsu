@@ -251,53 +251,52 @@
                     </div>
                 </div>
 
-                <div class="row mb-3 text-center">
-                    <div class="col-3">
+                <div class="row mb-5 text-center p-0">
+                    <div class="col-2">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->bac_chairman }}</div>
-                        <div class="w-50 m-auto border-top border-dark">Chair</div>
+                        <div class="w-50 m-auto border-top border-dark">BAC Chairman</div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
+                        <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->vice_chairman }}</div>
+                        <div class="w-50 m-auto border-top border-dark">Vice Chairman</div>
+                    </div>
+                    <div class="col-2">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->member_1 }}</div>
                         <div class="w-50 m-auto border-top border-dark">Member</div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->member_2 }}</div>
                         <div class="w-50 m-auto border-top border-dark">Member</div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->member_3 }}</div>
+                        <div class="w-50 m-auto border-top border-dark">Member</div>
+                    </div>
+                    <div class="col-2">
+                        <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->member_4 }}</div>
                         <div class="w-50 m-auto border-top border-dark">Member</div>
                     </div>
                 </div>
                 <div class="row mb-3 text-center">
                     <div class="col-4">
-                        <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->member_4 }}</div>
-                        <div class="w-50 m-auto border-top border-dark">Member</div>
-                    </div>
-                    <div class="col-4">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->end_user }}</div>
-                        <div class="w-50 m-auto border-top border-dark">End User</div>
+                        <div class="w-75 m-auto border-top border-dark">End User</div>
                     </div>
                     <div class="col-4">
                         <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->technical_resource_person }}</div>
-                        <div class="w-50 m-auto border-top border-dark">Technical Resource Person</div>
+                        <div class="w-75 m-auto border-top border-dark">Technical Resource Person</div>
                     </div>
-                </div>
-                <div class="row mb-2 text-center">
-                    <div class="col-12 mb-5">
-                        <div class="text-uppercase">Approved</div>
-                    </div>
-                    <div class="col-12">
-                        <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->president }}</div>
-                        <div class="w-25 m-auto border-top border-dark">President</div>
+                    <div class="col-4">
+                        <div class="fw-bold text-uppercase">{{ $bac_reso->abstract_of_canvass->procurement_office_rep }}</div>
+                        <div class="w-75 m-auto border-top border-dark">Procurement Office's Representative</div>
                     </div>
                 </div>
             </div>
         </div>
-        {{-- <script>
+        <script>
             window.addEventListener('load', function () {
                 window.print();
             })
-        </script> --}}
+        </script>
     </body>
 </html>

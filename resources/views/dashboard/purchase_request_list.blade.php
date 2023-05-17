@@ -28,7 +28,7 @@
     @endif
 
     <div class="table-responsive">
-        <table class="table table-small table-bordered">
+        <table class="table table-small table-bordered" id="pr-list-user">
             <caption>Purchase Requests for the Year <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
             <thead>
                 <tr class="small">
@@ -82,4 +82,7 @@
             </tbody>
         </table>
     </div>
+    <x-slot:additional_script>
+        @include('layout/datatable', ['tableId' => 'pr-list-user'])
+    </x-slot>
 </x-dashboard-layout>

@@ -54,9 +54,16 @@
             </div>
         @endif
 
-        @if ($dayDiff <= 5)
+        @if ($dayDiff <= 5 && $dayDiff > 0)
             <div class="alert alert-warning mb-3 fs-5" role="alert">
                 <div class="fw-bold">{{$dayDiff}} day{{$dayDiff == 1 ? "" : "s more"}} before due!</div>
+                <div>Just a reminder to complete your pending tasks as soon as possible.</div>
+            </div>
+        @endif
+
+        @if ($dayDiff < 0)
+            <div class="alert alert-warning mb-3 fs-5" role="alert">
+                <div class="fw-bold">You are way past the DUE DATE!</div>
                 <div>Just a reminder to complete your pending tasks as soon as possible.</div>
             </div>
         @endif

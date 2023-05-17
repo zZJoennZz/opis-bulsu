@@ -29,9 +29,9 @@
                     <tr>
                         <td>
                             <form action="{{ route('aoc.delete') }}/{{ $aoc->id }}" method="POST" onsubmit="return confirm('Are you sure to delete this?')">
+                                @csrf
+                                @method('DELETE')
                                 <div class="btn-group" role="group" aria-label="{{ $aoc->pr->pr_number }} options">
-                                    @csrf
-                                    @method('DELETE')
                                     @if ($aoc->is_draft === 1)
                                         <a href="{{ route('aoc.single', ['id' => $aoc->id]) }}" class="btn btn-outline-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
                                     @else

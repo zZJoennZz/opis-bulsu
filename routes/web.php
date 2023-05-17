@@ -116,6 +116,9 @@ Route::middleware('budget.office')->group(function () {
     Route::get('/approved-ppmp-request/{branch_id}', [PPMPController::class, 'approved_ppmp_request'])->name('approved-ppmp-request.show');
     Route::post('/send-back-ppmp-request/{user_id}', [PPMPController::class, 'send_back'])->name('send-bank-ppmp.perform');
 
+    Route::get('/due-date', [SettingController::class, 'budget_setting'])->name('due-date.show');
+    Route::put('/due-date', [SettingController::class, 'budget_save_setting'])->name('due-date.update');
+
     Route::post('/notifications/batch', [NotificationController::class, 'acknowledge_batch'])->name('notification.acknowledge_batch');
 });
 
@@ -274,10 +277,15 @@ Route::middleware('procurement.office')->group(function () {
 
     //settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::put('/settings', [SettingController::class, 'save_changes'])->name('settings.update');
 });
 
 Route::middleware('supply.office')->group(function () {
     Route::get('/so-dashboard', [DashboardController::class, 'show'])->name('so-dashboard.show');
+
+    //api
+    Route::get('/purchase-order/api/{iar_id?}', [PurchaseOrderController::class, 'get_by_iar'])->name('po_by_iar.get');
+    Route::get('/bac_reso_item/{id?}', [BacResoController::class, 'get_single_by_id'])->name('bac_reso_item.get');
 
     //manage end users
     Route::get('/manage-end-user', [SupplyEndUserController::class, 'all'])->name('supply-end-user.all');
@@ -304,6 +312,8 @@ Route::middleware('supply.office')->group(function () {
     Route::post('/manage-supply-position/batch', [SupplyPositionController::class, 'delete_batch'])->name('supplyposition.delete_batch');
 
     Route::get('/inventory-custodian-form', [InventoryCustodianController::class, 'add'])->name('icf.add');
+    Route::post('/inventory-custodian-form', [InventoryCustodianController::class, 'store'])->name('icf.store');
+    Route::get('/inventory-custodian-form/print/{id?}', [InventoryCustodianController::class, 'print'])->name('icf.print');
 });
 
 //ADMIN ONLY

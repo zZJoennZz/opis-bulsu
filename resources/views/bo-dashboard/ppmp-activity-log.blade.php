@@ -56,7 +56,7 @@
                                 <span class="fw-bold">Action by: </span> {{ $history->changes_record_by->profile->first_name }} {{ $history->changes_record_by->profile->last_name }}
                             </div>
                         </td>
-                        <td>{{ $history->created_at }}</td>
+                        <td class="text-end">{{ date('Y-m-d h:i:s A', strtotime($history->created_at)) }}</td>
                         
                     </tr>
                 @endforeach

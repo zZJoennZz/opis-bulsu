@@ -381,4 +381,22 @@ class BacResoController extends Controller
             ], 200);
         }
     }
+
+    public function get_single_by_id($id)
+    {
+        try {
+            $bac_reso_item = BACResoItem::where('id', $id)
+                ->with(['quotation.pr_item.ppmp.item_detail', 'quotation.pr_item.ppmp.item_detail.unit', 'quotation.pr_item.ppmp.milestones'])
+                ->get();
+            return response()->json([
+                'success' => true,
+                'data' => $bac_reso_item
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Please try again.'
+            ], 400);
+        }
+    }
 }

@@ -22,7 +22,7 @@
                             <div class="mb-3">
                                 <label for="bac_reso" class="form-label">BAC Resolution <small class="text-muted">Items under this BAC will also display below.</small></label>
                                 <select id="bac_reso" name="bac_reso" class="form-select" aria-label="Select BAC Resolution">
-                                    <option value="0" disabled selected>Open this to select BAC resolution</option>
+                                    <option value="0" disabled selected hidden>Open this to select BAC resolution</option>
                                     @foreach ($bac_reso as $bac)
                                         <option value="{{ $bac->id }}">{{ $bac->b_a_c_reso_number }}</option>
                                     @endforeach
@@ -31,14 +31,14 @@
                             <div class="mb-3">
                                 <label for="company" class="form-label">Company</label>
                                 <select id="company" name="company" class="form-select" aria-label="Select company">
-                                    <option value="0" disabled selected>Select BAC resolution first</option>
+                                    <option value="0" disabled selected hidden>Select BAC resolution first</option>
                                 </select>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="mode_of_procurement" class="form-label">Mode of Procurement</label>
                                 <select id="mode_of_procurement" name="mode_of_procurement" class="form-select" aria-label="Select mode of procurement">
-                                    <option value="0" disabled selected>Open this to select mode of procurement</option>
+                                    <option value="0" disabled selected hidden>Open this to select mode of procurement</option>
                                     @foreach ($mode_of_procurement as $mop)
                                         <option value="{{ $mop->id }}">{{ $mop->name }}</option>
                                     @endforeach
@@ -47,7 +47,7 @@
                             <div class="mb-3">
                                 <label for="accountant_name" class="form-label">Accountant</label>
                                 <select id="accountant_name" name="accountant_name" class="form-select" aria-label="Select mode of procurement">
-                                    <option value="0" disabled selected>Open this to select accountant name</option>
+                                    <option value="0" disabled selected hidden>Open this to select accountant name</option>
                                     @foreach (json_decode(json_decode(getSettingValue('accountants')), true) as $acct)
                                         <option value="{{ $acct['id'] }}">{{ $acct['full_name'] }}</option>
                                     @endforeach
@@ -77,7 +77,7 @@
                                     <div class="mb-3">
                                         <label for="mode_of_payment" class="form-label">Payment Term</label>
                                         <select id="mode_of_payment" name="mode_of_payment" class="form-select" aria-label="Select mode of payment">
-                                            <option value="0" disabled selected>Open this to select mode of payment</option>
+                                            <option value="0" disabled selected hidden>Open this to select mode of payment</option>
                                             @foreach ($mode_of_payment as $mop)
                                                 <option value="{{ $mop->id }}">{{ $mop->name }}</option>
                                             @endforeach
@@ -197,7 +197,14 @@
                             $('#generate-report').prop('disabled', true);
                         })
                         .catch((err) => {
-                            console.log(err);
+                            $('#company').empty();
+                            $('#company').append($('<option>', {
+                                value: 0,
+                                text: 'No valid companies',
+                                selected: true,
+                                disabled: true,
+                                hidden: true,
+                            }));
                             $('#generate-report').prop('disabled', true);
                         })
                 });

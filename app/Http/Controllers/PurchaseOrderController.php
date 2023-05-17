@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AllotAndOblSlip;
 use App\Models\BACReso;
+use App\Models\BACResoItem;
+use App\Models\Company;
 use App\Models\InspectionAndAcceptance;
 use App\Models\ModeOfProcurement;
 use Illuminate\Http\Request;
@@ -24,6 +26,7 @@ class PurchaseOrderController extends Controller
         })
             ->with(['mop'])
             ->where('is_delete', '=', 0)
+            ->latest()
             ->get();
         // return $po_list;
         return view('po-dashboard/purchase-order-list')->with('po_list', $po_list);
@@ -31,6 +34,7 @@ class PurchaseOrderController extends Controller
 
     public function add_new()
     {
+
         $bac_reso = BACReso::with(['purchase_order'])
             ->where('is_delete', '=', 0)
             ->where('is_draft', '=', 0)
@@ -165,6 +169,26 @@ class PurchaseOrderController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(['Something went wrong. Please try again or contact web developer.']);
+        }
+    }
+
+    public function get_by_iar($iar_id)
+    {
+        try {
+            $iar = InspectionAndAcceptance::find($iar_id);
+            $get_items = BACResoItem::where('b_a_c_resos_id', $iar->purchase_order->b_a_c_resos_id)
+                ->with(['quotation.pr_item.ppmp.item_detail', 'bac_reso.purchase_order.company'])
+                ->get();
+
+            return response()->json([
+                'success' => true,
+                'data' => $get_items
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Cannot fetch items.'
+            ], 400);
         }
     }
 }

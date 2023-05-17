@@ -15,7 +15,7 @@
     <div class="mb-3">
         <a href="{{ route('ia.add') }}" class="btn btn-primary"><em class="bi bi-card-text"></em> Add New Report</a>
     </div> --}}
-    <table class="table table-sm border-dark caption-top">
+    <table class="table table-sm border-dark caption-top" id="iaa-table">
         <caption>Inspection and Acceptance Reports List <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
         <thead>
             <tr>
@@ -30,9 +30,9 @@
             <tr>
                 <td>
                     @if ($i->is_draft)
-                        <a href="{{ route('iaa.single') }}/{{ $i->id }}" class="btn btn-sm btn-primary"><em class="bi bi-eye-fill"></em></a>
+                        <a href="{{ route('iaa.single') }}/{{ $i->id }}" class="btn btn-sm btn-outline-primary"><em class="bi bi-eye-fill"></em></a>
                     @else
-                        <a target="_blank" href="{{ route('ia.single') }}/{{ $i->id }}" class="btn btn-sm btn-primary"><em class="bi bi-printer-fill"></em></a>
+                        <a target="_blank" href="{{ route('ia.single') }}/{{ $i->id }}" class="btn btn-sm btn-outline-primary"><em class="bi bi-printer-fill"></em></a>
                     @endif
                 </td>
                 <td><span class="badge bg-{{ $i->is_draft ? "secondary" : "primary" }}">{{ $i->is_draft ? "Draft" : "Done" }}</span> {{ $i->purchase_order->po_number }}</td>
@@ -44,6 +44,6 @@
     </table>
 
     <x-slot:additional_script>
-        
+        @include('layout/datatable', ['tableId' => 'iaa-table'])
     </x-slot>
 </x-dashboard-layout>

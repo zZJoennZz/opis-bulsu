@@ -35,8 +35,8 @@
                                 @csrf
                                 @method("DELETE")
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <a target="_blank" href="{{ route('po.single') }}/{{$po->id}}" class="btn btn-sm btn-primary"><em class="bi bi-printer-fill"></em></a>
-                                    <button type="submit" class="btn btn-sm btn-danger"><em class="bi bi-trash-fill"></em></button>
+                                    <a target="_blank" href="{{ route('po.single') }}/{{$po->id}}" class="btn btn-sm btn-outline-primary"><em class="bi bi-printer-fill"></em></a>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><em class="bi bi-trash-fill"></em></button>
                                 </div>
                             </form>
                         </td>

@@ -227,13 +227,15 @@
                                     -
                                 </div>
                             </div>
-                            <div class="border-bottom border-dark text-center fw-bold">
-                                @php
-                                    $selectedAcct = collect(json_decode(json_decode(getSettingValue('accountants'))))->where('id', $po->accountant_name)
-                                @endphp
-                                {{ $selectedAcct[0]->full_name }}
-                            </div>
-                            <div class="text-center">{{ $selectedAcct[0]->position }}</div>
+                            @foreach (json_decode(json_decode(getSettingValue('accountants')), true) as $acct)
+                                @if ($acct['id'] === intval($po->accountant_name))
+                                    <div class="border-bottom border-dark text-center fw-bold">
+                                        {{ $acct['full_name'] }}
+                                    </div>
+                                    <div class="text-center">{{ $acct['position'] }}</div>
+                                @endif
+                            @endforeach
+                            
                         </div>
                     </div>
                 </div>

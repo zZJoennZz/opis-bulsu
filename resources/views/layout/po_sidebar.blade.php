@@ -91,11 +91,11 @@
 <li><hr /></li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('dashboard.show') }}">
-        <em class="bi bi-file-text"></em> Reports Configuration
+        <em class="bi bi-file-text"></em> PPMP Sections/Groups
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('settings.index') }}">
-        <em class="bi bi-gear-fill"></em> Settings
+        <em class="bi bi-gear-fill"></em> System
     </a>
 </li>
