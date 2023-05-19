@@ -192,6 +192,7 @@ class ItemDetailController extends Controller
             $newItem = new ItemDetail();
             $newItem->description = $request->description;
             $newItem->article = $request->article;
+            $newItem->extra_article = $request->extra_article;
             $newItem->price_catalogue = $request->price_catalogue;
             $newItem->category_id = $request->category_id;
             $newItem->unit_id = $request->unit_id;
@@ -244,6 +245,7 @@ class ItemDetailController extends Controller
 
             $itemDetail->description = $request->description;
             $itemDetail->article = $request->article;
+            $itemDetail->extra_article = $request->extra_article;
             $itemDetail->price_catalogue = $request->price_catalogue;
             $itemDetail->category_id = $request->category_id;
             $itemDetail->unit_id = $request->unit_id;
@@ -259,6 +261,9 @@ class ItemDetailController extends Controller
             }
             if (trim($beforeChange->article) !== trim($itemDetail->article)) {
                 array_push($changesSummary, 'Article was changed from "' . $beforeChange->article . '" to "' . $itemDetail->article . '".');
+            }
+            if (trim($beforeChange->extra_article) !== trim($itemDetail->extra_article)) {
+                array_push($changesSummary, 'Article line 2 was changed from "' . $beforeChange->extra_article . '" to "' . $itemDetail->extra_article . '".');
             }
             if ($beforeChange->price_catalogue !== $itemDetail->price_catalogue) {
                 array_push($changesSummary, 'Price catalogue was changed from "' . $beforeChange->price_catalogue . '" to "' . $itemDetail->price_catalogue . '".');
@@ -303,6 +308,7 @@ class ItemDetailController extends Controller
 
             $itemDetail->description = $request->description;
             $itemDetail->article = $request->article;
+            $itemDetail->extra_article = $request->extra_article;
             $itemDetail->price_catalogue = $request->price_catalogue;
             $itemDetail->category_id = $request->category_id;
             $itemDetail->unit_id = $request->unit_id;

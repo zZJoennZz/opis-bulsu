@@ -103,15 +103,6 @@
             @if ($setting->name === 'technical_resource_person')
                 <div class="row mb-3">
                     <div class="col-12">
-                        <label for="technical_resource_person" class="form-label">Member <span class="small text-muted">Signatory Setting</span></label>
-                        <input value="{{$setting->value}}" type="text" class="form-control form-control-lg" id="technical_resource_person" name="technical_resource_person">
-                    </div>
-                </div>
-            @endif
-
-            @if ($setting->name === 'technical_resource_person')
-                <div class="row mb-3">
-                    <div class="col-12">
                         <label for="technical_resource_person" class="form-label">Technical Resource Person <span class="small text-muted">Signatory Setting</span></label>
                         <input value="{{$setting->value}}" type="text" class="form-control form-control-lg" id="technical_resource_person" name="technical_resource_person">
                     </div>

@@ -31,6 +31,10 @@ class UserController extends Controller
     public function show($user_id)
     {
         $user = User::find($user_id);
+
+        if ($user->account_type === "admin") {
+            return redirect()->back()->withErrors(['Admin account cannot be edited.']);
+        }
         $positions = Position::all();
         $branches = Branch::all();
         return view('po-dashboard/view-user')
