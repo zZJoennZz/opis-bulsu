@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('contact_number')->nullable();
             $table->boolean('is_delete')->default('0');
             $table->unsignedBigInteger('added_by');
+            $table->text('office_code');
             $table->timestamps();
         });
     }
