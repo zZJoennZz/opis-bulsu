@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Models\EquipmentCode;
 use App\Models\InventoryCustodian;
 use Illuminate\Http\Request;
 use App\Models\ItemCategory;
@@ -10,6 +11,9 @@ use App\Models\ItemDetail;
 use App\Models\ProProManPlan;
 use App\Models\ProProManPlanHistory;
 use App\Models\Notification;
+use App\Models\PurchaseOrder;
+use App\Models\SupplyEndUser;
+use App\Models\SupplyOfficeEmployee;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -74,8 +78,7 @@ class DashboardController extends Controller
         }
 
         if ($user->account_type === "SUPPLY_OFFICE" || $user->account_type === "admin") {
-            $ics = InventoryCustodian::with(['bac_reso.quotation.pr_item.ppmp.milestones', 'bac_reso.quotation.quotation.company', 'iar', 'company', 'source_of_fund', 'added_by_user'])->get();
-            $viewToReturn = $viewToReturn->with('ics', $ics);
+            $viewToReturn = $viewToReturn->with('hey', 'hey');
         }
 
         return $viewToReturn;

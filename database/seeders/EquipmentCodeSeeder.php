@@ -78,6 +78,7 @@ class EquipmentCodeSeeder extends Seeder
         foreach ($ec as $e) {
             EquipmentCode::create([
                 'equipment_code' => $e['code'],
+                'unique_code' => 0,
                 'description' => $e['description'],
                 'added_by' => 1
             ]);

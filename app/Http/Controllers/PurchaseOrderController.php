@@ -191,4 +191,76 @@ class PurchaseOrderController extends Controller
             ], 400);
         }
     }
+
+    public function get_by_id($id, $type)
+    {
+        if ($type === "" || $type === null) {
+            return response()->json([
+                'success' => false,
+                'message' => "Invalid action."
+            ], 400);
+        }
+        try {
+            $po = PurchaseOrder::find($id);
+            $withCond = "";
+            if ($type === "ICSL") {
+                $withCond = [
+                    'bac_reso.bac_reso_items' => function ($builder) {
+                        $builder->doesntHave('supply_inventory_item');
+                    },
+                    'bac_reso.bac_reso_items.quotation' => function ($builder) use ($po) {
+                        $builder->where('offered_unit_price', '<', '5000')
+                            ->whereHas('quotation', function ($builder1) use ($po) {
+                                $builder1->where('companies_id', $po->companies_id);
+                            });
+                    },
+                    'bac_reso.bac_reso_items.quotation.quotation' => function ($builder) use ($po) {
+                        $builder->where('companies_id', $po->companies_id);
+                    },
+                    'bac_reso.bac_reso_items.quotation.pr_item.ppmp.item_detail.unit',
+                    'bac_reso.bac_reso_items.quotation.pr_item.ppmp.milestones'
+                ];
+            } else {
+                $withCond = [
+                    'bac_reso.bac_reso_items' => function ($builder) {
+                        $builder->doesntHave('supply_inventory_item');
+                    },
+                    'bac_reso.bac_reso_items.quotation' => function ($builder) use ($po) {
+                        $builder->where('offered_unit_price', '>=', '5000')
+                            ->where('offered_unit_price', '<', '50000')
+                            ->whereHas('quotation', function ($builder1) use ($po) {
+                                $builder1->where('companies_id', $po->companies_id);
+                            });
+                    },
+                    'bac_reso.bac_reso_items.quotation.quotation' => function ($builder) use ($po) {
+                        $builder->where('companies_id', $po->companies_id);
+                    },
+                    'bac_reso.bac_reso_items.quotation.pr_item.ppmp.item_detail.unit',
+                    'bac_reso.bac_reso_items.quotation.pr_item.ppmp.milestones'
+                ];
+            }
+
+            $poForItems = PurchaseOrder::where('id', $id)
+                ->with($withCond)
+                ->whereHas('bac_reso.bac_reso_items.quotation.quotation', function ($builder) use ($po) {
+                    $builder->where('companies_id', $po->companies_id);
+                })
+                ->first();
+
+            $items = $poForItems->bac_reso->bac_reso_items->filter(function ($item) {
+                return $item->quotation !== null;
+            })
+                ->values();
+
+            return response()->json([
+                'success' => true,
+                'data' => $items,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Cannot fetch items.'
+            ], 400);
+        }
+    }
 }

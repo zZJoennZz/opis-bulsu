@@ -5,14 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class EquipmentCode extends Model
+class InventoryTransactionItemSerialNumber extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'equipment_code',
-        'unique_code',
-        'description',
-        'is_delete',
-        'added_by',
+        'inventory_transaction_items_id',
+        'serial_number',
     ];
 }

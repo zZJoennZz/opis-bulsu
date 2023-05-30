@@ -36,9 +36,4 @@ class QuotationItem extends Model
     {
         return $this->hasOne(BACResoItem::class, 'quotation_items_id', 'id');
     }
-
-    public function canvass_abstract_item()
-    {
-        return $this->hasOne(CanvassAbstractItem::class, 'quotation_items_id', 'id');
-    }
 }

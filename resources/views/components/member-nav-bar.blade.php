@@ -91,7 +91,8 @@
             
         </div>
         <div class="float-end">
-            <div id="system-clock" style="color: gray;"></div>
+            <div class="d-inline"><i class="bi bi-clock-fill"></i></div>
+            <div class="d-inline" id="system-clock" style="color: gray;"></div>
         </div>
         
     </div>

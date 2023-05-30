@@ -132,6 +132,9 @@
                 <div class="mb-3 mb-md-0 small text-muted">
                     Copyright © {{ date("Y") }}. Bulacan State University.
                 </div>
+                <div class="mt-2 fst-italic" style="font-size: 12px; color: rgb(192, 192, 192);">
+                    OPIS version: 0.2.1
+                </div>
             </li>
         </ul>
         <hr />

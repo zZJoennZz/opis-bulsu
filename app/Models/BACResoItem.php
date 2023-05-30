@@ -24,4 +24,9 @@ class BACResoItem extends Model
     {
         return $this->belongsTo(BACReso::class, 'b_a_c_resos_id', 'id');
     }
+
+    public function supply_inventory_item()
+    {
+        return $this->hasOne(InventoryTransactionItem::class, 'b_a_c_reso_items_id', 'id');
+    }
 }

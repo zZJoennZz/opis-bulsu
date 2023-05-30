@@ -66,7 +66,7 @@ class SettingSeeder extends Seeder
         ]);
         Setting::create([
             'name' => 'accountants',
-            'valuue' => '"[\r\n    {\r\n        \"id\": 1,\r\n        \"full_name\": \"Joanha Christine T. Borja\",\r\n        \"position\": \"Head - System Accounting Office\"\r\n    },  \r\n    {\r\n        \"id\": 2,\r\n        \"full_name\": \"Ma. Carla V Diño\",\r\n        \"position\": \"Director for Finance - Main Campus\"\r\n    },\r\n    {\r\n        \"id\": 3,\r\n        \"full_name\": \"Sheila Marie Domingo\",\r\n        \"position\": \"Director for Finance - External\"\r\n    }\r\n]"'
+            'value' => '"[\r\n    {\r\n        \"id\": 1,\r\n        \"full_name\": \"Joanha Christine T. Borja\",\r\n        \"position\": \"Head - System Accounting Office\"\r\n    },  \r\n    {\r\n        \"id\": 2,\r\n        \"full_name\": \"Ma. Carla V Diño\",\r\n        \"position\": \"Director for Finance - Main Campus\"\r\n    },\r\n    {\r\n        \"id\": 3,\r\n        \"full_name\": \"Sheila Marie Domingo\",\r\n        \"position\": \"Director for Finance - External\"\r\n    }\r\n]"'
         ]);
     }
 }

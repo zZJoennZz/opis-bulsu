@@ -13,16 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('equipment_codes', function (Blueprint $table) {
+        Schema::create('inventory_transaction_item_serial_numbers', function (Blueprint $table) {
             $table->id();
-            $table->string('equipment_code');
-            $table->string('unique_code');
-            $table->string('description');
-            $table->boolean('is_delete')->default(0);
-            $table->unsignedBigInteger('added_by');
+            $table->unsignedBigInteger('inventory_transaction_items_id');
+            $table->string('serial_number');
             $table->timestamps();
-
-            $table->foreign('added_by')->references('id')->on('users');
         });
     }
 
@@ -33,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('equipment_codes');
+        Schema::dropIfExists('inventory_transaction_item_serial_numbers');
     }
 };

@@ -29,15 +29,15 @@
                         <form action="{{ route('supply-position.post_add') }}" method="POST">
                             @csrf
                             <div class="mb-3">
-                                <label for="position" class="form-label">Position</label>
+                                <label for="name" class="form-label">Position</label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter position here." required>
                             </div>
                             <div class="mb-3">
-                                <label for="type" class="form-label">Type</label>
-                                <select class="form-select" id="edit_college" name="type" aria-label="Select type">
-                                    <option disabled selected>Select type here</option>
-                                    <option value="END USER">END USER</option>
-                                    <option value="SUPPLY_OFFICE_EMPLOYEE">SUPPLY_OFFICE_EMPLOYEE</option>
+                                <label for="type" class="form-label">Position Type</label>
+                                <select class="form-select" id="type" name="type" aria-label="Select type">
+                                    <option disabled selected hidden>Select position type here</option>
+                                    <option value="END USER">End User</option>
+                                    <option value="SUPPLY_OFFICE_EMPLOYEE">Supply Office Employee</option>
                                 </select>
                             </div>
                             <div>

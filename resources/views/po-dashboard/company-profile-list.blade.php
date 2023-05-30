@@ -54,11 +54,11 @@
                                 <input type="email" class="form-control" id="email_address" name="email_address" required>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <label for="philgeps_number" class="col-form-label">Philgeps Number</label>
+                                <label for="philgeps_number" class="col-form-label">PhilGEPS Number</label>
                                 <input type="number" class="form-control" id="philgeps_number" name="philgeps_number" required>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <label for="is_in_philgeps" class="col-form-label">Philgeps Status</label>
+                                <label for="is_in_philgeps" class="col-form-label">PhilGEPS Status</label>
                                 <input type="checkbox" name="is_in_philgeps">
                             </div>
                         </div>
@@ -113,14 +113,14 @@
                                 <input type="email" class="form-control" id="edit_email_address" name="email_address" required>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <label for="philgeps_number" class="col-form-label">Philgeps Number</label>
+                                <label for="philgeps_number" class="col-form-label">PhilGEPS Number</label>
                                 <input type="number" class="form-control" id="edit-philgeps_number" name="philgeps_number" required>
                             </div>
                             <div class="col-sm-12 col-md-6">
-                                <label for="is_in_philgeps" class="col-form-label d-block">Philgeps Status</label>
+                                <label for="is_in_philgeps" class="col-form-label d-block">PhilGEPS Status</label>
                                 <input type="checkbox" name="is_in_philgeps" id="is_in_philgeps" value="this.checked" class="d-inline">
                                     <span class="badge text-bg-success float-left" title="" id="status_label"><em class="bi bi-person-fill-check"></em> Active</span>
-                                    <span class="badge text-bg-warning" title="" id="status_label"><em class="bi bi-person-fill-slash"></em> Inactive</span>                                                    
+                                    <span class="badge text-bg-warning" title="" id="status_label"><em class="bi bi-person-fill-slash"></em> Inactive</span>
                             </div>
                         </div>
                     </div>
@@ -146,7 +146,7 @@
                     <th>TIN #</th>
                     <th>Contact #</th>
                     <th>Email Address</th>
-                    <th>Philgeps Number</th>
+                    <th>PhilGEPS Number</th>
                     <th style="width: 5%;"></th>
                 </tr>
             </thead>

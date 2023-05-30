@@ -10,9 +10,15 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('icf.add') }}">
+    <a class="nav-link" aria-current="page" href="{{ route('icsl.add') }}">
         <em class="bi bi-file-text-fill"></em>
-        Inventory Custodian Form
+        ICS - LOW VALUE
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('icsh.add') }}">
+        <em class="bi bi-file-text-fill"></em>
+        ICS - HIGH VALUE
     </a>
 </li>
 <li><hr /></li>

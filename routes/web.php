@@ -23,12 +23,12 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\BacResoController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\InspectionAndAcceptanceController;
-use App\Http\Controllers\InventoryCustodianController;
 use App\Http\Controllers\SupplyEndUserController;
 use App\Http\Controllers\SupplyEmployeeController;
 use App\Http\Controllers\AbstractOfCanvassController;
 use App\Http\Controllers\AllotAndOblSlipController;
 use App\Http\Controllers\SupplyPositionController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -311,9 +311,12 @@ Route::middleware('supply.office')->group(function () {
     Route::delete('/manage-supply-position/single/{position_id}', [SupplyPositionController::class, 'delete_single']);
     Route::post('/manage-supply-position/batch', [SupplyPositionController::class, 'delete_batch'])->name('supplyposition.delete_batch');
 
-    Route::get('/inventory-custodian-form', [InventoryCustodianController::class, 'add'])->name('icf.add');
-    Route::post('/inventory-custodian-form', [InventoryCustodianController::class, 'store'])->name('icf.store');
-    Route::get('/inventory-custodian-form/print/{id?}', [InventoryCustodianController::class, 'print'])->name('icf.print');
+    Route::get('/purchase-order/{id?}/{type?}', [PurchaseOrderController::class, 'get_by_id'])->name('po.get-single');
+
+    Route::get('/inventory-custodian-slip-l', [TransactionController::class, 'add_ics_l'])->name('icsl.add');
+    Route::get('/inventory-custodian-slip-h', [TransactionController::class, 'add_ics_h'])->name('icsh.add');
+    Route::get('/inventory-custodian-slip', [TransactionController::class, 'add'])->name('ics.add');
+    Route::post('/inventory-custodian-slip/{type?}', [TransactionController::class, 'save_ics'])->name('ics.save');
 });
 
 //ADMIN ONLY

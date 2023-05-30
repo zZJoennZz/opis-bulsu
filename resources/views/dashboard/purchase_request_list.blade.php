@@ -82,7 +82,7 @@
             </tbody>
         </table>
     </div>
-    <x-slot:additional_script>
+    {{-- <x-slot:additional_script>
         @include('layout/datatable', ['tableId' => 'pr-list-user'])
-    </x-slot>
+    </x-slot> --}}
 </x-dashboard-layout>

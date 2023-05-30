@@ -25,11 +25,6 @@ class PurchaseOrder extends Model
         'added_by',
     ];
 
-    public function canvass_abstract()
-    {
-        return $this->hasOne(CanvassAbstract::class, 'id', 'canvass_abstracts_id');
-    }
-
     public function company()
     {
         return $this->hasOne(Company::class, 'id', 'companies_id');
@@ -53,5 +48,10 @@ class PurchaseOrder extends Model
     public function bac_reso()
     {
         return $this->hasOne(BACReso::class, 'id', 'b_a_c_resos_id');
+    }
+
+    public function transactions()
+    {
+        return $this->hasMany(InventoryTransaction::class, 'purchase_orders_id', 'id');
     }
 }
