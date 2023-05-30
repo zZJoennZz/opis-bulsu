@@ -30,7 +30,8 @@ class BranchController extends Controller
                 'type' => ['required', 'string', 'max:20'],
                 'contact_number' => ['required', 'regex:/^(02|\+63)[0-9]{7,10}$|^(\+639|09)[0-9]{9}$|^([0-9]{2,4}-)?[0-9]{6,8}$/'],
                 'email_address' => ['required', 'email', 'unique:branches,email_address'],
-                'address' => ['required', 'min:8']
+                'address' => ['required', 'min:8'],
+                'office_code' => ['required']
             ]);
 
             if ($validator->fails()) {
@@ -43,6 +44,7 @@ class BranchController extends Controller
             $newBranch->address = $request->address;
             $newBranch->email_address = $request->email_address;
             $newBranch->contact_number = $request->contact_number;
+            $newBranch->office_code = $request->office_code;
             $newBranch->added_by = Auth::user()->id;
             $newBranch->save();
             $Branch = Branch::all();
@@ -88,6 +90,7 @@ class BranchController extends Controller
                 Rule::unique('branches', 'email_address')->ignore($getBranch),
             ],
             'address' => ['required', 'min:8'],
+            'office_code' => ['required']
             
         ]);
 
@@ -102,6 +105,7 @@ class BranchController extends Controller
         $getBranch->address = $request->address;
         $getBranch->email_address = $request->email_address;
         $getBranch->contact_number = $request->contact_number;
+        $getBranch->office_code = $request->office_code;
         $getBranch->save();
 
         DB::commit();
