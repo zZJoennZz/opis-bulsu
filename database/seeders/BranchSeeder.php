@@ -24,7 +24,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Main Office',
@@ -34,7 +33,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Budget Office',
@@ -44,7 +42,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Procurement Unit',
@@ -54,7 +51,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Supply Office',
@@ -64,7 +60,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Hagonoy Campus',
@@ -74,7 +69,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Meneses Campus',
@@ -84,7 +78,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Bustos Campus',
@@ -94,7 +87,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Sarmiento Campus',
@@ -104,7 +96,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Architecture and Fine Arts',
@@ -114,7 +105,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Arts and Letters',
@@ -124,7 +114,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Business Administration',
@@ -134,7 +123,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Criminal Justice Education',
@@ -144,7 +132,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Education',
@@ -154,7 +141,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Engineering',
@@ -164,7 +150,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Home Economics',
@@ -174,7 +159,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Industrial Technology',
@@ -184,7 +168,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Information and Communications Technology',
@@ -194,7 +177,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Law',
@@ -204,7 +186,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Nursing',
@@ -214,7 +195,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Physical Education, Recreation and Sports',
@@ -224,7 +204,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Science',
@@ -234,7 +213,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'College of Social Science and Philosophy',
@@ -244,7 +222,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
         Branch::create([
             'branch_name' => 'Graduate School',
@@ -254,7 +231,6 @@ class BranchSeeder extends Seeder
             'contact_number' => null,
             'is_delete' => 0,
             'added_by' => 1,
-            'office_code' => 'Office Code'
         ]);
     }
 }
