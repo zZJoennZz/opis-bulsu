@@ -23,6 +23,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -32,6 +33,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -41,6 +43,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -50,6 +53,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -59,6 +63,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -68,6 +73,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -77,6 +83,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -86,6 +93,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -95,6 +103,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -104,6 +113,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -113,6 +123,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -122,6 +133,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -131,6 +143,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -140,6 +153,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -149,6 +163,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -158,6 +173,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -167,6 +183,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -176,6 +193,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -185,6 +203,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -194,6 +213,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -203,6 +223,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -212,6 +233,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -221,6 +243,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
         Branch::create([
@@ -230,6 +253,7 @@ class BranchSeeder extends Seeder
             'email_address' => null,
             'contact_number' => null,
             'is_delete' => 0,
+            'office_code' => '0D9',
             'added_by' => 1,
         ]);
     }
