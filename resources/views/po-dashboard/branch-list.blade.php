@@ -45,6 +45,10 @@
                             <input type="text" class="form-control" id="contact_number" name="contact_number" placeholder="Contact Number" required>
                             <span class="text-danger">Landline number valid format: 0XX-XXXXXX</span>
                         </div>
+                        <div class="mb-3">
+                            <label for="office_code" class="form-label">Office Code</label>
+                            <input type="text" class="form-control" id="office_code" name="office_code" placeholder="Office Code">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
@@ -89,6 +93,10 @@
                             <input type="text" class="form-control" id="edit_contact_number" name="contact_number" placeholder="Contact Number">
                             <span class="text-danger">Landline number valid format: 0XX-XXXXXX</span>
                         </div>
+                        <div class="mb-3">
+                            <label for="office_code" class="form-label">Office Code</label>
+                            <input type="text" class="form-control" id="edit_office_code" name="office_code" placeholder="Office Code">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
@@ -117,6 +125,7 @@
                     <th style="">Email</th>
                     <th style="">Contact No.</th>
                     <th>Created at</th>
+                    <th>Office Code</th>
                 </tr>
             </thead>
             <tbody>
@@ -134,6 +143,7 @@
                         <td>{{ $branch->email_address }}</td>
                         <td>{{ $branch->contact_number }}</td>
                         <td>{{ $branch->created_at }}</td>
+                        <td>{{ $branch->office_code }}</td> 
                     </tr>
                 @endforeach
             </tbody>
@@ -166,6 +176,7 @@
                         $('#edit_address').val(res.data.address);
                         $('#edit_email_address').val(res.data.email_address);
                         $('#edit_contact_number').val(res.data.contact_number);
+                        $('#edit_office_code').val(res.data.office_code);
                         $('#editBranch').modal('toggle');
                     })
                     .catch(err => alert("Could not fetch the data. Please contact website administrator."));
