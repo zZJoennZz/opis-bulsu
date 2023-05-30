@@ -140,7 +140,7 @@ class UserSeeder extends Seeder
             'account_type' => 'SUPPLY_OFFICE',
             'password' => 'admin',
             'ppmp_year' => '2022',
-            'branches_id' => 4,
+            'branches_id' => 5,
             'is_active' => 1,
         ]);
         Position::create([
