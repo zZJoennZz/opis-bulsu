@@ -471,6 +471,10 @@ class PPMPController extends Controller
             })
             ->get();
 
+        if (count($ppmpHistories) === 0) {
+            return redirect()->route('dashboard.show')->withErrors(['No records found.']);
+        }
+
         // return $ppmpHistories;
 
         return view('bo-dashboard/ppmp-activity-log')->with('ppmp_histories', $ppmpHistories)->with('branch_id', $branch_id);

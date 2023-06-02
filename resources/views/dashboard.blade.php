@@ -28,7 +28,7 @@
         <hr />
     @endif
     <x-slot:additional_script>
-        <style>
+        {{-- <style>
             .ppmpCard {
                 transition: ease-in-out all 200ms;
                 border: 1px solid transparent;
@@ -37,6 +37,6 @@
                 box-shadow: none !important;
                 border-bottom: 1px solid rgb(209, 209, 209) !important;
             }
-        </style>
+        </style> --}}
     </x-slot>
 </x-dashboard-layout>

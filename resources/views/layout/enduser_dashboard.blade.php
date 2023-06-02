@@ -1,11 +1,10 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h2 class="h3">Price Catalogue</h2>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h2 class="fs-5 fw-bold text-uppercase text-primary"><em class="bi bi-tags-fill"></em> Price Catalogue</h2>
     <div class="btn-toolbar mb-2 mb-md-0 d-flex justify-content-center align-items-center">
-        <div class="text-muted me-2">Can't find the item?</div> <a href={{ route('add-new-item.show') }} class="btn btn-warning"><em class="bi bi-bag-plus-fill"></em> Add new!</a>
+        <div class="text-muted me-2">Can't find the item?</div> <a href={{ route('add-new-item.show') }} class="btn btn-sm btn-secondary"><em class="bi bi-bag-plus-fill"></em> Add new</a>
     </div>
 </div>
 <div class="mb-3">
-    <div class="mb-3 fs-2 fw-bold"><em class="bi bi-tags-fill"></em> All Items</div>
     @if($is_consolidated)
         <div class="alert alert-warning mb-3 fs-5" role="alert">
             {{-- PPMP items for the year <div class="badge bg-primary">{{ Auth::user()->ppmp_year }}</div> is already consolidated. You are not allowed to add more items. --}}
@@ -46,21 +45,27 @@
             <div>Just a reminder to complete your pending tasks as soon as possible.</div>
         </div>
     @endif
-
-    <div class="mb-3">
-        <input type="text" class="form-control fs-4" id="item-search-text" oninput="onChangeText()" placeholder="Search..." />
-    </div>
-    <div class="mb-3">
-        <select class="form-select fs-4" id="price_catalogue_id" aria-label="Price Catalogue Category" onchange="getPriceCatalogue()">
-            <option value="0" selected>Price Catalogue Category</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->description }}</option>
-            @endforeach
-        </select>
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            <div class="mb-3">
+                <input type="text" class="form-control fs-4" id="item-search-text" oninput="onChangeText()" placeholder="Start typing to search for item..." />
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-6">
+            <div class="mb-3">
+                <select class="form-select fs-4" id="price_catalogue_id" aria-label="Price Catalogue Category" onchange="getPriceCatalogue()">
+                    <option value="0" selected hidden disabled>Open to select item category</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->description }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
     </div>
     <div id="price_catalogue">
     </div>
 </div>
+<script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
 <script defer>
     let itemList = [
         @foreach ($items as $item)
@@ -84,20 +89,16 @@
         itemListObj.map(item => {
             priceCat.innerHTML += `
                 <div class="col-lg-4 col-sm-12 mb-3">
-                    <div class="card text-center">
+                    <div class="card text-start">
                         <div class="card-body">
+                            <div class="float-end">
+                                <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-sm btn-primary"><em class="bi bi-cart-plus-fill"></em> Add to cart</a>
+                            </div>
                             <h5 class="card-title mb-3">${item["description"]}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">₱ ${item["price_catalogue"]} / ${item["uom"]}</h6>
-                            <p class="card-text">
+                            <h6 class="card-subtitle mb-2 text-muted">${convertToCurrency(parseFloat(item["price_catalogue"]))} / ${item["uom"]}</h6>
+                            <p class="card-text fst-italic">
                                 ${item["cat_desc"]}
                             </p>
-                            {{-- @if($is_consolidated)
-                                <button disabled class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</button>
-                            @else
-                                <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Item Detail</a>
-                            @endif --}}
-                            <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Add to cart</a>
-
                         </div>
                     </div>
                 </div>
@@ -119,14 +120,16 @@
         itemListObj.map(item => {
             priceCat.innerHTML += `
                 <div class="col-lg-4 col-sm-12 mb-3">
-                    <div class="card text-center">
+                    <div class="card text-start">
                         <div class="card-body">
+                            <div class="float-end">
+                                <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-sm btn-primary"><em class="bi bi-cart-plus-fill"></em> Add to cart</a>
+                            </div>
                             <h5 class="card-title mb-3">${item["description"]}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">₱ ${item["price_catalogue"]} / ${item["uom"]}</h6>
-                            <p class="card-text">
+                            <h6 class="card-subtitle mb-2 text-muted">${convertToCurrency(parseFloat(item["price_catalogue"]))} / ${item["uom"]}</h6>
+                            <p class="card-text fst-italic">
                                 ${item["cat_desc"]}
                             </p>
-                            <a href="{{ url('item-detail') }}/${item['id']}" class="btn btn-primary"><em class="bi bi-box-seam"></em> Add to cart</a>
                         </div>
                     </div>
                 </div>

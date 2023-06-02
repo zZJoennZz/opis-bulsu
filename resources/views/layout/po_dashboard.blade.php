@@ -1,7 +1,12 @@
 <div class="justify-content-between flex-wrap flex-md-nowrap align-items-start pt-3 pb-3 mb-3 border-bottom">
     <div class="float-lg-end">
-        <button type="button" class="btn btn-warning me-3" data-bs-toggle="modal" data-bs-target="#unsubmittedPPMP">
-            <em class="bi bi-asterisk"></em> Unsubmitted PPMP
+        <button type="button" class="btn btn-sm btn-secondary me-3" data-bs-toggle="modal" data-bs-target="#unsubmittedPPMP">
+            <span class="badge bg-warning text-dark fw-bold">{{ count(App\Models\Branch::whereDoesntHave('ppmp', function($query) {
+                $query->where('year', getPpmpYear());
+            }
+            )
+            ->where('type', '<>', 'DEVELOPER')
+            ->get()) }}</span> Unsubmitted PPMP
         </button>
         <span class="text-secondary">
             # of submissions:
@@ -10,7 +15,7 @@
             {{ count($ppmp_records_count) }}
         </span>
     </div>
-    <span class="h3">Project Procure Management Plan - Dashboard <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></span>
+    <span class="text-uppercase fs-4 fw-bold">PPMP Dashboard <span class="badge bg-primary fs-6">{{ Auth::user()->ppmp_year }}</span></span>
 </div>
 <div class="modal fade" id="unsubmittedPPMP" tabindex="-1" aria-labelledby="unsubmittedPPMP" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -32,10 +37,10 @@
     </div>
 </div>
 @foreach($all_branches as $branch)
-<div class="row border-bottom rounded-5 p-3 mb-3">
+<div class="row border-bottom border-primary pt-4 pb-3 mb-3">
     <div class="col-12 col-lg-6 text-start p-3">
-        {{-- <div class="fs-6"><span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></div> --}}
-        <div class="fs-1 mb-1 fw-bold">{{$branch->branch_name}}</div>
+        <div class="fs-6 fw-bold text-secondary">{{ $branch->type }}</div>
+        <div class="fs-2 mb-1 fw-bold text-primary">{{$branch->branch_name}}</div>
         <div class="fst-italic text-secondary"><span class="fw-bold">Requested by:</span>
             @if(isset($branch->ppmp[0]) && ($branch->ppmp[0]->is_draft === 0))
             {{$branch->ppmp[0]->user_profile->first_name}} {{$branch->ppmp[0]->user_profile->last_name}}
@@ -49,11 +54,11 @@
             $count = count($branch->ppmp->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 0))
         )
         <a @if($count > 0) href="{{ route('po-ppmp-approval.show', ['branch_id' => $branch->id]) }}" @endif class="@if($count > 0) ppmpCard @endif shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
-            <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%;">
+            <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
                 <em class="bi bi-file-earmark-spreadsheet" style="font-size: 1.4rem;"></em>
             </div>
             <div class="mt-4 fs-6 fw-bold @if($count > 0) text-primary @else text-secondary @endif">
-                New PPMP Approval
+                Pending
             </div>
             <div class="fs-2 fw-bold @if($count > 0) text-primary @else text-secondary @endif">
                 @if($count > 0  ) REVIEW @else N/A @endif
@@ -65,14 +70,14 @@
             $count = count($branch->ppmp->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1))
         )
         <a @if($count > 0) href="{{ route('po-approved-ppmp.show', ['branch_id' => $branch->id]) }}" @endif class="@if($count > 0) ppmpCard @endif shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
-            <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%;">
+            <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
                 <em class="bi bi-journal-check" style="font-size: 1.4rem;"></em>
             </div>
             <div class="mt-4 fs-6 fw-bold @if($count > 0) text-primary @else text-secondary @endif">
-                Approved PPMP
+                Approved
             </div>
             <div class="fs-2 fw-bold @if($count > 0) text-primary @else text-secondary @endif">
-                @if($count > 0  ) APPROVED @else N/A @endif
+                @if($count > 0  ) View @else N/A @endif
             </div>
         </a>
     </div>
@@ -81,11 +86,11 @@
             $count = count($branch->ppmp->where('year', '<>', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->groupBy('year'))
         )
         <a @if($count > 0) href="{{ route('previous-ppmp.show', ["branch_id" => $branch->id]) }}" @endif class="@if($count > 0) ppmpCard @endif shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
-            <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%;">
+            <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
                 <em class="bi bi-file-earmark-text" style="font-size: 1.4rem;"></em>
             </div>
             <div class="mt-4 fs-6 fw-bold @if($count > 0) text-primary @else text-secondary @endif">
-                Previous Records
+                All Records
             </div>
             <div class="fs-2 fw-bold @if($count > 0) text-primary @else text-secondary @endif">
                 {{ $count }}

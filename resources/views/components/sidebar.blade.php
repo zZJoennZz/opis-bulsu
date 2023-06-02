@@ -2,11 +2,11 @@
     <div class="position-sticky pt-3 sidebar-sticky scroll--simple">
         <div class="p-3 bg-dark text-light mb-3">
             <div class="fs-5 mb-3">
-                <a href="{{ route('logout.perform') }}">
+                {{-- <a href="{{ route('logout.perform') }}">
                     <div class="float-end bg-danger rounded-circle" style="display: flex; background: gray; width: 40px; height: 40px;">
                         <div class="m-auto text-light"><em class="bi bi-box-arrow-right"></em></div>
                     </div>
-                </a>
+                </a> --}}
                 @if(Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin')
                     <i class="bi bi-shield-check"></i>
                 @elseif(Auth::user()->account_type === 'BUDGET_OFFICE')

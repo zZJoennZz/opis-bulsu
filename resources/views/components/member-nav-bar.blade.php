@@ -90,7 +90,7 @@
             
             
         </div>
-        <div class="float-end">
+        <div class="float-end fs-6 py-2">
             <div class="d-inline"><i class="bi bi-clock-fill"></i></div>
             <div class="d-inline" id="system-clock" style="color: gray;"></div>
         </div>
@@ -98,7 +98,7 @@
     </div>
     <div class="navbar-nav">
         <div class="nav-item text-nowrap">
-            <a class="nav-link px-3" href="{{ route('logout.perform') }}">Logout</a>
+            <a class="nav-link px-3" href="{{ route('logout.perform') }}">Logout <em class="bi bi-arrow-bar-right"></em></a>
         </div>
     </div>
 </header>

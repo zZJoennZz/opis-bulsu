@@ -1,6 +1,6 @@
 <x-dashboard-layout>
     <x-slot:title>
-        New PPMP Budget Request
+        Pending Budget Request
     </x-slot>
 
     @php
@@ -16,22 +16,27 @@
         @method('PUT')
         <input type="hidden" name="branch" id="branch" value="{{ $branch_id }}">
         <div class="mb-3">
-            <a href="{{ route('bo-dashboard.show') }}" class="btn btn-secondary"><em class="bi bi-arrow-bar-left"></em> Back</a>
-            <button class="btn btn-success" type="submit"><em class="bi bi-check2-square"></em> Approve</button>
-            <button class="btn btn-warning" type="button" onclick="sendBack()"><em class="bi bi-arrow-90deg-up"></em> Send Back</button>
+            <a href="{{ route('bo-dashboard.show') }}" class="btn btn-sm btn-secondary"><em class="bi bi-arrow-bar-left"></em> Back</a>
+            <button class="btn btn-sm btn-warning" type="button" onclick="sendBack()"><em class="bi bi-arrow-90deg-up"></em> Send Back</button>
         </div>
         <div class="mb-3">
-            <label for="source_of_funds_id" class="form-label">Source of Fund:</label>
-            <select class="form-select" id="source_of_funds_id" name="source_of_funds_id" aria-label="Purpose of the item">
-                @foreach ($source_of_funds as $source)
-                <option value="{{$source->id}}" @php echo $currentSourceOfFund === $source->id ? "selected" : "" @endphp>{{$source->source_of_fund}}</option>
-                @endforeach
-            </select>
-            <div class="text-danger text-uppercase" style="margin-top: 1rem;">Changing the value here will update the source of fund of this year's PPMP of this branch.</div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="source_of_funds_id" class="form-label">PPMP source of fund: <span class="badge bg-primary">{{ getPpmpYear() }}</span></label>
+                    <select class="form-select" id="source_of_funds_id" name="source_of_funds_id" aria-label="Purpose of the item">
+                        @foreach ($source_of_funds as $source)
+                        <option value="{{$source->id}}" @php echo $currentSourceOfFund === $source->id ? "selected" : "" @endphp>{{$source->source_of_fund}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-sm-12 mt-2">
+                    <button class="btn btn-sm btn-primary" type="submit"><em class="bi bi-check2-square"></em> Approve</button>
+                </div>
+            </div>
         </div>
     </form>
     <div class="table-responsive mb-3">
-        <table class="table table-sm table-bordered border-dark caption-top" id="ppmp-cart">
+        <table class="table table-sm table-hover border-dark caption-top" id="ppmp-cart">
             <caption>New Project Procurement Management Plan Requests <span class="badge text-bg-primary">Year <strong>{{ Auth::user()->ppmp_year }}</strong></span></caption>
             <thead class="text-center">
                 <tr>
@@ -82,7 +87,7 @@
                         <td>₱{{ number_format($totalAmount, 2) }}</td>
                         @php ($totalTotalAmount = floatval($totalTotalAmount) + floatval($totalAmount))
                         <td>{{ $item->remarks }}</td>
-                        <td><a href="{{ route('get-ppmp-record.show', ['ppmp_id' => $item->id]) }}" class="btn btn-success"><em class="bi bi-pencil-square"></em></a></td>
+                        <td><a href="{{ route('get-ppmp-record.show', ['ppmp_id' => $item->id]) }}" class="btn btn-sm btn-success"><em class="bi bi-pencil-square"></em></a></td>
                     </tr>
                 @endforeach
             </tbody>

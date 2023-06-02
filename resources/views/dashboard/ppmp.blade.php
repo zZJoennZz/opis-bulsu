@@ -12,7 +12,7 @@
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     <div class="table-responsive mb-3">
-        <table class="table table-sm table-bordered border-dark caption-top" id="ppmp-request-table">
+        <table class="table table-sm table-hover border-dark caption-top" id="ppmp-request-table">
             <caption>Project Procurement Management Plan Request <span class="badge text-bg-primary">Year <strong>{{ Auth::user()->ppmp_year }}</strong></span></caption>
             <thead class="text-center">
                 <tr>
@@ -40,7 +40,7 @@
                     <tr>
                         <td>
                             @if (!is_null($item->pr_item))
-                                <span class="badge bg-danger">PR Submitted</span>
+                                <span class="badge bg-danger">N/A</span>
                             @else
                                 <a href="{{ route('get-ppmp-record.show', ['ppmp_id' => $item->id]) }}" class="btn btn-success btn-sm"><em class="bi bi-pencil-square"></em></a>
                             @endif

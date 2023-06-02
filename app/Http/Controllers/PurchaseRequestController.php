@@ -75,7 +75,17 @@ class PurchaseRequestController extends Controller
 
     public function pr_form()
     {
-        return view('dashboard/purchase_request_form')->with('is_pr_enabled', $this->isPrEnabled());
+        $sourceOfFund = ProProManPlan::where('year', getPpmpYear())
+            ->with(['source_of_fund'])
+            ->where('is_consolidate', 1)
+            ->where('is_draft', 0)
+            ->where('is_bo_approve', 1)
+            ->where('is_pr_approve', 1)
+            ->first();
+
+        return view('dashboard/purchase_request_form')
+            ->with('is_pr_enabled', $this->isPrEnabled())
+            ->with('source_of_fund', $sourceOfFund->source_of_fund);
     }
 
     public function pr_available_items_api()

@@ -28,7 +28,7 @@
     @endif
 
     <div class="table-responsive">
-        <table class="table table-small table-bordered" id="pr-list-user">
+        <table class="table table-sm table-hover border-dark" id="pr-list-user">
             <caption>Purchase Requests for the Year <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
             <thead>
                 <tr class="small">
@@ -45,6 +45,11 @@
                 </tr>
             </thead>
             <tbody>
+                @if (count($pr_records) === 0)
+                    <tr>
+                        <td colspan="10" class="text-center fst-italic">No records found.</td>
+                    </tr>
+                @endif
                 @foreach ($pr_records as $pr)
                     <tr>
                         <td>{{ $pr->pr_number }}</td>

@@ -1,4 +1,129 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+@php
+    $noPpmpBranches = 0;
+@endphp
+<div class="modal fade" id="unsubmittedPPMPbo" tabindex="-1" aria-labelledby="unsubmittedPPMPbo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="unsubmittedPPMPbo"><em class="bi bi-asterisk"></em> Unsubmitted PPMP</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-start">
+                <ul class="list-group">
+                    @foreach($branches as $branch)
+                        @if(count($branch->ppmp) === 0)
+                        @php
+                            $noPpmpBranches += 1;
+                        @endphp
+                        <li class="list-group-item">{{ $branch->branch_name }}</li>
+                        @endif
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <button type="button" class="btn btn-sm btn-secondary me-3 float-end" data-bs-toggle="modal" data-bs-target="#unsubmittedPPMPbo">
+            <span class="badge bg-light text-dark fw-bold">{{ $noPpmpBranches }}</span> Unsubmitted PPMP
+        </button>
+        <div class="fw-bold text-uppercase fs-4">Budget Office Dashboard</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <div class="text-muted small">List of campuses/offices</div>
+    </div>
+</div>
+<div class="row">
+    @foreach ($branches as $branch)
+        <div class="col-sm-12 col-md-6">
+            <div class="my-2">
+                <div class="border border-primary rounded p-3">
+                    <a href="{{ route('ppmp-activity-log.show', ['branch_id' => $branch->id]) }}" class="float-end btn btn-link btn-sm"><em class="bi bi-clock-history"></em> History Logs</a>
+                    <div>
+                        <span class="badge bg-primary">
+                            @if ($branch->type === "CAMPUS")
+                                <em class="bi bi-buildings-fill"></em>
+                            @else
+                                <em class="bi bi-building-fill"></em>
+                            @endif
+                            {{ $branch->type }}
+                        </span>
+                    </div>
+                    <div class="text-primary fs-4 fw-bold mb-4">{{ $branch->branch_name }}</div>
+                    <div class="row">
+                        <div class="col-4">
+                            @php
+                                $isDisabled = true;
+                                if (count($branch->ppmp->where('is_bo_approve', 0)->where('is_delete', 0)->where('is_draft', 0)) === 0) {
+                                    $isDisabled = true;
+                                } else {
+                                    $isDisabled = false;
+                                }
+                            @endphp
+                            <a href="{{ $isDisabled ? "#" : route('bo-new-ppmp-request.show', ['branch_id' => $branch->id]) }}" class="shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
+                                <div class="mb-md-2 position-absolute top-0 {{ $isDisabled ? "bg-secondary" : "bg-danger" }} text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
+                                    <em class="bi bi-file-earmark-spreadsheet" style="font-size: 1.4rem;"></em>
+                                </div>
+                                <div class="mt-4 fs-6 fw-bold {{ $isDisabled ? "text-secondary" : "text-danger" }}">
+                                    Pending
+                                </div>
+                                <div class="fs-2 fw-bold {{ $isDisabled ? "text-secondary" : "text-danger" }}">
+                                    {{ $isDisabled ? "None" : "Review" }}
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            @php
+                                $isDisabled = true;
+                                if (count($branch->ppmp->where('is_bo_approve', 1)->where('is_delete', 0)->where('is_draft', 0)) === 0) {
+                                    $isDisabled = true;
+                                } else {
+                                    $isDisabled = false;
+                                }
+                            @endphp
+                            <a href="{{ $isDisabled ? "#" : route('approved-ppmp-request.show', ['branch_id' => $branch->id]) }}" class="shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
+                                <div class="mb-md-2 position-absolute top-0 {{ $isDisabled ? "bg-secondary" : "bg-primary" }} text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
+                                    <em class="bi bi-journal-check" style="font-size: 1.4rem;"></em>
+                                </div>
+                                <div class="mt-4 fs-6 fw-bold {{ $isDisabled ? "text-secondary" : "text-primary" }}">
+                                    Approved
+                                </div>
+                                <div class="fs-2 fw-bold {{ $isDisabled ? "text-secondary" : "text-primary" }}">
+                                    {{ $isDisabled ? "None" : "View" }}
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-4">
+                            @php
+                                $isDisabled = true;
+                                if (count($branch->ppmp->where('year', '<>',getPpmpYear())->where('is_bo_approve', 1)->where('is_pr_approve', 1)->where('is_delete', 0)->where('is_draft', 0)) === 0) {
+                                    $isDisabled = true;
+                                } else {
+                                    $isDisabled = false;
+                                }
+                            @endphp
+                            <a href="{{ $isDisabled ? "#" : route('approved-ppmp-request.show', ['branch_id' => $branch->id]) }}" class="shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
+                                <div class="mb-md-2 position-absolute top-0 {{ $isDisabled ? "bg-secondary" : "bg-primary" }} text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
+                                    <em class="bi bi-file-earmark-text" style="font-size: 1.4rem;"></em>
+                                </div>
+                                <div class="mt-4 fs-6 fw-bold {{ $isDisabled ? "text-secondary" : "text-primary" }}">
+                                    All Records
+                                </div>
+                                <div class="fs-2 fw-bold {{ $isDisabled ? "text-secondary" : "text-primary" }}">
+                                    {{ $isDisabled ? "None" : "View" }}
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+{{-- <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h2 class="h3">Budget Office Dashboard <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></h2>
 </div>
 @foreach ($ppmp_list as $ppmp)
@@ -95,122 +220,4 @@
         </a>
     </div>
 </div>
-@endforeach
-{{-- <div class="mb-3 table-responsive" style="max-height: 90vh;">
-    <table id="bo-dashboard-table" class="table table-sm border-dark caption-top">
-        <caption>Project Procure Management Plan - Budget Requests</caption>
-        <thead>
-            <tr>
-                <th style="width: 10%">PPMP Year</th>
-                <th style="width: 30%">End-User / Unit</th>
-                <th style="width: 15%">Requested By</th>
-                <th style="width: 40%">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($ppmp_list as $ppmp)
-                <tr>
-                    <td class="fs-3 fw-bold"><span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></td>
-                    <td class="fs-3 fw-bold">{{ $ppmp->branch_name }}</td>
-                    <td>{{ $ppmp->username }}</td>
-                    <td>
-                        <div class="row p-2">
-                            <div class="col-lg-3 col-md-12">
-                                @php($branchId = $ppmp->id)
-                                @php(
-                                    $newBudgetRequests = array_filter($new_budget_requests, function ($rec) use ($branchId) {
-                                        return $rec["branches_id"] === $branchId;
-                                    })
-                                )
-                                @foreach ($newBudgetRequests as $count)
-                                    @if ($count["count"] > 0)
-                                    <a href="{{ route('bo-new-ppmp-request.show', ['branch_id' => $ppmp->id]) }}" class="btn h-100 btn-primary position-relative" style="font-size: 1rem;">
-                                        <em class="bi bi-cart" style="font-size: 2rem;"></em>
-                                        <div class="fw-bold">New PPMP Budget Request</div>
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                            {{ $count["count"] }}
-                                            <span class="visually-hidden">new requests</span>
-                                        </span>
-                                    </a>
-                                    @else
-                                    <a class="btn opacity-50 h-100 btn-primary position-relative" style="font-size: 1rem;">
-                                        <em class="bi bi-cart" style="font-size: 2rem;"></em>
-                                        <div class="fw-bold">New PPMP Budget Request</div>
-                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                            {{ $count["count"] }}
-                                            <span class="visually-hidden">new requests</span>
-                                        </span>
-                                    </a>
-                                    @endif
-                                @endforeach
-                            </div>
-                            <div class="col-lg-3 col-md-12">
-                                @php(
-                                    $approvedBudgetRequests = array_filter($approved_budget_request, function ($rec) use ($branchId) {
-                                        return $rec["branches_id"] === $branchId;
-                                    })
-                                )
-                                @foreach ($approvedBudgetRequests as $count)
-                                    @if ($count["count"] > 0)
-                                        <a href="{{ route('approved-ppmp-request.show', ['branch_id' => $ppmp->id]) }}" class="btn h-100 btn-success position-relative" style="font-size: 1rem;">
-                                            <em class="bi bi-cart-check" style="font-size: 2rem;"></em>
-                                            <div class="fw-bold">Approved PPMP Budget Request</div>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                                {{ $count["count"] }}
-                                                <span class="visually-hidden">approved requests</span>
-                                            </span>
-                                        </a>
-                                    @else
-                                        <a class="btn h-100 opacity-50 btn-success position-relative" style="font-size: 1rem;">
-                                            <em class="bi bi-cart-check" style="font-size: 2rem;"></em>
-                                            <div class="fw-bold">Approved PPMP Budget Request</div>
-                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                                {{ $count["count"] }}
-                                                <span class="visually-hidden">approved requests</span>
-                                            </span>
-                                        </a>
-                                    @endif
-                                @endforeach
-                                
-                            </div>
-                            <div class="col-lg-3 col-md-12">
-                                <button class="btn h-100 btn-secondary position-relative" style="font-size: 1rem;">
-                                    <em class="bi bi-file-earmark-text" style="font-size: 2rem;"></em>
-                                    <div class="fw-bold">PPMP Historical Records</div>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        @php(
-                                            $previousRecords = array_filter($previous_records, function ($rec) use ($branchId) {
-                                                return $rec["branches_id"] === $branchId;
-                                            })
-                                        )
-                                        @foreach ($previousRecords as $count)
-                                            {{ $count["count"] }}
-                                        @endforeach
-                                        <span class="visually-hidden">records</span>
-                                    </span>
-                                </button>
-                            </div>
-                            <div class="col-lg-3 col-md-12">
-                                <a href="{{ route('ppmp-activity-log.show', ['branch_id' => $branchId]) }}" class="btn h-100 btn-secondary position-relative" style="font-size: 1rem;">
-                                    <em class="bi bi-clock-history" style="font-size: 2rem;"></em>
-                                    <div class="fw-bold">Previous PPMP History Logs</div>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        @php(
-                                            $ppmpLogs = array_filter($ppmp_logs, function ($rec) use ($branchId) {
-                                                return $rec["branches_id"] === $branchId;
-                                            })
-                                        )
-                                        @foreach ($ppmpLogs as $count)
-                                            {{ $count["count"] }}
-                                        @endforeach
-                                        <span class="visually-hidden">previous ppmp</span>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div> --}}
+@endforeach --}}
