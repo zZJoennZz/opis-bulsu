@@ -24,12 +24,12 @@
                             <span class="badge text-bg-primary"><em class="bi bi-check-circle-fill"></em> Procurement Unit</span>
                         </div>
                         <div class="table-responsive mb-3">
-                            <table class="table table-sm table-bordered border-dark caption-top" id="approved-ppm-table">
+                            <table class="table table-sm table-hover border-dark caption-top" id="approved-ppm-table">
                                 <caption>New Project Procurement Management Plan Requests <span class="badge text-bg-primary">Year <strong>{{ Auth::user()->ppmp_year }}</strong></span></caption>
                                 <thead class="text-center">
                                     <tr>
                                         <th rowspan="2" scope="col">Item Description</th>
-                                        <th rowspan="2" scope="col">Unit of Measurement</th>
+                                        <th rowspan="2" scope="col">Unit</th>
                                         <th rowspan="2" scope="col">Estimated Budget</th>
                                         <th colspan="{{ count($ppmp_format) }}" id="milestones">Schedule/Milestone of Activities</th>
                                         <th rowspan="2" scope="col">Total Qty</th>

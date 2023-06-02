@@ -18,22 +18,22 @@
                         ]
                         )
                         <div class="mb-4">
-                            <a href="{{ route('bo-dashboard.show') }}" class="btn btn-secondary"><em class="bi bi-arrow-bar-left"></em> Back</a>
-                            <button class="btn btn-success" type="button" onclick="submitApprove()"><em class="bi bi-check2-square"></em> Approve</button>
-                            <button class="btn btn-warning" type="button" onclick="sendBack()"><em class="bi bi-arrow-90deg-up"></em> Send Back</button>
-                            <a href="{{ route('ppmp-activity-log.show', ['branch_id' => $ppmp_items[0]->branches_id]) }}" class="btn btn-info float-end"><em class="bi bi-clock-history"></em> PPMP Changes History Logs</a>
+                            <a href="{{ route('bo-dashboard.show') }}" class="btn btn-sm btn-secondary"><em class="bi bi-arrow-bar-left"></em> Back</a>
+                            <button class="btn btn-sm btn-primary" type="button" onclick="submitApprove()"><em class="bi bi-check2-square"></em> Approve</button>
+                            <button class="btn btn-sm btn-warning" type="button" onclick="sendBack()"><em class="bi bi-arrow-90deg-up"></em> Send Back</button>
+                            <a href="{{ route('ppmp-activity-log.show', ['branch_id' => $ppmp_items[0]->branches_id]) }}" class="btn btn-link btn-sm float-end"><em class="bi bi-clock-history"></em> PPMP Changes History Logs</a>
                         </div>
                         <hr />
                         <div class="mb-4">
                             <span class="badge text-bg-primary"><em class="bi bi-check-circle-fill"></em> Budget Office</span>
                         </div>
                         <div class="table-responsive mb-3">
-                            <table class="table table-sm table-bordered border-dark caption-top" id="ppmp-approval-table">
+                            <table class="table table-sm table-hover border-dark caption-top" id="ppmp-approval-table">
                                 <caption>New Project Procurement Management Plan Requests <span class="badge text-bg-primary">Year <strong>{{ Auth::user()->ppmp_year }}</strong></span></caption>
                                 <thead class="text-center">
                                     <tr>
                                         <th rowspan="2" scope="col">Item Description</th>
-                                        <th rowspan="2" scope="col">Unit of Measurement</th>
+                                        <th rowspan="2" scope="col">Unit</th>
                                         <th rowspan="2" scope="col">Estimated Budget</th>
                                         <th colspan="{{ count($ppmp_format) }}" id="milestones">Schedule/Milestone of Activities</th>
                                         <th rowspan="2" scope="col">Total Qty</th>
@@ -71,7 +71,7 @@
                                             <td>₱{{ number_format($totalAmount, 2) }}</td>
                                             @php ($totalTotalAmount = floatval($totalTotalAmount) + floatval($totalAmount))
                                             <td>{{ $item->remarks }}</td>
-                                            <td><a href="{{ route('get-ppmp-record.show', ['ppmp_id' => $item->id]) }}" class="btn btn-success"><em class="bi bi-pencil-square"></em></a></td>
+                                            <td><a href="{{ route('get-ppmp-record.show', ['ppmp_id' => $item->id]) }}" class="btn btn-sm btn-success"><em class="bi bi-pencil-square"></em></a></td>
                                         </tr>
                                     @endforeach
                                     

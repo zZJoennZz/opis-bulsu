@@ -20,7 +20,7 @@ class ConsolidateController extends Controller
             return $data->item_detail;
         });
 
-        $notConsolidated = ProProManPlan::where('year', '=', Auth::user()->ppmp_year)->where('is_consolidate', '=', 0)->where('is_draft', '=', 0)->get();
+        $notConsolidated = ProProManPlan::where('year', '=', Auth::user()->ppmp_year)->where('is_consolidate', '=', 0)->where('is_draft', '=', 0)->where('is_delete', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
 
         return view('po-dashboard/view-consolidate')
             ->with('consolidated_records', $getConsolidated)
@@ -29,7 +29,7 @@ class ConsolidateController extends Controller
 
     public function consolidate()
     {
-        $getConsolidated = ProProManPlan::where('is_consolidate', '=', 0)->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
+        $getConsolidated = ProProManPlan::where('is_consolidate', '=', 0)->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_delete', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
 
         $toConsolidate = [];
         foreach ($getConsolidated as $ppmp) {

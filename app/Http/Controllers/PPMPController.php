@@ -81,7 +81,7 @@ class PPMPController extends Controller
 
         $user = Auth::user();
 
-        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue', 'pro_pro_man_plans.submitted_by', 'branches.branch_name')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->where('pro_pro_man_plans.is_pr_approve', '=', 0)->get();
+        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->leftJoin('branches', 'branches.id', '=', 'pro_pro_man_plans.branches_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue', 'pro_pro_man_plans.submitted_by', 'branches.branch_name')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->where('pro_pro_man_plans.is_pr_approve', '=', 0)->where('pro_pro_man_plans.is_delete', 0)->get();
 
         if (count($ppmpNewRequests) <= 0) {
             return redirect()->route('bo-dashboard.show');
@@ -155,7 +155,16 @@ class PPMPController extends Controller
 
         $user = Auth::user();
 
-        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue')->where('year', '=', $user->ppmp_year)->where('is_draft', '=', '0')->where('pro_pro_man_plans.branches_id', '=', $branch_id)->where('pro_pro_man_plans.is_bo_approve', '=', 1)->get();
+        $ppmpNewRequests = ProProManPlan::leftJoin('item_details', 'item_details.id', '=', 'pro_pro_man_plans.item_details_id')
+            ->leftJoin('units', 'units.id', '=', 'item_details.unit_id')
+            ->select($this->select_all_ppmp, 'item_details.description', 'units.uom', 'item_details.price_catalogue')
+            ->where('year', '=', $user->ppmp_year)
+            ->where('pro_pro_man_plans.is_draft', '=', '0')
+            ->where('pro_pro_man_plans.branches_id', '=', $branch_id)
+            ->where('pro_pro_man_plans.is_bo_approve', '=', 1)
+            ->where('pro_pro_man_plans.is_delete', 0)
+            ->where('pro_pro_man_plans.is_pr_approve', 1)
+            ->get();
 
         $ppmpIds = [];
         foreach ($ppmpNewRequests as $newRequest) {
