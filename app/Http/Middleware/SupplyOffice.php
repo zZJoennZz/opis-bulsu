@@ -48,6 +48,10 @@ class SupplyOffice
             return redirect()->route('po-dashboard.show');
         }
 
+        if (Auth::user()->account_type === "PROCUREMENT_HEAD") {
+            return redirect()->route('ph-dashboard.show');
+        }
+
         if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "SUPPLY_OFFICE") {
             return $next($request);
         }

@@ -1,8 +1,8 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h2 class="fs-5 fw-bold text-uppercase text-primary"><em class="bi bi-tags-fill"></em> Price Catalogue</h2>
-    <div class="btn-toolbar mb-2 mb-md-0 d-flex justify-content-center align-items-center">
+    {{-- <div class="btn-toolbar mb-2 mb-md-0 d-flex justify-content-center align-items-center">
         <div class="text-muted me-2">Can't find the item?</div> <a href={{ route('add-new-item.show') }} class="btn btn-sm btn-secondary"><em class="bi bi-bag-plus-fill"></em> Add new</a>
-    </div>
+    </div> --}}
 </div>
 <div class="mb-3">
     @if($is_consolidated)

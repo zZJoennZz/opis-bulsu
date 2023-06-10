@@ -46,6 +46,10 @@ class Admin
             return redirect()->route('so-dashboard.show');
         }
 
+        if (Auth::user()->account_type === "PROCUREMENT_HEAD") {
+            return redirect()->route('ph-dashboard.show');
+        }
+
         if (Auth::user()->account_type === "admin") {
             return $next($request);
         }

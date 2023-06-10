@@ -23,6 +23,11 @@
         <hr />
     @endif
 
+    @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_HEAD")
+        @include('layout/procurement_head_dashboard')
+        <hr />
+    @endif
+
     @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "SUPPLY_OFFICE")
         @include('layout/so_dashboard')
         <hr />

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
-class ProcurementOffice
+class ProcurementOfficeHead
 {
     /**
      * Handle an incoming request.
@@ -42,11 +42,11 @@ class ProcurementOffice
             return redirect()->route('so-dashboard.show');
         }
 
-        if (Auth::user()->account_type === "PROCUREMENT_HEAD") {
-            return redirect()->route('ph-dashboard.show');
+        if (Auth::user()->account_type === "SUPPLY_OFFICE") {
+            return redirect()->route('po-dashboard.show');
         }
 
-        if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE") {
+        if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_HEAD") {
             return $next($request);
         }
 

@@ -154,5 +154,26 @@ class UserSeeder extends Seeder
             'last_name' => 'Office',
             'positions_id' => 5,
         ]);
+
+        User::create([
+            'username' => 'phead',
+            'email' => 'phead@admin.com',
+            'account_type' => 'PROCUREMENT_HEAD',
+            'password' => 'admin',
+            'ppmp_year' => '2022',
+            'branches_id' => 4,
+            'is_active' => 1,
+        ]);
+        Position::create([
+            'description' => 'Procurement Office Head',
+            'is_delete' => 0,
+            'added_by' => 1,
+        ]);
+        UserProfile::create([
+            'users_id' => 8,
+            'first_name' => 'Elizabeth',
+            'last_name' => 'Sunga',
+            'positions_id' => 6,
+        ]);
     }
 }

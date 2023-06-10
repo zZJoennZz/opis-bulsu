@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'budget.office' => \App\Http\Middleware\BudgetOffice::class,
         'procurement.office' => \App\Http\Middleware\ProcurementOffice::class,
         'supply.office' => \App\Http\Middleware\SupplyOffice::class,
+        'procurement.head' => \App\Http\Middleware\ProcurementOfficeHead::class,
     ];
 }

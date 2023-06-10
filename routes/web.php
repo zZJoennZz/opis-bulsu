@@ -69,12 +69,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/update-ppmp-record/{ppmp_id}', [PPMPController::class, 'get_ppmp_record'])->name('get-ppmp-record.show');
     Route::post('/update-ppmp-record/{ppmp_id}', [PPMPController::class, 'update_ppmp'])->name('update-ppmp-record.perform');
 
-    Route::get('/add-new-item-detail', [ItemDetailController::class, 'new_item_detail'])->name('add-new-item.show');
-    Route::post('/add-new-item-detail', [ItemDetailController::class, 'submit_item_detail'])->name('add-new-item.perform');
-
-    Route::get('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'get_item_detail'])->name('view-item-detail.show');
-    Route::post('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'update_item_detail'])->name('view-item-detail.update');
-
     Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
 
     Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
@@ -122,6 +116,11 @@ Route::middleware('budget.office')->group(function () {
     Route::post('/notifications/batch', [NotificationController::class, 'acknowledge_batch'])->name('notification.acknowledge_batch');
 });
 
+//AVAIL TO PROCUREMENT OFFICE HEAD
+Route::middleware('procurement.head')->group(function () {
+    Route::get('/ph-dashboard', [DashboardController::class, 'show'])->name('ph-dashboard.show');
+});
+
 //AVAILABLE TO PROCUREMENT OFFICE
 Route::middleware('procurement.office')->group(function () {
     Route::get('/po-dashboard', [DashboardController::class, 'show'])->name('po-dashboard.show');
@@ -145,6 +144,12 @@ Route::middleware('procurement.office')->group(function () {
     Route::put('/item-categories/{category_id}', [ItemCategoryController::class, 'update'])->name('item-cat.update');
     Route::delete('/item-categories/single/{category_id}', [ItemCategoryController::class, 'delete_single'])->name('item-cat.delete');
     Route::post('/item-categories/batch', [ItemCategoryController::class, 'delete_batch'])->name('item-cat.delete_batch');
+
+    Route::get('/add-new-item-detail', [ItemDetailController::class, 'new_item_detail'])->name('add-new-item.show');
+    Route::post('/add-new-item-detail', [ItemDetailController::class, 'submit_item_detail'])->name('add-new-item.perform');
+
+    Route::get('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'get_item_detail'])->name('view-item-detail.show');
+    Route::post('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'update_item_detail'])->name('view-item-detail.update');
 
     Route::get('/item-details', [ItemDetailController::class, 'all'])->name('item-detail-list.all');
     Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');

@@ -92,6 +92,10 @@ class DashboardController extends Controller
             $viewToReturn = $viewToReturn->with('hey', 'hey');
         }
 
+        if ($user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "admin") {
+            $viewToReturn = $viewToReturn->with('hey', 'hey');
+        }
+
         return $viewToReturn;
     }
 }

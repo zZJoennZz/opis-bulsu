@@ -135,7 +135,6 @@ class ItemDetailController extends Controller
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            die($e);
             return redirect()->back()->withErrors(["Something went wrong! Your submission isn't added to the cart."]);
         }
 
@@ -186,7 +185,7 @@ class ItemDetailController extends Controller
 
         DB::beginTransaction();
         $user = Auth::user();
-        $success_message = $user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin" ? "Item detail successfully saved." : "Item detail successfully submitted for review!";
+        $success_message = $user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "admin" ? "Item detail successfully saved." : "Item detail successfully submitted for review!";
 
         try {
             $newItem = new ItemDetail();
@@ -196,21 +195,21 @@ class ItemDetailController extends Controller
             $newItem->price_catalogue = $request->price_catalogue;
             $newItem->category_id = $request->category_id;
             $newItem->unit_id = $request->unit_id;
-            $newItem->is_approve = $user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin" ? 1 : 0;
+            $newItem->is_approve = $user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "admin" ? 1 : 0;
             $newItem->is_delete = 0;
             $newItem->added_by = $user->id;
             $newItem->save();
 
-            if ($user->account_type !== "PROCUREMENT_OFFICE" && $user->account_type !== "admin") {
-                $users = User::where('account_type', '=', 'PROCUREMENT_OFFICE')->orWhere('account_type', '=', 'admin')->get();
+            if ($user->account_type !== "PROCUREMENT_HEAD" && $user->account_type !== "admin") {
+                $procurement_heads = User::where('account_type', '=', 'PROCUREMENT_HEAD')->orWhere('account_type', '=', 'admin')->get();
 
-                foreach ($users as $user) {
+                foreach ($procurement_heads as $head) {
                     $newNotif = new Notification();
                     $newNotif->title = "New item detail";
                     $newNotif->message = "A new item detail has been added and required your approval. Please review here!";
                     $newNotif->url = "/view-item-detail/" . $newItem->id;
                     $newNotif->is_read = false;
-                    $newNotif->sent_to = $user->id;
+                    $newNotif->sent_to = $head->id;
                     $newNotif->sent_by = $user->id;
                     $newNotif->save();
                 }
@@ -250,7 +249,7 @@ class ItemDetailController extends Controller
             $itemDetail->category_id = $request->category_id;
             $itemDetail->unit_id = $request->unit_id;
 
-            if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE") {
+            if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_HEAD") {
                 $itemDetail->save();
             }
 
@@ -286,12 +285,12 @@ class ItemDetailController extends Controller
             $recordHistory->before_change = json_encode($beforeChange);
             $recordHistory->after_change = json_encode($itemDetail);
             $recordHistory->changes = json_encode($changesSummary);
-            $recordHistory->is_approve = Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE" ? 1 : 0;
+            $recordHistory->is_approve = Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_HEAD" ? 1 : 0;
             $recordHistory->remarks = "n/a";
             $recordHistory->save();
             DB::commit();
 
-            return redirect()->back()->with('success', Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE" ? 'Item successfully updated!' : "Your changes needs to be reviewed first.");
+            return redirect()->back()->with('success', Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_HEAD" ? 'Item successfully updated!' : "Your changes needs to be reviewed first.");
         } catch (Throwable $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(['Item not updated. Please contact website administartor.']);
