@@ -25,8 +25,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-start">
+                <div class="text-end mb-3">
+                    <a href="{{ route('unsub-ppmp') }}" target="_blank" class="btn btn-secondary btn-sm"><em class="bi bi-printer-fill"></em> Print List</a>
+                </div>
                 <ul class="list-group">
-                    @foreach($all_branches as $branch)
+                    @php
+                        $unsub_ppmp_branches = App\Models\Branch::whereDoesntHave('ppmp', function($query) {
+                            $query->where('year', getPpmpYear());
+                        }
+                        )
+                        ->where('type', '<>', 'DEVELOPER')
+                        ->get();
+                    @endphp
+                    @foreach($unsub_ppmp_branches as $branch)
                         @if(!isset($branch->ppmp[0]))
                         <li class="list-group-item">{{ $branch->branch_name }}</li>
                         @endif

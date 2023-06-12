@@ -19,7 +19,7 @@
                         )
                         <div class="table-responsive">
                             <table class="table table-small table-bordered" id="pending-item-changes">
-                                <caption>Pending item details changes made by end users</caption>
+                                <caption>Pending item details changes</caption>
                                 <thead>
                                     <tr>
                                         <th>Item Name</th>

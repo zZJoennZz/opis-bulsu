@@ -93,9 +93,24 @@ class DashboardController extends Controller
         }
 
         if ($user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "admin") {
-            $viewToReturn = $viewToReturn->with('hey', 'hey');
+            $allItemDetails = ItemDetail::all();
+            $viewToReturn = $viewToReturn->with('allItemDetails', $allItemDetails);
         }
 
         return $viewToReturn;
+    }
+
+    public function print_unsub_ppmp()
+    {
+        $unsub_ppmp_branches = Branch::whereDoesntHave(
+            'ppmp',
+            function ($query) {
+                $query->where('year', getPpmpYear());
+            }
+        )
+            ->where('type', '<>', 'DEVELOPER')
+            ->get();
+
+        return view('po-dashboard/print-unsubmitted-ppmp')->with('unsub_ppmp_branches', $unsub_ppmp_branches);
     }
 }

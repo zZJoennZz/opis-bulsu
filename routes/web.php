@@ -119,11 +119,18 @@ Route::middleware('budget.office')->group(function () {
 //AVAIL TO PROCUREMENT OFFICE HEAD
 Route::middleware('procurement.head')->group(function () {
     Route::get('/ph-dashboard', [DashboardController::class, 'show'])->name('ph-dashboard.show');
+
+    Route::get('/item-details/pending', [ItemDetailController::class, 'pending_items'])->name('pending-item-detail.show');
+    Route::get('/item-details/pending/{item_detail_id}', [ItemDetailController::class, 'view_pending_item'])->name('pending-item-detail.single');
+    Route::put('/item-details/pending/approve/{item_details_id}', [ItemDetailController::class, 'approve_pending_update'])->name('approve-pending-item.perform');
+    Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');
+    Route::post('/item-details/batch', [ItemDetailController::class, 'delete_batch'])->name('item-detail-list.delete_batch');
 });
 
 //AVAILABLE TO PROCUREMENT OFFICE
 Route::middleware('procurement.office')->group(function () {
     Route::get('/po-dashboard', [DashboardController::class, 'show'])->name('po-dashboard.show');
+    Route::get('/print-unsubmitted-ppmp', [DashboardController::class, 'print_unsub_ppmp'])->name('unsub-ppmp');
 
     Route::get('/consolidate', [ConsolidateController::class, 'index'])->name('consolidated.show');
     Route::post('/consolidate', [ConsolidateController::class, 'consolidate'])->name('consolidate.perform');
@@ -152,11 +159,6 @@ Route::middleware('procurement.office')->group(function () {
     Route::post('/view-item-detail/{item_detail_id}', [ItemDetailController::class, 'update_item_detail'])->name('view-item-detail.update');
 
     Route::get('/item-details', [ItemDetailController::class, 'all'])->name('item-detail-list.all');
-    Route::delete('/item-details/single/{item_detail_id}', [ItemDetailController::class, 'delete'])->name('item-detail-list.delete');
-    Route::post('/item-details/batch', [ItemDetailController::class, 'delete_batch'])->name('item-detail-list.delete_batch');
-    Route::get('/item-details/pending', [ItemDetailController::class, 'pending_items'])->name('pending-item-detail.show');
-    Route::get('/item-details/pending/{item_detail_id}', [ItemDetailController::class, 'view_pending_item'])->name('pending-item-detail.single');
-    Route::put('/item-details/pending/approve/{item_details_id}', [ItemDetailController::class, 'approve_pending_update'])->name('approve-pending-item.perform');
 
     Route::get('/item-purpose', [ItemPurposeController::class, 'all'])->name('item-purpose.all');
     Route::post('/item-purpose', [ItemPurposeController::class, 'add'])->name('item-purpose.add');

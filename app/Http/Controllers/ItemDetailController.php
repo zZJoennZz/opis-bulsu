@@ -387,7 +387,7 @@ class ItemDetailController extends Controller
         $categories = ItemCategory::all();
         $units = Unit::all();
         $getItem = ItemDetail::find($item_detail_id);
-        return view('po-dashboard/pending-item-history')
+        return view('ph-dashboard.item-detail-history')
             ->with('item_detail', $getItem)
             ->with('categories', $categories)
             ->with('units', $units);

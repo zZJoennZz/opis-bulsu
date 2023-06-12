@@ -42,7 +42,7 @@ class ProcurementOfficeHead
             return redirect()->route('so-dashboard.show');
         }
 
-        if (Auth::user()->account_type === "SUPPLY_OFFICE") {
+        if (Auth::user()->account_type === "PROCUREMENT_OFFICE") {
             return redirect()->route('po-dashboard.show');
         }
 

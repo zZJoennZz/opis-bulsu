@@ -32,4 +32,9 @@ class Branch extends Model
     {
         return $this->hasMany(PurchaseRequestMode::class, 'branches_id', 'id');
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'branches_id', 'id');
+    }
 }
