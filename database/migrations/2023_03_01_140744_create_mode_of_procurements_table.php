@@ -16,7 +16,11 @@ return new class extends Migration
         Schema::create('mode_of_procurements', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('is_delete')->default('0');
+            $table->unsignedBigInteger('added_by');
             $table->timestamps();
+
+            $table->foreign('added_by')->references('id')->on('users');
         });
     }
 

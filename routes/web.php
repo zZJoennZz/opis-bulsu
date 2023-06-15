@@ -29,6 +29,7 @@ use App\Http\Controllers\AbstractOfCanvassController;
 use App\Http\Controllers\AllotAndOblSlipController;
 use App\Http\Controllers\SupplyPositionController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ModeOfProcurementController;
 
 /*
 |--------------------------------------------------------------------------
@@ -285,6 +286,14 @@ Route::middleware('procurement.office')->group(function () {
     //settings
     Route::get('/settings', [SettingController::class, 'index'])->name('settings.index');
     Route::put('/settings', [SettingController::class, 'save_changes'])->name('settings.update');
+
+    //ModeofProcurementController
+    Route::get('/mode-of-procurement', [ModeOfProcurementController::class, 'all'])->name('mode-procurement.all');
+    Route::post('/mode-of-procurement', [ModeOfProcurementController::class, 'add'])->name('mode-procurement.add');
+    Route::get('/mode-of-procurement/{modeprocurement_id}', [ModeOfProcurementController::class, 'get'])->name('mode-procurement.single');
+    Route::put('/mode-of-procurement/{modeprocurement_id}', [ModeOfProcurementController::class, 'update'])->name('mode-procurement.update');
+    Route::delete('/mode-of-procurement/single/{modeprocurement_id}', [ModeOfProcurementController::class, 'delete_single'])->name('mode-procurement.delete');
+    Route::post('/mode-of-procurement/batch', [ModeOfProcurementController::class, 'delete_batch'])->name('mode-procurement.delete_batch');
 });
 
 Route::middleware('supply.office')->group(function () {
