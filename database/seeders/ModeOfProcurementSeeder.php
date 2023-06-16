@@ -26,7 +26,9 @@ class ModeOfProcurementSeeder extends Seeder
 
         foreach ($mop as $m) {
             ModeOfProcurement::create([
-                'name' => $m
+                'name' => $m ,
+                'is_delete' => 0,
+                'added_by' => 1,
             ]);
         }
     }
