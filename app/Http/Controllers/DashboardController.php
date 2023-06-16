@@ -79,7 +79,7 @@ class DashboardController extends Controller
             $viewToReturn = $viewToReturn->with('branches', $branches);
         }
 
-        if ($user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin") {
+        if ($user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin") {
             $allBranches = Branch::where('type', '<>', 'DEVELOPER')->get();
             $ppmpRecordsCount = ProProManPlan::where('year', '=', $user->ppmp_year)->where('is_draft', '=', 0)->groupBy('branches_id')->select('branches_id')->get();
 

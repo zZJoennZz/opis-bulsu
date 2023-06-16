@@ -13,6 +13,7 @@ use App\Models\SourceOfFund;
 use App\Models\ItemPurpose;
 use App\Models\ProProManPlanHistory;
 use App\Models\Notification;
+use App\Models\ProProManPlanRevision;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -280,6 +281,7 @@ class PPMPController extends Controller
             $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
             $sourceOfFunds = SourceOfFund::all();
             $itemPurposes = ItemPurpose::where('is_delete', '=', 0)->get();
+            $allItems = ItemDetail::all();
 
             return view('bo-dashboard/edit-ppmp-request')
                 ->with('item_detail', $itemDetail)
@@ -288,7 +290,8 @@ class PPMPController extends Controller
                 ->with('source_of_funds', $sourceOfFunds)
                 ->with('item_purposes', $itemPurposes)
                 ->with('ppmp_record', $ppmpRecord)
-                ->with('milestone_values', $ppmpRecord->milestones);
+                ->with('milestone_values', $ppmpRecord->milestones)
+                ->with('allItems', $allItems);
         } else {
             return redirect()->route('dashboard.show')->withErrors(['Already have PR or the record does not exist.']);
         }
@@ -299,14 +302,18 @@ class PPMPController extends Controller
         $request->validate([
             'item_purposes_id' => 'required|numeric|min:1',
             'estimated_budget' => 'required|numeric',
+            'item_details_id' => 'exists:item_details,id',
         ]);
         $user = Auth::user();
+        $item_details_id = $request->item_details_id;
         $item_purposes_id = $request->item_purposes_id;
         $estimated_budget = $request->estimated_budget;
         $is_priority = $request->is_priority === "yes" ? 1 : 0;
         $remarks = $request->remarks;
+
         $ppmpRecord = ProProManPlan::where('year', '=', $user->ppmp_year)->doesntHave('pr_item')->find($ppmp_id);
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
+
         $newMilestones = [];
 
         if ($ppmpRecord->submitted_by !== $user->id && $user->account_type !== "admin" && $user->account_type !== "PROCUREMENT_OFFICE" && $user->account_type !== "BUDGET_OFFICE") {
@@ -326,6 +333,7 @@ class PPMPController extends Controller
         }
 
         $oldState = [
+            'item_details_id' => $ppmpRecord->item_details_id,
             'source_of_funds_id' => $ppmpRecord->source_of_funds_id,
             'item_purposes_id' => $ppmpRecord->item_purposes_id,
             'estimated_budget' => $ppmpRecord->estimated_budget,
@@ -335,6 +343,7 @@ class PPMPController extends Controller
         ];
 
         $newState = [
+            'item_details_id' => $request->item_details_id,
             'source_of_funds_id' => $request->source_of_funds_id,
             'item_purposes_id' => $request->item_purposes_id,
             'estimated_budget' => $request->estimated_budget,
@@ -344,6 +353,9 @@ class PPMPController extends Controller
         ];
 
         $summaryLog = [];
+        if (intval($oldState["item_details_id"]) !== intval($newState["item_details_id"])) {
+            array_push($summaryLog, "Item purpose was changed from " . ItemDetail::find($oldState["item_details_id"])->description . " to " . ItemDetail::find($newState["item_details_id"])->description . ".");
+        }
         if (intval($oldState["item_purposes_id"]) !== intval($newState["item_purposes_id"])) {
             array_push($summaryLog, "Item purpose was changed from " . ItemPurpose::find($oldState["item_purposes_id"])->description . " to " . ItemPurpose::find($newState["item_purposes_id"])->description . ".");
         }
@@ -388,43 +400,69 @@ class PPMPController extends Controller
         }
 
         DB::beginTransaction();
+        $ppmpRecord->item_details_id = $item_details_id;
+        $ppmpRecord->item_purposes_id = $item_purposes_id;
+        $ppmpRecord->estimated_budget = $estimated_budget;
+        $ppmpRecord->is_priority = $is_priority;
+        $ppmpRecord->remarks = $remarks;
+
+        $ppmpRecord->is_bo_approve = 0;
+        $ppmpRecord->is_pr_approve = 0;
+        $ppmpRecord->is_consolidate = 0;
+
+        $ppmpRecord->save();
+
+        foreach (json_decode($ppmpFormat->format) as $field) {
+            $milestoneFind = MilestoneOfActivity::where('pro_pro_man_plans_id', '=', $ppmp_id)->where('milestone_value_id', '=', $field->id)->first();
+            $milestoneFind->milestone_value = $request[$field->id];
+            $milestoneFind->save();
+        }
+
+        $ppmpNewHistory = new ProProManPlanHistory();
+        $ppmpNewHistory->pro_pro_man_plans_id = $ppmp_id;
+        $ppmpNewHistory->before_state = json_encode($oldState);
+        $ppmpNewHistory->after_state = json_encode($newState);
+        $ppmpNewHistory->remarks = $request->remarks;
+        $ppmpNewHistory->is_confirm = 0;
+        $ppmpNewHistory->changes_summary = json_encode($summaryLog);
+        $ppmpNewHistory->record_by = $user->id;
+
+        $ppmpNewHistory->save();
+
+        //send notifications to budget office users
+        if ($user->account_type === "END_USER") {
+            $bousers = User::where('account_type', '=', "BUDGET_OFFICE")->orWhere('account_type', '=', 'admin')->get();
+
+            foreach ($bousers as $bo) {
+                sendNotification($bo->id, "New Revision", "PPMP record has been revised and requires you to review. Check here!", "/new-ppmp-request/" . $user->branches_id);
+            }
+        }
+
+        $checkIfConsolidated = ProProManPlan::where('year', getPpmpYear())
+            ->where('is_consolidate', 1)
+            ->get();
+
+        if (count($checkIfConsolidated) >= 1) {
+            $checkIfExisting = ProProManPlanRevision::where('pro_pro_man_plans_id', $ppmp_id)
+                ->first();
+            if ($checkIfExisting !== null) {
+                $newRevision = ProProManPlanRevision::find($checkIfExisting->id);
+                $newRevision->pro_pro_man_plans_id = $ppmp_id;
+                $newRevision->type = "REVISION";
+                $newRevision->item_details_id = $oldState['item_details_id'];
+
+                $newRevision->save();
+            } else {
+                $newRevision = new ProProManPlanRevision();
+                $newRevision->pro_pro_man_plans_id = $ppmp_id;
+                $newRevision->type = "REVISION";
+                $newRevision->item_details_id = $oldState['item_details_id'];
+
+                $newRevision->save();
+            }
+        }
         try {
-            $ppmpRecord->item_purposes_id = $item_purposes_id;
-            $ppmpRecord->estimated_budget = $estimated_budget;
-            $ppmpRecord->is_priority = $is_priority;
-            $ppmpRecord->remarks = $remarks;
 
-            $ppmpRecord->is_bo_approve = 0;
-            $ppmpRecord->is_pr_approve = 0;
-            $ppmpRecord->is_consolidate = 0;
-
-            $ppmpRecord->save();
-
-            foreach (json_decode($ppmpFormat->format) as $field) {
-                $milestoneFind = MilestoneOfActivity::where('pro_pro_man_plans_id', '=', $ppmp_id)->where('milestone_value_id', '=', $field->id)->first();
-                $milestoneFind->milestone_value = $request[$field->id];
-                $milestoneFind->save();
-            }
-
-            $ppmpNewHistory = new ProProManPlanHistory();
-            $ppmpNewHistory->pro_pro_man_plans_id = $ppmp_id;
-            $ppmpNewHistory->before_state = json_encode($oldState);
-            $ppmpNewHistory->after_state = json_encode($newState);
-            $ppmpNewHistory->remarks = $request->remarks;
-            $ppmpNewHistory->is_confirm = 0;
-            $ppmpNewHistory->changes_summary = json_encode($summaryLog);
-            $ppmpNewHistory->record_by = $user->id;
-
-            $ppmpNewHistory->save();
-
-            //send notifications to budget office users
-            if ($user->account_type === "END_USER") {
-                $bousers = User::where('account_type', '=', "BUDGET_OFFICE")->orWhere('account_type', '=', 'admin')->get();
-
-                foreach ($bousers as $bo) {
-                    sendNotification($bo->id, "New Revision", "PPMP record has been revised and requires you to review. Check here!", "/new-ppmp-request/" . $user->branches_id);
-                }
-            }
 
             DB::commit();
         } catch (Throwable $e) {
@@ -521,9 +559,9 @@ class PPMPController extends Controller
         $branch = Branch::find($branch_id);
         $ppmpFormat = MilestoneFormat::find(env("MILESTONE_FORMAT"));
 
-        $ppmp_report = ItemCategoryGroupSection::with(['category_groups', 'category_groups.categories', 'category_groups.categories.item_details', 'category_groups.categories.item_details.unit'])->with('category_groups.categories.item_details.ppmp', function ($query) use ($year, $branch_id) {
+        $ppmp_report = ItemCategoryGroupSection::with(['category_groups', 'category_groups.categories', 'category_groups.categories.item_details', 'category_groups.categories.item_details.unit', 'category_groups.categories.item_details.ppmp' => function ($query) use ($year, $branch_id) {
             return $query->where('year', '=', $year)->where('branches_id', '=', $branch_id)->with('milestones');
-        })->get();
+        }, 'category_groups.categories.item_details.ppmp.revision'])->get();
 
         return view('po-dashboard/view-previous-ppmp')
             ->with('branch', $branch)

@@ -1,6 +1,6 @@
 <div class="table-responsive">
     <table class="table table-small border-dark caption-top" id="pending-item-changes">
-        <caption class="text-uppercasea small">Pending Item Changes</caption>
+        <caption class="text-uppercase fw-bold">Pending Item Changes</caption>
         <thead>
             <tr>
                 <th>Item Name</th>
@@ -24,3 +24,4 @@
         </tbody>
     </table>
 </div>
+@include('layout/datatable', ["tableId" => "pending-item-changes"])

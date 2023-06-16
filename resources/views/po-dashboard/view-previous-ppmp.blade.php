@@ -84,7 +84,21 @@
                                                                     $ctr += 1
                                                                 @endphp
                                                             </td>
-                                                            <td>{{$item->description}}</td>
+                                                            <td>
+                                                                {{$item->description}}
+                                                                @foreach ($item->ppmp as $itemPpmp)
+                                                                    @if ($itemPpmp->revision !== null)
+                                                                        <div>
+                                                                            @if ($itemPpmp->revision->type === "REVISION")
+                                                                                <div class="text-uppercase text-muted fw-bold" style="font-size: 10px;">Replaced item:</div>
+                                                                                <span class="small text-muted">{{ $itemPpmp->revision->item_detail->description }}</span>
+                                                                            @else
+                                                                                <span class="badge bg-secondary">Supplemental</span>
+                                                                            @endif
+                                                                        </div>
+                                                                    @endif
+                                                                @endforeach
+                                                            </td>
                                                             <td class="text-center">{{$item->unit->uom}}</td>
                                                             @php
                                                                 $totalQty = 0
@@ -109,7 +123,7 @@
                                                                     {{$total}}
                                                                 </td>
                                                             @endforeach
-                                                            <td>₱ <div class="float-end">{{$item->price_catalogue}}</div></td>
+                                                            <td>₱ <div class="float-end">{{number_format($item->price_catalogue, 2)}}</div></td>
                                                             <td>
                                                                 ₱ <div class="float-end">{{number_format($totalQty * $item->price_catalogue, 2)}}</div>
                                                                 @php

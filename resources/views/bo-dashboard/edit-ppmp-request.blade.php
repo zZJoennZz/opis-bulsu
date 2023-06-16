@@ -1,6 +1,6 @@
 <x-dashboard-layout>
     <x-slot:title>
-        Edit PPMP
+        Edit Record
     </x-slot>
 
     @php
@@ -29,7 +29,7 @@
 
     <div class="row">
         <div class="col-lg-6 col-md-12">
-            <div class="fs-3 mb-3 fw-bold">Edit PPMP Request</div>
+            <div class="small text-muted text-uppercase fw-bold mb-3">Current item:</div>
             <div class="mb-3">
                 <label for="ppmp_year" class="form-label">PPMP Year:</label>
                 <input type="text" class="form-control" id="ppmp_year" value="{{ $ppmp_year }}" readonly>
@@ -74,6 +74,20 @@
                         </div>
                     </div> --}}
                     {{-- <div class="col-lg-8 col-md-12 mb-3"> replaced the div below --}}
+                    <div class="col-12 mb-3">
+                        <div class="mb-3">
+                            <label for="item_details_id" class="form-label">Item:</label>
+                            <select name="item_details_id" id="item_details_id" class="form-select">
+                                @foreach ($allItems as $item)
+                                    @if ($ppmp_record->item_details_id === $item->id)
+                                        <option value="{{$item->id}}" selected>{{$item->description}} (₱ {{ $item->price_catalogue }} / {{ $item->unit->uom }})</option>
+                                    @else
+                                        <option value="{{$item->id}}">{{$item->description}} (₱ {{ $item->price_catalogue }} / {{ $item->unit->uom }})</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-12 mb-3">
                         <div class="mb-3">
                             <label for="item_purposes_id" class="form-label">Purpose:</label>
@@ -125,7 +139,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12 d-flex" style="justify-content: end;">
-                        <button type="submit" class="btn btn-primary me-2"><em class="bi bi-save2"></em> Update PPMP Record</button>
+                        <button type="submit" class="btn btn-primary me-2">Update Record</button>
                         <a href="{{ route('bo-new-ppmp-request.show', ['branch_id' => $ppmp_record->branches_id]) }}" class="btn btn-danger">Cancel</a>
                     </div>
                 </div>

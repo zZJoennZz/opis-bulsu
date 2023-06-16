@@ -65,4 +65,9 @@ class ProProManPlan extends Model
     {
         return $this->hasOne(PurchaseRequestItem::class, 'pro_pro_man_plans_id', 'id');
     }
+
+    public function revision()
+    {
+        return $this->hasOne(ProProManPlanRevision::class, 'pro_pro_man_plans_id', 'id');
+    }
 }

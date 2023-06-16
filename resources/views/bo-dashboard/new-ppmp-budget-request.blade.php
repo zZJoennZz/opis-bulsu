@@ -64,6 +64,16 @@
                     <tr>
                         <td>
                             {{ $item->description }}
+                            @if ($item->revision !== null)
+                                <div>
+                                    @if ($item->revision->type === "REVISION")
+                                        <div class="text-uppercase text-muted fw-bold" style="font-size: 10px;">Replaced item:</div>
+                                        <span class="small text-muted">{{ $item->revision->item_detail->description }}</span>
+                                    @else
+                                        <span class="badge bg-secondary">Supplemental</span>
+                                    @endif
+                                </div>
+                            @endif
                             <div>
                                 @if ($item->is_bo_approve === 1)
                                     <span class="badge text-bg-primary"><em class="bi bi-check-circle-fill"></em> Budget Office</span>

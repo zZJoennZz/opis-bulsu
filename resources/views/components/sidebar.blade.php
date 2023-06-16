@@ -114,7 +114,7 @@
             <hr />
         @endif
         
-        @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE")
+        @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE" || Auth::user()->account_type === "PROCUREMENT_HEAD")
             <ul class="nav flex-column">
                 @include('layout/po_sidebar')
             </ul>

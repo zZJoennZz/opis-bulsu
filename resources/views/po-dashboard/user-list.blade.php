@@ -35,7 +35,9 @@
                     <tr>
                         <td>
                             <div class="form-check w-100 d-flex align-items-center justify-content-center">
-                                <input class="form-check-input item-checkbox" type="checkbox" value="{{ $user->id }}" id="category{{ $user->id }}" @if($user->is_active!==1) disabled @endif>
+                                @if ($user->account_type !== "admin")
+                                    <input class="form-check-input item-checkbox" type="checkbox" value="{{ $user->id }}" id="category{{ $user->id }}" @if($user->is_active!==1) disabled @endif>
+                                @endif
                             </div>
                         </td>
                         <td class="text-center">
@@ -55,7 +57,7 @@
                             @if ($user->account_type === "admin")
                                 <span class="badge text-bg-info"><em class="bi bi-shield-shaded"></em> Admin</span>
                             @endif
-                            @if ($user->account_type === "PROCUREMENT_OFFICE")
+                            @if ($user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "PROCUREMENT_HEAD")
                                 <span class="badge text-bg-success"><em class="bi bi-bag-fill"></em> Procurement</span>
                             @endif
                             @if ($user->account_type === "BUDGET_OFFICE")
@@ -72,10 +74,12 @@
                             {{ date_format($user->created_at,"M d, Y h:i:s A")}}
                         </td>
                         <td class="p-2 text-end">
-                            @if($user->is_active==1)
-                                <a href="javascript:void(0)" id="status{{$user->id}}" title="off" onclick="status('{{$user->id}}','{{$user->is_active}}')" class="status__id"><span class="badge text-bg-success" title=""><em class="bi bi-person-fill-check"></em> Active</span></a>
-                            @else
-                                <a href="javascript:void(0)" id="status{{$user->id}}" title="on" onclick="status('{{$user->id}}','{{$user->is_active}}')" class="status__id"><span class="badge text-bg-warning" title=""><em class="bi bi-person-fill-slash"></em> Inactive</span></a>
+                            @if ($user->account_type !== "admin")
+                                @if($user->is_active==1)
+                                    <a href="javascript:void(0)" id="status{{$user->id}}" title="off" onclick="status('{{$user->id}}','{{$user->is_active}}')" class="status__id"><span class="badge text-bg-success" title=""><em class="bi bi-person-fill-check"></em> Active</span></a>
+                                @else
+                                    <a href="javascript:void(0)" id="status{{$user->id}}" title="on" onclick="status('{{$user->id}}','{{$user->is_active}}')" class="status__id"><span class="badge text-bg-warning" title=""><em class="bi bi-person-fill-slash"></em> Inactive</span></a>
+                                @endif
                             @endif
                         </td>
                     </tr>

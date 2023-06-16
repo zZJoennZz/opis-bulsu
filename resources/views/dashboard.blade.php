@@ -18,13 +18,13 @@
         <hr />
     @endif
 
-    @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE")
-        @include('layout/po_dashboard')
+    @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_HEAD")
+        @include('layout/procurement_head_dashboard')
         <hr />
     @endif
 
-    @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_HEAD")
-        @include('layout/procurement_head_dashboard')
+    @if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE" || Auth::user()->account_type === "PROCUREMENT_HEAD")
+        @include('layout/po_dashboard')
         <hr />
     @endif
 

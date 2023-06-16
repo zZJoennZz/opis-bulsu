@@ -14,6 +14,7 @@ use App\Models\Notification;
 use App\Models\User;
 use App\Models\ItemDetailHistory;
 use App\Models\Branch;
+use App\Models\ProProManPlanRevision;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -102,35 +103,49 @@ class ItemDetailController extends Controller
         $ppmpFormat = json_decode(MilestoneFormat::find(env("MILESTONE_FORMAT"))->format);
 
         DB::beginTransaction();
+        $newPPMP = new ProProManPlan();
+        $newPPMP->item_details_id = $item_details_id;
+        $newPPMP->year = $year;
+        $newPPMP->branches_id = $branches_id;
+        $newPPMP->is_draft = $is_draft;
+        $newPPMP->is_bo_approve = $is_bo_approve;
+        $newPPMP->is_pr_approve = $is_pr_approve;
+        $newPPMP->source_of_funds_id = $source_of_funds_id;
+        $newPPMP->item_purposes_id = $item_purposes_id;
+        $newPPMP->estimated_budget = $estimated_budget;
+        $newPPMP->is_priority = $is_priority;
+        $newPPMP->is_delete = 0;
+        $newPPMP->remarks = $remarks;
+        $newPPMP->submitted_by = $submitted_by;
+
+        $newPPMP->save();
+
+        $lastInsertedId = $newPPMP->id;
+
+        foreach ($ppmpFormat as $format) {
+            $newMilestone = new MilestoneOfActivity();
+            $newMilestone->pro_pro_man_plans_id = $lastInsertedId;
+            $newMilestone->milestone_formats_id = env("MILESTONE_FORMAT");
+            $newMilestone->milestone_value_id = $format->id;
+            $newMilestone->milestone_value = $request[$format->id];
+
+            $newMilestone->save();
+        }
+
+        $checkIfConsolidated = ProProManPlan::where('year', getPpmpYear())
+            ->where('is_consolidate', 1)
+            ->get();
+
+        if (count($checkIfConsolidated) >= 1) {
+            $newRevision = new ProProManPlanRevision();
+            $newRevision->pro_pro_man_plans_id = $lastInsertedId;
+            $newRevision->type = "SUPPLEMENTAL";
+            $newRevision->item_details_id = 0;
+
+            $newRevision->save();
+        }
         try {
-            $newPPMP = new ProProManPlan();
-            $newPPMP->item_details_id = $item_details_id;
-            $newPPMP->year = $year;
-            $newPPMP->branches_id = $branches_id;
-            $newPPMP->is_draft = $is_draft;
-            $newPPMP->is_bo_approve = $is_bo_approve;
-            $newPPMP->is_pr_approve = $is_pr_approve;
-            $newPPMP->source_of_funds_id = $source_of_funds_id;
-            $newPPMP->item_purposes_id = $item_purposes_id;
-            $newPPMP->estimated_budget = $estimated_budget;
-            $newPPMP->is_priority = $is_priority;
-            $newPPMP->is_delete = 0;
-            $newPPMP->remarks = $remarks;
-            $newPPMP->submitted_by = $submitted_by;
 
-            $newPPMP->save();
-
-            $lastInsertedId = $newPPMP->id;
-
-            foreach ($ppmpFormat as $format) {
-                $newMilestone = new MilestoneOfActivity();
-                $newMilestone->pro_pro_man_plans_id = $lastInsertedId;
-                $newMilestone->milestone_formats_id = env("MILESTONE_FORMAT");
-                $newMilestone->milestone_value_id = $format->id;
-                $newMilestone->milestone_value = $request[$format->id];
-
-                $newMilestone->save();
-            }
 
             DB::commit();
         } catch (Throwable $e) {
