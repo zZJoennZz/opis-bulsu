@@ -11,5 +11,7 @@ class ModeOfProcurement extends Model
 
     protected $fillable = [
         'name',
+        'added_by',
+        'is_delete'
     ];
 }
