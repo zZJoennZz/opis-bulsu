@@ -340,6 +340,9 @@ class PPMPController extends Controller
             'is_priority' => $ppmpRecord->is_priority,
             'remarks' => $ppmpRecord->remarks,
             'milestones' => $ppmpRecord->milestones,
+            'is_pr_approve' => $ppmpRecord->is_pr_approve,
+            'is_bo_approve' => $ppmpRecord->is_bo_approve,
+            'is_consolidate' => $ppmpRecord->is_consolidate,
         ];
 
         $newState = [
@@ -354,7 +357,7 @@ class PPMPController extends Controller
 
         $summaryLog = [];
         if (intval($oldState["item_details_id"]) !== intval($newState["item_details_id"])) {
-            array_push($summaryLog, "Item purpose was changed from " . ItemDetail::find($oldState["item_details_id"])->description . " to " . ItemDetail::find($newState["item_details_id"])->description . ".");
+            array_push($summaryLog, "Item was changed from " . ItemDetail::find($oldState["item_details_id"])->description . " to " . ItemDetail::find($newState["item_details_id"])->description . ".");
         }
         if (intval($oldState["item_purposes_id"]) !== intval($newState["item_purposes_id"])) {
             array_push($summaryLog, "Item purpose was changed from " . ItemPurpose::find($oldState["item_purposes_id"])->description . " to " . ItemPurpose::find($newState["item_purposes_id"])->description . ".");
@@ -440,9 +443,10 @@ class PPMPController extends Controller
 
         $checkIfConsolidated = ProProManPlan::where('year', getPpmpYear())
             ->where('is_consolidate', 1)
+            ->limit(1)
             ->get();
 
-        if (count($checkIfConsolidated) >= 1) {
+        if (count($checkIfConsolidated) >= 1 && intval($oldState["item_details_id"]) !== intval($newState["item_details_id"])) {
             $checkIfExisting = ProProManPlanRevision::where('pro_pro_man_plans_id', $ppmp_id)
                 ->first();
             if ($checkIfExisting !== null) {
