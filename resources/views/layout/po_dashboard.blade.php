@@ -1,7 +1,7 @@
 <div class="justify-content-between flex-wrap flex-md-nowrap align-items-start pt-3 pb-3 mb-3 border-bottom">
     <div class="float-lg-end">
         <button type="button" class="btn btn-sm btn-secondary me-3" data-bs-toggle="modal" data-bs-target="#unsubmittedPPMP">
-            <span class="badge bg-warning text-dark fw-bold">{{ count(App\Models\Branch::whereDoesntHave('ppmp', function($query) {
+            <span class="badge bg-light text-dark fw-bold">{{ count(App\Models\Branch::whereDoesntHave('ppmp', function($query) {
                 $query->where('year', getPpmpYear());
             }
             )

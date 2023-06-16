@@ -11,6 +11,9 @@
     @endphp
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
+    <div class="mb-3">
+        <span class="badge text-bg-primary"><em class="bi bi-check-circle-fill"></em> Budget Office</span>
+    </div>
     <div class="table-responsive mb-3">
         <table class="table table-sm table-hover border-dark caption-top" id="approved-ppmp-table">
             <caption>Approved Project Procurement Management Plan Requests <span class="badge text-bg-primary">Year <strong>{{ Auth::user()->ppmp_year }}</strong></span></caption>
@@ -49,14 +52,6 @@
                                     @endif
                                 </div>
                             @endif
-                            <div>
-                                @if ($item->is_bo_approve === 1)
-                                    <span class="badge text-bg-primary"><em class="bi bi-check-circle-fill"></em> Budget Office</span>
-                                @endif
-                                @if ($item->is_pr_approve === 1)
-                                    <span class="badge text-bg-primary"><em class="bi bi-check-circle-fill"></em> Procurement Unit</span>
-                                @endif
-                            </div>
                         </td>
                         <td>{{ $item->uom }}</td>
                         <td>₱{{ number_format($item->estimated_budget, 2) }}</td>

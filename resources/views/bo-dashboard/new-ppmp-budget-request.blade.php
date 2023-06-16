@@ -22,7 +22,7 @@
         <div class="mb-3">
             <div class="row">
                 <div class="col-sm-12">
-                    <label for="source_of_funds_id" class="form-label">PPMP source of fund: <span class="badge bg-primary">{{ getPpmpYear() }}</span></label>
+                    <label for="source_of_funds_id" class="form-label"><span class="badge bg-primary">{{ getPpmpYear() }}</span>'s <span class="text-uppercase">Selected Source of Fund</span>:</label>
                     <select class="form-select" id="source_of_funds_id" name="source_of_funds_id" aria-label="Purpose of the item">
                         @foreach ($source_of_funds as $source)
                         <option value="{{$source->id}}" @php echo $currentSourceOfFund === $source->id ? "selected" : "" @endphp>{{$source->source_of_fund}}</option>
