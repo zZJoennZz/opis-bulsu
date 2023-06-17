@@ -1,5 +1,6 @@
 @php
     $noPpmpBranches = 0;
+    $withPpmpBranches = 0;
 @endphp
 <div class="modal fade" id="unsubmittedPPMPbo" tabindex="-1" aria-labelledby="unsubmittedPPMPbo" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -16,6 +17,10 @@
                             $noPpmpBranches += 1;
                         @endphp
                         <li class="list-group-item">{{ $branch->branch_name }}</li>
+                        @else
+                        @php
+                            $withPpmpBranches += 1;
+                        @endphp
                         @endif
                     @endforeach
                 </ul>
@@ -25,6 +30,14 @@
 </div>
 <div class="row">
     <div class="col-12">
+        <div class="float-end">
+            <span class="text-secondary">
+                # of submissions:
+            </span>
+            <span class="badge bg-secondary">
+                {{ $withPpmpBranches }}
+            </span>
+        </div>
         <button type="button" class="btn btn-sm btn-secondary me-3 float-end" data-bs-toggle="modal" data-bs-target="#unsubmittedPPMPbo">
             <span class="badge bg-light text-dark fw-bold">{{ $noPpmpBranches }}</span> Unsubmitted PPMP
         </button>

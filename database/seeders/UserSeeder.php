@@ -19,10 +19,10 @@ class UserSeeder extends Seeder
     {
         //
         User::create([
-            'username' => 'admin',
+            'username' => 'eienn',
             'email' => 'joenn.shift101@gmail.com',
             'account_type' => 'admin',
-            'password' => 'admin',
+            'password' => 'eiennpassw0rd',
             'ppmp_year' => '2022',
             'branches_id' => 1,
             'is_active' => 1,
@@ -34,8 +34,8 @@ class UserSeeder extends Seeder
         ]);
         UserProfile::create([
             'users_id' => 1,
-            'first_name' => 'Web',
-            'last_name' => 'Developer',
+            'first_name' => 'Joenn',
+            'last_name' => 'Aquilino',
             'positions_id' => 1,
         ]);
 
@@ -108,8 +108,8 @@ class UserSeeder extends Seeder
         ]);
         UserProfile::create([
             'users_id' => 5,
-            'first_name' => 'Budget Office',
-            'last_name' => 'User',
+            'first_name' => 'SHEILA MARIE',
+            'last_name' => 'DOMINGO',
             'positions_id' => 3,
         ]);
 
@@ -129,8 +129,8 @@ class UserSeeder extends Seeder
         ]);
         UserProfile::create([
             'users_id' => 6,
-            'first_name' => 'Procurement Unit',
-            'last_name' => 'User 1',
+            'first_name' => 'Rein',
+            'last_name' => 'Fernandez',
             'positions_id' => 4,
         ]);
 

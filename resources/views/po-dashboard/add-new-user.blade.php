@@ -25,6 +25,7 @@
                             <option value="admin">Admin</option>
                         @endif
                         <option value="PROCUREMENT_OFFICE">Procurement User</option>
+                        <option value="PROCUREMENT_HEAD">Procurement Head</option>
                         <option value="BUDGET_OFFICE">Budget User</option>
                         <option value="SUPPLY_OFFICE">Supply User</option>
                         <option value="END_USER">User</option>
@@ -124,7 +125,7 @@
                             }
                         </select>
                     `);
-                } else if (e === "PROCUREMENT_OFFICE" || e === "BUDGET_OFFICE" || e === "SUPPLY_OFFICE"){
+                } else if (e === "PROCUREMENT_HEAD" || e === "PROCUREMENT_OFFICE" || e === "BUDGET_OFFICE" || e === "SUPPLY_OFFICE"){
                     branches = allBranches.filter(d => d.type === "OFFICE");
                     deptDiv[0].innerHTML = `
                         <label for="branches_id" class="form-label">Department:</label>

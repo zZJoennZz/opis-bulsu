@@ -1,22 +1,7 @@
-<div class="justify-content-between flex-wrap flex-md-nowrap align-items-start pt-3 pb-3 mb-3 border-bottom">
-    <div class="float-lg-end">
-        <button type="button" class="btn btn-sm btn-secondary me-3" data-bs-toggle="modal" data-bs-target="#unsubmittedPPMP">
-            <span class="badge bg-light text-dark fw-bold">{{ count(App\Models\Branch::whereDoesntHave('ppmp', function($query) {
-                $query->where('year', getPpmpYear());
-            }
-            )
-            ->where('type', '<>', 'DEVELOPER')
-            ->get()) }}</span> Unsubmitted PPMP
-        </button>
-        <span class="text-secondary">
-            # of submissions:
-        </span>
-        <span class="badge bg-secondary">
-            {{ count($ppmp_records_count) }}
-        </span>
-    </div>
-    <span class="text-uppercase fs-4 fw-bold">PPMP Dashboard <span class="badge bg-primary fs-6">{{ Auth::user()->ppmp_year }}</span></span>
-</div>
+@php
+    $noPpmpBranches = 0;
+    $withPpmpBranches = 0;
+@endphp
 <div class="modal fade" id="unsubmittedPPMP" tabindex="-1" aria-labelledby="unsubmittedPPMP" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
@@ -29,17 +14,16 @@
                     <a href="{{ route('unsub-ppmp') }}" target="_blank" class="btn btn-secondary btn-sm"><em class="bi bi-printer-fill"></em> Print List</a>
                 </div>
                 <ul class="list-group">
-                    @php
-                        $unsub_ppmp_branches = App\Models\Branch::whereDoesntHave('ppmp', function($query) {
-                            $query->where('year', getPpmpYear());
-                        }
-                        )
-                        ->where('type', '<>', 'DEVELOPER')
-                        ->get();
-                    @endphp
-                    @foreach($unsub_ppmp_branches as $branch)
-                        @if(!isset($branch->ppmp[0]))
+                    @foreach($branches as $branch)
+                        @if(count($branch->ppmp) === 0)
+                        @php
+                            $noPpmpBranches += 1;
+                        @endphp
                         <li class="list-group-item">{{ $branch->branch_name }}</li>
+                        @else
+                        @php
+                            $withPpmpBranches += 1;
+                        @endphp
                         @endif
                     @endforeach
                 </ul>
@@ -47,7 +31,22 @@
         </div>
     </div>
 </div>
-@foreach($all_branches as $branch)
+<div class="justify-content-between flex-wrap flex-md-nowrap align-items-start pb-3 mb-3 border-bottom">
+    <div class="float-lg-end">
+        <button type="button" class="btn btn-sm btn-secondary me-3" data-bs-toggle="modal" data-bs-target="#unsubmittedPPMP">
+            <span class="badge bg-light text-dark fw-bold">{{ $noPpmpBranches }}</span> Unsubmitted PPMP
+        </button>
+        <span class="text-secondary">
+            # of submissions:
+        </span>
+        <span class="badge bg-secondary">
+            {{ $withPpmpBranches }}
+        </span>
+    </div>
+    <span class="text-uppercase fs-4 fw-bold">All Offices/Campuses <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span></span>
+</div>
+
+@foreach($branches as $branch)
 <div class="row border-bottom border-primary pt-4 pb-3 mb-3">
     <div class="col-12 col-lg-6 text-start p-3">
         <div class="fs-6 fw-bold text-secondary">{{ $branch->type }}</div>
@@ -64,7 +63,7 @@
         @php (
             $count = count($branch->ppmp->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 0))
         )
-        <a @if($count > 0) href="{{ route('po-ppmp-approval.show', ['branch_id' => $branch->id]) }}" @endif class="@if($count > 0) ppmpCard @endif shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
+        <a @if($count > 0) href="{{ route('po-ppmp-approval.show', ['branch_id' => $branch->id]) }}" @endif class="@if($count > 0) shadow @else border @endif h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
             <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
                 <em class="bi bi-file-earmark-spreadsheet" style="font-size: 1.4rem;"></em>
             </div>
@@ -80,7 +79,7 @@
         @php (
             $count = count($branch->ppmp->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1))
         )
-        <a @if($count > 0) href="{{ route('po-approved-ppmp.show', ['branch_id' => $branch->id]) }}" @endif class="@if($count > 0) ppmpCard @endif shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
+        <a @if($count > 0) href="{{ route('po-approved-ppmp.show', ['branch_id' => $branch->id]) }}" @endif class="@if($count > 0) shadow @else border @endif h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
             <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
                 <em class="bi bi-journal-check" style="font-size: 1.4rem;"></em>
             </div>
@@ -94,9 +93,12 @@
     </div>
     <div class="col-12 col-lg-2 mb-4">
         @php (
-            $count = count($branch->ppmp->where('year', '<>', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->groupBy('year'))
+            $checkBranch = \App\Models\Branch::find($branch->id)
         )
-        <a @if($count > 0) href="{{ route('previous-ppmp.show', ["branch_id" => $branch->id]) }}" @endif class="@if($count > 0) ppmpCard @endif shadow h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
+        @php (
+            $count = count($checkBranch->ppmp->where('year', '<>', getPpmpYear())->where('is_draft', 0)->where('is_delete', 0)->where('is_bo_approve', 1)->where('is_pr_approve', 1)->groupBy('year')->pluck('id'))
+        )
+        <a @if($count > 0) href="{{ route('previous-ppmp.show', ["branch_id" => $branch->id]) }}" @endif class="@if($count > 0) shadow @else border @endif h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
             <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
                 <em class="bi bi-file-earmark-text" style="font-size: 1.4rem;"></em>
             </div>

@@ -75,16 +75,25 @@ class DashboardController extends Controller
             }])
                 ->where('type', '<>', 'DEVELOPER')
                 ->get();
-
+            // return $branches;
             $viewToReturn = $viewToReturn->with('branches', $branches);
         }
 
         if ($user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "PROCUREMENT_OFFICE" || $user->account_type === "admin") {
-            $allBranches = Branch::where('type', '<>', 'DEVELOPER')->get();
+            // $allBranches = Branch::where('type', '<>', 'DEVELOPER')->get();
+            $branches = Branch::with(['ppmp' => function ($builder) {
+                $builder
+                    ->where('year', getPpmpYear())
+                    ->where('is_delete', 0)
+                    ->where('is_draft', 0);
+            }])
+                ->where('type', '<>', 'DEVELOPER')
+                ->get();
             $ppmpRecordsCount = ProProManPlan::where('year', '=', $user->ppmp_year)->where('is_draft', '=', 0)->groupBy('branches_id')->select('branches_id')->get();
 
             $viewToReturn = $viewToReturn
-                ->with('all_branches', $allBranches)
+                // ->with('all_branches', $allBranches)
+                ->with('branches', $branches)
                 ->with('ppmp_records_count', $ppmpRecordsCount);
         }
 
