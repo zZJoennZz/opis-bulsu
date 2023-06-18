@@ -14,72 +14,69 @@
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     <form action="{{route('add-new-user.perform')}}" method="POST">
         @csrf
-        <div class="row">
-            <div class="col-12 mb-1 small text-secondary border-bottom">Account</div>
-            <div class="col-12 col-md-4">
-                <div class="mb-3">
-                    <label for="account_type" class="form-label">Account Type:</label>
-                    <select onchange="accountTypeOnChange(this.value)" name="account_type" id="account_type" class="form-select" required>
-                        <option value="0" selected disabled hidden>Select account type</option>
-                        @if (Auth::user()->account_type === 'admin')
-                            <option value="admin">Admin</option>
-                        @endif
-                        <option value="PROCUREMENT_OFFICE">Procurement User</option>
-                        <option value="PROCUREMENT_HEAD">Procurement Head</option>
-                        <option value="BUDGET_OFFICE">Budget User</option>
-                        <option value="SUPPLY_OFFICE">Supply User</option>
-                        <option value="END_USER">User</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="mb-3" id="dept-div">
-                    <span class="fst-italic">
-                        <label for="select-first" class="form-label">Select account type first!<span class="text-danger">*</span></label>
-                        <input type="text" id="select-first" class="form-control" disabled>
-                    </span>
-                </div>
-            </div>
-            <div class="col-12 col-md-4">
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username:</label>
-                    <input type="text" id="username" name="username" class="form-control">
-                </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="account_type" class="form-label">Account Type:</label>
+                <select onchange="accountTypeOnChange(this.value)" name="account_type" id="account_type" class="form-select" required>
+                    <option value="0" selected disabled hidden>Select account type</option>
+                    @if (Auth::user()->account_type === 'admin')
+                        <option value="admin">Admin</option>
+                    @endif
+                    <option value="PROCUREMENT_OFFICE">Procurement User</option>
+                    <option value="PROCUREMENT_HEAD">Procurement Head</option>
+                    <option value="BUDGET_OFFICE">Budget User</option>
+                    <option value="SUPPLY_OFFICE">Supply User</option>
+                    <option value="END_USER">User</option>
+                </select>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12 mb-1 small text-secondary border-bottom">User Profile</div>
-            <div class="col-12 col-md-4">
-                <div class="mb-3">
-                    <label for="first_name" class="form-label">First Name:</label>
-                    <input type="text" id="first_name" name="first_name" class="form-control" required>
-                </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6" id="dept-div">
+                <span class="fst-italic">
+                    <label for="select-first" class="form-label">Select account type first!<span class="text-danger">*</span></label>
+                    <input type="text" id="select-first" class="form-control" disabled>
+                </span>
             </div>
-            <div class="col-12 col-md-4">
-                <div class="mb-3" id="dept-div">
-                    <label for="last_name" class="form-label">Last Name:</label>
-                    <input type="text" id="last_name" name="last_name" class="form-control" required>
-                </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="username" class="form-label">Username:</label>
+                <input type="text" id="username" name="username" class="form-control">
             </div>
-            <div class="col-12 col-md-4">
-                <div class="mb-3">
-                    <label for="positions_id" class="form-label">Position:</label>
-                    <select name="positions_id" id="positions_id" class="form-select" required>
-                        <option value="0" selected>Select position</option>
-                        @foreach ($positions as $position)
-                            <option value="{{$position->id}}">{{$position->description}}</option>
-                        @endforeach
-                    </select>
-                </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="first_name" class="form-label">First Name:</label>
+                <input type="text" id="first_name" name="first_name" class="form-control" required>
             </div>
-            <div class="col-12 mb-3">
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="last_name" class="form-label">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" class="form-control" required>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
+                <label for="positions_id" class="form-label">Position:</label>
+                <select name="positions_id" id="positions_id" class="form-select" required>
+                    <option value="0" selected hidden disabled>Select position</option>
+                    @foreach ($positions as $position)
+                        <option value="{{$position->id}}">{{$position->description}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-sm-12 col-md-6">
                 <label for="email" class="form-label">Email Address:</label>
                 <input type="email" name="email" id="email" class="form-control" required>
                 <small class="text-secondary fst-italic">The password reset link will be sent to this email address.</small>
             </div>
+        </div>
+        <div class="row">
             <div class="col-12">
-                <a href="{{route('users-list.show')}}" class="btn btn-danger">Cancel</a>
-                <button class="btn btn-primary float-end fw-bold"><em class="bi bi-save"></em> Save User</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </div>
         </div>
     </form>
@@ -95,23 +92,13 @@
                 },
                 @endforeach
             ];
-            let Positions = [
-                @foreach($positions as $position)
-                {
-                    'id' : {{$position->id}},
-                    'description' : '{{$position->description}}',
-                },
-                @endforeach
-            ];
-        
+            
             async function accountTypeOnChange(e) {
                 let deptDiv = $('#dept-div');
-                let pos = $('#positions_id');
                 
                 deptDiv.empty();
 
                 let branches;
-                let position;
                 if (e === "END_USER") {
                     branches = allBranches.filter(d => d.type === "CAMPUS");
                     deptDiv.html(`
@@ -138,14 +125,6 @@
                             }
                         </select>
                     `;
-                    position = Positions.filter(dx => dx.description === "Procurement Staff");
-                    pos.html( `
-                            ${
-                                position.map(dx =>
-                                    `<option value="${dx.id}">${dx.description}</option>`
-                                )
-                            }
-                    `);
                 } else {
                     deptDiv[0].innerHTML = `
                     <span class="fst-italic">
@@ -164,7 +143,6 @@
                     `;
                 }
                 branches = null;
-                position = null;
             }
         </script>
     </x-slot>
