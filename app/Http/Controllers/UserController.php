@@ -120,7 +120,7 @@ class UserController extends Controller
                 $newUser->branches_id = $inputs['branches_id'];
                 $newUser->save();
 
-                $newUserProfile = UserProfile::find($inputs["profile_id"]);
+                $newUserProfile = UserProfile::find($newUser->profile->id);
                 $newUserProfile->users_id = $newUser->id;
                 $newUserProfile->first_name = $inputs['first_name'];
                 $newUserProfile->last_name = $inputs['last_name'];
@@ -128,18 +128,14 @@ class UserController extends Controller
                 $newUserProfile->save();
 
                 DB::commit();
-                back()
+                return redirect()
+                    ->back()
                     ->with('success', 'User details successfully updated.');
-                return response()->json([
-                    "success" => true
-                ], 200);
             } catch (Throwable $e) {
                 DB::rollBack();
-                back()
+                return redirect()
+                    ->back()
                     ->withErrors(['Something went wrong! User changes is not saved.']);
-                return response()->json([
-                    "success" => false
-                ], 400);
             }
         }
     }

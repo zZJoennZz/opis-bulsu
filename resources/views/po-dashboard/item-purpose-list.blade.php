@@ -62,7 +62,7 @@
         <button class="btn btn-danger" onclick="deleteRecord()"><em class="bi bi-trash"></em> Delete</button>
     </div>
     <div class="table-responsive">
-        <table class="table table-sm table-bordered" id="item-purpose-table">
+        <table class="table table-sm table-hover border-dark" id="item-purpose-table">
             <caption>Item Purpose List</caption>
             <thead>
                 <tr>
@@ -79,7 +79,7 @@
                                 <input class="form-check-input itempurpose-checkbox" type="checkbox" value="{{ $purpose->id }}" id="itempurpose{{ $purpose->id }}" @if($purpose->is_delete===1) disabled @endif>
                             </div>
                         </td>
-                        <td class="text-center"><button class="btn btn-success" onclick="openEdit({{ $purpose->id }})" @if($purpose->is_delete===1) disabled @endif><em class="bi bi-pencil-square"></em></button></td>
+                        <td class="text-center"><button class="btn btn-sm btn-success" onclick="openEdit({{ $purpose->id }})" @if($purpose->is_delete===1) disabled @endif><em class="bi bi-pencil-square"></em></button></td>
                         <td>{{ $purpose->description }} @if($purpose->is_delete===1) <span class="badge bg-secondary">Item Purpose Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$purpose->id}})"><em class="bi bi-trash-fill"></em></button> @endif</td>
                         
                     </tr>
