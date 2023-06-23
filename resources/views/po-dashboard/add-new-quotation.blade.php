@@ -18,7 +18,7 @@
             <div class="mb-3">
                 <label for="companies_id" class="form-label">Company</label>
                 <select onchange="get_company_details(event)" id="companies_id" name="companies_id" class="form-select" aria-label="Company name" required>
-                    <option selected value="">Select company</option>
+                    <option selected hidden disabled value="">Select company</option>
                     @foreach ($company_profiles as $profile)
                         <option value="{{$profile->id}}">{{$profile->name}}</option>
                     @endforeach
@@ -27,7 +27,7 @@
             <div class="mb-3">
                 <label for="purchase_requests_id" class="form-label">Purchase Request #</label>
                 <select onchange="get_pr_record(event)" id="purchase_requests_id" name="purchase_requests_id" class="form-select" aria-label="Purchase request number">
-                    <option selected>Select purchase request</option>
+                    <option value="" disabled hidden selected>Select purchase request</option>
                     @foreach ($purchase_requests as $pr)
                         <option value="{{$pr->id}}">{{$pr->pr_number}}</option>
                     @endforeach
@@ -99,7 +99,7 @@
     <div class="row">
         <div class="col-12">
             <button type="button" onclick="submitRequest()" class="btn btn-primary">
-                <em class="bi bi-file-earmark-break-fill"></em> Submit Quotation Request
+                <em class="bi bi-file-earmark-break-fill"></em> Submit
             </button>
         </div>
     </div>

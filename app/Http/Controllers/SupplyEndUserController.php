@@ -33,7 +33,7 @@ class SupplyEndUserController extends Controller
 
             $request->validate([
                 'first_name' => $nameVal,
-                'middle_name' => $nameVal,
+                'middle_name' => 'max:50',
                 'last_name' => $nameVal,
                 'college' => 'required|exists:branches,id',
                 'position' => 'required|exists:supply_positions,id'
@@ -42,7 +42,7 @@ class SupplyEndUserController extends Controller
             DB::beginTransaction();
             $new_end_user = new SupplyEndUser();
             $new_end_user->first_name = $request->first_name;
-            $new_end_user->middle_name = $request->middle_name;
+            $new_end_user->middle_name = $request->middle_name ?? "";
             $new_end_user->last_name = $request->last_name;
             $new_end_user->branches_id = $request->college;
             $new_end_user->supply_positions_id = $request->position;
@@ -60,34 +60,57 @@ class SupplyEndUserController extends Controller
 
     public function get($enduser_id)
     {
-        $enduser = SupplyEndUser::find($enduser_id);
+        try {
+            $enduser = SupplyEndUser::where('id', $enduser_id)
+                ->with(['branch', 'position'])
+                ->first();
 
-        return response()->json($enduser, 200);
+            if ($enduser === null) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'End user not found.'
+                ], 404);
+            }
+
+            return response()->json($enduser, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'sucess' => false,
+                'message' => 'Something went wrong, please try again.'
+            ], 400);
+        }
     }
 
     public function update(Request $request, $enduser_id)
     {
 
-        $validator = Validator::make($request->all(), [
-            'first_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'college' => ['required', 'string', 'max:255'],
-            'position' => ['required', 'string', 'max:255']
+        // $validator = Validator::make($request->all(), [
+        //     'first_name' => ['required', 'string', 'max:255'],
+        //     'middle_name' => ['string', 'max:50'],
+        //     'last_name' => ['required', 'string', 'max:255'],
+        //     'college' => ['required', 'string', 'max:255'],
+        //     'position' => ['required', 'string', 'max:255']
+        // ]);
+
+        // if ($validator->fails()) {
+        //     $errors = $validator->errors();
+        //     return redirect()->back()->withErrors($errors);
+        // }
+
+        $request->validate([
+            'first_name' => "required|max:100|string",
+            'middle_name' => "max:100",
+            'last_name' => "required|max:100|string",
+            'college' => "required|exists:branches,id",
+            'position' => "required|exists:supply_positions,id",
         ]);
-
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return redirect()->back()->withErrors($errors);
-        }
-
 
         $UpdateEnduser = SupplyEndUser::find($enduser_id);
         DB::beginTransaction();
         try {
 
         $UpdateEnduser->first_name = $request->first_name;
-        $UpdateEnduser->middle_name = $request->middle_name;
+        $UpdateEnduser->middle_name = $request->middle_name ?? "";
         $UpdateEnduser->last_name = $request->last_name; 
         $UpdateEnduser->branches_id = $request->college; 
         $UpdateEnduser->supply_positions_id = $request->position;        
@@ -95,12 +118,12 @@ class SupplyEndUserController extends Controller
 
         DB::commit();
 
-        session(['success' => 'Supply Enduser successfully updated!']);
+        session(['success' => 'Supply End User successfully updated!']);
         return response()->json([
             'success' => true,
         ], 200);
 
-        } catch (Throwable $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
                 'success' => false,

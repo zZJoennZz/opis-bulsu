@@ -21,7 +21,7 @@
         <div class="row mb-3">
             <div class="col-sm-12 col-md-10">
                 <select class="form-select" id="purchase_requests_id" name="purchase_requests_id" aria-label="Select purchase request" required>
-                    <option value="" disabled selected>Select purchase request</option>
+                    <option value="" disabled selected hidden>Select purchase request</option>
                     @foreach ($pr_without_abstract as $pr)
                         <option value="{{ $pr->id }}">{{ $pr->pr_number }}</option>
                     @endforeach
@@ -42,7 +42,7 @@
         <div class="row mb-3">
             <div class="col-12">
                 <label for="abc" class="form-label">ABC</label>
-                <input type="number" class="form-control" id="abc" name="abc" title="number" placeholder="Type amount" required>
+                <input type="text" class="form-control" id="abc" name="abc" title="number" placeholder="Type amount" required>
             </div>
         </div>
         <div class="row mb-3">

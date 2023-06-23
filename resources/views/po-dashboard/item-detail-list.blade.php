@@ -99,7 +99,7 @@
                 };
                 await axios.put(`{{ url('/item-categories') }}/${selectedCategory}`, data)
                     .then(res => {
-                        {{Session::forget('success');}}
+                        {{Session::forget('success')}}
                         window.location.reload();
                     })
                     .catch(err => {

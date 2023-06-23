@@ -306,17 +306,17 @@ Route::middleware('supply.office')->group(function () {
     //manage end users
     Route::get('/manage-end-user', [SupplyEndUserController::class, 'all'])->name('supply-end-user.all');
     Route::post('/manage-end-user', [SupplyEndUserController::class, 'post_add'])->name('supply-end-user.post_add');
-    Route::get('/manage-end-user/{enduser_id}', [SupplyEndUserController::class, 'get'])->name('enduser.single');
-    Route::put('/manage-end-user/{enduser_id}', [SupplyEndUserController::class, 'update']);
+    Route::get('/manage-end-user/{enduser_id?}', [SupplyEndUserController::class, 'get'])->name('enduser.single');
+    Route::put('/manage-end-user/{enduser_id?}', [SupplyEndUserController::class, 'update'])->name('supply-end-user.put');
     Route::delete('/manage-end-user/single/{enduser_id}', [SupplyEndUserController::class, 'delete_single']);
     Route::post('/manage-end-user/batch', [SupplyEndUserController::class, 'delete_batch'])->name('enduser.delete_batch');
 
     //manage supply employee
     Route::get('/manage-supply-employee', [SupplyEmployeeController::class, 'all'])->name('supply-employee.all');
     Route::post('/manage-supply-employee', [SupplyEmployeeController::class, 'post_add'])->name('supply-employee.post_add');
-    Route::get('/manage-supply-employee/{enduser_id}', [SupplyEmployeeController::class, 'get'])->name('supplyemployee.single');
-    Route::put('/manage-supply-employee/{enduser_id}', [SupplyEmployeeController::class, 'update']);
-    Route::delete('/manage-supply-employee/single/{enduser_id}', [SupplyEmployeeController::class, 'delete_single']);
+    Route::get('/manage-supply-employee/{supplyEmployeeId?}', [SupplyEmployeeController::class, 'get'])->name('supplyemployee.single');
+    Route::put('/manage-supply-employee/{enduser_id?}', [SupplyEmployeeController::class, 'update']);
+    Route::delete('/manage-supply-employee/single/{enduser_id?}', [SupplyEmployeeController::class, 'delete_single']);
     Route::post('/manage-supply-employee/batch', [SupplyEmployeeController::class, 'delete_batch'])->name('supplyemployee.delete_batch');
 
     //manage supply position
@@ -333,6 +333,9 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/inventory-custodian-slip-h', [TransactionController::class, 'add_ics_h'])->name('icsh.add');
     Route::get('/inventory-custodian-slip', [TransactionController::class, 'add'])->name('ics.add');
     Route::post('/inventory-custodian-slip/{type?}', [TransactionController::class, 'save_ics'])->name('ics.save');
+
+    Route::get('/property-acknowledgment-receipt', [TransactionController::class, 'add_par'])->name('par.add');
+    Route::post('/property-acknowledgment-receipt', [TransactionController::class, 'save_par'])->name('par.save');
 });
 
 //ADMIN ONLY

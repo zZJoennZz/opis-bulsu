@@ -109,7 +109,7 @@
                 };
                 await axios.put(`{{ url('/position') }}/${selectedPosition}`, data)
                     .then(res => {
-                        {{Session::forget('success');}}
+                        {{Session::forget('success')}}
                         window.location.reload();
                     })
                     .catch(err => {

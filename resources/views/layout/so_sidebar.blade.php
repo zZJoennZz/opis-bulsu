@@ -12,13 +12,25 @@
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('icsl.add') }}">
         <em class="bi bi-file-text-fill"></em>
-        ICS - LOW VALUE
+        ICS 
+        <span class="badge bg-secondary">
+            <em class="bi bi-caret-down-fill"></em> Low Value
+        </span>
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('icsh.add') }}">
         <em class="bi bi-file-text-fill"></em>
-        ICS - HIGH VALUE
+        ICS
+        <span class="badge bg-secondary">
+            <em class="bi bi-caret-up-fill"></em> High Value
+        </span>
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('par.add') }}" aria-current="page" class="nav-link">
+        <em class="bi bi-file-text-fill"></em>
+        PAR
     </a>
 </li>
 <li><hr /></li>

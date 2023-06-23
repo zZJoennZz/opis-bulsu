@@ -50,11 +50,25 @@ class SupplyEmployeeController extends Controller
             return redirect()->back()->withErrors(['Something went wrong! Supply employee is not saved. Please contact website administrator.']);
         }
     }
-    public function get($enduser_id)
+    public function get($supplyEmployeeId)
     {
-        $enduser = SupplyOfficeEmployee::find($enduser_id);
+        try {
+            $supEmployee = SupplyOfficeEmployee::where('id', $supplyEmployeeId)->with('position')->first();
 
-        return response()->json($enduser, 200);
+            if ($supEmployee === null) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Supply employe not found.'
+                ], 404);
+            }
+
+            return response()->json($supEmployee, 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something went wrong. Please refresh the page and try again.'
+            ], 400);
+        }
     }
 
     public function update(Request $request, $enduser_id)

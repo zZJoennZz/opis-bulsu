@@ -139,7 +139,7 @@
                 };
                 await axios.put(`{{ url('/manage-supply-position') }}/${selectedEndUser}`, data)
                     .then(res => {
-                        {{Session::forget('success');}}
+                        {{Session::forget('success')}}
                         window.location.reload();
 
                     })

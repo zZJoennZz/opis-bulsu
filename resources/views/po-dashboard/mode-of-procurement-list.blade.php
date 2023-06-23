@@ -111,7 +111,7 @@
                 };
                 await axios.put(`{{ url('/mode-of-procurement') }}/${selectedModeProcurement}`, data)
                     .then(res => {
-                        {{Session::forget('success');}}
+                        {{Session::forget('success')}}
                         window.location.reload();
                     })
                     .catch(err => {

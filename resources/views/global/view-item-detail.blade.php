@@ -14,7 +14,7 @@
                 ['name' => 'Edit item detail: <span class="badge bg-primary">' . $item_detail->description . '</span>']
             ];
             $cancelUrl = route('item-detail-single.show', ['id' => $item_detail->id]);
-        } else if (Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin') {
+        } else if (Auth::user()->account_type === 'PROCUREMENT_HEAD' ||Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin') {
             $bc =
             [
                 ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
@@ -29,14 +29,14 @@
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     <div class="mb-3">
         <h1 class="card-title">@if($item_detail->is_approve === 0 && $item_detail->is_delete === 0) <span class="badge bg-secondary">Under Review</span> @endif @if($item_detail->is_delete===1) <span class="badge bg-danger">Item deleted</span> @endif</h1>
-        @if (Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin')
+        @if (Auth::user()->account_type === 'PROCUREMENT_HEAD' || Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin')
             <div>
                 <small><a href="{{route('pending-item-detail.single', ['item_detail_id' => $item_detail->id])}}">View changes logs</a></small>
             </div>
         @endif
     </div>
     <div class="mb-3">
-        <form action="@if($item_detail->is_approve === 0 && $item_detail->is_delete === 0 && (Auth::user()->account_type === "PROCUREMENT_OFFICE" || Auth::user()->account_type === "admin")){{ route('item-detail-review-approve.perform', ['item_detail_id' => $item_detail->id]) }}@else{{ route('view-item-detail.update', ['item_detail_id' => $item_detail->id]) }}@endif" method="post">
+        <form action="@if($item_detail->is_approve === 0 && $item_detail->is_delete === 0 && (Auth::user()->account_type === "PROCUREMENT_HEAD" || Auth::user()->account_type === "admin")){{ route('item-detail-review-approve.perform', ['item_detail_id' => $item_detail->id]) }}@else{{ route('view-item-detail.update', ['item_detail_id' => $item_detail->id]) }}@endif" method="post">
             @csrf
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" value="{{$item_detail->description}}" id="description" name="description" placeholder="Item name" @if($item_detail->is_delete===1) disabled @endif required>
@@ -72,10 +72,10 @@
             </div>
             <div class="row">
                 <div class="col-12 d-flex" style="justify-content: end;">
-                    @if($item_detail->is_approve === 0 && $item_detail->is_delete === 0 && (Auth::user()->account_type === "PROCUREMENT_OFFICE" || Auth::user()->account_type === "admin"))
+                    @if($item_detail->is_approve === 0 && $item_detail->is_delete === 0 && (Auth::user()->account_type === "PROCUREMENT_HEAD" || Auth::user()->account_type === "admin"))
                         <button type="submit" @if($item_detail->is_delete===1) disabled @endif class="btn btn-info me-2"><em class="bi bi-save"></em> Save & Approve Item</button>
                     @endif
-                    @if (Auth::user()->account_type === "PROCUREMENT_OFFICE" || Auth::user()->account_type === "admin")
+                    @if (Auth::user()->account_type === "PROCUREMENT_HEAD" || Auth::user()->account_type === "admin")
                         <script src="{{ asset('build/assets/app.b487754a.js') }}"></script>
                         <script>
                             async function deleteItem() {

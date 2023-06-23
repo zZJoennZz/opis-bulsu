@@ -22,7 +22,7 @@
         <div class="d-flex align-items-center justify-content-center mb-5">
             <div class="fs-5 fw-bold fst-italic text-secondary">
                 <div class="text-center fs-1"><em class="bi bi-exclamation-triangle"></em></div>
-                Purchase request submissions is is disabled for <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span>. Please get in touch with procurement office.
+                Purchase request submission is disabled for <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span>. Please get in touch with procurement office.
             </div>
         </div>
     @endif

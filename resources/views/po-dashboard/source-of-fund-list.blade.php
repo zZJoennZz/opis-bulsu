@@ -120,7 +120,7 @@
                 };
                 await axios.put(`{{ url('/source-of-fund') }}/${selectedSourceofFund}`, data)
                     .then(res => {
-                        {{Session::forget('success');}}
+                        {{Session::forget('success')}}
                         window.location.reload();
                     })
                     .catch(err => {

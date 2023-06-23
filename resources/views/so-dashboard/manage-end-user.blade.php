@@ -30,7 +30,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="middle_name" class="form-label">Middle Name</label>
-                                <input type="text" class="form-control" id="middle_name" name="middle_name" placeholder="Enter end user middle name here." required>
+                                <input type="text" class="form-control" id="middle_name" name="middle_name" placeholder="Enter end user middle name here.">
                             </div>
                             <div class="mb-3">
                                 <label for="last_name" class="form-label">Last Name</label>
@@ -184,9 +184,9 @@
                     "college" : $('#edit_college').val(),
                     "position" : $('#edit_position').val()
                 };
-                await axios.put(`{{ url('/manage-end-user') }}/${selectedEndUser}`, data)
+                await axios.put(`{{ route('supply-end-user.put') }}/${selectedEndUser}`, data)
                     .then(res => {
-                        {{Session::forget('success');}}
+                        {{Session::forget('success')}}
                         window.location.reload();
 
                     })

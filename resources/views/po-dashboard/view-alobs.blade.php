@@ -19,7 +19,7 @@
         <div class="mb-3">
             <label for="budget_officer" class="form-label">Budget Officer:</label>
             <select name="budget_officer" id="budget_officer" class="form-select" required>
-                <option value="" disabled selected>Select budget officer</option>
+                <option value="" disabled selected hidden>Select budget officer</option>
                 @foreach ($bo_users as $user)
                     <option value="{{ $user->id }}" @if ($alobs->budget_officer_id === $user->id)
                         selected

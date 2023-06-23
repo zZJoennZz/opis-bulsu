@@ -64,14 +64,14 @@
             $count = count($branch->ppmp->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 0))
         )
         <a @if($count > 0) href="{{ route('po-ppmp-approval.show', ['branch_id' => $branch->id]) }}" @endif class="@if($count > 0) shadow @else border @endif h-100 w-100 rounded-4 p-4 text-center d-flex align-items-center justify-content-center flex-column position-relative text-decoration-none" style="cursor: pointer;">
-            <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-primary @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
+            <div class="mb-md-2 position-absolute top-0 @if($count > 0) bg-danger @else bg-secondary @endif text-light p-2" style="width: 50px; height: 50px; border-radius: 100%; margin-top: -1rem;">
                 <em class="bi bi-file-earmark-spreadsheet" style="font-size: 1.4rem;"></em>
             </div>
-            <div class="mt-4 fs-6 fw-bold @if($count > 0) text-primary @else text-secondary @endif">
+            <div class="mt-4 fs-6 fw-bold @if($count > 0) text-danger @else text-secondary @endif">
                 Pending
             </div>
-            <div class="fs-2 fw-bold @if($count > 0) text-primary @else text-secondary @endif">
-                @if($count > 0  ) REVIEW @else N/A @endif
+            <div class="fs-2 fw-bold @if($count > 0) text-danger @else text-secondary @endif">
+                @if($count > 0) REVIEW @else N/A @endif
             </div>
         </a>
     </div>
