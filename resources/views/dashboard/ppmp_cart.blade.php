@@ -6,7 +6,7 @@
     @php
         $breadcrumb = [
             ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-            ['name' => 'PPMP Cart']
+            ['name' => 'Cart']
         ]
     @endphp
 

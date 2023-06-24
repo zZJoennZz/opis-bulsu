@@ -13,7 +13,7 @@
     <a class="nav-link" href="{{ route('ppmp-cart.get') }}">
         <em class="bi bi-cart-fill"></em>
         <div class="position-relative d-inline">
-            PPMP Cart
+            Cart
             <span class="badge rounded-pill bg-danger" style="font-size: 0.7rem">
                 @php
                     echo getCartCount()

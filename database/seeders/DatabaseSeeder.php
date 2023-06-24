@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\SupplyEndUser;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -32,6 +33,8 @@ class DatabaseSeeder extends Seeder
             SupplyPositionSeeder::class,
             EquipmentCodeSeeder::class,
             CompanySeeder::class,
+            SupplyEndUserSeeder::class,
+            SupplyEmployeeSeeder::class,
         ]);
     }
 }
