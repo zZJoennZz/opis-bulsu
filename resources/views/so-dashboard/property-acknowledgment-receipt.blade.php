@@ -283,7 +283,7 @@
                         branch: branch,
                     })
                     .then(function(response) {
-                        // window.location.href = response.data.redirect;
+                        window.location.href = response.data.redirect;
                         console.log(response);
                     })
                     .catch(function(error) {

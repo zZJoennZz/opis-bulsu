@@ -19,7 +19,8 @@ use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
-    public function add_par() {
+    public function add_par()
+    {
         try {
             $pos = PurchaseOrder::where('year', getPpmpYear())
                 ->with(['bac_reso.bac_reso_items.quotation', 'company' => function ($query) {
@@ -31,7 +32,7 @@ class TransactionController extends Controller
                 ->get();
 
             $par_po = [];
-            
+
             foreach ($pos as $po) {
                 $itemCtr = 0;
                 foreach ($po->transactions as $tran) {
@@ -47,7 +48,7 @@ class TransactionController extends Controller
 
             $end_users = SupplyEndUser::with(['position', 'branch'])->get();
             $supply_emp = SupplyOfficeEmployee::with(['position'])->get();
-            $branches = Branch::where('type','<>', 'DEVELOPER')->get();
+            $branches = Branch::where('type', '<>', 'DEVELOPER')->get();
 
             return view('so-dashboard.property-acknowledgment-receipt')
                 ->with('par_po', $par_po)
@@ -149,7 +150,8 @@ class TransactionController extends Controller
         }
     }
 
-    public function save_par(Request $request) {
+    public function save_par(Request $request)
+    {
         $customMessages = [
             'purchaseOrderId.required' => 'Please select a purchase order.',
             'dateAcquired.required' => 'Please enter the date acquired.',
@@ -176,6 +178,7 @@ class TransactionController extends Controller
         ], $customMessages);
 
         DB::beginTransaction();
+
         try {
             $branch = Branch::find($request->branch);
 
@@ -234,7 +237,7 @@ class TransactionController extends Controller
                         "14",
                         $eqCode->unique_code,
                         $eqCode->unique_code,
-                        $branch->branch->office_code,
+                        $branch->office_code,
                     );
 
 
@@ -263,7 +266,7 @@ class TransactionController extends Controller
                 }
             }
 
-            foreach($request->issuedBy as $issuer) {
+            foreach ($request->issuedBy as $issuer) {
                 $new_issuer = new InventoryTransactionIssuer([
                     "inventory_transactions_id" => $new_par->id,
                     "supply_office_employees_id" => $issuer,
@@ -271,7 +274,7 @@ class TransactionController extends Controller
                 $new_issuer->save();
             }
 
-            foreach($request->receivedBy as $receiver) {
+            foreach ($request->receivedBy as $receiver) {
                 $new_receiver = new InventoryTransactionReceiver([
                     "inventory_transactions_id" => $new_par->id,
                     "supply_end_users_id" => $receiver,
@@ -279,8 +282,13 @@ class TransactionController extends Controller
                 $new_receiver->save();
             }
 
-            DB::rollBack();
-            return "UY";
+            DB::commit();
+            back()->with('success', 'Property acknowledgment receipt created.');
+
+            return response()->json([
+                'success' => true,
+                'redirect' => route('so-dashboard.show'),
+            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
