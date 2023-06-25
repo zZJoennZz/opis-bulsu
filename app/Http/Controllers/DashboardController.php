@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Branch;
 use App\Models\EquipmentCode;
 use App\Models\InventoryCustodian;
+use App\Models\InventoryTransaction;
 use Illuminate\Http\Request;
 use App\Models\ItemCategory;
 use App\Models\ItemDetail;
@@ -98,7 +99,18 @@ class DashboardController extends Controller
         }
 
         if ($user->account_type === "SUPPLY_OFFICE" || $user->account_type === "admin") {
-            $viewToReturn = $viewToReturn->with('hey', 'hey');
+
+            $par_inventory = InventoryTransaction::with(['items.serial_numbers', 'issuers.employee.position', 'receivers', 'purchase_order'])
+                ->where('type', 'PAR')
+                ->get();
+
+            $ics_inventory = InventoryTransaction::with(['items.serial_numbers', 'issuers.employee.position', 'receivers', 'purchase_order'])
+                ->where('type', '<>', 'PAR')
+                ->get();
+
+            $viewToReturn = $viewToReturn
+                ->with('par_inventory', $par_inventory)
+                ->with('ics_inventory', $ics_inventory);
         }
 
         if ($user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "admin") {

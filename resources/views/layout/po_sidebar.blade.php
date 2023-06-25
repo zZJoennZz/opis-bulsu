@@ -1,4 +1,4 @@
-<li class="nav-item">
+<li class="nav-item small">
     <b class="nav-link" aria-current="page">
         PROCUREMENT OFFICE
     </b>
@@ -10,38 +10,49 @@
     </a> --}}
     <div class="p-2">
         <div class="mb-2">
-            <a href="{{ route('dashboard.show') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-earmark-spreadsheet float-start"></em> Project Procurement Management Plan</a>
+            <a href="{{ route('dashboard.show') }}" class="btn btn-dark fs-5 fw-bold w-100"><em
+                    class="bi bi-file-earmark-spreadsheet float-start"></em> Project Procurement Management Plan</a>
         </div>
         <hr />
         <div class="mb-2">
-            <a href="{{ route('consolidated.show') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-card-list float-start"></em> Consolidated Annual Procurement Plan</a>
+            <a href="{{ route('consolidated.show') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-card-list float-start"></em>
+                Consolidated Annual Procurement Plan</a>
         </div>
         <hr />
         <div class="mb-2">
-            <a href="{{ route('pr-admin.show') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-basket2-fill float-start"></em> Purchase Request</a>
+            <a href="{{ route('pr-admin.show') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-basket2-fill float-start"></em> Purchase
+                Request</a>
         </div>
         <div class="mb-2">
-            <a href="{{ route('quotation.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-chat-left-quote-fill float-start"></em> Price Quotation</a>
+            <a href="{{ route('quotation.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-chat-left-quote-fill float-start"></em>
+                Price Quotation</a>
         </div>
         <div class="mb-2">
-            <a href="{{ route('aoc.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-ruled-fill float-start"></em> Abstract of Canvass</a>
+            <a href="{{ route('aoc.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-ruled-fill float-start"></em> Abstract of
+                Canvass</a>
         </div>
         <div class="mb-2">
-            <a href="{{ route('bac-reso.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-envelope-check-fill float-start"></em> BAC Resolution</a>
+            <a href="{{ route('bac-reso.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-envelope-check-fill float-start"></em> BAC
+                Resolution</a>
         </div>
         <div class="mb-2">
-            <a href="{{ route('po.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-cart-check-fill float-start"></em> Purchase Order</a>
+            <a href="{{ route('po.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-cart-check-fill float-start"></em> Purchase
+                Order</a>
         </div>
         <div class="mb-2">
-            <a href="{{ route('alobs.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-earmark-text-fill float-start"></em> ALOBS</a>
+            <a href="{{ route('alobs.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-earmark-text-fill float-start"></em>
+                ALOBS</a>
         </div>
         <div>
-            <a href="{{ route('ia.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-bag-check-fill float-start"></em> Inspection & Acceptance</a>
+            <a href="{{ route('ia.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-bag-check-fill float-start"></em> Inspection &
+                Acceptance</a>
         </div>
     </div>
 </li>
-<li><hr /></li>
-<li class="nav-item">
+<li>
+    <hr />
+</li>
+<li class="nav-item small">
     <b class="nav-link" aria-current="page">
         SETTINGS
     </b>
@@ -51,7 +62,6 @@
         <em class="bi bi-people-fill"></em> Manage Users
     </a>
 </li>
-<li><hr /></li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('item-cat.show') }}">
         <em class="bi bi-filter"></em> Manage Item Categories
@@ -88,7 +98,9 @@
     </a>
 </li>
 
-<li><hr /></li>
+<li>
+    <hr />
+</li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('dashboard.show') }}">
         <em class="bi bi-file-text"></em> PPMP Sections/Groups

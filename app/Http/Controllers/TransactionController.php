@@ -245,6 +245,7 @@ class TransactionController extends Controller
                         "inventory_transactions_id" => $new_par->id,
                         "b_a_c_reso_items_id" => $item->id,
                         "quantity" => $totalQty,
+                        "unit_price" => $item->quotation->offered_unit_price,
                         "equipment_codes_id" => $request->purchaseOrderItems[$ctr]['equipmentCode'],
                         "property_number" => $property_no,
                     ]);
@@ -414,6 +415,7 @@ class TransactionController extends Controller
                         "inventory_transactions_id" => $new_ics->id,
                         "b_a_c_reso_items_id" => $item->id,
                         "quantity" => $totalQty,
+                        "unit_price" => $item->quotation->offered_unit_price,
                         "equipment_codes_id" => $request->purchaseOrderItems[$ctr]['equipmentCode'],
                         "property_number" => $property_no,
                     ]);

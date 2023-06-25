@@ -1,4 +1,4 @@
-<li class="nav-item">
+<li class="nav-item small">
     <b class="nav-link" aria-current="page">
         SUPPLY OFFICE
     </b>
@@ -9,10 +9,15 @@
         Dashboard
     </a>
 </li>
+<li class="nav-item small">
+    <b class="nav-link" aria-current="page">
+        TRANSACTION
+    </b>
+</li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('icsl.add') }}">
         <em class="bi bi-file-text-fill"></em>
-        ICS 
+        ICS
         <span class="badge bg-secondary">
             <em class="bi bi-caret-down-fill"></em> Low Value
         </span>
@@ -33,7 +38,9 @@
         PAR
     </a>
 </li>
-<li><hr /></li>
+<li>
+    <hr />
+</li>
 <li class="nav-item">
     <b class="nav-link" aria-current="page">
         SETTINGS

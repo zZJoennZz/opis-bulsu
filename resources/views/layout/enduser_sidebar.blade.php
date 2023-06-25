@@ -1,4 +1,4 @@
-<li class="nav-item">
+<li class="nav-item small">
     <b class="nav-link" aria-current="page">
         END USER
     </b>
@@ -16,7 +16,7 @@
             Cart
             <span class="badge rounded-pill bg-danger" style="font-size: 0.7rem">
                 @php
-                    echo getCartCount()
+                echo getCartCount()
                 @endphp
             </span>
         </div>
@@ -27,7 +27,7 @@
         <em class="bi bi-window"></em>
         PPMP <span class="badge text-bg-primary">{{ Auth::user()->ppmp_year }}</span>
     </a>
-</li>   
+</li>
 <li class="nav-item">
     <a class="nav-link" href="{{ route('pr-list.show') }}">
         <em class="bi bi-list-ul"></em>

@@ -1,4 +1,4 @@
-<li class="nav-item">
+<li class="nav-item small">
     <b class="nav-link" aria-current="page">
         BUDGET OFFICE
     </b>

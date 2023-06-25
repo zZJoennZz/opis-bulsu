@@ -12,4 +12,9 @@ class InventoryTransactionIssuer extends Model
         'inventory_transactions_id',
         'supply_office_employees_id',
     ];
+
+    public function employee()
+    {
+        return $this->hasOne(SupplyOfficeEmployee::class, 'id', 'supply_office_employees_id');
+    }
 }

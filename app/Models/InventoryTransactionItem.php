@@ -12,6 +12,7 @@ class InventoryTransactionItem extends Model
         'inventory_transactions_id',
         'b_a_c_reso_items_id',
         'quantity',
+        'unit_price',
         'equipment_codes_id',
         'property_number',
     ];
@@ -19,5 +20,10 @@ class InventoryTransactionItem extends Model
     public function bac_reso_item()
     {
         return $this->hasOne(BACResoItem::class, 'id', 'b_a_c_reso_items_id');
+    }
+
+    public function serial_numbers()
+    {
+        return $this->hasMany(InventoryTransactionItemSerialNumber::class, 'inventory_transaction_items_id', 'id');
     }
 }

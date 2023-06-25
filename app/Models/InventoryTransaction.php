@@ -18,8 +18,23 @@ class InventoryTransaction extends Model
         'added_by',
     ];
 
+    public function purchase_order()
+    {
+        return $this->hasOne(PurchaseOrder::class, 'id', 'purchase_orders_id');
+    }
+
     public function items()
     {
         return $this->hasMany(InventoryTransactionItem::class, 'inventory_transactions_id', 'id');
+    }
+
+    public function issuers()
+    {
+        return $this->hasMany(InventoryTransactionIssuer::class, 'inventory_transactions_id', 'id');
+    }
+
+    public function receivers()
+    {
+        return $this->hasMany(InventoryTransactionReceiver::class, 'inventory_transactions_id', 'id');
     }
 }
