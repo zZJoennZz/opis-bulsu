@@ -331,11 +331,12 @@ Route::middleware('supply.office')->group(function () {
 
     Route::get('/inventory-custodian-slip-l', [TransactionController::class, 'add_ics_l'])->name('icsl.add');
     Route::get('/inventory-custodian-slip-h', [TransactionController::class, 'add_ics_h'])->name('icsh.add');
-    Route::get('/inventory-custodian-slip', [TransactionController::class, 'add'])->name('ics.add');
     Route::post('/inventory-custodian-slip/{type?}', [TransactionController::class, 'save_ics'])->name('ics.save');
 
     Route::get('/property-acknowledgment-receipt', [TransactionController::class, 'add_par'])->name('par.add');
     Route::post('/property-acknowledgment-receipt', [TransactionController::class, 'save_par'])->name('par.save');
+
+    Route::get('/all-transactions', [TransactionController::class, 'all_trans'])->name('trans.all');
 });
 
 //ADMIN ONLY

@@ -15,6 +15,12 @@
     </b>
 </li>
 <li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('trans.all') }}">
+        <em class="bi bi-eye-fill"></em>
+        View All
+    </a>
+</li>
+<li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('icsl.add') }}">
         <em class="bi bi-file-text-fill"></em>
         ICS
@@ -41,7 +47,7 @@
 <li>
     <hr />
 </li>
-<li class="nav-item">
+<li class="nav-item small">
     <b class="nav-link" aria-current="page">
         SETTINGS
     </b>

@@ -465,30 +465,15 @@ class TransactionController extends Controller
         }
     }
 
-    //to be removed
-    public function add()
-    {
+    public function all_trans() {
         try {
-            $ics_po = PurchaseOrder::where('year', getPpmpYear())
-                ->where('is_delete', 0)
-                ->with(['company'])
-                ->whereDoesntHave('transaction', function ($builder) {
-                    $builder->where('type', 'ICS');
-                })
+            $allTrans = InventoryTransaction::with(['purchase_order'])
                 ->get();
-
-            $eq_code = EquipmentCode::all();
-
-            $end_users = SupplyEndUser::with(['position', 'branch'])->get();
-            $supply_emp = SupplyOfficeEmployee::with(['position'])->get();
-
-            return view('so-dashboard.inventory-custodian-slip')
-                ->with('ics_po', $ics_po)
-                ->with('eq_code', $eq_code)
-                ->with('end_users', $end_users)
-                ->with('supply_emp', $supply_emp);
-        } catch (\Exception $e) {
-            return "HEY";
+            return view('so-dashboard.all-transactions')
+                ->with('allTrans', $allTrans);
+        }
+        catch (\Exception $e) {
+            return redirect()->route('so-dashboard.show')->withErrors(['Something went wrong. Cannot access transactions.']);
         }
     }
 }

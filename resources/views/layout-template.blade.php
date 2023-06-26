@@ -5,7 +5,7 @@
 
     @php
         $breadcrumb = [
-            ['name' => '<em class="bi bi-house-fill"></em>'],
+            ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
             ['name' => 'Manage End User'],
         ]
     @endphp
