@@ -12,7 +12,7 @@
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     <div class="mb-3">
-        <span class="badge bg-secondary">
+        <span class="badge @if ($type === "ICSL") bg-secondary @else bg-primary @endif">
             @if ($type === "ICSL")
                 <em class="bi bi-caret-down-fill"></em> Low Value
             @else

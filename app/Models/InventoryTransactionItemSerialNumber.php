@@ -12,4 +12,12 @@ class InventoryTransactionItemSerialNumber extends Model
         'inventory_transaction_items_id',
         'serial_number',
     ];
+
+    public function item() {
+        return $this->belongsTo(InventoryTransactionItem::class, 'id', 'inventory_transaction_items_id');
+    }
+
+    public function current_end_user() {
+        return $this->hasOne(InventoryTransferItem::class, 'inventory_transaction_item_serial_numbers_id', 'id');
+    }
 }

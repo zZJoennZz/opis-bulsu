@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TransferController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
@@ -337,6 +338,10 @@ Route::middleware('supply.office')->group(function () {
     Route::post('/property-acknowledgment-receipt', [TransactionController::class, 'save_par'])->name('par.save');
 
     Route::get('/all-transactions', [TransactionController::class, 'all_trans'])->name('trans.all');
+
+    Route::get('/all-ics', [TransferController::class, 'all_ics'])->name('ics.all');
+    Route::get('/prepare-transfer/{itemId?}', [TransferController::class, 'prepare'])->name('prepare-transfer.show');
+    Route::post('/prepare-transfer/{itemId?}', [TransferController::class, 'submit_transfer'])->name('transfer.submit');
 });
 
 //ADMIN ONLY
