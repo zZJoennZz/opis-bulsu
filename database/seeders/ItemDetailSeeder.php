@@ -46,7 +46,7 @@ class ItemDetailSeeder extends Seeder
             [
                 'description' => 'Laptop',
                 'article' => 'P006',
-                'price_catalogue' => 799.99,
+                'price_catalogue' => 9999.99,
                 'category_id' => 6,
                 'unit_id' => 6,
                 'added_by' => 1,

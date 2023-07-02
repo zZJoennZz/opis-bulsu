@@ -12,7 +12,7 @@
                 @csrf
                 @method("PUT")
                 <div class="modal-body">
-                    <img src="{{ asset(" img/bsu-small-logo.png") }}" alt="BSU Small Logo" class="d-block mb-3 m-auto" />
+                    <img src="{{ asset('img/bsu-small-logo.png') }}" alt="BSU Small Logo" class="d-block mb-3 m-auto" />
                     <label for="ppmp_year" class="form-label">Enter PPMP year</label>
                     <input type="number" min="1990" max="9999" value="{{ Auth::user()->ppmp_year }}" class="form-control fs-2" id="ppmp_year"
                         name="ppmp_year" placeholder="1996">

@@ -73,7 +73,7 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
 
-    Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
+    Route::delete('/delete-ppmp-record/{ppmp_id?}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
 
     Route::get('/account-settings', [UserController::class, 'account_settings'])->name('account-settings.show');
     Route::post('/account-settings', [UserController::class, 'change_user_details'])->name('account-settings.save');
