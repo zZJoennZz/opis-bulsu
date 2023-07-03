@@ -1,19 +1,19 @@
 <x-dashboard-layout>
     <x-slot:title>
-        All Inventory Custodian Slip Records
+        Property Acknowledgment Report Records
     </x-slot>
 
     @php
         $breadcrumb = [
             ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-            ['name' => 'All ICS Records'],
+            ['name' => 'All PAR Records'],
         ]
     @endphp
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
     <div class="table-responsive">
-        <table class="table table-sm table-hover border-dark caption-top" id="all-ics-items">
-            <caption>All ICS Items</caption>
+        <table class="table table-sm table-hover border-dark caption-top" id="all-par-records">
+            <caption>All PAR Items</caption>
             <thead class="small">
                 <tr>
                     <th></th>
@@ -24,7 +24,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($ics as $i)
+                @foreach ($par as $i)
                     @foreach ($i->items as $item)
                     @php
                         $totalQty = $item->quantity;
@@ -57,6 +57,6 @@
         </table>
     </div>
     <x-slot:additional_script>
-        @include('layout/datatable', ['tableId' => 'all-ics-items'])
+        @include('layout/datatable', ['tableId' => 'all-par-records'])
     </x-slot>
 </x-dashboard-layout>

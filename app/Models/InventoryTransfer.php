@@ -17,18 +17,18 @@ class InventoryTransfer extends Model
     ];
 
     public function item() {
-        return $this->hasMany(InventoryTransactionItem::class, 'id', 'inventory_transaction_items_id');
+        return $this->hasOne(InventoryTransactionItem::class, 'id', 'inventory_transaction_items_id');
     }
 
     public function items() {
         return $this->hasMany(InventoryTransferItem::class, 'inventory_transfers_id', 'id');
     }
 
-    public function issuer() {
+    public function issuers() {
         return $this->hasMany(InventoryTransferIssuer::class, 'inventory_transfers_id', 'id');
     }
 
-    public function receiver() {
+    public function receivers() {
         return $this->hasMany(InventoryTransferReceiver::class, 'inventory_transfers_id', 'id');
     }
 }

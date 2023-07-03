@@ -340,6 +340,11 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/all-transactions', [TransactionController::class, 'all_trans'])->name('trans.all');
 
     Route::get('/all-ics', [TransferController::class, 'all_ics'])->name('ics.all');
+    Route::get('/all-par', [TransferController::class, 'all_par'])->name('par.all');
+    Route::get('/all-transfers', [TransferController::class, 'all_transfers'])->name('transfers.all');
+    Route::get('/prepare-transfer', function() {
+        return redirect()->route('dashboard.show');
+    });
     Route::get('/prepare-transfer/{itemId?}', [TransferController::class, 'prepare'])->name('prepare-transfer.show');
     Route::post('/prepare-transfer/{itemId?}', [TransferController::class, 'submit_transfer'])->name('transfer.submit');
 });
