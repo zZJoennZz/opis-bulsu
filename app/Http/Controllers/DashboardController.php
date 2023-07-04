@@ -6,6 +6,8 @@ use App\Models\Branch;
 use App\Models\EquipmentCode;
 use App\Models\InventoryCustodian;
 use App\Models\InventoryTransaction;
+use App\Models\InventoryTransactionItem;
+use App\Models\InventoryTransfer;
 use Illuminate\Http\Request;
 use App\Models\ItemCategory;
 use App\Models\ItemDetail;
@@ -99,18 +101,22 @@ class DashboardController extends Controller
         }
 
         if ($user->account_type === "SUPPLY_OFFICE" || $user->account_type === "admin") {
-
-            $par_inventory = InventoryTransaction::with(['items.serial_numbers', 'issuers.employee.position', 'receivers', 'purchase_order'])
-                ->where('type', 'PAR')
+            $lastFiveTransactions = InventoryTransaction::where('is_delete', 0)
+                ->latest()
+                ->take(5)
                 ->get();
-
-            $ics_inventory = InventoryTransaction::with(['items.serial_numbers', 'issuers.employee.position', 'receivers', 'purchase_order'])
-                ->where('type', '<>', 'PAR')
-                ->get();
+            $untransferredItems = InventoryTransactionItem::all();
+            $totalUntransferredItems = 0;
+            foreach ($untransferredItems as $item) {
+                $totalUntransferredItems += $item->quantity;
+                foreach ($item->transfers as $transfer) {
+                    $totalUntransferredItems -= $transfer->quantity;
+                }
+            }
 
             $viewToReturn = $viewToReturn
-                ->with('par_inventory', $par_inventory)
-                ->with('ics_inventory', $ics_inventory);
+                ->with('lastFiveTransactions', $lastFiveTransactions)
+                ->with('totalUntransferredItems', $totalUntransferredItems);
         }
 
         if ($user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "admin") {
