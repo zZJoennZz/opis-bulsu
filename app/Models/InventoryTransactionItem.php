@@ -17,6 +17,10 @@ class InventoryTransactionItem extends Model
         'property_number',
     ];
 
+    public function transaction() {
+        return $this->belongsTo(InventoryTransaction::class, 'inventory_transactions_id', 'id');
+    }
+
     public function bac_reso_item()
     {
         return $this->hasOne(BACResoItem::class, 'id', 'b_a_c_reso_items_id');
@@ -25,5 +29,9 @@ class InventoryTransactionItem extends Model
     public function serial_numbers()
     {
         return $this->hasMany(InventoryTransactionItemSerialNumber::class, 'inventory_transaction_items_id', 'id');
+    }
+
+    public function transfers() {
+        return $this->hasMany(InventoryTransfer::class, 'inventory_transaction_items_id', 'id');
     }
 }

@@ -194,6 +194,7 @@ class TransactionController extends Controller
             $new_par = new InventoryTransaction([
                 "type" => "PAR",
                 "number" => $par_number,
+                "branches_id" => $branch->id,
                 "date_acquired" => $request->dateAcquired,
                 "purchase_orders_id" => $request->purchaseOrderId,
                 "date_issued" => $request->dateIssued,
@@ -348,6 +349,7 @@ class TransactionController extends Controller
             $new_ics = new InventoryTransaction([
                 "type" => $type,
                 "number" => $ics_number,
+                "branches_id" => $branch->branch->id,
                 "date_acquired" => $request->dateAcquired,
                 "purchase_orders_id" => $request->purchaseOrderId,
                 "date_issued" => $request->dateIssued,
@@ -467,7 +469,7 @@ class TransactionController extends Controller
 
     public function all_trans() {
         try {
-            $allTrans = InventoryTransaction::with(['purchase_order'])
+            $allTrans = InventoryTransaction::with(['purchase_order', 'issuers', 'receivers'])
                 ->get();
             return view('so-dashboard.all-transactions')
                 ->with('allTrans', $allTrans);

@@ -17,7 +17,7 @@
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('trans.all') }}">
         <em class="bi bi-eye-fill"></em>
-        View All
+        All Transactions
     </a>
 </li>
 <li class="nav-item">
@@ -33,13 +33,36 @@
     <a class="nav-link" aria-current="page" href="{{ route('icsh.add') }}">
         <em class="bi bi-file-text-fill"></em>
         ICS
-        <span class="badge bg-secondary">
+        <span class="badge bg-primary">
             <em class="bi bi-caret-up-fill"></em> High Value
         </span>
     </a>
 </li>
 <li class="nav-item">
     <a href="{{ route('par.add') }}" aria-current="page" class="nav-link">
+        <em class="bi bi-file-text-fill"></em>
+        PAR
+    </a>
+</li>
+<li class="nav-item small">
+    <b class="nav-link" aria-current="page">
+        PROPERTY TRANSFER
+    </b>
+</li>
+<li class="nav-item">
+    <a href="{{ route('transfers.all') }}" aria-current="page" class="nav-link">
+        <em class="bi bi-list"></em>
+        All Transfers
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('ics.all') }}" aria-current="page" class="nav-link">
+        <em class="bi bi-file-text-fill"></em>
+        ICS
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('par.all') }}" aria-current="page" class="nav-link">
         <em class="bi bi-file-text-fill"></em>
         PAR
     </a>

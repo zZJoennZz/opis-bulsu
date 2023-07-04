@@ -8,6 +8,8 @@ use App\Models\Notification;
 use App\Models\MilestoneFormat;
 use App\Models\ProProManPlan;
 use App\Models\MilestoneOfActivity;
+use App\Models\ProProManPlanHistory;
+use App\Models\ProProManPlanRevision;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -39,15 +41,20 @@ class CartController extends Controller
     public function delete_from_cart($ppmp_id)
     {
         $ppmpRecord = ProProManPlan::find($ppmp_id);
-        DB::beginTransaction();
         try {
-            $ppmpRecord->is_delete = 1;
-            $ppmpRecord->save();
+            DB::beginTransaction();
+            if ($ppmpRecord->is_draft !== 1) {
+                return redirect()->back()->withErrors(['Action not allowed.']);
+            }
+            ProProManPlanHistory::where('pro_pro_man_plans_id', $ppmp_id)->delete();
+            ProProManPlanRevision::where('pro_pro_man_plans_id', $ppmp_id)->delete();
+            MilestoneOfActivity::where('pro_pro_man_plans_id', $ppmp_id)->delete();
+            $ppmpRecord->delete();
             DB::commit();
             return redirect()->back()->with('success', 'Item removed.');
         } catch (Throwable $e) {
             DB::rollBack();
-            return redirect()->back()->with('success', 'Item not removed. Please contact website administrator.');
+            return redirect()->back()->withErrors(['Item not removed. Please contact website administrator.']);
         }
     }
 

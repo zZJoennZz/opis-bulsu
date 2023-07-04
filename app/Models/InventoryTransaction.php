@@ -11,6 +11,7 @@ class InventoryTransaction extends Model
     protected $fillable = [
         'type', //ICSH, ICSL, PAR
         'number',
+        'branches_id',
         'date_acquired',
         'purchase_orders_id',
         'date_issued',
@@ -36,5 +37,9 @@ class InventoryTransaction extends Model
     public function receivers()
     {
         return $this->hasMany(InventoryTransactionReceiver::class, 'inventory_transactions_id', 'id');
+    }
+
+    public function branch() {
+        return $this->hasOne(Branch::class, 'id', 'branches_id');
     }
 }

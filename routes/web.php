@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\TransferController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
@@ -73,7 +74,7 @@ Route::middleware('auth')->group(function () {
 
     Route::put('/update-year', [YearController::class, 'update_year'])->name('update-year.perform');
 
-    Route::delete('/delete-ppmp-record/{ppmp_id}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
+    Route::delete('/delete-ppmp-record/{ppmp_id?}', [CartController::class, 'delete_from_cart'])->name('delete-ppmp.perform');
 
     Route::get('/account-settings', [UserController::class, 'account_settings'])->name('account-settings.show');
     Route::post('/account-settings', [UserController::class, 'change_user_details'])->name('account-settings.save');
@@ -347,7 +348,14 @@ Route::middleware('supply.office')->group(function () {
     Route::delete('/manage-equipment-code/single/{equipment_code_id}', [EquipmentCodesController::class, 'delete_single']);
     Route::post('/manage-equipment-code/batch', [EquipmentCodesController::class, 'delete_batch'])->name('equipmentcode.delete_batch');
     
-    
+    Route::get('/all-ics', [TransferController::class, 'all_ics'])->name('ics.all');
+    Route::get('/all-par', [TransferController::class, 'all_par'])->name('par.all');
+    Route::get('/all-transfers', [TransferController::class, 'all_transfers'])->name('transfers.all');
+    Route::get('/prepare-transfer', function() {
+        return redirect()->route('dashboard.show');
+    });
+    Route::get('/prepare-transfer/{itemId?}', [TransferController::class, 'prepare'])->name('prepare-transfer.show');
+    Route::post('/prepare-transfer/{itemId?}', [TransferController::class, 'submit_transfer'])->name('transfer.submit');
 });
 
 //ADMIN ONLY
