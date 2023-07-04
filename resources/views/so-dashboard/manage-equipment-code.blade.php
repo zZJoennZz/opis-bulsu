@@ -147,7 +147,7 @@
                 };
                 await axios.put(`{{ url('/manage-equipment-code') }}/${selectedEquipmentCode}`, data)
                     .then(res => {
-                        {{Session::forget('success');}}
+                        {{Session::forget('success')}}
                         window.location.reload();
 
                     })

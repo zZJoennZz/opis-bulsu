@@ -91,7 +91,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('users-list.show') }}">
+    <a class="nav-link" aria-current="page" href="{{ route('equipment-code.all') }}">
         <em class="bi bi-diagram-3-fill"></em> Manage Equipment Codes
     </a>
 </li>
