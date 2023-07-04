@@ -31,6 +31,7 @@ use App\Http\Controllers\AllotAndOblSlipController;
 use App\Http\Controllers\SupplyPositionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ModeOfProcurementController;
+use App\Http\Controllers\EquipmentCodesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -339,6 +340,14 @@ Route::middleware('supply.office')->group(function () {
 
     Route::get('/all-transactions', [TransactionController::class, 'all_trans'])->name('trans.all');
 
+    // manage equipment code
+    Route::get('/manage-equipment-code', [EquipmentCodesController::class, 'all'])->name('equipment-code.all');
+    Route::post('/manage-equipment-code', [EquipmentCodesController::class, 'post_add'])->name('equipment-code.post_add');
+    Route::get('/manage-equipment-code/{equipment_code_id}', [EquipmentCodesController::class, 'get'])->name('equipment-code.single');
+    Route::put('/manage-equipment-code/{equipment_code_id}', [EquipmentCodesController::class, 'update']);
+    Route::delete('/manage-equipment-code/single/{equipment_code_id}', [EquipmentCodesController::class, 'delete_single']);
+    Route::post('/manage-equipment-code/batch', [EquipmentCodesController::class, 'delete_batch'])->name('equipmentcode.delete_batch');
+    
     Route::get('/all-ics', [TransferController::class, 'all_ics'])->name('ics.all');
     Route::get('/all-par', [TransferController::class, 'all_par'])->name('par.all');
     Route::get('/all-transfers', [TransferController::class, 'all_transfers'])->name('transfers.all');
