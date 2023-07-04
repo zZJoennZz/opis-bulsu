@@ -59,6 +59,7 @@
                                 <div>{{ $receiver->end_user->first_name . ' ' . $receiver->end_user->middle_name . ' ' . $receiver->end_user->last_name }}</div>
                                 <div class="fst-italic text-secondary" style="font-size: 11px;">{{ $receiver->end_user->position->name }}</div>
                             @endforeach
+                            {{ $transfer->receivers[count($transfer->receivers) - 1]->end_user->position->name }}
                         </td>
                         <td>
                             {{ $transfer->item->transaction->branch->branch_name }}
