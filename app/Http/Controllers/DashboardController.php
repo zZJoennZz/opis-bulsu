@@ -105,18 +105,17 @@ class DashboardController extends Controller
                 ->latest()
                 ->take(5)
                 ->get();
-            $untransferredItems = InventoryTransactionItem::all();
-            $totalUntransferredItems = 0;
-            foreach ($untransferredItems as $item) {
-                $totalUntransferredItems += $item->quantity;
-                foreach ($item->transfers as $transfer) {
-                    $totalUntransferredItems -= $transfer->quantity;
-                }
-            }
+            // $untransferredItems = InventoryTransactionItem::all();
+            // $totalUntransferredItems = 0;
+            // foreach ($untransferredItems as $item) {
+            //     $totalUntransferredItems += $item->quantity;
+            //     foreach ($item->transfers as $transfer) {
+            //         $totalUntransferredItems -= $transfer->quantity;
+            //     }
+            // }
 
             $viewToReturn = $viewToReturn
-                ->with('lastFiveTransactions', $lastFiveTransactions)
-                ->with('totalUntransferredItems', $totalUntransferredItems);
+                ->with('lastFiveTransactions', $lastFiveTransactions);
         }
 
         if ($user->account_type === "PROCUREMENT_HEAD" || $user->account_type === "admin") {

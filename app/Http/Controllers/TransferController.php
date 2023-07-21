@@ -2,32 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\InventoryTransactionItem;
-use App\Models\InventoryTransactionItemSerialNumber;
-use App\Models\InventoryTransfer;
-use App\Models\InventoryTransferIssuer;
-use App\Models\InventoryTransferItem;
-use App\Models\InventoryTransferReceiver;
-use App\Models\SupplyEndUser;
-use Illuminate\Http\Request;
 use App\Models\InventoryTransaction;
+use App\Models\PropertyTransfer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TransferController extends Controller
 {
     public function all_transfers() {
-        $allTransfers = InventoryTransfer::all();
+        $allTransfers = PropertyTransfer::all();
 
         return view('so-dashboard.all-transfers')
             ->with('allTransfers', $allTransfers);
     }
 
     public function all_ics() {
+        // return InventoryTransaction::with(['purchase_order', 'items.bac_reso_item', 'issuers', 'receivers', 'items.properties.transfers'])
+        // ->where('type', '<>', 'PAR')    
+        // ->get();
         try {
-            $ics = InventoryTransaction::with(['purchase_order', 'items.bac_reso_item', 'items.serial_numbers', 'issuers', 'receivers', 'items.transfers'])
+            $ics = InventoryTransaction::with(['purchase_order', 'items.bac_reso_item', 'issuers', 'receivers', 'items.properties.transfers'])
                 ->where('type', '<>', 'PAR')    
                 ->get();
+
             return view('so-dashboard.all-ics')
                 ->with('ics', $ics);
         } catch (\Exception $e) {

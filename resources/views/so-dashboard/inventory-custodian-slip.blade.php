@@ -123,6 +123,7 @@
 
                     $('.eq_code').each(function(index) {
                         let eqCodeSelect = $(this);
+                        let itemIdInput = $('.itemId').eq(index);
                         let serialNumberTextarea = $('.serial_numbers').eq(index);
 
                         let eqCode = eqCodeSelect.val();
@@ -149,6 +150,7 @@
                         purchaseOrderItems.push({
                             equipmentCode: eqCode,
                             serialNumbers: serialNumberLines,
+                            itemId: itemIdInput.val(),
                         });
                     });
 
@@ -166,6 +168,7 @@
                     })
                     .then(function(response) {
                         window.location.href = response.data.redirect;
+                        // console.log(response);
                     })
                     .catch(function(error) {
                         if (error.response.status === 422) {
@@ -205,7 +208,10 @@
                                 item.quotation.pr_item.ppmp.milestones.forEach((m) => totalQty += m.milestone_value);
                                 tblRows += `
                                     <tr class="po_item">
-                                        <td>${item.quotation.pr_item.ppmp.item_detail.description}</td>
+                                        <td>
+                                            <input type="hidden" value="${item.id}" class="itemId">
+                                            ${item.quotation.pr_item.ppmp.item_detail.description}
+                                        </td>
                                         <td>${totalQty} ${item.quotation.pr_item.ppmp.item_detail.unit.uom}</td>
                                         <td>${convertToCurrency(parseFloat(item.quotation.offered_unit_price))}</td>
                                         <td>${eqCode}</td>

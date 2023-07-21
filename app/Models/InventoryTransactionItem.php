@@ -26,12 +26,7 @@ class InventoryTransactionItem extends Model
         return $this->hasOne(BACResoItem::class, 'id', 'b_a_c_reso_items_id');
     }
 
-    public function serial_numbers()
-    {
-        return $this->hasMany(InventoryTransactionItemSerialNumber::class, 'inventory_transaction_items_id', 'id');
-    }
-
-    public function transfers() {
-        return $this->hasMany(InventoryTransfer::class, 'inventory_transaction_items_id', 'id');
+    public function properties() {
+        return $this->hasMany(InventoryTransactionItemProperty::class, 'inventory_transaction_items_id', 'id');
     }
 }

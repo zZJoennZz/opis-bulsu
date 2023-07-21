@@ -58,7 +58,7 @@
     <div class="col-sm-12 col-md-3">
         <div class="text-primary text-uppercase mb-1">Available Items</div>
         <div>
-            <div class="text-center fw-bold text-primary" style="font-size: 100px;">{{ $totalUntransferredItems }}</div>
+            <div class="text-center fw-bold text-primary" style="font-size: 100px;">20</div>
             <div class="text-center"><a href="{{ route('ics.all') }}" class="btn btn-sm btn-link">View ICS Items</a></div>
             <div class="text-center"><a href="{{ route('par.all') }}" class="btn btn-sm btn-link">View PAR Items</a></div>
         </div>

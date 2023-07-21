@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BACResoItem;
 use App\Models\EquipmentCode;
 use App\Models\InventoryTransaction;
 use App\Models\InventoryTransactionIssuer;
 use App\Models\InventoryTransactionItem;
+use App\Models\InventoryTransactionItemProperty;
+use App\Models\InventoryTransactionItemPropertyCurrentKeeper;
 use App\Models\InventoryTransactionItemSerialNumber;
 use App\Models\InventoryTransactionReceiver;
 use App\Models\PurchaseOrder;
 use App\Models\SupplyEndUser;
 use App\Models\SupplyOfficeEmployee;
 use App\Models\Branch;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -255,12 +257,37 @@ class TransactionController extends Controller
 
                     if ($request->purchaseOrderItems[$ctr]['serialNumbers'] !== "" && $request->purchaseOrderItems[$ctr]['serialNumbers'] !== null) {
                         foreach ($request->purchaseOrderItems[$ctr]['serialNumbers'] as $sn) {
-                            $new_ics_item_sn = new InventoryTransactionItemSerialNumber([
+                            $new_property = new InventoryTransactionItemProperty([
                                 "inventory_transaction_items_id" => $new_par_item->id,
                                 "serial_number" => $sn,
                             ]);
 
-                            $new_ics_item_sn->save();
+                            $new_property->save();
+
+                            foreach ($request->receivedBy as $receiver) {
+                                $current_keeper = new InventoryTransactionItemPropertyCurrentKeeper([
+                                    'inventory_transaction_item_properties_id' => $new_property->id,
+                                    'supply_end_users_id' => $receiver,
+                                ]);
+
+                                $current_keeper->save();
+                            }
+                        }
+                    } else {
+                        for ($itemCtr = 0; $itemCtr <= $totalQty; $itemCtr++) {
+                            $new_property = new InventoryTransactionItemProperty([
+                                "inventory_transaction_items_id" => $new_par_item->id,
+                                "serial_number" => "n/a",
+                            ]);
+                            
+                            foreach ($request->receivedBy as $receiver) {
+                                $current_keeper = new InventoryTransactionItemPropertyCurrentKeeper([
+                                    'inventory_transaction_item_properties_id' => $new_property->id,
+                                    'supply_end_users_id' => $receiver,
+                                ]);
+
+                                $current_keeper->save();
+                            }
                         }
                     }
 
@@ -331,7 +358,7 @@ class TransactionController extends Controller
             'purchaseOrderItems.*.serialNumbers' => 'array',
         ], $customMessages);
 
-        try {
+        // try {
             DB::beginTransaction();
             $branch = SupplyEndUser::with(['branch'])->where('id', $request->receivedBy)->first();
 
@@ -358,52 +385,23 @@ class TransactionController extends Controller
 
             $new_ics->save();
 
-            $po_id = PurchaseOrder::find($request->purchaseOrderId);
-            $withCond = "";
-            if ($type === "ICSL") {
-                $withCond = [
-                    'bac_reso.bac_reso_items.quotation' => function ($builder) use ($po_id) {
-                        $builder->where('offered_unit_price', '<', '5000')
-                            ->whereHas('quotation', function ($builder1) use ($po_id) {
-                                $builder1->where('companies_id', $po_id->companies_id);
-                            });
-                    },
-                    'bac_reso.bac_reso_items.quotation.quotation' => function ($builder) use ($po_id) {
-                        $builder->where('companies_id', $po_id->companies_id);
-                    },
-                    'bac_reso.bac_reso_items.quotation.pr_item.ppmp.item_detail.unit',
-                    'bac_reso.bac_reso_items.quotation.pr_item.ppmp.milestones'
-                ];
-            } else {
-                $withCond = [
-                    'bac_reso.bac_reso_items.quotation' => function ($builder) use ($po_id) {
-                        $builder->where('offered_unit_price', '<', '50000')
-                            ->where('offered_unit_price', '>=', '5000')
-                            ->whereHas('quotation', function ($builder1) use ($po_id) {
-                                $builder1->where('companies_id', $po_id->companies_id);
-                            });
-                    },
-                    'bac_reso.bac_reso_items.quotation.quotation' => function ($builder) use ($po_id) {
-                        $builder->where('companies_id', $po_id->companies_id);
-                    },
-                    'bac_reso.bac_reso_items.quotation.pr_item.ppmp.item_detail.unit',
-                    'bac_reso.bac_reso_items.quotation.pr_item.ppmp.milestones'
-                ];
-            }
-            $po = PurchaseOrder::with($withCond)
-                ->where('id', $request->purchaseOrderId)
-                ->first();
-            $ctr = 0;
-            foreach ($po->bac_reso->bac_reso_items as $item) {
-                if ($item->quotation !== null) {
-                    // return $item->quotation->quotation;
-                    $eqCode = EquipmentCode::find($request->purchaseOrderItems[$ctr]['equipmentCode']);
+            $poRecord = PurchaseOrder::find($request->purchaseOrderId);
 
-                    $totalQty = 0;
-                    foreach ($item->quotation->pr_item->ppmp->milestones as $m) {
-                        $totalQty += $m->milestone_value;
+            foreach ($request->purchaseOrderItems as $item) {
+                $bacReso = BacResoItem::with(['quotation.quotation' => function($builder) use ($poRecord) {
+                    $builder->where('companies_id', $poRecord->companies_id);
+                }, 'quotation.pr_item.ppmp.milestones'])->where('id', $item['itemId'])->first();
+                
+                if ($bacReso !== null && $bacReso->quotation->quotation !== null) {
+                    
+                    //compute the total quantity of the item
+                    $itemQty = 0;
+                    foreach ($bacReso->quotation->pr_item->ppmp->milestones as $m) {
+                        $itemQty += $m->milestone_value;
                     }
 
+                    //store to database
+                    $eqCode = EquipmentCode::find($item['equipmentCode']);
                     $property_no = sprintf(
                         '%s-%s-%s-%s',
                         date('Y', strtotime($request->dateIssued)),
@@ -411,33 +409,142 @@ class TransactionController extends Controller
                         $eqCode->unique_code,
                         $branch->branch->office_code,
                     );
-
-
                     $new_ics_item = new InventoryTransactionItem([
                         "inventory_transactions_id" => $new_ics->id,
-                        "b_a_c_reso_items_id" => $item->id,
-                        "quantity" => $totalQty,
-                        "unit_price" => $item->quotation->offered_unit_price,
-                        "equipment_codes_id" => $request->purchaseOrderItems[$ctr]['equipmentCode'],
+                        "b_a_c_reso_items_id" => $item['itemId'],
+                        "quantity" => $itemQty,
+                        "unit_price" => $bacReso->quotation->offered_unit_price,
+                        "equipment_codes_id" => $item['equipmentCode'],
                         "property_number" => $property_no,
                     ]);
 
                     $new_ics_item->save();
 
-                    if ($request->purchaseOrderItems[$ctr]['serialNumbers'] !== "" && $request->purchaseOrderItems[$ctr]['serialNumbers'] !== null) {
-                        foreach ($request->purchaseOrderItems[$ctr]['serialNumbers'] as $sn) {
-                            $new_ics_item_sn = new InventoryTransactionItemSerialNumber([
-                                "inventory_transaction_items_id" => $new_ics_item->id,
-                                "serial_number" => $sn,
-                            ]);
+                    for ($qtyCtr = 0; $qtyCtr < $itemQty; $qtyCtr++) {
+                        $new_property = new InventoryTransactionItemProperty([
+                            "inventory_transaction_items_id" => $new_ics_item->id,
+                            "serial_number" => count($item['serialNumbers']) > 0 ? $item['serialNumbers'][$qtyCtr] : "n/a",
+                        ]);
 
-                            $new_ics_item_sn->save();
-                        }
+                        $new_property->save();
+
+                        $current_keeper = new InventoryTransactionItemPropertyCurrentKeeper([
+                            'inventory_transaction_item_properties_id' => $new_property->id,
+                            'supply_end_users_id' => $request->receivedBy,
+                        ]);
+
+                        $current_keeper->save();
                     }
-
-                    $ctr += 1;
+                } else {
+                    DB::rollBack();
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Invalid payload. Please try again.'
+                    ], 400);
                 }
             }
+            
+            // $po_id = PurchaseOrder::find($request->purchaseOrderId);
+            // $withCond = "";
+            // if ($type === "ICSL") {
+            //     $withCond = [
+            //         'bac_reso.bac_reso_items.quotation' => function ($builder) use ($po_id) {
+            //             $builder->where('offered_unit_price', '<', '5000')
+            //                 ->whereHas('quotation', function ($builder1) use ($po_id) {
+            //                     $builder1->where('companies_id', $po_id->companies_id);
+            //                 });
+            //         },
+            //         'bac_reso.bac_reso_items.quotation.quotation' => function ($builder) use ($po_id) {
+            //             $builder->where('companies_id', $po_id->companies_id);
+            //         },
+            //         'bac_reso.bac_reso_items.quotation.pr_item.ppmp.item_detail.unit',
+            //         'bac_reso.bac_reso_items.quotation.pr_item.ppmp.milestones'
+            //     ];
+            // } else {
+            //     $withCond = [
+            //         'bac_reso.bac_reso_items.quotation' => function ($builder) use ($po_id) {
+            //             $builder->where('offered_unit_price', '<', '50000')
+            //                 ->where('offered_unit_price', '>=', '5000')
+            //                 ->whereHas('quotation', function ($builder1) use ($po_id) {
+            //                     $builder1->where('companies_id', $po_id->companies_id);
+            //                 });
+            //         },
+            //         'bac_reso.bac_reso_items.quotation.quotation' => function ($builder) use ($po_id) {
+            //             $builder->where('companies_id', $po_id->companies_id);
+            //         },
+            //         'bac_reso.bac_reso_items.quotation.pr_item.ppmp.item_detail.unit',
+            //         'bac_reso.bac_reso_items.quotation.pr_item.ppmp.milestones'
+            //     ];
+            // }
+            // $po = PurchaseOrder::with($withCond)
+            //     ->where('id', $request->purchaseOrderId)
+            //     ->first();
+            // $ctr = 0;
+            // foreach ($po->bac_reso->bac_reso_items as $item) {
+            //     if ($item->quotation !== null) {
+            //         // return $item->quotation->quotation;
+            //         $eqCode = EquipmentCode::find($request->purchaseOrderItems[$ctr]['equipmentCode']);
+
+            //         $totalQty = 0;
+            //         foreach ($item->quotation->pr_item->ppmp->milestones as $m) {
+            //             $totalQty += $m->milestone_value;
+            //         }
+
+            //         $property_no = sprintf(
+            //             '%s-%s-%s-%s',
+            //             date('Y', strtotime($request->dateIssued)),
+            //             "SE",
+            //             $eqCode->unique_code,
+            //             $branch->branch->office_code,
+            //         );
+
+
+            //         $new_ics_item = new InventoryTransactionItem([
+            //             "inventory_transactions_id" => $new_ics->id,
+            //             "b_a_c_reso_items_id" => $item->id,
+            //             "quantity" => $totalQty,
+            //             "unit_price" => $item->quotation->offered_unit_price,
+            //             "equipment_codes_id" => $request->purchaseOrderItems[$ctr]['equipmentCode'],
+            //             "property_number" => $property_no,
+            //         ]);
+
+            //         $new_ics_item->save();
+
+            //         if (isset($request->purchaseOrderItems[$ctr]['serialNumbers']) && is_array($request->purchaseOrderItems[$ctr]['serialNumbers'])) {
+            //             foreach ($request->purchaseOrderItems[$ctr]['serialNumbers'] as $sn) {
+            //                 $new_property = new InventoryTransactionItemProperty([
+            //                     "inventory_transaction_items_id" => $new_ics_item->id,
+            //                     "serial_number" => $sn,
+            //                 ]);
+
+            //                 $new_property->save();
+
+            //                 $current_keeper = new InventoryTransactionItemPropertyCurrentKeeper([
+            //                     'inventory_transaction_item_properties_id' => $new_property->id,
+            //                     'supply_end_users_id' => $request->receivedBy,
+            //                 ]);
+
+            //                 $current_keeper->save();
+            //             }
+            //         } else {
+            //             for ($itemCtr = 0; $itemCtr < $totalQty; $itemCtr++) {
+            //                 $new_property = new InventoryTransactionItemProperty([
+            //                     "inventory_transaction_items_id" => $new_ics_item->id,
+            //                     "serial_number" => "n/a",
+            //                 ]);
+                            
+            //                 $current_keeper = new InventoryTransactionItemPropertyCurrentKeeper([
+            //                     'inventory_transaction_item_properties_id' => $new_property->id,
+            //                     'supply_end_users_id' => $request->receivedBy,
+            //                 ]);
+
+            //                 $current_keeper->save();
+            //             }
+            //         }
+
+            //         $ctr += 1;
+            //     }
+            // }
 
             $new_issuer = new InventoryTransactionIssuer([
                 "inventory_transactions_id" => $new_ics->id,
@@ -458,13 +565,13 @@ class TransactionController extends Controller
                 'success' => true,
                 'redirect' => route('so-dashboard.show'),
             ], 200);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Something went wrong.'
-            ], 400);
-        }
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'Something went wrong.'
+        //     ], 400);
+        // }
     }
 
     public function all_trans() {

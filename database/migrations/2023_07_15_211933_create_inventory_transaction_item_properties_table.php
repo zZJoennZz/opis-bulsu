@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('inventory_transfer_issuers', function (Blueprint $table) {
+        Schema::create('inventory_transaction_item_properties', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('inventory_transfers_id');
-            $table->unsignedBigInteger('supply_end_users_id');
+            $table->unsignedBigInteger('inventory_transaction_items_id');
+            $table->string('serial_number')->nullable();
             $table->timestamps();
-
-            $table->foreign('inventory_transfers_id')->references('id')->on('inventory_transfers');
-            $table->foreign('supply_end_users_id')->references('id')->on('supply_end_users');
         });
     }
 
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('inventory_transfer_issuers');
+        Schema::dropIfExists('inventory_transaction_item_properties');
     }
 };
