@@ -7,11 +7,13 @@ use App\Models\EquipmentCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class EquipmentCodesController extends Controller
 {
     //
-    public function all(){
+    public function all()
+    {
         $equipment_codes = EquipmentCode::all();
         return view('so-dashboard/manage-equipment-code')
             ->with('equipment_codes', $equipment_codes);
@@ -21,12 +23,13 @@ class EquipmentCodesController extends Controller
     {
         try {
 
-        DB::beginTransaction();
+            DB::beginTransaction();
 
             $new_equipment_code = new EquipmentCode();
             $new_equipment_code->unique_code = $request->unique_code;
             $new_equipment_code->equipment_code = $request->equipment_code;
             $new_equipment_code->description = $request->description;
+            $new_equipment_code->article = $request->article;
             $new_equipment_code->added_by = Auth::user()->id;
             $new_equipment_code->save();
             DB::commit();
@@ -50,7 +53,8 @@ class EquipmentCodesController extends Controller
         $validator = Validator::make($request->all(), [
             'unique_code' => ['required', 'string', 'max:255'],
             'equipment_code' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255']
+            'description' => ['required', 'string', 'max:255'],
+            'article' => ['required', 'string', 'max:255']
         ]);
 
         if ($validator->fails()) {
@@ -60,11 +64,12 @@ class EquipmentCodesController extends Controller
 
 
         $UpdateEquipmentCode = EquipmentCode::find($equipment_code_id);
-            DB::beginTransaction();
-            try {
+        DB::beginTransaction();
+        try {
             $UpdateEquipmentCode->unique_code = $request->unique_code;
             $UpdateEquipmentCode->equipment_code = $request->equipment_code;
-            $UpdateEquipmentCode->description = $request->description; 
+            $UpdateEquipmentCode->description = $request->description;
+            $UpdateEquipmentCode->article = $request->article;
             $UpdateEquipmentCode->save();
 
             DB::commit();
@@ -73,13 +78,12 @@ class EquipmentCodesController extends Controller
             return response()->json([
                 'success' => true,
             ], 200);
-
-            } catch (Throwable $e) {
-                DB::rollBack();
-                return response()->json([
-                    'success' => false,
-                ], 400);
-            }
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+            ], 400);
+        }
     }
 
     public function delete_single($equipment_code_id)
@@ -121,6 +125,4 @@ class EquipmentCodesController extends Controller
             ], 400);
         }
     }
-
-
 }

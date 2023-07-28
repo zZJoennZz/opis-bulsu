@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('equipment_code');
             $table->string('unique_code');
             $table->string('description');
+            $table->string('article')->default('NON_SEMI_EXPENDABLE');
             $table->boolean('is_delete')->default(0);
             $table->unsignedBigInteger('added_by');
             $table->timestamps();

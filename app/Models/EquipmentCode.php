@@ -12,6 +12,7 @@ class EquipmentCode extends Model
         'equipment_code',
         'unique_code',
         'description',
+        'article', //ONLY SEMI-EXPENDABLE and NON-SEMI-EXPENDABLE for now
         'is_delete',
         'added_by',
     ];
