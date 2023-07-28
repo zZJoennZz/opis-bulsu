@@ -83,7 +83,7 @@ class UserController extends Controller
                 DB::commit();
                 return redirect()
                     ->back()
-                    ->with('success', 'New user successfully added! Please let them know to reset the password first to setup the account!');
+                    ->with('success', 'New user successfully added! Please let them know to reset the password first to setup the account password!');
             } catch (Throwable $e) {
                 DB::rollBack();
                 return redirect()
@@ -186,6 +186,15 @@ class UserController extends Controller
         } catch (Throwable $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(['Account details changes not saved.']);
+        }
+    }
+
+    public function delete_user($id)
+    {
+        try {
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['Account failed to delete.']);
         }
     }
 }

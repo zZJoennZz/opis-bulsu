@@ -3,27 +3,78 @@
 namespace App\Http\Controllers;
 
 use App\Models\InventoryTransaction;
+use App\Models\InventoryTransactionItem;
+use App\Models\InventoryTransactionItemProperty;
+use App\Models\InventoryTransactionItemPropertyCurrentKeeper;
 use App\Models\PropertyTransfer;
+use App\Models\PropertyTransferIssuer;
+use App\Models\PropertyTransferProperty;
+use App\Models\PropertyTransferReceiver;
+use App\Models\SupplyEndUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TransferController extends Controller
 {
-    public function all_transfers() {
+    public $notApplicableVariants = [
+        'N/A',
+        'Not Applicable',
+        'n/a',
+        'NA',
+        'na',
+        'N.A.',
+        'n.a.',
+        'N/Appl.',
+        'n/appl.',
+        'not applicable',
+        'not available',
+        'not apply',
+        'Not Apply',
+        'no data',
+        'No Data',
+        'Nill',
+        'None or Not Applicable',
+        'nill',
+        '--',
+        'TBD',
+        'To Be Determined',
+        'tbd',
+        'TBA',
+        'To Be Announced',
+        'tba',
+        'TBC',
+        'To Be Confirmed',
+        'tbc',
+        'N/S',
+        'Not Specified',
+        'n/s',
+        'N/R',
+        'Not Required',
+        'n/r',
+        'N/D',
+        'n/d',
+        'N/V',
+        'Not Valid',
+        'n/v',
+    ];
+
+    public function all_transfers()
+    {
         $allTransfers = PropertyTransfer::all();
 
         return view('so-dashboard.all-transfers')
             ->with('allTransfers', $allTransfers);
     }
 
-    public function all_ics() {
+    public function all_ics()
+    {
         // return InventoryTransaction::with(['purchase_order', 'items.bac_reso_item', 'issuers', 'receivers', 'items.properties.transfers'])
-        // ->where('type', '<>', 'PAR')    
+        // ->where('type', '<>', 'PAR')
         // ->get();
         try {
             $ics = InventoryTransaction::with(['purchase_order', 'items.bac_reso_item', 'issuers', 'receivers', 'items.properties.transfers'])
-                ->where('type', '<>', 'PAR')    
+                ->where('type', '<>', 'PAR')
                 ->get();
 
             return view('so-dashboard.all-ics')
@@ -34,10 +85,11 @@ class TransferController extends Controller
         }
     }
 
-    public function all_par() {
+    public function all_par()
+    {
         try {
             $par = InventoryTransaction::with(['purchase_order', 'items.bac_reso_item', 'items.serial_numbers', 'issuers', 'receivers', 'items.transfers'])
-                ->where('type', 'PAR')    
+                ->where('type', 'PAR')
                 ->get();
 
             return view('so-dashboard.all-par')
@@ -46,225 +98,130 @@ class TransferController extends Controller
             return redirect()->route('dashboard.show');
         }
     }
-    public function prepare($itemId) {
-        $inventoryItem = InventoryTransactionItem::find($itemId);
 
-        $getAllTransfers = $inventoryItem->transfers;
+    public function transfer_ics($id)
+    {
+        try {
+            $icsItem = InventoryTransactionItem::whereHas('properties', function ($builder) {
+                $builder->doesntHave('transfers');
+            })
+                ->where('id', $id)
+                ->with(['properties' => function ($builder) {
+                    $builder->doesntHave('transfers');
+                }, 'bac_reso_item.quotation.pr_item.ppmp.item_detail.unit'])
+                ->first();
 
-        if ($inventoryItem->quantity === count($getAllTransfers)) {
-            return redirect()
-                ->back()
-                ->withErrors(['Items are already transferred.']);
+            $endUsers = SupplyEndUser::all();
+            return view('so-dashboard.transfer-ics')
+                ->with('icsItem', $icsItem)
+                ->with('endUsers', $endUsers);
+        } catch (\Exception $e) {
+            return redirect()->route('dashboard.show');
         }
-
-        $supplyEndUsers = SupplyEndUser::all();
-        return view('so-dashboard.prepare-item-transfer')
-            ->with('inventoryItem', $inventoryItem)
-            ->with('supplyEndUsers', $supplyEndUsers);
     }
 
-    public function submit_transfer(Request $request, $itemId)
+    public function post_transfer_ics(Request $request, $id)
     {
-        $getItem = InventoryTransactionItem::find($itemId);
-        
+        //Validate the inputs of the users.
+        // TODO: do the other inputs and other references to other tables if valid for the user.
         $request->validate([
-            'issuer' => [
-                'required',
-                'exists:supply_end_users,id',
-                'not_in:' . $request->receiver,
-            ],
-            'receiver' => [
-                'required',
-                'exists:supply_end_users,id',
-                'not_in:' . $request->issuer,
-            ],
-            'serialNumbers' => 'array',
-            'serialNumbers.*' => 'exists:inventory_transaction_item_serial_numbers,id',
-            'reason' => 'required|max:255',
-            'quantity' => [
-                'required',
-                'integer',
-                'min:1',
-                'max:'.$getItem->quantity,
-            ],
+            'selected_serial_numbers.*' => 'array|exists:inventory_transaction_item_properties,id',
+            'quantity' => 'integer|numeric|required',
+            'reason' => 'required',
+            'receiver' => 'required|exists:supply_end_users,id'
         ]);
-        
-        $serialNumbers = $request->input('serialNumbers', []);
-        
-        $isSerialAlreadyTransferred = InventoryTransactionItemSerialNumber::whereIn('id', $serialNumbers)
-            ->has('current_end_user')
-            ->count();
-        
-        if ($isSerialAlreadyTransferred > 0) {
-            return redirect()
-                ->back()
-                ->withErrors(['Selected item/s under selected serial number/s is/are already transferred.']);
-        }
-        
-        $checkIfItemHasSerialNumbers = InventoryTransactionItem::where('id', $itemId)
-            ->has('serial_numbers')
-            ->count();
-            
-        $checkIfSerialNumbersAreValid = InventoryTransactionItemSerialNumber::where('inventory_transaction_items_id', $itemId)
-            ->whereIn('id', $serialNumbers)
-            ->count();
-        
-        $isSerialRequired = $checkIfItemHasSerialNumbers > 0 ? true : false;
-        $isSelectedSerialNumbersValid = $checkIfSerialNumbersAreValid === count($serialNumbers) ? true : false;
-        
-        if ($isSerialRequired && !$isSelectedSerialNumbersValid) {
-            return redirect()
-                ->back()
-                ->withErrors(['Invalid serial numbers.']);
-        }
-        
-        if ($isSerialRequired && count($serialNumbers) !== intval($request->quantity)) {
-            return redirect()
-                ->back()
-                ->withErrors(['Please select the same amount of serial numbers relative to quantity.']);
-        }
-        
+
         try {
             DB::beginTransaction();
-            
-            $latest_transfer = InventoryTransfer::whereYear('created_at', date('Y'))
-                ->latest()
+
+            //PTR number builder
+            $latestPt = PropertyTransfer::latest()
                 ->first();
-                
-            $latest_transfer_ctr = $latest_transfer === null ? 1 : intval(substr($latest_transfer->number, 9, 3)) + 1;
-            
-            $ptr_number = date('Y') . "-" . date('m') . "-" . str_pad($latest_transfer_ctr, 3, '0', STR_PAD_LEFT);
-            
-            $newTransfer = InventoryTransfer::create([
-                'number' => $ptr_number,
-                'reason' => $request->reason,
+
+            $ptNumCtr = $latestPt === null ? 1 : intval(substr($latestPt->number, 9, 4)) + 1;
+
+            $ptNumber = sprintf(
+                '%s-%s-%s',
+                date('Y'),
+                date('m'),
+                str_pad($ptNumCtr, 4, '0', STR_PAD_LEFT),
+            );
+
+            $newProperty = new PropertyTransfer([
+                'inventory_transaction_items_id' => $id,
+                'number' => $ptNumber,
                 'quantity' => $request->quantity,
-                'inventory_transaction_items_id' => $itemId,
+                'reason' => $request->reason,
                 'added_by' => Auth::user()->id,
             ]);
-            
-            InventoryTransferIssuer::create([
-                'inventory_transfers_id' => $newTransfer->id,
-                'supply_end_users_id' => $request->issuer,
+            $newProperty->save();
+
+            //Fetching the itemss + properties so we can get the available properties and also to check if the property have a valid serial number. In case it's n/a, we will just get random properties that are available.
+            $itemWithProperties = InventoryTransactionItem::with(['properties' => function ($builder) {
+                $builder
+                    ->doesntHave('transfers')
+                    ->whereIn('serial_number', $this->notApplicableVariants);
+            }, 'transaction.receivers'])
+                ->find($id);
+
+            $newPropertyTransferIssuer = new PropertyTransferIssuer([
+                'property_transfers_id' => $newProperty->id,
+                'supply_end_users_id' => $itemWithProperties->transaction->receivers[0]->supply_end_users_id,
             ]);
-            
-            InventoryTransferReceiver::create([
-                'inventory_transfers_id' => $newTransfer->id,
+            $newPropertyTransferIssuer->save();
+
+            $newPropertyTransferReceiver = new PropertyTransferReceiver([
+                'property_transfers_id' => $newProperty->id,
                 'supply_end_users_id' => $request->receiver,
             ]);
-            
-            if ($isSerialRequired) {
-                foreach ($serialNumbers as $serialNumber) {
-                    InventoryTransferItem::create([
-                        'inventory_transfers_id' => $newTransfer->id,
-                        'inventory_transaction_item_serial_numbers_id' => $serialNumber,
+            $newPropertyTransferReceiver->save();
+
+            if ($itemWithProperties->properties->isEmpty()) {
+                //save the properties with serial numbers here
+                if (count(json_decode($request->selected_serial_numbers)) === $request->quantity) {
+                    foreach (json_decode($request->selected_serial_numbers) as $serialNumber) {
+                        $newPropertyTransferProperty = new PropertyTransferProperty([
+                            'property_transfers_id' => $newProperty->id,
+                            'inventory_transaction_item_properties_id' => $serialNumber,
+                        ]);
+                        $newPropertyTransferProperty->save();
+
+                        InventoryTransactionItemPropertyCurrentKeeper::where('inventory_transaction_item_properties_id', $serialNumber)->delete();
+
+                        $newKeeper = new InventoryTransactionItemPropertyCurrentKeeper([
+                            'inventory_transaction_item_properties_id' => $serialNumber,
+                            'supply_end_users_id' => $request->receiver,
+                        ]);
+                        $newKeeper->save();
+                    }
+                } else {
+                    DB::rollBack();
+                    throw new \UnexpectedValueException();
+                }
+            } else {
+                //save the properties without serial numbers
+                //we will be looping through the available properties instead of specific properties
+                for ($i = 0; $i < $request->quantity; $i++) {
+                    $newPropertyTransferProperty = new PropertyTransferProperty([
+                        'property_transfers_id' => $newProperty->id,
+                        'inventory_transaction_item_properties_id' => $itemWithProperties->properties[$i]->id,
                     ]);
+                    $newPropertyTransferProperty->save();
+
+                    InventoryTransactionItemPropertyCurrentKeeper::where('inventory_transaction_item_properties_id', $itemWithProperties->properties[$i]->id)->delete();
+
+                    $newKeeper = new InventoryTransactionItemPropertyCurrentKeeper([
+                        'inventory_transaction_item_properties_id' => $itemWithProperties->properties[$i]->id,
+                        'supply_end_users_id' => $request->receiver,
+                    ]);
+                    $newKeeper->save();
                 }
             }
-            
             DB::commit();
-
-            $routeAfterSubmission = "";
-            if ($getItem->transaction->type === "PAR") {
-                $routeAfterSubmission = "par.all";
-            } else {
-                $routeAfterSubmission = "ics.all";
-            }
-            
-            return redirect()
-                ->route($routeAfterSubmission)
-                ->with('success', 'Property successfully transferred.');
+            return redirect()->route('transfers.all')->with('success', 'Property transfer has been successfully processed.');
         } catch (\Exception $e) {
             DB::rollBack();
-            
-            return redirect()
-                ->back()
-                ->withErrors(['Something went wrong. Please try again or contact the web developer.']);
+            return redirect()->back()->withErrors(['Please check your inputs if correct. If the problem persists please contact the administrator.']);
         }
     }
-
-
-    // public function submit_transfer(Request $request, $itemId) {
-    //     //validating the transfer request inputs
-    //     $getItem = InventoryTransactionItem::find($itemId);
-    //     $request->validate([
-    //         'issuer' => 'required|exists:supply_end_users,id|not_in:' . $request->receiver,
-    //         'receiver' => 'required|exists:supply_end_users,id|not_in:' . $request->issuer,
-    //         'serialNumbers' => 'array',
-    //         'serialNumbers.*' => 'exists:inventory_transaction_item_serial_numbers,id',
-    //         'reason' => 'required|max:255',
-    //         'quantity' => 'required|integer|min:1|max:'.$getItem->quantity,
-    //     ]);
-    //     $serialNumbers = $request->serialNumbers ?? [];
-    //     $isSerialAlreadyTransferred = InventoryTransactionItemSerialNumber::whereIn('id', $serialNumbers)->has('current_end_user')->get();
-    //     if (count($isSerialAlreadyTransferred) > 0) {
-    //         return redirect()->back()->withErrors(['Selected item/s under selected serial number/s is/are already transferred.']);
-    //     }
-        
-    //     $checkIfItemHasSerialNumbers = InventoryTransactionItem::where('id', $itemId)->has('serial_numbers')->get();
-    //     $checkIfSerialNumbersAreValid = InventoryTransactionItemSerialNumber::where('inventory_transaction_items_id', $itemId)->whereIn('id', $serialNumbers)->get();
-    //     $isSerialRequired = count($checkIfItemHasSerialNumbers) > 0 ? true : false;
-    //     $isSelectedSerialNumbersValid = count($checkIfSerialNumbersAreValid) === count($serialNumbers) ? true : false;
-    //     if ($isSerialRequired && !$isSelectedSerialNumbersValid) {
-    //         return redirect()->back()->withErrors(['Invalid serial numbers.']);
-    //     }
-        
-    //     if ($isSerialRequired && (count($serialNumbers) !== intval($request->quantity))) {
-    //         return redirect()->back()->withErrors(['Please select same amount of serial numbers relative to quantity.']);
-    //     }
-
-    //     //begin transfer
-    //     try {
-    //         DB::beginTransaction();
-    //         //ptr number builder
-    //         $latest_transfer = InventoryTransfer::where((DB::raw('YEAR(created_at)')), date('Y'))
-    //             ->latest()
-    //             ->first();
-
-    //         $latest_transfer_ctr = $latest_transfer === null ? 1 : intval(substr($latest_transfer->number, 9, 3)) + 1;
-
-    //         $ptr_number = date('Y') . "-" . date('m') . "-" . str_pad($latest_transfer_ctr, 3, '0', STR_PAD_LEFT);
-
-    //         $newTransfer = new InventoryTransfer([
-    //             'number' => $ptr_number,
-    //             'reason' => $request->reason,
-    //             'quantity' => $request->quantity,
-    //             'inventory_transaction_items_id' => $itemId,
-    //             'added_by' => Auth::user()->id,
-    //         ]);
-    //         $newTransfer->save();
-
-    //         $newIssuer = new InventoryTransferIssuer([
-    //             'inventory_transfers_id' => $newTransfer->id,
-    //             'supply_end_users_id' => $request->issuer,
-    //         ]);
-    //         $newIssuer->save();
-
-    //         $newReceiver = new InventoryTransferReceiver([
-    //             'inventory_transfers_id' => $newTransfer->id,
-    //             'supply_end_users_id' => $request->receiver
-    //         ]);
-    //         $newReceiver->save();
-
-    //         if ($isSerialRequired) {
-    //             for ($i = 0; $i < $request->quantity; $i++) {
-    //                 $newItem = new InventoryTransferItem([
-    //                     'inventory_transfers_id' => $newTransfer->id,
-    //                     'inventory_transaction_item_serial_numbers_id' => $request->serialNumbers[$i],
-    //                 ]);
-    //                 $newItem->save();
-    //             }
-    //         }
-            
-    //         DB::commit();
-    //         return redirect()
-    //             ->route('ics.all')
-    //             ->with('success', 'Property successfully transferred.');
-    //     } catch (\Exception $e) {
-    //         DB::rollBack();
-    //         return redirect()
-    //             ->back()
-    //             ->withErrors(['Something went wrong. Please try again or contact web developer.']);
-    //     }
-    // }
 }

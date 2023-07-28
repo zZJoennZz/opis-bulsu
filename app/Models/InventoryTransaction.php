@@ -39,7 +39,8 @@ class InventoryTransaction extends Model
         return $this->hasMany(InventoryTransactionReceiver::class, 'inventory_transactions_id', 'id');
     }
 
-    public function branch() {
+    public function branch()
+    {
         return $this->hasOne(Branch::class, 'id', 'branches_id');
     }
 }

@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "eienn/opis-app",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "The eProcurement system for BulSU.",
     "keywords": [
         "framework",
         "laravel"

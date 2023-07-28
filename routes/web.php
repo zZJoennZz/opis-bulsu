@@ -305,6 +305,13 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/purchase-order/api/{iar_id?}', [PurchaseOrderController::class, 'get_by_iar'])->name('po_by_iar.get');
     Route::get('/bac_reso_item/{id?}', [BacResoController::class, 'get_single_by_id'])->name('bac_reso_item.get');
 
+    //transfers
+    Route::get('/transfer', function () {
+        return redirect()->route('transfers.all');
+    });
+    Route::get('/transfer/{id?}', [TransferController::class, 'transfer_ics'])->name('transfer_ics.get');
+    Route::post('/transfer/{id?}', [TransferController::class, 'post_transfer_ics'])->name('transfer_ics.perform');
+
     //manage end users
     Route::get('/manage-end-user', [SupplyEndUserController::class, 'all'])->name('supply-end-user.all');
     Route::post('/manage-end-user', [SupplyEndUserController::class, 'post_add'])->name('supply-end-user.post_add');
@@ -331,12 +338,17 @@ Route::middleware('supply.office')->group(function () {
 
     Route::get('/purchase-order/{id?}/{type?}', [PurchaseOrderController::class, 'get_by_id'])->name('po.get-single');
 
+    Route::get('/inventory-custodian-slip', function () {
+        return redirect()->route('trans.all');
+    });
     Route::get('/inventory-custodian-slip-l', [TransactionController::class, 'add_ics_l'])->name('icsl.add');
     Route::get('/inventory-custodian-slip-h', [TransactionController::class, 'add_ics_h'])->name('icsh.add');
     Route::post('/inventory-custodian-slip/{type?}', [TransactionController::class, 'save_ics'])->name('ics.save');
+    Route::get('/inventory-custodian-slip/{id?}', [TransactionController::class, 'print_ics'])->name('ics.print');
 
     Route::get('/property-acknowledgment-receipt', [TransactionController::class, 'add_par'])->name('par.add');
     Route::post('/property-acknowledgment-receipt', [TransactionController::class, 'save_par'])->name('par.save');
+    Route::get('/property-acknowledgment-receipt/{id?}', [TransactionController::class, 'print_par'])->name('par.print');
 
     Route::get('/all-transactions', [TransactionController::class, 'all_trans'])->name('trans.all');
 
@@ -347,15 +359,10 @@ Route::middleware('supply.office')->group(function () {
     Route::put('/manage-equipment-code/{equipment_code_id}', [EquipmentCodesController::class, 'update']);
     Route::delete('/manage-equipment-code/single/{equipment_code_id}', [EquipmentCodesController::class, 'delete_single']);
     Route::post('/manage-equipment-code/batch', [EquipmentCodesController::class, 'delete_batch'])->name('equipmentcode.delete_batch');
-    
+
     Route::get('/all-ics', [TransferController::class, 'all_ics'])->name('ics.all');
     Route::get('/all-par', [TransferController::class, 'all_par'])->name('par.all');
-    Route::get('/all-transfers', [TransferController::class, 'all_transfers'])->name('transfers.all');
-    Route::get('/prepare-transfer', function() {
-        return redirect()->route('dashboard.show');
-    });
-    Route::get('/prepare-transfer/{itemId?}', [TransferController::class, 'prepare'])->name('prepare-transfer.show');
-    Route::post('/prepare-transfer/{itemId?}', [TransferController::class, 'submit_transfer'])->name('transfer.submit');
+    Route::get('/transfers', [TransferController::class, 'all_transfers'])->name('transfers.all');
 });
 
 //ADMIN ONLY

@@ -1,110 +1,134 @@
 <x-dashboard-layout>
     <x-slot:title>
         {{$item_detail[0]->description}}
-    </x-slot>
+        </x-slot>
 
-    @php
+        @php
         $breadcrumb = [
-            ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-            ['name' => 'Add <span class="badge bg-primary">' . $item_detail[0]->description . '</span> to cart']
+        ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+        ['name' => 'Add <span class="badge bg-primary">' . $item_detail[0]->description . '</span> to cart']
         ]
-    @endphp
+        @endphp
 
-    <x-breadcrumb :breadcrumb="$breadcrumb" />
-    <div class="row">
-        <div class="col-lg-6 col-md-12">
-            <div class="fs-3 mb-3">Order Item Details</div>
-            <div class="mb-3">
-                <label for="ppmp_year" class="form-label fw-bold">PPMP Year:</label>
-                <input type="text" class="form-control" id="ppmp_year" value="{{ $ppmp_year }}" readonly>
+        <x-breadcrumb :breadcrumb="$breadcrumb" />
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <div class="fs-3 mb-3">Order Item Details</div>
+                <div class="mb-3">
+                    <label for="ppmp_year" class="form-label fw-bold">PPMP Year:</label>
+                    <input type="text" class="form-control" id="ppmp_year" value="{{ $ppmp_year }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label fw-bold">Description:</label>
+                    <input type="text" class="form-control" id="description" value="{{ $item_detail[0]->description }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="ppmp_year" class="form-label fw-bold">Price:</label>
+                    <input type="text" class="form-control" id="ppmp_year" value="{{ $item_detail[0]->price_catalogue }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="uom" class="form-label fw-bold">Unit of Measurement:</label>
+                    <input type="text" class="form-control" id="uom" value="{{ $item_detail[0]->uom }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="cat_desc" class="form-label fw-bold">Category:</label>
+                    <input type="text" class="form-control" id="cat_desc" value="{{ $item_detail[0]->cat_desc }}" readonly>
+                </div>
+                <div class="mb-3">
+                    <a href={{ route('view-item-detail.show',['item_detail_id'=> $item_detail[0]->id]) }} class="btn btn-link" style="font-size:
+                        0.8rem;"><em class="bi bi-pencil-square"></em> Edit this item</a>
+                </div>
             </div>
-            <div class="mb-3">
-                <label for="description" class="form-label fw-bold">Description:</label>
-                <input type="text" class="form-control" id="description" value="{{ $item_detail[0]->description }}" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="ppmp_year" class="form-label fw-bold">Price:</label>
-                <input type="text" class="form-control" id="ppmp_year" value="{{ $item_detail[0]->price_catalogue }}" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="uom" class="form-label fw-bold">Unit of Measurement:</label>
-                <input type="text" class="form-control" id="uom" value="{{ $item_detail[0]->uom }}" readonly>
-            </div>
-            <div class="mb-3">
-                <label for="cat_desc" class="form-label fw-bold">Category:</label>
-                <input type="text" class="form-control" id="cat_desc" value="{{ $item_detail[0]->cat_desc }}" readonly>
-            </div>
-            <div class="mb-3">
-                <a href={{ route('view-item-detail.show',['item_detail_id' => $item_detail[0]->id]) }} class="btn btn-link" style="font-size: 0.8rem;"><em class="bi bi-pencil-square"></em> Edit this item</a>
-            </div>
-        </div>
-        <div class="col-lg-6 col-md-12">
-            <form action="{{ route('item-detail-single.add', request()->segment(count(request()->segments()))) }}" method="POST">
-                @csrf
-                <div class="row">
-                    {{-- <div class="col-lg-4 col-md-12 mb-3">
-                        <div class="mb-3">
-                            <label for="source_of_funds_id" class="form-label fw-bold">Source of Fund:</label>
-                            <select class="form-select" id="source_of_funds_id" name="source_of_funds_id" aria-label="Purpose of the item">
-                                @foreach ($source_of_funds as $source)
+            <div class="col-lg-6 col-md-12">
+                <form action="{{ route('item-detail-single.add', request()->segment(count(request()->segments()))) }}" method="POST">
+                    @csrf
+                    <div class="row">
+                        {{-- <div class="col-lg-4 col-md-12 mb-3">
+                            <div class="mb-3">
+                                <label for="source_of_funds_id" class="form-label fw-bold">Source of Fund:</label>
+                                <select class="form-select" id="source_of_funds_id" name="source_of_funds_id" aria-label="Purpose of the item">
+                                    @foreach ($source_of_funds as $source)
                                     <option value="{{$source->id}}">{{$source->source_of_fund}}</option>
-                                @endforeach
-                            </select>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div> --}}
+                        {{-- <div class="col-lg-8 col-md-12 mb-3"> replaced by div below --}}
+                            <div class="col-12 mb-3">
+                                <div class="mb-3">
+                                    <label for="item_purposes_id" class="form-label fw-bold">Purpose:</label>
+                                    <select class="form-select" id="item_purposes_id" name="item_purposes_id" aria-label="Purpose of the item">
+                                        @foreach ($item_purposes as $purpose)
+                                        <option value="{{$purpose->id}}">{{$purpose->description}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div> --}}
-                    {{-- <div class="col-lg-8 col-md-12 mb-3"> replaced by div below --}}
-                    <div class="col-12 mb-3">
-                        <div class="mb-3">
-                            <label for="item_purposes_id" class="form-label fw-bold">Purpose:</label>
-                            <select class="form-select" id="item_purposes_id" name="item_purposes_id" aria-label="Purpose of the item">
-                                @foreach ($item_purposes as $purpose)
-                                    <option value="{{$purpose->id}}">{{$purpose->description}}</option>
-                                @endforeach
-                            </select>
+                        <div class="row">
+                            <div class="col-12 mb-1">
+                                <p class="fw-bold">Milestone of Activities:</p>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 mb-1">
-                        <p class="fw-bold">Milestone of Activities:</p>
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    @foreach (json_decode($ppmp_format) as $format)
-                        <div class="col-lg-4 col-md-12 mb-1 d-flex" style="align-items: center; justify-content: center;">
-                            <label class="me-2"  style="max-width:50px;width:100%;" for="{{ $format->id }}">{{ $format->name }}:</label>
-                            <input class="w-100 form-control py-1" type="number" id="{{ $format->id }}" name="{{ $format->id }}" value="0" min="0" required />
+                        <div class="row mb-3">
+                            @foreach (json_decode($ppmp_format) as $format)
+                            <div class="col-lg-4 col-md-12 mb-1 d-flex" style="align-items: center; justify-content: center;">
+                                <label class="me-2" style="max-width:50px;width:100%;" for="{{ $format->id }}">{{ $format->name }}:</label>
+                                <input class="w-100 form-control py-1 milestone_values" type="number" id="{{ $format->id }}" name="{{ $format->id }}"
+                                    value="0" min="0" required />
+                            </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <label for="estimated_budget" class="form-label fw-bold">Estimated Budget:</label>
-                        <input type="text" class="form-control" name="estimated_budget" id="estimated_budget" required>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-3 col-md-12 mb-3 d-flex" style="align-items: center; justify-content: center;">
-                        <input class="form-check-input me-2" type="checkbox" value="yes" id="is_priority" name="is_priority">
-                        <label class="form-check-label" for="is_priority">
-                            Is Priority?
-                        </label>
-                    </div>
-                    <div class="col-lg-9 col-md-12 mb-3">
-                        <label for="remarks" class="form-label fw-bold">Remarks:</label>
-                        <input type="text" class="form-control" name="remarks" id="remarks">
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 d-flex" style="justify-content: end">
-                        <button type="submit" class="btn btn-primary me-2">Add to PPMP Cart</button>
-                        <a href="/dashboard" class="btn btn-danger">Cancel</a>
-                    </div>
-                </div>
-            </form>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="estimated_budget" class="form-label fw-bold">Estimated Budget:</label>
+                                <input type="text" class="form-control" name="estimated_budget" id="estimated_budget" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-12 mb-3 d-flex" style="align-items: center; justify-content: center;">
+                                <input class="form-check-input me-2" type="checkbox" value="yes" id="is_priority" name="is_priority">
+                                <label class="form-check-label" for="is_priority">
+                                    Is Priority?
+                                </label>
+                            </div>
+                            <div class="col-lg-9 col-md-12 mb-3">
+                                <label for="remarks" class="form-label fw-bold">Remarks:</label>
+                                <input type="text" class="form-control" name="remarks" id="remarks">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 d-flex" style="justify-content: end">
+                                <button type="submit" class="btn btn-primary me-2">Add to PPMP Cart</button>
+                                <a href="/dashboard" class="btn btn-danger">Cancel</a>
+                            </div>
+                        </div>
+                </form>
+            </div>
         </div>
-    </div>
-    <x-slot:additional_script>
+        <x-slot:additional_script>
+            <script>
+                // Function to update the estimated_budget field
+                function updateEstimatedBudget() {
+                    let totalBudget = 0;
+                    const ppmpFormatFields = document.querySelectorAll('.milestone_values');
+                    
+                    ppmpFormatFields.forEach(field => {
+                        totalBudget += parseFloat(field.value) || 0;
+                    });
+                    
+                    const estimatedBudgetField = document.getElementById('estimated_budget');
+                    estimatedBudgetField.value = {{ $item_detail[0]->price_catalogue }} * totalBudget.toFixed(2);
+                }
+                
+                // Add event listeners to each ppmp_format field
+                const ppmpFormatFields = document.querySelectorAll('.milestone_values');
+                ppmpFormatFields.forEach(field => {
+                    field.addEventListener('change', updateEstimatedBudget);
+                });
 
-    </x-slot>
+                // Initial update of the estimated_budget field on page load
+                updateEstimatedBudget();
+            </script>
+            </x-slot>
 </x-dashboard-layout>

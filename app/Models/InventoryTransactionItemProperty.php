@@ -13,11 +13,18 @@ class InventoryTransactionItemProperty extends Model
         'serial_number',
     ];
 
-    public function current_owners() {
+    public function item()
+    {
+        return $this->belongsTo(InventoryTransactionItem::class, 'inventory_transaction_items_id', 'id');
+    }
+
+    public function current_owners()
+    {
         return $this->hasMany(InventoryTransactionItemPropertyCurrentKeeper::class, 'id', 'inventory_transaction_item_properties_id');
     }
 
-    public function transfers() {
-        return $this->hasMany(PropertyTransfer::class, 'inventory_transaction_item_properties_id', 'id');
+    public function transfers()
+    {
+        return $this->hasMany(PropertyTransferProperty::class, 'inventory_transaction_item_properties_id', 'id');
     }
 }

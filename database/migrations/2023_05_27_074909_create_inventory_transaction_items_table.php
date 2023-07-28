@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('inventory_transactions_id');
             $table->unsignedBigInteger('b_a_c_reso_items_id');
             $table->integer('quantity');
-            $table->decimal('unit_price');
+            $table->double('unit_price');
             $table->unsignedBigInteger('equipment_codes_id');
             $table->string('property_number');
             $table->timestamps();

@@ -13,4 +13,9 @@ class PropertyTransferIssuer extends Model
         'property_transfers_id',
         'supply_end_users_id',
     ];
+
+    public function end_user()
+    {
+        return $this->hasOne(SupplyEndUser::class, 'id', 'supply_end_users_id');
+    }
 }

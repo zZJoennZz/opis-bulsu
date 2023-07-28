@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('year');
             $table->string('type');
-            $table->decimal('abc');
+            $table->double('abc');
             $table->unsignedBigInteger('purchase_requests_id');
             $table->string('bac_chairman');
             $table->string('vice_chairman');
