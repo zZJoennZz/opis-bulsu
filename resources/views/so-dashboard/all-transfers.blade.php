@@ -16,12 +16,11 @@
                 <caption>All Property Transfers</caption>
                 <thead style="font-size: 11px;">
                     <tr>
-                        <th style="width: 30%;">Details</th>
-                        <th>Transfer Date</th>
-                        <th>Issued By</th>
-                        <th>Received By</th>
-                        <th>College</th>
-                        <th>Reason for transfer</th>
+                        <th style="width: 30%;">Item Detail</th>
+                        <th style="width: 10%;">Transfer Date</th>
+                        <th style="width: 20%;">Issued By</th>
+                        <th style="width: 20%;">Received By</th>
+                        <th style="width: 20%;">College</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,21 +29,10 @@
                         <td>
                             <div>
                                 <div><span class="badge bg-secondary">{{ $transfer->number }}</span></div>
-                                <div class="fw-bold mb-2">
-                                    {{ $transfer->item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}
-                                </div>
-                                <div>
-                                    <div class="text-muted text-uppercase" style="font-size: 11px;">Quantity Transferred:</div>
-                                    <div>{{ $transfer->quantity }}</div>
-                                </div>
-                                <div>
-                                    <div class="text-muted text-uppercase" style="font-size: 11px;">Unit Cost:</div>
-                                    <div>₱ {{ number_format($transfer->item->bac_reso_item->quotation->offered_unit_price, 2) }}</div>
-                                </div>
-                                <div>
-                                    <div class="text-muted text-uppercase" style="font-size: 11px;">Total Cost:</div>
-                                    <div>₱ {{ number_format($transfer->item->bac_reso_item->quotation->offered_unit_price * $transfer->quantity, 2) }}
-                                    </div>
+                                <div class="mb-2">
+                                    <strong>{{ $transfer->item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}</strong> / {{
+                                    $transfer->quantity
+                                    }} {{ $transfer->item->bac_reso_item->quotation->pr_item->ppmp->item_detail->unit->uom }}
                                 </div>
                             </div>
                         </td>
@@ -61,12 +49,10 @@
                             </div>
                             <div class="fst-italic text-secondary" style="font-size: 11px;">{{ $receiver->end_user->position->name }}</div>
                             @endforeach
-                            {{ $transfer->receivers[count($transfer->receivers) - 1]->end_user->position->name }}
                         </td>
                         <td>
                             {{ $transfer->item->transaction->branch->branch_name }}
                         </td>
-                        <td>{{ $transfer->reason ?? "n/a" }}</td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -9,62 +9,59 @@
         Dashboard
     </a>
 </li>
-<li class="nav-item small">
-    <b class="nav-link" aria-current="page">
-        TRANSACTION
-    </b>
-</li>
-<li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('trans.all') }}">
-        <em class="bi bi-eye-fill"></em>
-        All Transactions
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('icsl.add') }}">
-        <em class="bi bi-file-text-fill"></em>
-        ICS
-        <span class="badge bg-secondary">
-            <em class="bi bi-caret-down-fill"></em> Low Value
-        </span>
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('icsh.add') }}">
-        <em class="bi bi-file-text-fill"></em>
-        ICS
-        <span class="badge bg-primary">
-            <em class="bi bi-caret-up-fill"></em> High Value
-        </span>
-    </a>
-</li>
-<li class="nav-item">
-    <a href="{{ route('par.add') }}" aria-current="page" class="nav-link">
-        <em class="bi bi-file-text-fill"></em>
-        PAR
-    </a>
+<li class="nav-item d-flex flex-column">
+    <div class="p-2">
+        <div class="mb-2">
+            <a href="{{ route('icsl.add') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-text-fill float-start"></em>
+                ICS
+                <span class="badge bg-secondary">
+                    <em class="bi bi-caret-down-fill"></em> Low Value
+                </span></a>
+        </div>
+        <div class="mb-2">
+            <a href="{{ route('icsh.add') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-text-fill float-start"></em>
+                ICS
+                <span class="badge bg-primary">
+                    <em class="bi bi-caret-up-fill"></em> High Value
+                </span></a>
+        </div>
+        <div class="mb-2">
+            <a href="{{ route('par.add') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-file-text-fill float-start"></em>
+                PAR</a>
+        </div>
+        <div class="mb-2">
+            <a href="{{ route('trans.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-eye-fill float-start"></em>
+                All Transactions</a>
+        </div>
+    </div>
 </li>
 <li class="nav-item small">
     <b class="nav-link" aria-current="page">
-        PROPERTY TRANSFER
+        PROPERTIES
     </b>
 </li>
 <li class="nav-item">
     <a href="{{ route('transfers.all') }}" aria-current="page" class="nav-link">
         <em class="bi bi-list"></em>
-        All Transfers
+        Transfers
     </a>
 </li>
 <li class="nav-item">
     <a href="{{ route('ics.all') }}" aria-current="page" class="nav-link">
         <em class="bi bi-file-text-fill"></em>
-        ICS
+        ICS Items
     </a>
 </li>
 <li class="nav-item">
     <a href="{{ route('par.all') }}" aria-current="page" class="nav-link">
         <em class="bi bi-file-text-fill"></em>
-        PAR
+        PAR Items
+    </a>
+</li>
+<li class="nav-item">
+    <a href="{{ route('transfered_items.all') }}" aria-current="page" class="nav-link">
+        <em class="bi bi-people-fill"></em>
+        Transferred Items
     </a>
 </li>
 <li>

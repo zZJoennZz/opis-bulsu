@@ -18,7 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('inventory_transaction_items_id');
             $table->string('number');
             $table->integer('quantity');
-            $table->string('reason')->nullable();
+            $table->longText('reason')->nullable();
             $table->unsignedBigInteger('added_by');
             $table->timestamps();
 

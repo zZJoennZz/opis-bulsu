@@ -31,7 +31,7 @@
                     @endphp
                     @foreach ($item->properties as $property)
                     @php
-                    if (count($property->transfers) === 0){
+                    if (count($property->transfers) === 0 && $property->is_available){
                     $availableUnits += 1;
                     }
                     @endphp

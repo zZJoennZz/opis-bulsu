@@ -11,6 +11,7 @@ class InventoryTransactionItemProperty extends Model
     protected $fillable = [
         'inventory_transaction_items_id',
         'serial_number',
+        'is_available',
     ];
 
     public function item()
@@ -20,7 +21,7 @@ class InventoryTransactionItemProperty extends Model
 
     public function current_owners()
     {
-        return $this->hasMany(InventoryTransactionItemPropertyCurrentKeeper::class, 'id', 'inventory_transaction_item_properties_id');
+        return $this->hasMany(InventoryTransactionItemPropertyCurrentKeeper::class, 'inventory_transaction_item_properties_id', 'id');
     }
 
     public function transfers()

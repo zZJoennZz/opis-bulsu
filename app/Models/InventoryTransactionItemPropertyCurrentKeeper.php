@@ -13,7 +13,13 @@ class InventoryTransactionItemPropertyCurrentKeeper extends Model
         'supply_end_users_id',
     ];
 
-    public function item() {
+    public function item()
+    {
         return $this->belongsTo(InventoryTransactionItemProperty::class, 'inventory_transaction_item_properties_id', 'id');
+    }
+
+    public function end_user()
+    {
+        return $this->hasOne(SupplyEndUser::class, 'id', 'supply_end_users_id');
     }
 }

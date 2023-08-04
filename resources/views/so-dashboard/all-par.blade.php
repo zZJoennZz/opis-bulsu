@@ -1,62 +1,63 @@
 <x-dashboard-layout>
     <x-slot:title>
         Property Acknowledgment Report Records
-    </x-slot>
+        </x-slot>
 
-    @php
+        @php
         $breadcrumb = [
-            ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
-            ['name' => 'All PAR Records'],
+        ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+        ['name' => 'All PAR Records'],
         ]
-    @endphp
+        @endphp
 
-    <x-breadcrumb :breadcrumb="$breadcrumb" />
-    <div class="table-responsive">
-        <table class="table table-sm table-hover border-dark caption-top" id="all-par-records">
-            <caption>All PAR Items</caption>
-            <thead class="small">
-                <tr>
-                    <th></th>
-                    <th>Item</th>
-                    <th>Available Unit/s</th>
-                    <th>Unit Cost</th>
-                    <th>College/Office</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($par as $i)
+        <x-breadcrumb :breadcrumb="$breadcrumb" />
+        <div class="table-responsive">
+            <table class="table table-sm table-hover border-dark caption-top" id="all-par-records">
+                <caption>All PAR Items</caption>
+                <thead class="small">
+                    <tr>
+                        <th>Transfer</th>
+                        <th style="width: 40%;">Item</th>
+                        <th>Available Unit/s</th>
+                        <th>Unit Cost</th>
+                        <th style="width: 30%;">College/Office</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($par as $i)
                     @foreach ($i->items as $item)
                     @php
-                        $totalQty = $item->quantity;
-
-                        foreach ($item->transfers as $transfer) {
-                            $totalQty -= $transfer->quantity;
-                        }
+                    $availableUnits = 0;
                     @endphp
+                    @foreach ($item->properties as $property)
+                    @php
+                    if (count($property->transfers) === 0 && $property->is_available){
+                    $availableUnits += 1;
+                    }
+                    @endphp
+                    @endforeach
                     <tr>
-                        <td><button type="button" onclick="window.location.href='{{ route('prepare-transfer.show') }}/{{ $item->id }}'" class="btn btn-sm btn-secondary" @if($totalQty === 0) disabled @endif><em class="bi bi-arrow-left-right"></em></button></td>
                         <td>
-                            {{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}
-                            <div class="small text-muted">
-                                <span class="badge bg-secondary">{{ $i->number }}</span>
-                            </div>
+                            @if ($availableUnits > 0)
+                            <a class="btn btn-sm btn-secondary" href="{{ route('transfer_ics.get') }}/{{ $item->id }}"><em
+                                    class="bi bi-arrow-right-short"></em></a>
+                            @else
+                            <button class="btn btn-sm btn-secondary" disabled type="button"><em class="bi bi-arrow-right-short"></em></button>
+                            @endif
                         </td>
+                        <td>{{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}</td>
                         <td>
-                            {{ $totalQty }} / {{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->unit->uom }}
+                            {{ $availableUnits }}
                         </td>
-                        <td>₱ {{ number_format($item->bac_reso_item->quotation->offered_unit_price, 2) }}</td>
-                        <td>
-                            @foreach ($i->receivers as $receiver)
-                            {{ $receiver->end_user->branch->branch_name }}
-                            @endforeach
-                        </td>
+                        <td>₱ {{ number_format($item->unit_price, 2) }}</td>
+                        <td>{{ $i->branch->branch_name }}</td>
                     </tr>
                     @endforeach
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    <x-slot:additional_script>
-        @include('layout/datatable', ['tableId' => 'all-par-records'])
-    </x-slot>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <x-slot:additional_script>
+            @include('layout/datatable', ['tableId' => 'all-par-records'])
+            </x-slot>
 </x-dashboard-layout>

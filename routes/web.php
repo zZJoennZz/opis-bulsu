@@ -32,6 +32,7 @@ use App\Http\Controllers\SupplyPositionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ModeOfProcurementController;
 use App\Http\Controllers\EquipmentCodesController;
+use App\Http\Controllers\PropertyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -309,8 +310,13 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/transfer', function () {
         return redirect()->route('transfers.all');
     });
-    Route::get('/transfer/{id?}', [TransferController::class, 'transfer_ics'])->name('transfer_ics.get');
-    Route::post('/transfer/{id?}', [TransferController::class, 'post_transfer_ics'])->name('transfer_ics.perform');
+    Route::get('/transfer/{id?}', [TransferController::class, 'transfer_item'])->name('transfer_ics.get');
+    Route::post('/transfer/{id?}', [TransferController::class, 'post_transfer'])->name('transfer_ics.perform');
+    Route::get('/transfer-property', function () {
+        return redirect()->route('transfered_items.all');
+    });
+    Route::get('/transfer-property/{propertyId}', [TransferController::class, 'user_to_user_transfer'])->name('user.transfer');
+    Route::post('/transfer-property/{propertyId}', [TransferController::class, 'transfer_user_to_user'])->name('user.transfer.perform');
 
     //manage end users
     Route::get('/manage-end-user', [SupplyEndUserController::class, 'all'])->name('supply-end-user.all');
@@ -363,6 +369,9 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/all-ics', [TransferController::class, 'all_ics'])->name('ics.all');
     Route::get('/all-par', [TransferController::class, 'all_par'])->name('par.all');
     Route::get('/transfers', [TransferController::class, 'all_transfers'])->name('transfers.all');
+
+    Route::get('/property', [PropertyController::class, 'list'])->name('transfered_items.all');
+    Route::get('/property/{propertyId}', [PropertyController::class, 'view'])->name('property.single');
 });
 
 //ADMIN ONLY

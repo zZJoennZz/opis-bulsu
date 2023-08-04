@@ -6,7 +6,8 @@
         <div class="table-responsive">
             <table class="table table-sm table-hover border-primary caption-top" id="5-recent-transactions">
                 <caption class="border border-primary text-primary px-1 py-1 rounded-top">
-                    <span class="text-uppercase">5 recent transactions</span> <a href="{{ route('trans.all') }}" class="btn btn-sm btn-outline-primary float-end">View All</a>
+                    <span class="text-uppercase">5 recent transactions</span> <a href="{{ route('trans.all') }}"
+                        class="btn btn-sm btn-outline-primary float-end">View All</a>
                 </caption>
                 <thead class="text-secondary" style="font-size: 11px;">
                     <tr>
@@ -18,38 +19,44 @@
                 </thead>
                 <tbody>
                     @foreach ($lastFiveTransactions as $transaction)
-                        <tr>
-                            <td>
-                                <a class="btn btn-primary btn-sm"><em class="bi bi-eye-fill"></em></a>
-                            </td>
-                            <td>
-                                <div>
-                                    @if ($transaction->type === "PAR")
-                                        <span class="badge bg-success">PAR</span>
+                    <tr>
+                        <td>
+                            @if ($transaction->type !== "PAR")
+                            <a href="{{ route('ics.print', ['id' => $transaction->id]) }}" target="_blank" class="btn btn-sm btn-secondary"><em
+                                    class="bi bi-printer-fill"></em></a>
+                            @else
+                            <a href="{{ route('par.print', ['id' => $transaction->id]) }}" target="_blank" class="btn btn-sm btn-secondary"><em
+                                    class="bi bi-printer-fill"></em></a>
+                            @endif
+                        </td>
+                        <td>
+                            <div>
+                                @if ($transaction->type === "PAR")
+                                <span class="badge bg-success">PAR</span>
+                                @endif
+                                @if ($transaction->type === "ICSL")
+                                <span class="badge bg-secondary">ICS <em class="bi bi-caret-down-fill"></em></span>
+                                @endif
+                                @if ($transaction->type === "ICSH")
+                                <span class="badge bg-primary">ICS <em class="bi bi-caret-up-fill"></em></span>
+                                @endif
+                                <div class="fw-bold">{{ $transaction->number }}</div>
+                                <div class="small">
+                                    @php
+                                    $numOfItems = count($transaction->items);
+                                    @endphp
+                                    {{ $numOfItems }}
+                                    @if ($numOfItems > 1)
+                                    items
+                                    @else
+                                    item
                                     @endif
-                                    @if ($transaction->type === "ICSL")
-                                        <span class="badge bg-secondary">ICS <em class="bi bi-caret-down-fill"></em></span>
-                                    @endif
-                                    @if ($transaction->type === "ICSH")
-                                        <span class="badge bg-primary">ICS <em class="bi bi-caret-up-fill"></em></span>
-                                    @endif
-                                    <div class="fw-bold">{{ $transaction->number }}</div>
-                                    <div class="small">
-                                        @php
-                                            $numOfItems = count($transaction->items);
-                                        @endphp
-                                       {{ $numOfItems }} 
-                                       @if ($numOfItems > 1)
-                                           items
-                                        @else
-                                            item
-                                       @endif
-                                    </div>
                                 </div>
-                            </td>
-                            <td>{{ $transaction->date_acquired }}</td>
-                            <td>{{ $transaction->date_issued }}</td>
-                        </tr>
+                            </div>
+                        </td>
+                        <td>{{ $transaction->date_acquired }}</td>
+                        <td>{{ $transaction->date_issued }}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>

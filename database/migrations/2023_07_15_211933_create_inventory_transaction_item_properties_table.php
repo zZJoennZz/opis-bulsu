@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('inventory_transaction_items_id');
             $table->string('serial_number')->nullable();
+            $table->boolean('is_available')->default(true);
             $table->timestamps();
         });
     }

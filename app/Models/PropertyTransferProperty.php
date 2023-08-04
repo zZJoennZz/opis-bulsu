@@ -21,6 +21,6 @@ class PropertyTransferProperty extends Model
 
     public function transfer()
     {
-        return $this->belongsTo(PropertyTransfer::class, 'id', 'property_transfers_id');
+        return $this->belongsTo(PropertyTransfer::class, 'property_transfers_id', 'id');
     }
 }
