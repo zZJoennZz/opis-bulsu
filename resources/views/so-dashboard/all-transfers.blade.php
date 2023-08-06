@@ -28,7 +28,11 @@
                     <tr>
                         <td>
                             <div>
-                                <div><span class="badge bg-secondary">{{ $transfer->number }}</span></div>
+                                <div>
+                                    <span class="badge bg-secondary">{{ $transfer->number }}</span>
+                                    <a href="{{ route('transfer.print', ['transferId' => $transfer->id]) }}" target="_blank"
+                                        class="btn btn-sm btn-link float-end">Print</a>
+                                </div>
                                 <div class="mb-2">
                                     <strong>{{ $transfer->item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}</strong> / {{
                                     $transfer->quantity

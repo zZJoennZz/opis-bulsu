@@ -13,6 +13,8 @@ class PropertyTransfer extends Model
         'number',
         'quantity',
         'reason',
+        'type',
+        'other_type',
         'added_by',
     ];
 

@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('number');
             $table->integer('quantity');
             $table->longText('reason')->nullable();
+            $table->string('type')->default('OTHERS');
+            $table->string('other_type')->nullable();
             $table->unsignedBigInteger('added_by');
             $table->timestamps();
 

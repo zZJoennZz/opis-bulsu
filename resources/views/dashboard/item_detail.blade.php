@@ -34,10 +34,10 @@
                     <label for="cat_desc" class="form-label fw-bold">Category:</label>
                     <input type="text" class="form-control" id="cat_desc" value="{{ $item_detail[0]->cat_desc }}" readonly>
                 </div>
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <a href={{ route('view-item-detail.show',['item_detail_id'=> $item_detail[0]->id]) }} class="btn btn-link" style="font-size:
                         0.8rem;"><em class="bi bi-pencil-square"></em> Edit this item</a>
-                </div>
+                </div> --}}
             </div>
             <div class="col-lg-6 col-md-12">
                 <form action="{{ route('item-detail-single.add', request()->segment(count(request()->segments()))) }}" method="POST">

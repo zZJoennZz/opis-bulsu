@@ -38,15 +38,18 @@
             <div class="border-bottom mb-2 pb-2">
                 @foreach ($transfer->transfer->receivers as $receiver)
                 @if (in_array($receiver->end_user->id, $item->current_owners->pluck('supply_end_users_id')->toArray()))
-                <div class="text-primary">
+                <div class="text-primary fw-bold">
                     <div class="float-end">{{ date('Y-m-d', strtotime($transfer->created_at)) }}</div>
                     <span class="badge bg-primary">Current</span> {{ $receiver->end_user->first_name }} {{
                     $receiver->end_user->middle_name }} {{
                     $receiver->end_user->last_name }}
                 </div>
                 @else
-                <div class="text-muted">{{ $receiver->end_user->first_name }} {{ $receiver->end_user->middle_name }} {{
-                    $receiver->end_user->last_name }}</div>
+                <div class="text-muted">
+                    <div class="float-end">{{ date('Y-m-d', strtotime($transfer->created_at)) }}</div>
+                    {{ $receiver->end_user->first_name }} {{ $receiver->end_user->middle_name }} {{
+                    $receiver->end_user->last_name }}
+                </div>
                 @endif
                 @endforeach
             </div>
@@ -61,7 +64,7 @@
                 @endforeach
             </div>
         </div>
-        <x-slot:additional_script>
+        {{-- <x-slot:additional_script>
 
-            </x-slot>
+            </x-slot> --}}
 </x-dashboard-layout>

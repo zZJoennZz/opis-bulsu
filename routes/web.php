@@ -311,6 +311,7 @@ Route::middleware('supply.office')->group(function () {
         return redirect()->route('transfers.all');
     });
     Route::get('/transfer/{id?}', [TransferController::class, 'transfer_item'])->name('transfer_ics.get');
+    Route::get('/transfer/print/{transferId?}', [TransferController::class, 'print_transfer'])->name('transfer.print');
     Route::post('/transfer/{id?}', [TransferController::class, 'post_transfer'])->name('transfer_ics.perform');
     Route::get('/transfer-property', function () {
         return redirect()->route('transfered_items.all');

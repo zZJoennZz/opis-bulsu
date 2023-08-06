@@ -27,9 +27,12 @@ class PropertyController extends Controller
     }
     public function view($propertyId)
     {
-        $item = InventoryTransactionItemProperty::with(['transfers.transfer' => function ($builder) {
+        $item = InventoryTransactionItemProperty::with(['transfers' => function ($builder) {
+            $builder->latest();
+        }, 'transfers.transfer' => function ($builder) {
             $builder->latest();
         }])->find($propertyId);
+
         return view('so-dashboard.view-property')
             ->with('item', $item);
     }

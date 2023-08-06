@@ -113,6 +113,7 @@ class TransferController extends Controller
                 ->first();
 
             $endUsers = SupplyEndUser::all();
+
             return view('so-dashboard.transfer-item')
                 ->with('tranItem', $tranItem)
                 ->with('endUsers', $endUsers);
@@ -309,6 +310,17 @@ class TransferController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->withErrors(['Please check your inputs if correct. If the problem persists please contact the administrator.']);
+        }
+    }
+
+    public function print_transfer($transferId)
+    {
+        try {
+            $transfer = PropertyTransfer::find($transferId);
+            return view('so-dashboard.print-transfer')
+                ->with('transfer', $transfer);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['Invalid transfer ID.']);
         }
     }
 }

@@ -60,8 +60,8 @@
 </li>
 <li class="nav-item">
     <a href="{{ route('transfered_items.all') }}" aria-current="page" class="nav-link">
-        <em class="bi bi-people-fill"></em>
-        Transferred Items
+        <em class="bi bi-bag-fill"></em>
+        Items
     </a>
 </li>
 <li>

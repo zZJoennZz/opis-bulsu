@@ -11,6 +11,7 @@ class InventoryTransactionItemProperty extends Model
     protected $fillable = [
         'inventory_transaction_items_id',
         'serial_number',
+        'property_condition',
         'is_available',
     ];
 
