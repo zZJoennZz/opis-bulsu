@@ -11,10 +11,9 @@ class PropertyController extends Controller
     public function list()
     {
         try {
-            $items = InventoryTransactionItemProperty::has('transfers')
-                ->with(['transfers' => function ($builder) {
-                    $builder->latest();
-                }, 'current_owners.end_user', 'item.transaction', 'item.bac_reso_item.quotation.pr_item.ppmp.item_detail'])
+            $items = InventoryTransactionItemProperty::with(['transfers' => function ($builder) {
+                $builder->latest();
+            }, 'current_owners.end_user', 'item.transaction', 'item.bac_reso_item.quotation.pr_item.ppmp.item_detail'])
                 ->where('is_available', true)
                 ->get();
 
