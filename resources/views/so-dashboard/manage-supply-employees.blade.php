@@ -27,15 +27,15 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="first_name" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter end user first name here." required>
+                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter first name here" required>
                             </div>
                             <div class="mb-3">
                                 <label for="middle_name" class="form-label">Middle Name</label>
-                                <input type="text" class="form-control" id="middle_name" name="middle_name" placeholder="Enter end user middle name here." required>
+                                <input type="text" class="form-control" id="middle_name" name="middle_name" placeholder="Enter middle name here" required>
                             </div>
                             <div class="mb-3">
                                 <label for="last_name" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter end user last name here." required>
+                                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Enter last name here" required>
                             </div>
                             <div class="mb-3">
                                 <label for="position" class="form-label">Position</label>
