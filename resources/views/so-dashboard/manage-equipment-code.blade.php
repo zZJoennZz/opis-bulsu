@@ -29,13 +29,13 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="unique_code" class="form-label">Unique Code</label>
-                                    <input type="text" class="form-control" id="unique_code" name="unique_code" placeholder="Enter unique code here."
+                                    <input type="text" class="form-control" id="unique_code" name="unique_code" placeholder="Enter unique code here"
                                         required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="equipment_code" class="form-label">Equipment Code</label>
                                     <input type="text" class="form-control" id="equipment_code" name="equipment_code"
-                                        placeholder="Enter equipment code here." required>
+                                        placeholder="Enter equipment code here" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="description" class="form-label">Description</label>
