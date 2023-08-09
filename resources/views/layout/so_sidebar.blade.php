@@ -64,6 +64,12 @@
         Items
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('end_users.all') }}" aria-current="page" class="nav-link">
+        <em class="bi bi-people-fill"></em>
+        Keepers
+    </a>
+</li>
 <li>
     <hr />
 </li>

@@ -16,4 +16,9 @@ class EquipmentCode extends Model
         'is_delete',
         'added_by',
     ];
+
+    public function items()
+    {
+        return $this->hasMany(InventoryTransactionItem::class, 'equipment_codes_id', 'id');
+    }
 }

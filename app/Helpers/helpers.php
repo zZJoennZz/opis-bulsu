@@ -231,3 +231,43 @@ if (!function_exists('daysDiff')) {
         return $days;
     }
 }
+
+if (!function_exists('pluralize')) {
+    function pluralize($word, $count = 2)
+    {
+        if ($count === 1) {
+            return $word;
+        }
+
+        $irregularPlurals = array(
+            'man' => 'men',
+            'woman' => 'women',
+            // Add more irregular plurals here
+        );
+
+        $pluralRules = array(
+            '/(s|x|sh|ch)$/i' => '$1es',
+            '/([^aeiouy]|qu)y$/i' => '$1ies',
+            '/(f|fe)$/i' => 'ves',
+            '/(child)$/i' => '$1ren',
+            '/(tooth)$/i' => '$1eeth',
+            '/(person)$/i' => '$1s',
+            '/(.*)(?=mouse$)/i' => '$1ice',
+            // Add more plural rules here
+        );
+
+        foreach ($irregularPlurals as $singular => $plural) {
+            if (preg_match('/' . $singular . '$/i', $word)) {
+                return preg_replace('/' . $singular . '$/i', $plural, $word);
+            }
+        }
+
+        foreach ($pluralRules as $pattern => $replacement) {
+            if (preg_match($pattern, $word)) {
+                return preg_replace($pattern, $replacement, $word);
+            }
+        }
+
+        return $word . 's';
+    }
+}

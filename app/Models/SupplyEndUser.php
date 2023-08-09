@@ -28,4 +28,9 @@ class SupplyEndUser extends Model
     {
         return $this->hasOne(SupplyPosition::class, 'id', 'supply_positions_id');
     }
+
+    public function keepers()
+    {
+        return $this->hasMany(InventoryTransactionItemPropertyCurrentKeeper::class, 'supply_end_users_id', 'id');
+    }
 }

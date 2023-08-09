@@ -101,8 +101,9 @@
                             }
                             }
                             @endphp
-                            <span class="text-success">({{ $availableQty }} {{
-                                $item->item->bac_reso_item->quotation->pr_item->ppmp->item_detail->unit->uom }} available)</span>
+                            <div class="small text-success">({{ $availableQty }} {{
+                                pluralize($item->item->bac_reso_item->quotation->pr_item->ppmp->item_detail->unit->uom, $availableQty) }} available)
+                            </div>
                         </td>
                         <td>{{ $item->item->transaction->date_acquired }}</td>
                         <td>

@@ -373,6 +373,9 @@ Route::middleware('supply.office')->group(function () {
 
     Route::get('/property', [PropertyController::class, 'list'])->name('transfered_items.all');
     Route::get('/property/{propertyId}', [PropertyController::class, 'view'])->name('property.single');
+
+    Route::get('/end-user', [PropertyController::class, 'users'])->name('end_users.all');
+    Route::get('/end-user/{userId}', [PropertyController::class, 'user_items'])->name('end_users.single');
 });
 
 //ADMIN ONLY
