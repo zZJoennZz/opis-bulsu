@@ -57,10 +57,10 @@
                                 @foreach ($item->properties as $property)
                                 <tr>
                                     <td class="border border-dark">
-                                        @if ($highValue->article === "SEMI_EXPENDABLE")
-                                            <div>Semi-expendable</div>
-                                        @endif
                                         @if ($lastEqId !== $highValue->id)
+                                            @if ($highValue->article === "SEMI_EXPENDABLE")
+                                                <div>Semi-expendable</div>
+                                            @endif
                                             {{ $highValue->description }}
                                             @php
                                                 $lastEqId = $highValue->id;
@@ -92,10 +92,10 @@
                             @else
                                 <tr>
                                     <td class="border border-dark">
-                                        @if ($highValue->article === "SEMI_EXPENDABLE")
-                                            <div>Semi-expendable</div>
-                                        @endif
                                         @if ($lastEqId !== $highValue->id)
+                                            @if ($highValue->article === "SEMI_EXPENDABLE")
+                                                <div>Semi-expendable</div>
+                                            @endif
                                             {{ $highValue->description }}
                                             @php
                                                 $lastEqId = $highValue->id;

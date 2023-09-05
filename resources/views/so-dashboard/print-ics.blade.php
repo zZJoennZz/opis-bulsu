@@ -60,23 +60,21 @@
 
             <div class="row">
                 <div class="col-12">
-                    <table class="w-100">
+                    <table class="w-100 text-center">
                         <caption></caption>
-                        <thead class="align-middle text-center">
-                            <tr>
-                                <th style="width: 10%; border: 1px solid #000;" rowspan="2">Quantity</th>
-                                <th style="width: 10%; border: 1px solid #000;" rowspan="2">Unit</th>
-                                <th style="width: 30%; border: 1px solid #000;" colspan="2">Amount</th>
-                                <th style="width: 25%; border: 1px solid #000;" rowspan="2">Description</th>
-                                <th style="border: 1px solid #000;" rowspan="2">Inventory Item No.</th>
-                                <th style="border: 1px solid #000;" rowspan="2">Estimated Useful Life</th>
-                            </tr>
-                            <tr>
-                                <th style="border: 1px solid #000;">Unit Cost</th>
-                                <th style="border: 1px solid #000;">Total Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-center"
+                        <tr>
+                            <th style="width: 10%; border: 1px solid #000;" rowspan="2">Quantity</th>
+                            <th style="width: 10%; border: 1px solid #000;" rowspan="2">Unit</th>
+                            <th style="width: 30%; border: 1px solid #000;" colspan="2">Amount</th>
+                            <th style="width: 25%; border: 1px solid #000;" rowspan="2">Description</th>
+                            <th style="border: 1px solid #000;" rowspan="2">Inventory Item No.</th>
+                            <th style="border: 1px solid #000;" rowspan="2">Estimated Useful Life</th>
+                        </tr>
+                        <tr>
+                            <th style="border: 1px solid #000;">Unit Cost</th>
+                            <th style="border: 1px solid #000;">Total Cost</th>
+                        </tr>
+                        <tbody
                             style="border-left: 1px solid #000; border-right: 1px solid #000; border-bottom: 1px solid #000; border-top: 1px solid #000;">
 
                             @foreach ($icsRecord->items as $item)

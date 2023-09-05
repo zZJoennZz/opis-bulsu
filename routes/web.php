@@ -376,6 +376,7 @@ Route::middleware('supply.office')->group(function () {
 
     Route::get('/end-user', [PropertyController::class, 'users'])->name('end_users.all');
     Route::get('/end-user/{userId}', [PropertyController::class, 'user_items'])->name('end_users.single');
+    Route::get('/end-user/print/{userId}', [PropertyController::class, 'print_user_items_rpcsp'])->name('end_users.print');
 });
 
 //ADMIN ONLY

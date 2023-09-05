@@ -1,0 +1,109 @@
+{
+    "type": "",
+    "asAt": "",
+    "fundCluster": "",
+    "endUser": {
+        "name": "Napoleon Rath Hansen",
+        "position": "ADMINISTRATIVE OFFICER IV",
+        "branch": "Procurement Unit"
+    },
+    "accountabilityOn": "",
+    "inventoryCommitteeChair": "JOANHA CHRISTINE BORJA",
+    "inventoryCommitteeMembers": [
+        "LEAH C. CRUZ",
+        "SHARON ALMARIO",
+        "JESSICA GONZALES"
+    ],
+    "approvedBy": "DR. CECILIA N. GASCON",
+    "witnessedBy": "",
+    "data": [
+        {
+            "isHeading": true,
+            "text": "Below P50,000 - HIGH VALUED ITEMS"
+        },
+        {
+            "isHeading": false,
+            "article": {
+                "text": "COMMUNICATION EQUIPMENT",
+                "isSemiExpendable": true
+            },
+            "product": {
+                "name": "Computer Set, i5-3330, Intel, 8GB DDR3, PCI-E 2GB DDR3 128 bit, 500GB 7200rpm, ATX Casing, Keyboard, 21.8\" LED Monitor, UPS 650VA, Window 8 64bit",
+                "serialNumber": "",
+                "dateAcquired": "2023-08-09"
+            },
+            "semiExpendablePropertyNo": "2023-SE-0-0D9",
+            "unit": "box",
+            "unitValue": 40000,
+            "balancePerCard": 3,
+            "remarks": ""
+        },
+        {
+            "isHeading": false,
+            "article": {
+                "text": "OFFICE EQUIPMENT",
+                "isSemiExpendable": true
+            },
+            "product": {
+                "name": "Airconditioning Unit Window Type, 2.5 Hp, Panasonic CW-SC245EPH",
+                "serialNumber": "10202020",
+                "dateAcquired": "2023-08-03"
+            },
+            "semiExpendablePropertyNo": "2023-SE-0-0D9",
+            "unit": "box",
+            "unitValue": 44000,
+            "balancePerCard": 1,
+            "remarks": ""
+        },
+        {
+            "isHeading": false,
+            "article": null,
+            "product": {
+                "name": "Airconditioning Unit Window Type, 2.5 Hp, Panasonic CW-SC245EPH",
+                "serialNumber": "10202020",
+                "dateAcquired": "2023-08-03"
+            },
+            "semiExpendablePropertyNo": "2023-SE-0-0D9",
+            "unit": "box",
+            "unitValue": 44000,
+            "balancePerCard": 1,
+            "remarks": ""
+        },
+        {
+            "isHeading": false,
+            "article": null,
+            "product": {
+                "name": "Airconditioning Unit Window Type, 2.5 Hp, Panasonic CW-SC245EPH",
+                "serialNumber": "10202020",
+                "dateAcquired": "2023-08-03"
+            },
+            "semiExpendablePropertyNo": "2023-SE-0-0D9",
+            "unit": "box",
+            "unitValue": 44000,
+            "balancePerCard": 1,
+            "remarks": ""
+        },
+        {
+            "isHeading": true,
+            "text": "Below P50,000 - LOW VALUED ITEMS"
+        },
+        {
+            "isHeading": false,
+            "article": {
+                "text": "SPORTS EQUIPMENT",
+                "isSemiExpendable": false
+            },
+            "product": {
+                "name": "Ballpoint Pens, Sx",
+                "serialNumber": "",
+                "dateAcquired": "2023-08-01"
+            },
+            "semiExpendablePropertyNo": "2023-SE-0-0D9",
+            "unit": "box",
+            "unitValue": 411,
+            "balancePerCard": 15,
+            "remarks": ""
+        }
+    ],
+    "notes": ""
+}

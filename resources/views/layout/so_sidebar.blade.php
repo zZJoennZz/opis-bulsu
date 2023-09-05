@@ -46,7 +46,7 @@
         Transfers
     </a>
 </li>
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{ route('ics.all') }}" aria-current="page" class="nav-link">
         <em class="bi bi-file-text-fill"></em>
         ICS Items
@@ -57,7 +57,7 @@
         <em class="bi bi-file-text-fill"></em>
         PAR Items
     </a>
-</li>
+</li> --}}
 <li class="nav-item">
     <a href="{{ route('transfered_items.all') }}" aria-current="page" class="nav-link">
         <em class="bi bi-bag-fill"></em>

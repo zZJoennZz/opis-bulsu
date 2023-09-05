@@ -51,7 +51,31 @@ class PropertyController extends Controller
     {
         $endUser = SupplyEndUser::find($userId);
 
-        $eqCodesHighValue = EquipmentCode::with(['items' => function ($builder) {
+        $eqCodesHighValue = $this->getEqCodesHighValue($userId);
+        $eqCodesLowValue = $this->getEqCodesLowValue($userId);
+
+        return view('so-dashboard.show-end-user')
+            ->with('eqCodesHighValue', $eqCodesHighValue)
+            ->with('eqCodesLowValue', $eqCodesLowValue)
+            ->with('endUser', $endUser);
+    }
+
+    public function print_user_items_rpcsp($userId)
+    {
+        $endUser = SupplyEndUser::find($userId);
+
+        $eqCodesHighValue = $this->getEqCodesHighValue($userId);
+        $eqCodesLowValue = $this->getEqCodesLowValue($userId);
+
+        return view('so-dashboard.print-rpcsp')
+            ->with('eqCodesHighValue', $eqCodesHighValue)
+            ->with('eqCodesLowValue', $eqCodesLowValue)
+            ->with('endUser', $endUser);
+    }
+
+    private function getEqCodesHighValue($userId)
+    {
+        return EquipmentCode::with(['items' => function ($builder) {
             $builder->whereBetween('unit_price', [5000, 49999.99])->orderBy('unit_price', 'DESC');
         }, 'items.properties' => function ($builder) use ($userId) {
             $builder->whereHas('current_owners', function ($builder1) use ($userId) {
@@ -63,8 +87,11 @@ class PropertyController extends Controller
             });
         })
             ->get();
+    }
 
-        $eqCodesLowValue = EquipmentCode::with(['items' => function ($builder) {
+    private function getEqCodesLowValue($userId)
+    {
+        return EquipmentCode::with(['items' => function ($builder) {
             $builder->whereBetween('unit_price', [0, 4999.99])->orderBy('unit_price', 'DESC');
         }, 'items.properties' => function ($builder) use ($userId) {
             $builder->whereHas('current_owners', function ($builder1) use ($userId) {
@@ -76,10 +103,5 @@ class PropertyController extends Controller
             });
         })
             ->get();
-
-        return view('so-dashboard.show-end-user')
-            ->with('eqCodesHighValue', $eqCodesHighValue)
-            ->with('eqCodesLowValue', $eqCodesLowValue)
-            ->with('endUser', $endUser);
     }
 }
