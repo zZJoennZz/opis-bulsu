@@ -29,4 +29,8 @@ class InventoryTransactionItemProperty extends Model
     {
         return $this->hasMany(PropertyTransferProperty::class, 'inventory_transaction_item_properties_id', 'id');
     }
+
+    public function histories() {
+        return $this->hasMany(InventoryTransactionItemPropertyHistory::class, 'inventory_transaction_item_properties_id', 'id');
+    }
 }

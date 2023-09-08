@@ -34,7 +34,9 @@
                             <div class="btn-group btn-group-sm" role="group" aria-label="actions button group">
                                 <a href="{{ route('property.single', ['propertyId' => $item->id]) }}" class="btn btn-outline-primary"><em
                                         class="bi bi-eye-fill"></em></a>
+                                @if ($item->item->transaction->type === "PAR")
                                 <button type="button" class="btn btn-outline-primary"><em class="bi bi-wrench-adjustable"></em></button>
+                                @endif
                                 <a href="{{ route('user.transfer', ['propertyId' => $item->id]) }}" class="btn btn-outline-primary"><em
                                         class="bi bi-arrow-left-right"></em></a>
                             </div>
@@ -74,7 +76,9 @@
                             <div class="btn-group btn-group-sm" role="group" aria-label="actions button group">
                                 <a href="{{ route('property.single', ['propertyId' => $item->id]) }}" class="btn btn-outline-primary"><em
                                         class="bi bi-eye-fill"></em></a>
+                                @if ($item->item->transaction->type === "PAR")
                                 <button type="button" class="btn btn-outline-primary"><em class="bi bi-wrench-adjustable"></em></button>
+                                @endif
                                 <a href="{{ route('transfer_ics.get', ['id' => $item->item->id]) }}" class="btn btn-outline-primary"><em
                                         class="bi bi-arrow-left-right"></em></a>
                             </div>

@@ -173,13 +173,20 @@ class TransferController extends Controller
             ]);
             $newPropertyTransferReceiver->save();
 
+            $transferIssuer = $request->issuer;
+            if ($transferIssuer === null) {
+                $transferIssuer = $itemWithProperties->transaction->receivers[0]->supply_end_users_id;
+            }
+            
+            $newPropertyTransferIssuer = new PropertyTransferIssuer([
+                'property_transfers_id' => $newProperty->id,
+                'supply_end_users_id' => $transferIssuer,
+            ]);
+
+            $newPropertyTransferIssuer->save();
+
             if ($itemWithProperties->properties->isEmpty()) {
                 //save the properties with serial numbers here
-                $newPropertyTransferIssuer = new PropertyTransferIssuer([
-                    'property_transfers_id' => $newProperty->id,
-                    'supply_end_users_id' => $request->issuer,
-                ]);
-                $newPropertyTransferIssuer->save();
                 foreach (json_decode($request->selected_serial_numbers) as $serialNumber) {
                     $newPropertyTransferProperty = new PropertyTransferProperty([
                         'property_transfers_id' => $newProperty->id,
@@ -198,11 +205,11 @@ class TransferController extends Controller
             } else {
                 //save the properties without serial numbers
                 //we will be looping through the available properties instead of specific properties
-                $newPropertyTransferIssuer = new PropertyTransferIssuer([
-                    'property_transfers_id' => $newProperty->id,
-                    'supply_end_users_id' => $itemWithProperties->transaction->receivers[0]->supply_end_users_id,
-                ]);
-                $newPropertyTransferIssuer->save();
+                // $newPropertyTransferIssuer = new PropertyTransferIssuer([
+                //     'property_transfers_id' => $newProperty->id,
+                //     'supply_end_users_id' => $itemWithProperties->transaction->receivers[0]->supply_end_users_id,
+                // ]);
+                // $newPropertyTransferIssuer->save();
                 for ($i = 0; $i < $request->quantity; $i++) {
                     $newPropertyTransferProperty = new PropertyTransferProperty([
                         'property_transfers_id' => $newProperty->id,
