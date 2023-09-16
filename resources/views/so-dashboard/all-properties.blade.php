@@ -35,7 +35,7 @@
                                 <a href="{{ route('property.single', ['propertyId' => $item->id]) }}" class="btn btn-outline-primary"><em
                                         class="bi bi-eye-fill"></em></a>
                                 @if ($item->item->transaction->type === "PAR")
-                                <button type="button" class="btn btn-outline-primary"><em class="bi bi-wrench-adjustable"></em></button>
+                                <a href="{{ route('maintenance.select') }}/{{ $item->id }}" class="btn btn-outline-primary"><em class="bi bi-wrench-adjustable"></em></a>
                                 @endif
                                 <a href="{{ route('user.transfer', ['propertyId' => $item->id]) }}" class="btn btn-outline-primary"><em
                                         class="bi bi-arrow-left-right"></em></a>
@@ -77,7 +77,7 @@
                                 <a href="{{ route('property.single', ['propertyId' => $item->id]) }}" class="btn btn-outline-primary"><em
                                         class="bi bi-eye-fill"></em></a>
                                 @if ($item->item->transaction->type === "PAR")
-                                <button type="button" class="btn btn-outline-primary"><em class="bi bi-wrench-adjustable"></em></button>
+                                <a href="{{ route('maintenance.select', ['id' => $item->id]) }}" class="btn btn-outline-primary"><em class="bi bi-wrench-adjustable"></em></a>
                                 @endif
                                 <a href="{{ route('transfer_ics.get', ['id' => $item->item->id]) }}" class="btn btn-outline-primary"><em
                                         class="bi bi-arrow-left-right"></em></a>

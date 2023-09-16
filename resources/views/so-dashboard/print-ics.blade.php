@@ -83,7 +83,7 @@
                                 <td>{{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->unit->uom }}</td>
                                 <td>₱ {{ number_format($item->bac_reso_item->quotation->offered_unit_price, 2) }}</td>
                                 <td>₱ {{ number_format($item->bac_reso_item->quotation->offered_unit_price * $item->quantity, 2) }}</td>
-                                <td>{{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}</td>
+                                <td>{{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}, {{ $item->bac_reso_item->quotation->brand_and_model_offered }}</td>
                                 <td>{{ $item->property_number }}</td>
                                 <td></td>
                             </tr>

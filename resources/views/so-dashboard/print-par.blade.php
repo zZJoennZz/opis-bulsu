@@ -79,7 +79,7 @@
                             <tr style="border-bottom: none !important;">
                                 <td style="border-bottom: 0px solid #fff !important;">{{ $item->quantity }}</td>
                                 <td>{{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->unit->uom }}</td>
-                                <td>{{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}</td>
+                                <td>{{ $item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}, {{ $item->bac_reso_item->quotation->brand_and_model_offered }}</td>
                                 <td>{{ $item->property_number }}</td>
                                 <td>₱ {{ number_format($item->bac_reso_item->quotation->offered_unit_price, 2) }}</td>
                                 <td>₱ {{ number_format($item->bac_reso_item->quotation->offered_unit_price * $item->quantity, 2) }}</td>
@@ -88,11 +88,11 @@
                             @for ($i = 0; $i < 20 - count($parRecord->items); $i++)
                                 <tr class="text-light">
                                     <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 @endfor
                                 <tr>

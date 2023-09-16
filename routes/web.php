@@ -32,6 +32,7 @@ use App\Http\Controllers\SupplyPositionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ModeOfProcurementController;
 use App\Http\Controllers\EquipmentCodesController;
+use App\Http\Controllers\ItemMaintenanceController;
 use App\Http\Controllers\PropertyController;
 
 /*
@@ -377,6 +378,8 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/end-user', [PropertyController::class, 'users'])->name('end_users.all');
     Route::get('/end-user/{userId}', [PropertyController::class, 'user_items'])->name('end_users.single');
     Route::get('/end-user/print/{userId}', [PropertyController::class, 'print_user_items_rpcsp'])->name('end_users.print');
+
+    Route::get('/maintenance/select-form/{id}', [ItemMaintenanceController::class, 'select_form'])->name('maintenance.select');
 });
 
 //ADMIN ONLY
