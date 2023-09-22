@@ -108,36 +108,46 @@
                     <tr>
                         <th style="width: 45%;">Item Detail</th>
                         <th class="text-center" style="width: 10%;">Unit</th>
-                        <th class="text-center" style="width: 15%;">Qty</th>
+                        <th class="text-center" style="width: 10%;">Qty</th>
                         <th class="text-center" style="width: 15%;">Price Catalogue</th>
-                        <th class="text-center" style="width: 15%;">Total Amount</th>
+                        <th class="text-center" style="width: 25%;">Total Amount</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php($grandTotalAmt = 0)
                     @foreach ($consolidated_records as $record => $ppmp)
+                    {{-- {{$ppmp}} --}}
+                        @foreach ($ppmp as $consolidated => $toConsolidated)
                         <tr>
-                            <td>{{ json_decode($record)->description }}</td>
-                            <td>{{ $ppmp[0]->item_detail->unit->uom }}</td>
+                            <td> {{$toConsolidated->id}} {{$toConsolidated->item_detail->description}}</td>
+                            <td><span class="d-none"></span> {{$toConsolidated->item_detail->unit->uom}}</td>
                             <td class="text-center">
                                 @php($totalQty = 0)
-                                @foreach ($ppmp[0]->milestones as $rec)
-                                    @php($totalQty += $rec->milestone_value)
+                                @foreach ($toConsolidated->milestones as $milestone)
+                                    @php($totalQty += $milestone->milestone_value)
                                 @endforeach
                                 {{ $totalQty }}
                             </td>
                             <td class="text-end">
                                 <div class="float-start">₱</div>
-                                {{ number_format(json_decode($record)->price_catalogue, 2) }}
+                                {{number_format($toConsolidated->item_detail->price_catalogue, 2)}}
+                                {{-- {{ number_format(json_decode($record)->price_catalogue, 2) }}
+                                @php($grandPriceCat += json_decode($record)->price_catalogue) --}}
                             </td>
                             <td class="text-end">
                                 <div class="float-start">₱</div>
-                                @php($totalAmount = floatval($totalQty) * floatval(json_decode($record)->price_catalogue))
+                                {{-- @php($totalAmount = floatval($totalQty) * floatval(json_decode($record)->price_catalogue))
                                 {{ number_format($totalAmount, 2) }}
 
-                                @php($grandTotalAmt += floatval($totalAmount) )
+                                @php($grandTotalAmt += floatval($totalAmount) ) --}}
+                                @php($totalAmount = floatval($totalQty) * floatval($toConsolidated->item_detail->price_catalogue))
+                                {{ number_format($totalAmount, 2) }}
                             </td>
                         </tr>
+
+                            @php($grandTotalAmt += $totalAmount)
+          
+                        @endforeach
                     @endforeach
                 </tbody>
                 <tfoot>
