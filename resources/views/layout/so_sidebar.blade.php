@@ -70,6 +70,12 @@
         Keepers
     </a>
 </li>
+<li class="nav-item">
+    <a href="{{ route('maintenance.index') }}" aria-current="page" class="nav-link">
+        <em class="bi bi-wrench-adjustable-circle"></em>
+        Maintenance
+    </a>
+</li>
 <li>
     <hr />
 </li>
@@ -80,21 +86,21 @@
 </li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('supply-end-user.all') }}">
-        <em class="bi bi-people-fill"></em> Manage End Users
+        <em class="bi bi-people-fill"></em> End Users
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('supply-employee.all') }}">
-        <em class="bi bi-person-fill-up"></em> Manage Supply Employees
+        <em class="bi bi-person-fill-up"></em> Supply Employees
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('supply-position.all') }}">
-        <em class="bi bi-person-fill-gear"></em> Manage Supply Positions
+        <em class="bi bi-person-fill-gear"></em> Supply Positions
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('equipment-code.all') }}">
-        <em class="bi bi-diagram-3-fill"></em> Manage Equipment Codes
+        <em class="bi bi-diagram-3-fill"></em> Equipment Codes
     </a>
 </li>

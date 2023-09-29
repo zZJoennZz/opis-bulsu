@@ -379,7 +379,11 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/end-user/{userId}', [PropertyController::class, 'user_items'])->name('end_users.single');
     Route::get('/end-user/print/{userId}', [PropertyController::class, 'print_user_items_rpcsp'])->name('end_users.print');
 
-    Route::get('/maintenance/select-form/{id}', [ItemMaintenanceController::class, 'select_form'])->name('maintenance.select');
+    Route::get('/maintenance', [ItemMaintenanceController::class, 'item_maintenance_index'])->name('maintenance.index');
+    Route::get('/maintenance/select-form/{id?}', [ItemMaintenanceController::class, 'select_form'])->name('maintenance.select');
+    Route::get('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'maintenance_form'])->name('maintenance.form');
+    Route::post('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'submit_maintenance_form'])->name('maintenance.formsubmit');
+    Route::get('/maintenance/print/{id?}', [ItemMaintenanceController::class, 'print_maintenance_request'])->name('maintenance.print');
 });
 
 //ADMIN ONLY

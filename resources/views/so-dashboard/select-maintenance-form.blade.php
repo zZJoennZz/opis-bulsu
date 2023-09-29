@@ -20,7 +20,7 @@
 
     <div class="row text-center">
         <div class="col-sm-12 col-md-6">
-            <button class="btn btn-primary btn-lg w-100" type="button"><em class="bi bi-tools"></em> Maintenance</button>
+            <a class="btn btn-primary btn-lg w-100" href="{{ route('maintenance.form', ['id' => $propertyId]) }}"><em class="bi bi-tools"></em> Maintenance</a>
         </div>
         <div class="col-sm-12 col-md-6">
             <button class="btn btn-secondary btn-lg w-100" type="button"><em class="bi bi-trash-fill"></em> Disposal</button>
