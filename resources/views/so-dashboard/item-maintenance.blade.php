@@ -32,7 +32,7 @@
                             <td>{{ $property->item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description }}, {{ $property->item->bac_reso_item->quotation->brand_and_model_offered }}</td>
                             <td>{{ number_format($property->item->bac_reso_item->quotation->offered_unit_price, 2) }}</td>
                             <td>{{ $property->current_owners[0]->end_user->first_name . ' ' . $property->current_owners[0]->end_user->middle_name . ' ' . $property->current_owners[0]->end_user->last_name }}</td>
-                            <td><button class="btn btn-secondary btn-sm"><em class="bi bi-tools"></em></button></td>
+                            <td><a class="btn btn-secondary btn-sm" href="{{ route('maintenance.select', ['id' => $property->id]) }}"><em class="bi bi-tools"></em></a></td>
                         </tr>
                     @endforeach
                 </tbody>

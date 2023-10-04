@@ -383,6 +383,8 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/maintenance/select-form/{id?}', [ItemMaintenanceController::class, 'select_form'])->name('maintenance.select');
     Route::get('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'maintenance_form'])->name('maintenance.form');
     Route::post('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'submit_maintenance_form'])->name('maintenance.formsubmit');
+    Route::get('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'disposal_form'])->name('disposal.form');
+    Route::get('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'submit_disposal_form'])->name('disposal.form');
     Route::get('/maintenance/print/{id?}', [ItemMaintenanceController::class, 'print_maintenance_request'])->name('maintenance.print');
 });
 
