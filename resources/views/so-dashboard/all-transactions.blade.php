@@ -17,7 +17,7 @@
                 <thead class="small">
                     <tr>
                         <th></th>
-                        <th style="width: 10%;">Type</th>
+                        <th style="width: 5%;">Type</th>
                         <th style="width: 15%;">No.</th>
                         <th style="width: 15%;">PO No.</th>
                         <th style="width: 10%;">Acquired</th>
@@ -30,13 +30,16 @@
                     @foreach ($allTrans as $tran)
                     <tr>
                         <td>
-                            @if ($tran->type !== "PAR")
-                            <a href="{{ route('ics.print', ['id' => $tran->id]) }}" target="_blank" class="btn btn-sm btn-secondary"><em
-                                    class="bi bi-printer-fill"></em></a>
-                            @else
-                            <a href="{{ route('par.print', ['id' => $tran->id]) }}" target="_blank" class="btn btn-sm btn-secondary"><em
-                                    class="bi bi-printer-fill"></em></a>
-                            @endif
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Small button group">
+                                <a href="{{ route('tran.single', ['id' => $tran->id]) }}" class="btn btn-secondary"><em class="bi bi-eye-fill"></em></a>
+                                @if ($tran->type !== "PAR")
+                                <a href="{{ route('ics.print', ['id' => $tran->id]) }}" target="_blank" class="btn btn-secondary"><em
+                                        class="bi bi-printer-fill"></em></a>
+                                @else
+                                <a href="{{ route('par.print', ['id' => $tran->id]) }}" target="_blank" class="btn btn-secondary"><em
+                                        class="bi bi-printer-fill"></em></a>
+                                @endif
+                            </div>
                         </td>
                         <td>
                             @if ($tran->type === "ICSL")

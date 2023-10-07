@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('date_acquired');
             $table->unsignedBigInteger('purchase_orders_id');
             $table->date('date_issued');
+            $table->longText('file_attachments_id')->nullable();
             $table->boolean('is_delete')->default(0);
             $table->unsignedBigInteger('added_by');
             $table->timestamps();

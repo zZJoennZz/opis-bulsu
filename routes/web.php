@@ -359,6 +359,10 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/property-acknowledgment-receipt/{id?}', [TransactionController::class, 'print_par'])->name('par.print');
 
     Route::get('/all-transactions', [TransactionController::class, 'all_trans'])->name('trans.all');
+    Route::get('/view-transaction/{id?}', [TransactionController::class, 'view_transaction'])->name('tran.single');
+    Route::post('/view-transaction/{id?}', [TransactionController::class, 'attach_file'])->name('tran.attach');
+
+    Route::delete('/delete-transaction-file/{itemId?}/{tranId?}', [TransactionController::class, 'delete_attachment'])->name('tran.delete_attachment');
 
     // manage equipment code
     Route::get('/manage-equipment-code', [EquipmentCodesController::class, 'all'])->name('equipment-code.all');

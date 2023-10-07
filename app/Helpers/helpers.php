@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Setting;
 use App\Models\ProProManPlan;
 use App\Models\Notification;
+use App\Models\FileAttachment;
 
 if (!function_exists('checkIfDeleted')) {
     function checkIfDeleted(string $tableName, int $id)
@@ -269,5 +270,12 @@ if (!function_exists('pluralize')) {
         }
 
         return $word . 's';
+    }
+}
+
+if (!function_exists('getFileAttachment')) {
+    function getFileAttachment($attachmentId)
+    {
+        return FileAttachment::find($attachmentId)->file_name;
     }
 }

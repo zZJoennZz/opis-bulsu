@@ -53,7 +53,7 @@
                         </span>
                     </div>
                     <div class="fw-bold">
-                        ICS No.: <div class="d-inline border-bottom border-dark pe-5">{{ $parRecord->number }}</div>
+                        PAR No.: <div class="d-inline border-bottom border-dark pe-5">{{ $parRecord->number }}</div>
                     </div>
                 </div>
             </div>
