@@ -55,46 +55,57 @@
                 <input type="text" class="form-control" value="{{ $transaction->purchase_order->po_number }}" readonly>
             </div>
         </div>
-        <div class="col-12 mb-3">
-            <div>
-                <label for="branch" class="form-label">Branch:</label>
-                <select class="form-select" name="branch" id="branch" aria-label="Default select example">
-                    @foreach ($branches as $branch)
-                        @if ($branch->type !== "DEVELOPER")
-                            @if ($branch->id === $transaction->branches_id)
-                            <option selected value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
-                            @else
-                            <option value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
+        <form action="{{ route('tran.edit', ['id' => $transaction->id]) }}" method="post">
+            @csrf
+            @method('PUT')
+            <div class="col-12 mb-3">
+                <div>
+                    <label for="branch" class="form-label">Branch:</label>
+                    <select class="form-select" name="branch" id="branch" aria-label="Default select example">
+                        @foreach ($branches as $branch)
+                            @if ($branch->type !== "DEVELOPER")
+                                @if ($branch->id === $transaction->branches_id)
+                                <option selected value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
+                                @else
+                                <option value="{{ $branch->id }}">{{ $branch->branch_name }}</option>
+                                @endif
                             @endif
-                        @endif
-                    @endforeach
-                </select>
+                        @endforeach
+                    </select>
+                </div>
             </div>
-        </div>
-        <div class="col-6 mb-3">
-            <div>
-                <label for="date_acquired" class="form-label">Date Acquired</label>
-                <input type="date" class="form-control" value="{{ $transaction->date_acquired }}" name="date_acquired" id="date_acquired">
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <div>
+                        <label for="date_acquired" class="form-label">Date Acquired</label>
+                        <input type="date" class="form-control" value="{{ $transaction->date_acquired }}" name="date_acquired" id="date_acquired">
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div>
+                        <label for="date_issued" class="form-label">Date Issued</label>
+                        <input type="date" class="form-control" value="{{ $transaction->date_issued }}" name="date_issued" id="date_issued">
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-6">
-            <div>
-                <label for="date_issued" class="form-label">Date Issued</label>
-                <input type="date" class="form-control" value="{{ $transaction->date_issued }}" name="date_issued" id="date_issued">
+            <div class="row">
+                <div class="col-6 mb-3">
+                    <div>
+                        <label for="issuer" class="form-label">Issuer</label>
+                        <input type="text" class="form-control" value="{{ $transaction->issuers[0]->employee->first_name . ' ' . $transaction->issuers[0]->employee->middle_name . ' ' . $transaction->issuers[0]->employee->last_name }}" id="issuer" readonly>
+                    </div>
+                </div>
+                <div class="col-6 mb-3">
+                    <div>
+                        <label for="receiver" class="form-label">Receiver</label>
+                        <input type="text" class="form-control" value="{{ $transaction->receivers[0]->end_user->first_name . ' ' . $transaction->receivers[0]->end_user->middle_name . ' ' . $transaction->receivers[0]->end_user->last_name }}" id="receiver" readonly>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-6 mb-3">
-            <div>
-                <label for="issuer" class="form-label">Issuer</label>
-                <input type="text" class="form-control" value="{{ $transaction->issuers[0]->employee->first_name . ' ' . $transaction->issuers[0]->employee->middle_name . ' ' . $transaction->issuers[0]->employee->last_name }}" id="issuer" readonly>
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Update</button>
             </div>
-        </div>
-        <div class="col-6">
-            <div>
-                <label for="receiver" class="form-label">Receiver</label>
-                <input type="text" class="form-control" value="{{ $transaction->receivers[0]->end_user->first_name . ' ' . $transaction->receivers[0]->end_user->middle_name . ' ' . $transaction->receivers[0]->end_user->last_name }}" id="receiver" readonly>
-            </div>
-        </div>
+        </form>
     </div>
     <div class="row mb-3">
         <div class="col-12">
@@ -150,10 +161,10 @@
                     @endphp
                     <li class="mb-2">
                         <a href="{{ asset('storage/attachments/' .  $attachmentName) }}" target="_blank" rel="noopener noreferrer">{{ $attachmentName }}</a>
-                        <form method="POST" action="{{ route('tran.delete_attachment', ['itemId' => $item, 'tranId' => $transaction->id]) }}">
+                        <form onsubmit="return confirmAttachmentDelete()" class="d-inline" method="POST" action="{{ route('tran.delete_attachment', ['itemId' => $item, 'tranId' => $transaction->id]) }}">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            <button type="submit" class="btn btn-danger btn-sm"><em class="bi bi-trash-fill"></em></button>
                         </form>
                     </li>
                     @endforeach
@@ -173,6 +184,14 @@
         </div>
     </div>
     <x-slot:additional_script>
-
+        <script>
+            function confirmAttachmentDelete(){
+                let confirmDelete = confirm("Are you sure you want to delete this file attachment?");
+                if (confirmDelete) {
+                    return true;
+                }
+                return false;
+            }
+        </script>
     </x-slot>
 </x-dashboard-layout>

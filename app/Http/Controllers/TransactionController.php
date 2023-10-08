@@ -621,6 +621,29 @@ class TransactionController extends Controller
         }
     }
 
+    public function update_transaciton(Request $request, $id)
+    {
+        $request->validate([
+            'date_issued' => 'required|date',
+            'date_acquired' => 'required|date',
+            'branch' => 'required|integer|exists:branches,id',
+        ]);
+        try {
+            DB::beginTransaction();
+            $transaction = InventoryTransaction::find($id);
+            $transaction->date_issued = $request->date_issued;
+            $transaction->date_acquired = $request->date_acquired;
+            $transaction->branches_id = $request->branch;
+            $transaction->save();
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Transaction updated successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['Update failed! Something went wrong.']);
+        }
+    }
+
     public function attach_file(Request $request, $id)
     {
         try {

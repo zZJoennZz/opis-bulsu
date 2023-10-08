@@ -361,6 +361,7 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/all-transactions', [TransactionController::class, 'all_trans'])->name('trans.all');
     Route::get('/view-transaction/{id?}', [TransactionController::class, 'view_transaction'])->name('tran.single');
     Route::post('/view-transaction/{id?}', [TransactionController::class, 'attach_file'])->name('tran.attach');
+    Route::put('/view-transaction/{id?}', [TransactionController::class, 'update_transaciton'])->name('tran.edit');
 
     Route::delete('/delete-transaction-file/{itemId?}/{tranId?}', [TransactionController::class, 'delete_attachment'])->name('tran.delete_attachment');
 
@@ -388,7 +389,7 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'maintenance_form'])->name('maintenance.form');
     Route::post('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'submit_maintenance_form'])->name('maintenance.formsubmit');
     Route::get('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'disposal_form'])->name('disposal.form');
-    Route::get('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'submit_disposal_form'])->name('disposal.form');
+    Route::post('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'submit_disposal_form'])->name('disposal.form');
     Route::get('/maintenance/print/{id?}', [ItemMaintenanceController::class, 'print_maintenance_request'])->name('maintenance.print');
 });
 
