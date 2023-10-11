@@ -86,13 +86,13 @@
                 </thead>
                 <tbody>
                     @foreach ($maintenanceProperties as $property)
-                        @if ($property->histories[0]->type === "DISPOSAL")
+                        @if ($property->histories[0]->type === "DISPOSE")
                         <tr>
                             <td>{{ $property->item->transaction->date_acquired }}</td>
                             <td>{{ $property->item->bac_reso_item->quotation->pr_item->ppmp->item_detail->description . ', ' . $property->item->bac_reso_item->quotation->brand_and_model_offered }}</td>
                             <td>{{ $property->current_owners[0]->end_user->first_name . ' ' . $property->current_owners[0]->end_user->middle_name . ' ' . $property->current_owners[0]->end_user->last_name }}</td>
                             <td>{{ $property->histories[0]->created_at }}</td>
-                            <td><button class="btn btn-secondary btn-sm"><em class="bi bi-printer-fill"></em></button></td>
+                            <td><a class="btn btn-secondary btn-sm" href="{{ route('maintenance.print', ['id' => $property->histories[0]->id]) }}" target="_blank"><em class="bi bi-printer-fill"></em></a></td>
                         </tr>
                         @endif
                     @endforeach

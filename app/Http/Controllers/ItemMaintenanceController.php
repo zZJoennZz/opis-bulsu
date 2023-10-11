@@ -71,7 +71,14 @@ class ItemMaintenanceController extends Controller
 
     public function print_maintenance_request($id)
     {
-        return view('so-dashboard.print-maintenance-request');
+        try {
+            $printMaintenance = InventoryTransactionItemPropertyHistory::find($id);
+
+            return view('so-dashboard.print-maintenance-request')
+                ->with('printMaintenance', $printMaintenance);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['Invalid request. Please try again.']);
+        }
     }
 
     public function submit_maintenance_form(Request $request, $id)

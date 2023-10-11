@@ -11,12 +11,13 @@ class InventoryTransactionItemPropertyHistory extends Model
 
     protected $fillable = [
         'inventory_transaction_item_properties_id',
-        'type', //AVAILABLE, RETURN, DISPOSAL, MAINTENANCE
+        'type', //AVAILABLE, RETURN, DISPOSE, MAINTENANCE
         'details',
         'added_by',
     ];
 
-    public function property() {
-        return $this->belongsTo(InventoryTransactionItemProperty::class, 'id', 'inventory_transaction_item_properties_id');
+    public function property()
+    {
+        return $this->belongsTo(InventoryTransactionItemProperty::class, 'inventory_transaction_item_properties_id', 'id');
     }
 }

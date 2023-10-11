@@ -6,6 +6,7 @@
     @php
         $breadcrumb = [
             ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
+            ['name' => 'Item Maintenance', 'route' => 'maintenance.index'],
             ['name' => 'Form Type', 'url' => route('maintenance.select', ['id' => $property->id])],
             ['name' => 'Maintenance Form'],
         ]
