@@ -108,37 +108,56 @@
                     <tr>
                         <th style="width: 45%;">Item Detail</th>
                         <th class="text-center" style="width: 10%;">Unit</th>
-                        <th class="text-center" style="width: 15%;">Qty</th>
+                        <th class="text-center" style="width: 10%;">Qty</th>
                         <th class="text-center" style="width: 15%;">Price Catalogue</th>
-                        <th class="text-center" style="width: 15%;">Total Amount</th>
+                        <th class="text-center" style="width: 25%;">Total Amount</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php($grandTotalAmt = 0)
-                    @foreach ($consolidated_records as $record => $ppmp)
-                        <tr>
-                            <td>{{ json_decode($record)->description }}</td>
-                            <td>{{ $ppmp[0]->item_detail->unit->uom }}</td>
-                            <td class="text-center">
-                                @php($totalQty = 0)
-                                @foreach ($ppmp[0]->milestones as $rec)
-                                    @php($totalQty += $rec->milestone_value)
-                                @endforeach
-                                {{ $totalQty }}
-                            </td>
-                            <td class="text-end">
-                                <div class="float-start">₱</div>
-                                {{ number_format(json_decode($record)->price_catalogue, 2) }}
-                            </td>
-                            <td class="text-end">
-                                <div class="float-start">₱</div>
-                                @php($totalAmount = floatval($totalQty) * floatval(json_decode($record)->price_catalogue))
-                                {{ number_format($totalAmount, 2) }}
+                    @php($consolidated_records_grouped = [])
 
-                                @php($grandTotalAmt += floatval($totalAmount) )
+                    @foreach ($consolidated_records as $record => $ppmp)
+                        @php($description = json_decode($record)->description)
+                        @php($totalQty = 0)
+                        @php($totalAmount = 0)
+            
+                        @foreach ($ppmp[0]->milestones as $rec)
+                            @php($totalQty += $rec->milestone_value)
+                        @endforeach
+            
+                        @php($totalAmount = floatval($totalQty) * floatval(json_decode($record)->price_catalogue))
+            
+                        @if(array_key_exists($description, $consolidated_records_grouped))
+                            @php($consolidated_records_grouped[$description]['qty'] += $totalQty)
+                            @php($consolidated_records_grouped[$description]['amount'] += $totalAmount)
+                            @php($consolidated_records_grouped[$description]['unit'] = $ppmp[0]->item_detail->unit->uom)
+                            @php($consolidated_records_grouped[$description]['price_catalogue'] = json_decode($record)->price_catalogue)
+                        @else
+                            @php($consolidated_records_grouped[$description]['qty'] = $totalQty)
+                            @php($consolidated_records_grouped[$description]['amount'] = $totalAmount)
+                            @php($consolidated_records_grouped[$description]['unit'] = $ppmp[0]->item_detail->unit->uom)
+                            @php($consolidated_records_grouped[$description]['price_catalogue'] = json_decode($record)->price_catalogue)
+                        @endif
+                    @endforeach
+            
+                    @foreach ($consolidated_records_grouped as $description => $data)
+                        <tr>
+                            <td>{{ $description }}</td>
+                            <td>{{ $ppmp[0]->item_detail->unit->uom }}</td>
+                            <td class="text-center">{{ $data['qty'] }}</td>
+                            <td class="text-end">
+                                <div class="float-start">₱</div>
+                                {{ number_format($data['price_catalogue'], 2) }}
+                  
+                            </td>
+                            <td class="text-end">
+                                <div class="float-start">₱</div>
+                                {{ number_format($data['amount'], 2) }}
                             </td>
                         </tr>
                     @endforeach
+                    
+                    
                 </tbody>
                 <tfoot>
                     <tr class="fs-4 fw-bold">
