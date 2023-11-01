@@ -17,6 +17,14 @@
             font-family: 'Times New Roman', Times, serif;
             font-size: 14px;
         }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 10px 0px 0px 10px;
+                page-break-after: always;
+            }
+        }
     </style>
 </head>
 

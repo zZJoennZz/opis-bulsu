@@ -130,6 +130,7 @@ class TransferController extends Controller
             'selected_serial_numbers.*' => 'array|exists:inventory_transaction_item_properties,id',
             'quantity' => 'integer|numeric',
             'reason' => 'required',
+            'transfer_type' => 'required|in:OTHERS,DONATION,RELOCATE,REASSIGNMENT',
             'receiver' => 'required|exists:supply_end_users,id',
             'issuer' => 'exists:supply_end_users,id'
         ]);
@@ -155,6 +156,8 @@ class TransferController extends Controller
                 'number' => $ptNumber,
                 'quantity' => $request->quantity ?? count(json_decode($request->selected_serial_numbers)),
                 'reason' => $request->reason,
+                'type' => $request->transfer_type,
+                'other_type' => $request->other_type,
                 'added_by' => Auth::user()->id,
             ]);
             $newProperty->save();
@@ -177,7 +180,7 @@ class TransferController extends Controller
             if ($transferIssuer === null) {
                 $transferIssuer = $itemWithProperties->transaction->receivers[0]->supply_end_users_id;
             }
-            
+
             $newPropertyTransferIssuer = new PropertyTransferIssuer([
                 'property_transfers_id' => $newProperty->id,
                 'supply_end_users_id' => $transferIssuer,

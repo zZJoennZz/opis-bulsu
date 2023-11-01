@@ -131,8 +131,8 @@
                 </tbody>
             </table>
         </div>
-        <div class="text-muted fst-italic small">Can't find item? Check <a href="{{ route('par.all') }}">PAR</a> or <a
-                href="{{ route('ics.all') }}">ICS</a>.</div>
+        {{-- <div class="text-muted fst-italic small">Can't find item? Check <a href="{{ route('par.all') }}">PAR</a> or <a
+                href="{{ route('ics.all') }}">ICS</a>.</div> --}}
         <x-slot:additional_script>
             @include('layout/datatable', ['tableId' => 'all-items'])
             </x-slot>

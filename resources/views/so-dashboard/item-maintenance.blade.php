@@ -42,9 +42,8 @@
 
     <div class="row mb-5">
         <div class="col-12">
-            <div class="text-uppercase fw-bold fs-4 text-secondary">Properties in Maintenance</div>
-
-            <table class="table table-sm" id="item-maintenance">
+            <table class="table table-sm caption-top" id="item-maintenance">
+                <caption>Properties in Maintenance</caption>
                 <thead>
                     <tr>
                         <th>Date Acquired</th>
@@ -73,8 +72,8 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="text-uppercase fw-bold fs-4 text-secondary">Disposed Properties</div>
-            <table class="table table-sm" id="item-disposal">
+            <table class="table table-sm caption-top" id="item-disposal">
+                <caption>Inventory and Inspection Report of Unserviceable Semi-Expendable Property Reports</caption>
                 <thead>
                     <tr>
                         <th>Date Acquired</th>

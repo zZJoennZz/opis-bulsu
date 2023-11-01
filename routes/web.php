@@ -32,7 +32,9 @@ use App\Http\Controllers\SupplyPositionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ModeOfProcurementController;
 use App\Http\Controllers\EquipmentCodesController;
+use App\Http\Controllers\GeneralInventoryController;
 use App\Http\Controllers\ItemMaintenanceController;
+use App\Http\Controllers\PPEController;
 use App\Http\Controllers\PropertyController;
 
 /*
@@ -389,8 +391,20 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'maintenance_form'])->name('maintenance.form');
     Route::post('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'submit_maintenance_form'])->name('maintenance.formsubmit');
     Route::get('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'disposal_form'])->name('disposal.form');
-    Route::post('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'submit_disposal_form'])->name('disposal.form');
+    Route::post('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'submit_disposal_form'])->name('disposal.formsubmit');
     Route::get('/maintenance/print/{id?}', [ItemMaintenanceController::class, 'print_maintenance_request'])->name('maintenance.print');
+
+    Route::get('/gi-par', [GeneralInventoryController::class, 'par'])->name('gi-par.show');
+    Route::post('/gi-par', [GeneralInventoryController::class, 'generate_par'])->name('gi-par.post');
+    Route::get('/gi-par/{snapshot_id?}', [GeneralInventoryController::class, 'print_par'])->name('gi-par.print');
+
+    Route::get('/gi-ics', [GeneralInventoryController::class, 'ics'])->name('gi-ics.show');
+    Route::post('/gi-ics', [GeneralInventoryController::class, 'generate_ics'])->name('gi-ics.post');
+    Route::get('/gi-ics/{snapshot_id?}', [GeneralInventoryController::class, 'print_ics'])->name('gi-ics.print');
+
+    Route::get('/physical-ppe', [PPEController::class, 'index'])->name('ppe.index');
+    Route::get('/physical-ppe/{id?}', [PPEController::class, 'print'])->name('ppe.print');
+    Route::post('/physical-ppe', [PPEController::class, 'generate'])->name('ppe.generate');
 });
 
 //ADMIN ONLY

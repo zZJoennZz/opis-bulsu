@@ -12,6 +12,7 @@ class InventoryTransactionItemProperty extends Model
         'inventory_transaction_items_id',
         'serial_number',
         'property_condition',
+        'remarks',
         'is_available',
     ];
 
@@ -30,7 +31,8 @@ class InventoryTransactionItemProperty extends Model
         return $this->hasMany(PropertyTransferProperty::class, 'inventory_transaction_item_properties_id', 'id');
     }
 
-    public function histories() {
+    public function histories()
+    {
         return $this->hasMany(InventoryTransactionItemPropertyHistory::class, 'inventory_transaction_item_properties_id', 'id');
     }
 }

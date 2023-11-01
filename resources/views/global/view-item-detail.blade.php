@@ -43,11 +43,11 @@
                 <label for="description">Item name</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" value="{{$item_detail->article}}" id="article" name="article" placeholder="Item article" @if($item_detail->is_delete===1) disabled @endif required>
+                <input type="text" class="form-control" value="{{$item_detail->article}}" id="article" name="article" placeholder="Item article" @if($item_detail->is_delete===1) disabled @endif>
                 <label for="article">Item article</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" value="{{$item_detail->extra_article}}" id="extra_article" name="extra_article" placeholder="Item article line 2" @if($item_detail->is_delete===1) disabled @endif required>
+                <input type="text" class="form-control" value="{{$item_detail->extra_article}}" id="extra_article" name="extra_article" placeholder="Item article line 2" @if($item_detail->is_delete===1) disabled @endif>
                 <label for="extra_article">Item article line 2</label>
             </div>
             <div class="form-floating mb-3">

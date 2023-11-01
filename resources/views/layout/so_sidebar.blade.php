@@ -73,7 +73,40 @@
 <li class="nav-item">
     <a href="{{ route('maintenance.index') }}" aria-current="page" class="nav-link">
         <em class="bi bi-wrench-adjustable-circle"></em>
-        Maintenance
+        Unserviceable Property
+    </a>
+</li>
+<li>
+    <hr />
+</li>
+<li class="nav-item small text-uppercase">
+    <b class="nav-link" aria-current="page">
+        General Inventory
+    </b>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('gi-par.show') }}">
+        <em class="bi bi-people-fill"></em> Property Acknowledgement Receipt
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('gi-ics.show') }}">
+        <em class="bi bi-person-fill-up"></em> Inventory Custodian Receipt
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('supply-position.all') }}">
+        <em class="bi bi-person-fill-gear"></em> Inventory and Inspection Report of Unserviceable Property
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('equipment-code.all') }}">
+        <em class="bi bi-diagram-3-fill"></em> Inventory of Furniture and Fixtures
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('ppe.index') }}">
+        <em class="bi bi-diagram-3-fill"></em> Physical Count of Property, Plant and Equipment
     </a>
 </li>
 <li>

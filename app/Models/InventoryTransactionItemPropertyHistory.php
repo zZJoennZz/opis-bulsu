@@ -12,6 +12,7 @@ class InventoryTransactionItemPropertyHistory extends Model
     protected $fillable = [
         'inventory_transaction_item_properties_id',
         'type', //AVAILABLE, RETURN, DISPOSE, MAINTENANCE
+        'record_number',
         'details',
         'added_by',
     ];

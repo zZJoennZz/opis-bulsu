@@ -42,7 +42,7 @@
         </div>
     </div>
 
-    <form method="POST" id="maintenance-form" action="{{ route('maintenance.formsubmit', ['id' => $property->id]) }}">
+    <form method="POST" id="maintenance-form" action="{{ route('disposal.formsubmit', ['id' => $property->id]) }}">
         @csrf
         <div class="mb-3">
             <div class="form-floating">

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text("description");
             $table->text("article")->nullable();
             $table->text("extra_article")->nullable();
-            $table->decimal("price_catalogue");
+            $table->double("price_catalogue");
             $table->unsignedBigInteger("category_id");
             $table->unsignedBigInteger("unit_id");
             $table->boolean('is_approve')->default(false);

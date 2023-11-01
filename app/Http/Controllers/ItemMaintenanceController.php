@@ -97,9 +97,25 @@ class ItemMaintenanceController extends Controller
                 "remarks" => $request->remarks,
             ];
 
+            $yearNow = date('Y');
+
+            $latest_rec = InventoryTransactionItemPropertyHistory::where(DB::raw('SUBSTR(record_number, 1, 4)'), '=', $yearNow)
+                ->latest()
+                ->first();
+
+            $rec_number_ctr = $latest_rec === null ? 1 : intval(substr($latest_rec->record_number, 9, 4)) + 1;
+
+            $rec_number = sprintf(
+                '%s-%s-%s',
+                $yearNow,
+                date('m'),
+                str_pad($rec_number_ctr, 3, '0', STR_PAD_LEFT),
+            );
+
             $newHistory = new InventoryTransactionItemPropertyHistory([
                 'inventory_transaction_item_properties_id' => $property->id,
                 'type' => 'MAINTENANCE',
+                'record_number' => $rec_number,
                 'details' => json_encode($details),
                 'added_by' => Auth::user()->id,
             ]);
@@ -133,9 +149,25 @@ class ItemMaintenanceController extends Controller
                 "remarks" => $request->remarks,
             ];
 
+            $yearNow = date('Y');
+
+            $latest_rec = InventoryTransactionItemPropertyHistory::where(DB::raw('SUBSTR(record_number, 1, 4)'), '=', $yearNow)
+                ->latest()
+                ->first();
+
+            $rec_number_ctr = $latest_rec === null ? 1 : intval(substr($latest_rec->record_number, 9, 4)) + 1;
+
+            $rec_number = sprintf(
+                '%s-%s-%s',
+                $yearNow,
+                date('m'),
+                str_pad($rec_number_ctr, 3, '0', STR_PAD_LEFT),
+            );
+
             $newHistory = new InventoryTransactionItemPropertyHistory([
                 'inventory_transaction_item_properties_id' => $property->id,
                 'type' => 'DISPOSE',
+                'record_number' => $rec_number,
                 'details' => json_encode($details),
                 'added_by' => Auth::user()->id,
             ]);

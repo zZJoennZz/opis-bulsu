@@ -32,7 +32,8 @@ class InventoryTransactionItem extends Model
         return $this->hasMany(InventoryTransactionItemProperty::class, 'inventory_transaction_items_id', 'id');
     }
 
-    public function equipment_code() {
+    public function equipment_code()
+    {
         return $this->hasOne(EquipmentCode::class, 'id', 'equipment_codes_id');
     }
 }

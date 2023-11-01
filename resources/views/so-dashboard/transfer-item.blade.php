@@ -111,6 +111,24 @@
             @endif
             <div class="row mb-3">
                 <div class="col-12">
+                    <label for="transfer_type" class="form-label">Transfer type</label>
+                    <select name="transfer_type" id="transfer_type" class="form-select" aria-label="Select transfer type">
+                        <option selected hidden disabled>Select transfer type</option>
+                        <option value="DONATION">Donation</option>
+                        <option value="RELOCATE">Relocate</option>
+                        <option value="REASSIGNMENT">Reassignment</option>
+                        <option value="OTHERS">Others</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3 d-none" id="other_type_div">
+                <div class="col-12">
+                    <label for="other_type" class="form-label">Other Type</label>
+                    <input type="text" class="form-control" id="other_type" name="other_type">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
                     <label for="reason" class="form-label">Reason for transfer</label>
                 </div>
                 <div class="col-12">
@@ -133,6 +151,16 @@
                     hiddenInput.value = JSON.stringify(selectedSerialNumbers);
                     this.appendChild(hiddenInput);
                     this.submit();
+                });
+
+                let transferTypeSelect = document.querySelector('#transfer_type');
+                transferTypeSelect.addEventListener('change', function(event) {
+                    let otherTypeDiv = document.querySelector('#other_type_div');
+                    if (event.target.value === "OTHERS") {
+                        otherTypeDiv.classList.remove('d-none');
+                    } else {
+                        otherTypeDiv.classList.add('d-none');
+                    }
                 });
             </script>
             <style>

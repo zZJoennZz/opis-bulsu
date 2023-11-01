@@ -194,7 +194,6 @@ class ItemDetailController extends Controller
             'category_id' => 'min:1',
             'unit_id' => 'min:1',
             'description' => 'required|min:3',
-            'article' => 'required|min:3',
             'price_catalogue' => 'required|numeric|min:1'
         ]);
 
@@ -234,6 +233,7 @@ class ItemDetailController extends Controller
             return redirect()->back()->with('success', $success_message);
         } catch (Throwable $e) {
             DB::rollBack();
+            // return $e;
             return redirect()->back()->withErrors(['Something went wrong! Your submission failed.']);
         }
     }

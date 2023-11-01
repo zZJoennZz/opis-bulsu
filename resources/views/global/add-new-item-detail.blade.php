@@ -13,7 +13,7 @@
                 ['name' => 'Add new item detail']
             ];
             $cancelUrl = route('dashboard.show');
-        } else if (Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin') {
+        } else if (Auth::user()->account_type === 'PROCUREMENT_OFFICE' || Auth::user()->account_type === 'admin' || Auth::user()->account_type === 'PROCUREMENT_HEAD') {
             $bc =
             [
                 ['name' => '<em class="bi bi-house-fill"></em>', 'route' => 'dashboard.show'],
@@ -34,11 +34,11 @@
                 <label for="description">Item name</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="article" name="article" placeholder="Item article" required>
+                <input type="text" class="form-control" id="article" name="article" placeholder="Item article">
                 <label for="article">Item article</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="extra_article" name="extra_article" placeholder="Item article" required>
+                <input type="text" class="form-control" id="extra_article" name="extra_article" placeholder="Item article">
                 <label for="extra_article">Item article line 2</label>
             </div>
             <div class="form-floating mb-3">

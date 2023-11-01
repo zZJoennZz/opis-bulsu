@@ -47,7 +47,7 @@
                                     <select class="form-select" id="article" name="article" aria-label="Select article" required>
                                         <option disabled hidden selected>Select article</option>
                                         <option value="SEMI_EXPENDABLE">Semi-expendable</option>
-                                        <option value="NON_SEMI_EXPENDABLE">Non-semi-expendable</option>
+                                        <option value="NON_SEMI_EXPENDABLE">Consumable</option>
                                     </select>
                                 </div>
                                 <div>
@@ -132,7 +132,7 @@
                                 <select class="form-select" id="edit_article" name="edit_article" aria-label="Select article" required>
                                     <option disabled hidden selected>Select article</option>
                                     <option value="SEMI_EXPENDABLE">Semi-expendable</option>
-                                    <option value="NON_SEMI_EXPENDABLE">Non-semi-expendable</option>
+                                    <option value="NON_SEMI_EXPENDABLE">Consumable</option>
                                 </select>
                             </div>
                             <div>
