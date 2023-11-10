@@ -16,8 +16,8 @@
 
             @media print {
                 @page {
+                    size: A4 portrait;
                     margin: 5px 0px 0px 5px;
-                    page-break-after: always;
                 }
             }
         </style>
@@ -25,7 +25,10 @@
     <body>
         <div style="width: 98%;" class="m-auto small">
             <table class="w-100">
-                <thead class="border-bottom border-dark">
+                {{-- <thead class="border-bottom border-dark">
+                    
+                </thead> --}}
+                <tbody class="border border-dark">
                     <tr>
                         <th colspan="6">
                             <div class="row mb-5">
@@ -64,7 +67,7 @@
                             </div>
                         </th>
                     </tr>
-                    <tr class="border-dark border-end border-start text-center">
+                    <tr class="border-dark border-bottom border-end border-start text-center">
                         <th style="width: 10%;" class="border-end border-dark">Stock/<br />Property No.</th>
                         <th style="width: 10%;" class="border-end border-dark">Unit</th>
                         <th style="width: 30%;" class="border-end border-dark">Description</th>
@@ -72,8 +75,6 @@
                         <th style="width: 16.66%;" class="border-end border-dark">Unit Cost</th>
                         <th style="width: 16.66%;" class="border-end border-dark">Total Cost</th>
                     </tr>
-                </thead>
-                <tbody class="border border-dark">
                     @php
                         $ctr = 1;
                     @endphp
@@ -96,8 +97,6 @@
                             $ctr += 1;
                         @endphp
                     @endforeach
-                </tbody>
-                <tfoot class="border-start border-end border-dark" style="padding: 0px !important;">
                     <tr>
                         <td colspan="6" class="border-bottom border-dark">
                             <div class="d-flex p-1">
@@ -135,7 +134,10 @@
                             </div>
                         </td>
                     </tr>
-                </tfoot>
+                </tbody>
+                {{-- <tfoot class="border-start border-end border-dark" style="padding: 0px !important;">
+                    
+                </tfoot> --}}
             </table>
         </div>
         <script>

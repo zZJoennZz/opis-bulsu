@@ -11,7 +11,84 @@
     @endphp
 
     <x-breadcrumb :breadcrumb="$breadcrumb" />
-    <div id="printReport" class="for-print d-none d-print-none">
+
+    @if ($consolidated_records === null || count($consolidated_records) === 0)
+        <p class="text-center fst-italic text-secondary">PPMP for the year <span class="badge bg-primary">{{ Auth::user()->ppmp_year }}</span> is not yet consolidated.</p>
+        <form onsubmit="return confirm(`Are you sure to consolidate the submitted PPMP as of ${new Date().toLocaleDateString('en-PH', { weekday: 'short', 'year': 'numeric', 'day': 'numeric', 'month': 'long', 'hour': '2-digit', 'minute': '2-digit', 'second': '2-digit' })} for the year {{ Auth::user()->ppmp_year }}.`)" class="d-flex w-100" method="POST" action="{{ route('consolidate.perform') }}">
+            @csrf
+            <button type="submit" class="btn btn-primary btn-lg mx-auto"><em class="bi bi-collection-fill"></em> Consolidate <span class="badge bg-dark">{{ Auth::user()->ppmp_year }}</span></button>
+        </form>
+    @else
+        <div class="mb-3">
+            <span class="float-end small"># of records: <span class="badge text-bg-secondary">{{ count($consolidated_records) }}</span></span>
+        </div>
+        @if (count($not_consolidated) > 0)
+            <div class="alert alert-warning" role="alert">
+                <strong>Warning!</strong> There {{ count($not_consolidated) === 1 ? "is" : "are" }} <strong><em>{{ count($not_consolidated) }}</em></strong> pending {{ count($not_consolidated) === 1 ? "revision" : "revisions" }} and {{ count($not_consolidated) === 1 ? "is" : "are" }} not included to this consolidation. Make sure the budget office and procurement office approve them first before redoing the consolidation.
+            </div>
+        @endif
+        <form onsubmit="return confirm('Are you sure to consolidate pending records?')" action="{{ route('consolidate.reset') }}" method="POST">
+            @csrf
+            <div class="btn-group" role="toolbar" aria-label="Consolidated PPMP Records Tools">
+                <a href="{{ route('consolidate.print') }}" target="_blank" class="btn btn-outline-success"><em class="bi bi-printer-fill"></em> Print</a>
+                {{-- <button onclick="printDoc()" type="button" class="btn btn-outline-success"><em class="bi bi-file-earmark-pdf-fill"></em> Save as PDF</button> --}}
+                <button type="submit" class="btn btn-outline-danger"><em class="bi bi-arrow-clockwise"></em> Consolidate Pending</button>
+            </div>
+        </form>
+        <div class="table-responsive mt-3">
+            <table class="table table-small table-bordered border-dark caption-top" id="consolidated-ppmp1">
+                <caption class="fs-4 fw-bold text-uppercase">Consolidated Annual Procurement Plan <span class="badge text-bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
+                <thead>
+                    <tr>
+                        <th style="width: 45%;">Item Detail</th>
+                        <th class="text-center" style="width: 10%;">Unit</th>
+                        <th class="text-center" style="width: 15%;">Qty</th>
+                        <th class="text-center" style="width: 15%;">Price Catalogue</th>
+                        <th class="text-center" style="width: 15%;">Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php($grandTotalAmt = 0)
+                    @foreach ($consolidated_records as $record)
+                        <tr>
+                            <td>{{ $record->description }}</td>
+                            <td>{{ $record->unit->uom }}</td>
+                            <td class="text-center">
+                                @php($totalQty = 0)
+                                @foreach ($record->ppmp as $ppmp)
+                                    @foreach ($ppmp->milestones as $milestone)
+                                        @php($totalQty += $milestone->milestone_value)
+                                    @endforeach
+                                @endforeach
+                                {{ $totalQty }}
+                            </td>
+                            <td class="text-end">
+                                <div class="float-start">₱</div>
+                                {{ number_format($record->price_catalogue, 2) }}
+                                {{-- {{ number_format(json_decode($record)->price_catalogue, 2) }} --}}
+                            </td>
+                            <td class="text-end">
+                                <div class="float-start">₱</div>
+                                {{ number_format($record->price_catalogue * $totalQty, 2) }}
+                                @php($grandTotalAmt += floatval($record->price_catalogue * $totalQty)) 
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                <tfoot>
+                    <tr class="fs-4 fw-bold">
+                        <td class="text-end" colspan="4">Grand Total</td>
+                        <td class="text-end">
+                            <div class="float-start">₱</div>
+                            {{ number_format($grandTotalAmt, 2) }}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    @endif
+
+    {{-- <div id="printReport" class="for-print d-none d-print-none">
         <div class="row mb-3">
             <div class="col-2"></div>
             <div class="col-8 text-center fw-bold">
@@ -102,7 +179,7 @@
             </div>
         </form>
         <div class="table-responsive mt-3">
-            <table class="table table-small table-bordered border-dark caption-top" id="consolidated-ppmp">
+            <table class="table table-small table-bordered border-dark caption-top" id="consolidated-ppmp1">
                 <caption class="fs-4 fw-bold text-uppercase">Consolidated Annual Procurement Plan <span class="badge text-bg-primary">{{ Auth::user()->ppmp_year }}</span></caption>
                 <thead>
                     <tr>
@@ -151,11 +228,13 @@
                 </tfoot>
             </table>
         </div>
-    @endif
+    @endif --}}
+
+    
     <x-slot:additional_script>
-    @if ($consolidated_records !== null || count($consolidated_records) !== 0)
+    {{-- @if ($consolidated_records !== null || count($consolidated_records) !== 0)
     @include('layout/datatable', ['tableId' => 'consolidated-ppmp'])
     @include('layout/save-pdf', ['divId' => 'printReport', 'margin' => 0.2, 'fileName' => 'eprocure-consolidated-' . date('Y')])
-    @endif
+    @endif --}}
     </x-slot>
 </x-dashboard-layout>

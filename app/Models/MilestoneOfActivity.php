@@ -14,4 +14,9 @@ class MilestoneOfActivity extends Model
         'milestone_value_id',
         'milestone_value'
     ];
+
+    public function ppmp()
+    {
+        return $this->belongsTo(ProProManPlan::class, 'pro_pro_man_plans_id', 'id');
+    }
 }

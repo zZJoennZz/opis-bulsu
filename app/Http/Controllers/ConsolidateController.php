@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ItemDetail;
 use Illuminate\Http\Request;
 use App\Models\ProProManPlan;
 use App\Models\PurchaseRequest;
@@ -16,9 +17,29 @@ class ConsolidateController extends Controller
 
     public function index()
     {
-        $getConsolidated = ProProManPlan::get()->where('is_consolidate', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->groupBy(function ($data) {
-            return $data->item_detail;
-        });
+        // $getConsolidated = ProProManPlan::get()->where('is_consolidate', '=', 1)->where('year', '=', Auth::user()->ppmp_year)->where('is_draft', '=', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->groupBy(function ($data) {
+        //     return $data->item_detail;
+        // });
+        // DB::enableQueryLog();
+        $userYear = Auth::user()->ppmp_year;
+        $getConsolidated = ItemDetail::whereHas('ppmp', function ($builder) use ($userYear) {
+            $builder->where('is_draft', 0)
+                ->where('is_bo_approve', 1)
+                ->where('is_pr_approve', 1)
+                ->where('is_consolidate', 1)
+                ->where('year', $userYear);
+        })
+            ->with([
+                'ppmp' => function ($builder) use ($userYear) {
+                    $builder->where('is_draft', 0)
+                        ->where('is_bo_approve', 1)
+                        ->where('is_pr_approve', 1)
+                        ->where('is_consolidate', 1)
+                        ->where('year', $userYear)
+                        ->with(['milestones']);
+                }
+            ])
+            ->get();
 
         $notConsolidated = ProProManPlan::where('year', '=', Auth::user()->ppmp_year)->where('is_consolidate', '=', 0)->where('is_draft', '=', 0)->where('is_delete', 0)->where('is_bo_approve', '=', 1)->where('is_pr_approve', '=', 1)->get();
 
@@ -45,6 +66,32 @@ class ConsolidateController extends Controller
             DB::rollBack();
             return redirect()->back()->withErrors(["Consolidation failed. Please try again. If the problem persists, contact website administrator."]);
         }
+    }
+
+    public function print_consolidated()
+    {
+        $userYear = Auth::user()->ppmp_year;
+        $getConsolidated = ItemDetail::whereHas('ppmp', function ($builder) use ($userYear) {
+            $builder->where('is_draft', 0)
+                ->where('is_bo_approve', 1)
+                ->where('is_pr_approve', 1)
+                ->where('is_consolidate', 1)
+                ->where('year', $userYear);
+        })
+            ->with([
+                'ppmp' => function ($builder) use ($userYear) {
+                    $builder->where('is_draft', 0)
+                        ->where('is_bo_approve', 1)
+                        ->where('is_pr_approve', 1)
+                        ->where('is_consolidate', 1)
+                        ->where('year', $userYear)
+                        ->with(['milestones']);
+                }
+            ])
+            ->get();
+
+        return view('po-dashboard.print-consolidated')
+            ->with('consolidated_records', $getConsolidated);
     }
 
     public function reset_consolidation()

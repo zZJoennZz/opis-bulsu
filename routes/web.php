@@ -142,6 +142,7 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/consolidate', [ConsolidateController::class, 'index'])->name('consolidated.show');
     Route::post('/consolidate', [ConsolidateController::class, 'consolidate'])->name('consolidate.perform');
     Route::post('/consolidate/reset', [ConsolidateController::class, 'reset_consolidation'])->name('consolidate.reset');
+    Route::get('/consolidate/print', [ConsolidateController::class, 'print_consolidated'])->name('consolidate.print');
 
     Route::get('/previous-ppmp/{branch_id}', [PPMPController::class, 'previous_ppmp'])->name('previous-ppmp.show');
     Route::get('/previous-ppmp/{branch_id}/{year}', [PPMPController::class, 'previous_ppmp_open'])->name('previous-ppmp-single.show');
