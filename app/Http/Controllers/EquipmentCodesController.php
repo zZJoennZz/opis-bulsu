@@ -74,7 +74,7 @@ class EquipmentCodesController extends Controller
 
             DB::commit();
 
-            session(['success' => 'Supply Position successfully updated!']);
+            session(['success' => 'Equipment code successfully updated!']);
             return response()->json([
                 'success' => true,
             ], 200);

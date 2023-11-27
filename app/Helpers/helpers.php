@@ -7,6 +7,7 @@ use App\Models\Setting;
 use App\Models\ProProManPlan;
 use App\Models\Notification;
 use App\Models\FileAttachment;
+use Illuminate\Database\Eloquent\Collection;
 
 if (!function_exists('checkIfDeleted')) {
     function checkIfDeleted(string $tableName, int $id)

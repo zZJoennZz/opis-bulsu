@@ -17,7 +17,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('inventory_transaction_items_id');
             $table->string('serial_number')->nullable();
-            $table->string('property_condition')->default('Brand New');
+            $table->string('property_condition')->nullable()->default('Brand New');
+            $table->string('accumulated_depreciation')->nullable();
+            $table->string('accumulated_impairment_losses')->nullable();
+            $table->string('carrying_amount')->nullable();
+            $table->string('disposal')->nullable();
+            $table->string('appraised_value')->nullable();
+            $table->string('or_number')->nullable();
+            $table->string('amount')->nullable();
             $table->boolean('is_available')->default(true);
             $table->timestamps();
         });

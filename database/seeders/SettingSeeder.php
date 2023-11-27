@@ -70,7 +70,11 @@ class SettingSeeder extends Seeder
         ]);
         Setting::create([
             'name' => 'inventory_committee_members',
-            'value' => '["LEAHC.CRUZ","SHARONALMARIO","JESSICAGONZALES"]',
+            'value' => '["LEAH C. CRUZ","SHARONALMARIO","JESSICA GONZALES"]',
+        ]);
+        Setting::create([
+            'name' => 'head_asset_management_unit',
+            'value' => 'Elizabeth D. Sunga',
         ]);
     }
 }

@@ -95,7 +95,7 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('supply-position.all') }}">
+    <a class="nav-link" aria-current="page" href="{{ route('iirup.index') }}">
         <em class="bi bi-person-fill-gear"></em> Inventory and Inspection Report of Unserviceable Property
     </a>
 </li>

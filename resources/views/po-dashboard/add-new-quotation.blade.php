@@ -208,7 +208,12 @@
         
                     htmlContent += `
                             <tr>
-                                <td>${d.ppmp.item_detail.description}</td>
+                                <td>
+                                    <div>
+                                        ${d.ppmp.item_detail.description}
+                                    </div>
+                                    <div class="small fst-italic">Price Catalogue: ${convertToCurrency(d.ppmp.item_detail.price_catalogue)}</div>
+                                </td>
                                 <td>${totalQty} ${d.ppmp.item_detail.unit.uom}</td>
                                 <td><input id="item_number_${d.id}" name="item_number_${d.id}" value="${d.item_number}" class="form-control" readonly></td>
                                 <td><input id="brand_and_model_offered_${d.id}" name="brand_and_model_offered_${d.id}" class="form-control"></td>

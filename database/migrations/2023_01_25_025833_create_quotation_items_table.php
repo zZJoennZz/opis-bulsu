@@ -20,7 +20,7 @@ return new class extends Migration
             // $table->unsignedBigInteger('pro_pro_man_plans_id'); //will be using pr item instead of ppmp
             $table->unsignedBigInteger('purchase_request_items_id');
             $table->string('brand_and_model_offered');
-            $table->decimal('offered_unit_price');
+            $table->double('offered_unit_price');
             $table->timestamps();
 
             $table->foreign('quotations_id')->references('id')->on('quotations');

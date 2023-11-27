@@ -382,30 +382,44 @@ Route::middleware('supply.office')->group(function () {
 
     Route::get('/property', [PropertyController::class, 'list'])->name('transfered_items.all');
     Route::get('/property/{propertyId}', [PropertyController::class, 'view'])->name('property.single');
+    Route::post('/property/edit', [PropertyController::class, 'edit'])->name('property.edit');
+    Route::put('/property/edit', [PropertyController::class, 'update'])->name('property.update');
 
     Route::get('/end-user', [PropertyController::class, 'users'])->name('end_users.all');
     Route::get('/end-user/{userId}', [PropertyController::class, 'user_items'])->name('end_users.single');
     Route::get('/end-user/print/{userId}', [PropertyController::class, 'print_user_items_rpcsp'])->name('end_users.print');
 
     Route::get('/maintenance', [ItemMaintenanceController::class, 'item_maintenance_index'])->name('maintenance.index');
-    Route::get('/maintenance/select-form/{id?}', [ItemMaintenanceController::class, 'select_form'])->name('maintenance.select');
-    Route::get('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'maintenance_form'])->name('maintenance.form');
-    Route::post('/maintenance/maintenance-form/{id?}', [ItemMaintenanceController::class, 'submit_maintenance_form'])->name('maintenance.formsubmit');
-    Route::get('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'disposal_form'])->name('disposal.form');
+    Route::get('/maintenance/select-form/{id?}', function () {
+        return redirect()->back()->withErrors(['Invalid action.']);
+    });
+    Route::get('/maintenance/select-form', function () {
+        return redirect()->back()->withErrors(['Invalid action.']);
+    });
+    Route::post('/maintenance/select-form', [ItemMaintenanceController::class, 'select_form'])->name('maintenance.select');
+    Route::get('/maintenance/maintenance-form', [ItemMaintenanceController::class, 'maintenance_form'])->name('maintenance.form');
+    Route::post('/maintenance/maintenance-form', [ItemMaintenanceController::class, 'submit_maintenance_form'])->name('maintenance.formsubmit');
+    Route::get('/maintenance/disposal-form', [ItemMaintenanceController::class, 'disposal_form'])->name('disposal.form');
     Route::post('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'submit_disposal_form'])->name('disposal.formsubmit');
-    Route::get('/maintenance/print/{id?}', [ItemMaintenanceController::class, 'print_maintenance_request'])->name('maintenance.print');
+    Route::get('/maintenance/print/{rec_number?}/{mode?}', [ItemMaintenanceController::class, 'print_maintenance'])->name('maintenance.print');
 
     Route::get('/gi-par', [GeneralInventoryController::class, 'par'])->name('gi-par.show');
     Route::post('/gi-par', [GeneralInventoryController::class, 'generate_par'])->name('gi-par.post');
     Route::get('/gi-par/{snapshot_id?}', [GeneralInventoryController::class, 'print_par'])->name('gi-par.print');
+    Route::delete('/gi-par/{snapshot_id?}', [GeneralInventoryController::class, 'delete'])->name('gi-par.delete');
 
     Route::get('/gi-ics', [GeneralInventoryController::class, 'ics'])->name('gi-ics.show');
     Route::post('/gi-ics', [GeneralInventoryController::class, 'generate_ics'])->name('gi-ics.post');
     Route::get('/gi-ics/{snapshot_id?}', [GeneralInventoryController::class, 'print_ics'])->name('gi-ics.print');
+    Route::delete('/gi-ics/{snapshot_id?}', [GeneralInventoryController::class, 'delete'])->name('gi-ics.delete');
 
     Route::get('/physical-ppe', [PPEController::class, 'index'])->name('ppe.index');
     Route::get('/physical-ppe/{id?}', [PPEController::class, 'print'])->name('ppe.print');
     Route::post('/physical-ppe', [PPEController::class, 'generate'])->name('ppe.generate');
+
+    Route::get('/inventory-and-inspection-report-of-unserviceable-property', [GeneralInventoryController::class, 'inventory_inspection_index'])->name('iirup.index');
+    Route::post('/inventory-and-inspection-report-of-unserviceable-property', [GeneralInventoryController::class, 'inventory_inspection_generate'])->name('iirup.generate');
+    Route::get('/inventory-and-inspection-report-of-unserviceable-property/{reportId?}', [GeneralInventoryController::class, 'print_inventory_inspection'])->name('iirup.print');
 });
 
 //ADMIN ONLY

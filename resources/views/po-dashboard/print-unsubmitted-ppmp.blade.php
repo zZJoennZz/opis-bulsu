@@ -18,6 +18,7 @@
             }
             @media print {
                 @page {
+                    size: A4 portrait;
                     margin: 5px 0px 0px 5px;
                     page-break-after: always;
                 }

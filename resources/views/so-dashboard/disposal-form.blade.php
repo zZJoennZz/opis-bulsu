@@ -52,6 +52,30 @@
         </div>
         <div class="mb-3">
             <div class="form-floating">
+                <textarea class="form-control" placeholder="Enter the property condition" id="property_condition" name="property_condition" style="height: 100px"></textarea>
+                <label for="property_condition">Property condition</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Enter the accumulated depreciation" id="accumulated_depreciation" name="accumulated_depreciation" style="height: 100px"></textarea>
+                <label for="accumulated_depreciation">Accumulated Depreciation</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Enter the property condition" id="accumulated_impairment_losses" name="accumulated_impairment_losses" style="height: 100px"></textarea>
+                <label for="accumulated_impairment_losses">Accumulated Impairment Losses</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Enter the property condition" id="carrying_amount" name="carrying_amount" style="height: 100px"></textarea>
+                <label for="carrying_amount">Carrying Amount</label>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="form-floating">
                 <textarea class="form-control" placeholder="Enter other remarks" id="remarks" name="remarks" style="height: 100px"></textarea>
                 <label for="remarks">Other remarks</label>
             </div>
@@ -60,7 +84,4 @@
             <button type="submit" class="btn btn-primary float-end">Submit <em class="bi bi-caret-right-fill"></em></button>
         </div>
     </form>
-    <x-slot:additional_script>
-        
-    </x-slot>
 </x-dashboard-layout>

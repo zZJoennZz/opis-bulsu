@@ -12,7 +12,14 @@ class InventoryTransactionItemProperty extends Model
         'inventory_transaction_items_id',
         'serial_number',
         'property_condition',
+        'accumulated_depreciation',
+        'accumulated_impairment_losses',
+        'carrying_amount',
         'remarks',
+        'disposal',
+        'appraised_value',
+        'or_number',
+        'amount',
         'is_available',
     ];
 

@@ -65,7 +65,11 @@
                     <td>{{ Carbon\Carbon::parse($report->created_at)->format('Y-m-d H:i A') }}</td>
                     <td>
                         <a href="{{ route('gi-ics.print', ['snapshot_id' => $report->id]) }}" target="_blank" class="btn btn-primary btn-sm">Print</a>
-                        <button class="btn btn-danger btn-sm">Delete</button>
+                        <form class="d-inline" method="POST" action="{{ route('gi-ics.delete', ['snapshot_id' => $report->id]) }}">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach
