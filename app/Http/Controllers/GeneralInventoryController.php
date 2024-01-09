@@ -161,14 +161,17 @@ class GeneralInventoryController extends Controller
             })
             ->get();
         $generatedReports = ReportSnapShot::where('report', 'iirup')
-            ->select(['id', 'created_at'])
+            ->select(['id', 'created_at', 'content'])
             ->get();
+        $endUsers = SupplyEndUser::all();
+
         return view('so-dashboard.iir-of-unserviceable-property')
             ->with('unavailableProperties', $unavailableProperties)
-            ->with('generatedReports', $generatedReports);
+            ->with('generatedReports', $generatedReports)
+            ->with('endUsers', $endUsers);
     }
 
-    public function inventory_inspection_generate()
+    public function inventory_inspection_generate(Request $request)
     {
         try {
             DB::beginTransaction();
@@ -176,12 +179,24 @@ class GeneralInventoryController extends Controller
                 ->whereHas('item.equipment_code', function ($builder) {
                     $builder->where('article', 'SEMI_EXPENDABLE');
                 })
+                ->whereHas('current_owners', function ($builder) use ($request) {
+                    $builder->where('supply_end_users_id', $request->end_users_id);
+                })
                 ->with(['item.transaction', 'item.bac_reso_item.quotation.pr_item.ppmp.item_detail'])
                 ->get();
 
+            $endUser = SupplyEndUser::where('id', $request->end_users_id)
+                ->with(['position', 'branch'])
+                ->first();
+
+            $content = [
+                "end_user" => $endUser,
+                "data" => json_encode($unavailableProperties)
+            ];
+
             $newReport = new ReportSnapShot([
                 'report' => 'iirup',
-                'content' => json_encode($unavailableProperties),
+                'content' => json_encode($content),
             ]);
 
             $newReport->save();

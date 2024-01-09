@@ -17,12 +17,12 @@
             <form onsubmit="return confirm('Are you sure to generate this report as of {{ date('Y-m-d') }}')" action="{{ route('iirup.generate') }}" method="post">
                 @csrf
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Email address</label>
-                    <select class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                    <label for="end_users_id" class="form-label">Select End User</label>
+                    <select name="end_users_id" id="end_users_id" class="form-select" aria-label="Default select example">
+                        <option selected disabled hidden>Select end user</option>
+                        @foreach ($endUsers as $user)
+                            <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div>
@@ -36,13 +36,18 @@
             <caption>Generated Inventory and Inspection Report of Unserviceable Properties</caption>
             <thead>
                 <tr>
-                    <th style="width: 90%;">Date Generated</th>
+                    <th style="width: 20%;">Date Generated</th>
+                    <th style="width: 70%;"> End User</th>
                     <th style="width: 10%;" class="text-end">Print</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($generatedReports as $report)
+                    @php
+                        $content = json_decode($report->content);
+                    @endphp
                     <td>{{ date('Y-m-d h:i A', strtotime($report->created_at)) }}</td>
+                    <td>{{ $content->end_user->first_name . ' ' . $content->end_user->middle_name . ' ' . $content->end_user->last_name }}</td>
                     <td class="text-end"><a href="{{ route('iirup.print', ['reportId' => $report->id]) }}" target="_blank" class="btn btn-success btn-sm"><em class="bi bi-printer-fill"></em></a></td>
                 @endforeach
             </tbody>
