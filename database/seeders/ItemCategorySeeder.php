@@ -76,5 +76,150 @@ class ItemCategorySeeder extends Seeder
             'under_of_group' => 6,
             'added_by' => 1,
         ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
+        ItemCategory::create([
+            'description' => 'FURNITURES & FIXTURES',
+            'under_of_group' => 6,
+            'added_by' => 1,
+        ]);
     }
 }
