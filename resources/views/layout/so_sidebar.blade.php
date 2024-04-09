@@ -99,11 +99,11 @@
         <em class="bi bi-person-fill-gear"></em> Inventory and Inspection Report of Unserviceable Property
     </a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" aria-current="page" href="{{ route('equipment-code.all') }}">
+{{-- <li class="nav-item">
+    <a class="nav-link" aria-current="page" href="{{ route('iif.index') }}">
         <em class="bi bi-diagram-3-fill"></em> Inventory of Furniture and Fixtures
     </a>
-</li>
+</li> --}}
 <li class="nav-item">
     <a class="nav-link" aria-current="page" href="{{ route('ppe.index') }}">
         <em class="bi bi-diagram-3-fill"></em> Physical Count of Property, Plant and Equipment

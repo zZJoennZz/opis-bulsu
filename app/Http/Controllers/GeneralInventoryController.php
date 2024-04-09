@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EquipmentCode;
 use App\Models\InventoryTransactionItem;
 use App\Models\InventoryTransactionItemProperty;
 use App\Models\ReportSnapShot;
@@ -140,7 +141,7 @@ class GeneralInventoryController extends Controller
             $newReportSnapshot->save();
 
             DB::commit();
-            return $reportContent;
+            return redirect()->back()->with('success', 'Report generated.');
         } catch (\Exception $e) {
             DB::rollBack();
         }
@@ -220,6 +221,28 @@ class GeneralInventoryController extends Controller
 
             return view('so-dashboard.print-iirup')
                 ->with('report', $report);
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['Something went wrong. Please try again!']);
+        }
+    }
+
+    public function iff_index()
+    {
+        try {
+            // $unavailableProperties = InventoryTransactionItemProperty::where('is_available', 0)
+            //     ->whereHas('item.equipment_code', function ($builder) {
+            //         $builder->where('article', 'SEMI_EXPENDABLE');
+            //     })
+            //     ->get();
+            $eqCodes = EquipmentCode::all();
+            $reports = ReportSnapShot::where('report', 'iff')
+                ->select(['id', 'created_at', 'content'])
+                ->get();
+            $endUsers = SupplyEndUser::all();
+            return view('so-dashboard.iff')
+                ->with('reports', $reports)
+                ->with('endUsers', $endUsers)
+                ->with('eqCodes', $eqCodes);
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['Something went wrong. Please try again!']);
         }

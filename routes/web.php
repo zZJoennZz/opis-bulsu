@@ -420,6 +420,8 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/inventory-and-inspection-report-of-unserviceable-property', [GeneralInventoryController::class, 'inventory_inspection_index'])->name('iirup.index');
     Route::post('/inventory-and-inspection-report-of-unserviceable-property', [GeneralInventoryController::class, 'inventory_inspection_generate'])->name('iirup.generate');
     Route::get('/inventory-and-inspection-report-of-unserviceable-property/{reportId?}', [GeneralInventoryController::class, 'print_inventory_inspection'])->name('iirup.print');
+
+    Route::get('/inventory-of-furniture-and-fixtures', [GeneralInventoryController::class, 'iff_index'])->name('iif.index');
 });
 
 //ADMIN ONLY
