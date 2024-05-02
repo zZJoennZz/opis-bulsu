@@ -8,6 +8,8 @@ use App\Models\PurchaseRequest;
 use App\Models\PurchaseRequestItem;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
+use App\Models\QuotationRequest;
+use App\Models\ModeOfProcurement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -200,5 +202,77 @@ class QuotationController extends Controller
                 'message' => 'Something went wrong. Cannot process your request.'
             ], 500);
         }
+    }
+
+    public function rfq_index() {
+        $purchase_requests = PurchaseRequest::with(['rfq'])
+            ->has('rfq')
+            ->where('year', getPpmpYear())
+            ->get();
+
+        return view('po-dashboard.all_rfq')
+            ->with('purchase_requests', $purchase_requests);
+    }
+
+    public function rfq_add() {
+        $purchase_requests = PurchaseRequest::doesntHave('rfq')
+            ->where('year', Auth::user()->ppmp_year)
+            ->get();
+        
+        $mode_of_procurements = ModeOfProcurement::all();
+
+        return view('po-dashboard.add_rfq')
+            ->with('purchase_requests', $purchase_requests)
+            ->with('mode_of_procurements', $mode_of_procurements);
+    }
+
+    public function rfq_create(Request $request) {
+        $request->validate([
+            'purchase_requests_id' => 'required|exists:purchase_requests,id',
+            'deadline_of_submission' => 'required|date|after:yesterday',
+            'mode_of_procurements_id' => 'required|exists:mode_of_procurements,id',
+            'approved_budget' => 'required|numeric',
+            'head_procurement' => 'required',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $latest_rfq = QuotationRequest::where('year', getPpmpYear())
+                ->latest()
+                ->first();
+
+            $quotation_number_ctr = $latest_rfq === null ? 1 : intval(substr($latest_rfq->quotation_number, 9, 4)) + 1;
+
+            $q_number = sprintf(
+                '%s-%s-%s',
+                getPpmpYear(),
+                date('m'),
+                str_pad($quotation_number_ctr, 4, '0', STR_PAD_LEFT),
+            );
+
+            $newRfq = new QuotationRequest();
+            $newRfq->year = getPpmpYear();
+            $newRfq->quotation_number = $q_number;
+            $newRfq->purchase_requests_id = $request->purchase_requests_id;
+            $newRfq->deadline_of_submission = $request->deadline_of_submission;
+            $newRfq->mode_of_procurements_id = $request->mode_of_procurements_id;
+            $newRfq->approved_budget = $request->approved_budget;
+            $newRfq->head_procurement = $request->head_procurement;  
+            
+            $newRfq->save();
+            DB::commit();
+            
+            return redirect()->back()->with('success', 'Request for quotation successfully saved!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['Something went wrong! Please contact web administrator!']);
+        }
+    }
+
+    public function rfq_print($id) {
+        $rfq = QuotationRequest::find($id);
+        return view('po-dashboard.print_rfq')
+            ->with('rfq', $rfq);
     }
 }

@@ -237,6 +237,12 @@ Route::middleware('procurement.office')->group(function () {
     Route::get('/company-profiles/update/{id}/{isChecked}', [CompanyController::class, 'status_change'])->name('status.change');
     Route::get('/company-profiles/bac-reso/{company_id?}', [CompanyController::class, 'get_company_by_bac_reso'])->name('company-bac.get');
 
+    //rfq
+    Route::get('/rfq', [QuotationController::class, 'rfq_index'])->name('rfq.index');
+    Route::get('/rfq/add', [QuotationController::class, 'rfq_add'])->name('rfq.add');
+    Route::post('/rfq/add', [QuotationController::class, 'rfq_create'])->name('rfq.create');
+    Route::get('/rfq/{id?}', [QuotationController::class, 'rfq_print'])->name('rfq.print');
+
     //price quotations
     Route::get('/quotations', [QuotationController::class, 'all'])->name('quotation.all');
     Route::get('/quotations/add', [QuotationController::class, 'add'])->name('quotation.add');

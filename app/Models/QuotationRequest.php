@@ -10,6 +10,7 @@ class QuotationRequest extends Model
     use HasFactory;
 
     protected $fillable = [
+        'year',
         'purchase_requests_id',
         'quotation_number',
         'deadline_of_submission',
@@ -27,4 +28,8 @@ class QuotationRequest extends Model
         'buyer_name',
         'head_procurement',
     ];
+
+    public function purchase_request() {
+        return $this->belongsTo(PurchaseRequest::class, 'purchase_requests_id', 'id');
+    }
 }

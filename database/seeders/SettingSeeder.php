@@ -74,7 +74,7 @@ class SettingSeeder extends Seeder
         ]);
         Setting::create([
             'name' => 'head_asset_management_unit',
-            'value' => 'Elizabeth D. Sunga',
+            'value' => 'ATTY. JEANETTE B. ESPLANA',
         ]);
     }
 }

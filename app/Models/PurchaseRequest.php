@@ -40,4 +40,8 @@ class PurchaseRequest extends Model
     {
         return $this->hasOne(AbstractOfCanvass::class, 'purchase_requests_id', 'id');
     }
+
+    public function rfq() {
+        return $this->hasOne(QuotationRequest::class, 'purchase_requests_id', 'id');
+    }
 }
