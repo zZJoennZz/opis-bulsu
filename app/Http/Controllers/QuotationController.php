@@ -204,7 +204,8 @@ class QuotationController extends Controller
         }
     }
 
-    public function rfq_index() {
+    public function rfq_index()
+    {
         $purchase_requests = PurchaseRequest::with(['rfq'])
             ->has('rfq')
             ->where('year', getPpmpYear())
@@ -214,11 +215,12 @@ class QuotationController extends Controller
             ->with('purchase_requests', $purchase_requests);
     }
 
-    public function rfq_add() {
+    public function rfq_add()
+    {
         $purchase_requests = PurchaseRequest::doesntHave('rfq')
             ->where('year', Auth::user()->ppmp_year)
             ->get();
-        
+
         $mode_of_procurements = ModeOfProcurement::all();
 
         return view('po-dashboard.add_rfq')
@@ -226,7 +228,8 @@ class QuotationController extends Controller
             ->with('mode_of_procurements', $mode_of_procurements);
     }
 
-    public function rfq_create(Request $request) {
+    public function rfq_create(Request $request)
+    {
         $request->validate([
             'purchase_requests_id' => 'required|exists:purchase_requests,id',
             'deadline_of_submission' => 'required|date|after:yesterday',
@@ -258,11 +261,11 @@ class QuotationController extends Controller
             $newRfq->deadline_of_submission = $request->deadline_of_submission;
             $newRfq->mode_of_procurements_id = $request->mode_of_procurements_id;
             $newRfq->approved_budget = $request->approved_budget;
-            $newRfq->head_procurement = $request->head_procurement;  
-            
+            $newRfq->head_procurement = $request->head_procurement;
+
             $newRfq->save();
             DB::commit();
-            
+
             return redirect()->back()->with('success', 'Request for quotation successfully saved!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -270,7 +273,8 @@ class QuotationController extends Controller
         }
     }
 
-    public function rfq_print($id) {
+    public function rfq_print($id)
+    {
         $rfq = QuotationRequest::find($id);
         return view('po-dashboard.print_rfq')
             ->with('rfq', $rfq);

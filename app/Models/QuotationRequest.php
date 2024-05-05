@@ -29,7 +29,13 @@ class QuotationRequest extends Model
         'head_procurement',
     ];
 
-    public function purchase_request() {
+    public function purchase_request()
+    {
         return $this->belongsTo(PurchaseRequest::class, 'purchase_requests_id', 'id');
+    }
+
+    public function mode_of_procurement()
+    {
+        return $this->hasOne(ModeOfProcurement::class, 'id', 'mode_of_procurements_id');
     }
 }
