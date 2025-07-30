@@ -34,7 +34,7 @@
                 <label for="description">Item name</label>
             </div>
             <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="article" name="article" placeholder="Item article">
+                <input required type="text" class="form-control" id="article" name="article" placeholder="Item article">
                 <label for="article">Item article</label>
             </div>
             <div class="form-floating mb-3">
@@ -58,7 +58,7 @@
                 <select class="form-select" id="category_id" name="category_id" aria-label="Item category">
                     <option value="0" selected>Select item category</option>
                     @foreach ($item_categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->description }}</option>
+                        <option value="{{ $category->id }}">{{ $category->group->title }}@if($category->description!="N/A"), {{$category->description}}@endif</option>
                     @endforeach
                 </select>
                 <label for="category_id">Category</label>

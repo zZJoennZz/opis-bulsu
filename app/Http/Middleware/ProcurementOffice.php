@@ -42,7 +42,7 @@ class ProcurementOffice
             return redirect()->route('so-dashboard.show');
         }
 
-        if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_OFFICE" || Auth::user()->account_type === "PROCUREMENT_HEAD") {
+        if (Auth::user()->account_type === "admin" || Auth::user()->account_type === "PROCUREMENT_HEAD" || Auth::user()->account_type === "PROCUREMENT_OFFICE") {
             return $next($request);
         }
 

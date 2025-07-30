@@ -96,12 +96,15 @@
                         <form onsubmit="return saveChanges(event)">
                             @csrf
                             <div class="mb-3">
-                                <label for="name" class="form-label">Position</label>
+                                <label for="edit_name" class="form-label">Position</label>
                                 <input type="text" class="form-control" id="edit_name" name="name">
                             </div>
                             <div class="mb-3">
-                                <label for="type" class="form-label">Type</label>
-                                <input type="text" class="form-control" id="edit_type" name="type">
+                                <label for="edit_type" class="form-label">Type</label>
+                                <select class="form-select" id="edit_type" name="edit_type" aria-label="Select type">
+                                    <option value="END_USER">End User</option>
+                                    <option value="SUPPLY_OFFICE_EMPLOYEE">Supply Office Employee</option>
+                                </select>
                             </div>
                             <div>
                                 <button  type="submit" class="btn btn-primary"><em class="bi bi-save2"></em> Save</button>

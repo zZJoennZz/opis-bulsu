@@ -15,4 +15,9 @@ class ItemCategory extends Model
     {
         return $this->hasMany(ItemDetail::class, 'category_id', 'id');
     }
+
+    public function group()
+    {
+        return $this->belongsTo(ItemCategoryGroup::class, 'under_of_group', 'id');
+    }
 }

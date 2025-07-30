@@ -97,7 +97,7 @@
                             </div>
                         </td>
                         <td class="text-center"><button class="btn btn-sm btn-success" onclick="openEdit({{ $category->id }})" @if($category->is_delete===1) disabled @endif><em class="bi bi-pencil-square"></em></button></td>
-                        <td>{{ $category->description }} @if($category->is_delete===1) <span class="badge bg-secondary">Category Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$category->id}})"><em class="bi bi-trash-fill"></em></button> @endif</td>
+                        <td><strong><em>{{ $category->group->title }}</em></strong>@if($category->description != "N/A"), <strong>{{ $category->description }}</strong> @endif @if($category->is_delete===1) <span class="badge bg-secondary">Category Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$category->id}})"><em class="bi bi-trash-fill"></em></button> @endif</td>
                         <td>{{ date('Y-m-d h:iA', strtotime($category->created_at)) }}</td>
                     </tr>
                 @endforeach

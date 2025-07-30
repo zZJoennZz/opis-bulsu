@@ -33,6 +33,14 @@
             <a href="{{ route('trans.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-eye-fill float-start"></em>
                 All Transactions</a>
         </div>
+        <div class="mb-2">
+            <a href="{{ route('if.all') }}" class="btn btn-dark fs-5 fw-bold w-100"><em class="bi bi-bar-chart-line-fill float-start"></em>
+                Item Stock Forecast</a>
+            <div class="my-1">
+                <a href="{{ route('model.info') }}" class="btn btn-sm btn-secondary w-100"><em class="bi bi-patch-question-fill float-start"></em>
+                About the Forecasting Model</a>
+            </div>
+        </div>
     </div>
 </li>
 <li class="nav-item small">
@@ -64,12 +72,12 @@
         Items
     </a>
 </li>
-<li class="nav-item">
+{{-- <li class="nav-item">
     <a href="{{ route('end_users.all') }}" aria-current="page" class="nav-link">
         <em class="bi bi-people-fill"></em>
         Keepers
     </a>
-</li>
+</li> --}}
 <li class="nav-item">
     <a href="{{ route('maintenance.index') }}" aria-current="page" class="nav-link">
         <em class="bi bi-wrench-adjustable-circle"></em>

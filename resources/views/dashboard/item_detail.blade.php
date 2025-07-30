@@ -32,7 +32,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="cat_desc" class="form-label fw-bold">Category:</label>
-                    <input type="text" class="form-control" id="cat_desc" value="{{ $item_detail[0]->cat_desc }}" readonly>
+                    <input type="text" class="form-control" id="cat_desc" value="{{ $item_detail[0]->cat_desc_group }} @if($item_detail[0]->cat_desc!="N/A"), {{ $item_detail[0]->cat_desc }}@endif" readonly>
                 </div>
                 {{-- <div class="mb-3">
                     <a href={{ route('view-item-detail.show',['item_detail_id'=> $item_detail[0]->id]) }} class="btn btn-link" style="font-size:

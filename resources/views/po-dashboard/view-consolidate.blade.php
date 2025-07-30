@@ -51,7 +51,7 @@
                     @php($grandTotalAmt = 0)
                     @foreach ($consolidated_records as $record)
                         <tr>
-                            <td>{{ $record->description }}</td>
+                            <td>{{ $record->description }} @if($record->extra_article!=null), {{$record->extra_article}} @endif</td>
                             <td>{{ $record->unit->uom }}</td>
                             <td class="text-center">
                                 @php($totalQty = 0)

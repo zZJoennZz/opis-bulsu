@@ -53,7 +53,7 @@
                 <select class="form-select fs-4" id="price_catalogue_id" aria-label="Price Catalogue Category" onchange="getPriceCatalogue()">
                     <option value="0" selected hidden disabled>Open to select item category</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}">{{ $category->description }}</option>
+                        <option value="{{ $category->id }}">{{ $category->group->title }}@if($category->description!="N/A"), {{$category->description}}@endif</option>
                     @endforeach
                 </select>
             </div>
@@ -73,6 +73,7 @@
             price_catalogue : '{{ $item->price_catalogue }}',
             category_id : '{{ $item->category_id }}',
             cat_desc : '{{ $item->cat_desc }}',
+            cat_group_under: '{{ $item->cat_group_under }}',
             uom : '{{ $item->uom }}',
             unit_id : '{{ $item->unit_id }}',
         },
@@ -93,7 +94,7 @@
                             </div>
                             <h5 class="card-title mb-3">${item["description"]}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">${convertToCurrency(parseFloat(item["price_catalogue"]))} / ${item["uom"]}</h6>
-                            <span class="badge bg-secondary">${item["cat_desc"]}</span>
+                            <span class="badge bg-secondary">${item["cat_group_under"]}${item["cat_desc"] !== "N/A" ? `, ${item["cat_desc"]}` : ""}</span>
                         </div>
                     </div>
                 </div>
@@ -122,7 +123,7 @@
                             </div>
                             <h5 class="card-title mb-3">${item["description"]}</h5>
                             <h6 class="card-subtitle mb-2 text-muted">${convertToCurrency(parseFloat(item["price_catalogue"]))} / ${item["uom"]}</h6>
-                            <span class="badge bg-secondary">${item["cat_desc"]}</span>
+                            <span class="badge bg-secondary">${item["cat_group_under"]}${item["cat_desc"] !== "N/A" ? `, ${item["cat_desc"]}` : ""}</span>
                         </div>
                     </div>
                 </div>

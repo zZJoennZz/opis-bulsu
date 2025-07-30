@@ -26,10 +26,9 @@ class TransactionController extends Controller
     public function add_par()
     {
         try {
-            $pos = PurchaseOrder::where('year', getPpmpYear())
-                ->with(['bac_reso.bac_reso_items.quotation', 'company' => function ($query) {
-                    $query->select('id', 'name');
-                }])
+            $pos = PurchaseOrder::with(['bac_reso.bac_reso_items.quotation', 'company' => function ($query) {
+                $query->select('id', 'name');
+            }])
                 ->whereHas('bac_reso.bac_reso_items.quotation', function ($builder) {
                     $builder->where('offered_unit_price', ">=", 50000);
                 })
@@ -68,10 +67,9 @@ class TransactionController extends Controller
     public function add_ics_l()
     {
         try {
-            $pos = PurchaseOrder::where('year', getPpmpYear())
-                ->with(['bac_reso.bac_reso_items', 'bac_reso.bac_reso_items.supply_inventory_item', 'transactions.items', 'company' => function ($query) {
-                    $query->select('id', 'name');
-                }])
+            $pos = PurchaseOrder::with(['bac_reso.bac_reso_items', 'bac_reso.bac_reso_items.supply_inventory_item', 'transactions.items', 'company' => function ($query) {
+                $query->select('id', 'name');
+            }])
                 ->whereHas('bac_reso.bac_reso_items.quotation', function ($builder) {
                     $builder->whereBetween('offered_unit_price', [0, 4999.99]);
                 })
@@ -117,10 +115,9 @@ class TransactionController extends Controller
             //     })
             //     ->get();
 
-            $pos = PurchaseOrder::where('year', getPpmpYear())
-                ->with(['bac_reso.bac_reso_items.supply_inventory_item', 'transactions.items', 'company' => function ($query) {
-                    $query->select('id', 'name');
-                }])
+            $pos = PurchaseOrder::with(['bac_reso.bac_reso_items.supply_inventory_item', 'transactions.items', 'company' => function ($query) {
+                $query->select('id', 'name');
+            }])
                 ->whereHas('bac_reso.bac_reso_items.quotation', function ($builder) {
                     $builder->whereBetween('offered_unit_price', [5000, 49999.99]);
                 })

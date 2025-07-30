@@ -32,6 +32,7 @@ use App\Http\Controllers\SupplyPositionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ModeOfProcurementController;
 use App\Http\Controllers\EquipmentCodesController;
+use App\Http\Controllers\ForecastingController;
 use App\Http\Controllers\GeneralInventoryController;
 use App\Http\Controllers\ItemMaintenanceController;
 use App\Http\Controllers\PPEController;
@@ -135,7 +136,7 @@ Route::middleware('procurement.head')->group(function () {
 });
 
 //AVAILABLE TO PROCUREMENT OFFICE
-Route::middleware('procurement.office')->group(function () {
+Route::middleware(['procurement.office'])->group(function () {
     Route::get('/po-dashboard', [DashboardController::class, 'show'])->name('po-dashboard.show');
     Route::get('/print-unsubmitted-ppmp', [DashboardController::class, 'print_unsub_ppmp'])->name('unsub-ppmp');
 
@@ -406,7 +407,7 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/maintenance/maintenance-form', [ItemMaintenanceController::class, 'maintenance_form'])->name('maintenance.form');
     Route::post('/maintenance/maintenance-form', [ItemMaintenanceController::class, 'submit_maintenance_form'])->name('maintenance.formsubmit');
     Route::get('/maintenance/disposal-form', [ItemMaintenanceController::class, 'disposal_form'])->name('disposal.form');
-    Route::post('/maintenance/disposal-form/{id?}', [ItemMaintenanceController::class, 'submit_disposal_form'])->name('disposal.formsubmit');
+    Route::post('/maintenance/disposal-form', [ItemMaintenanceController::class, 'submit_disposal_form'])->name('disposal.formsubmit');
     Route::get('/maintenance/print/{rec_number?}/{mode?}', [ItemMaintenanceController::class, 'print_maintenance'])->name('maintenance.print');
 
     Route::get('/gi-par', [GeneralInventoryController::class, 'par'])->name('gi-par.show');
@@ -428,6 +429,12 @@ Route::middleware('supply.office')->group(function () {
     Route::get('/inventory-and-inspection-report-of-unserviceable-property/{reportId?}', [GeneralInventoryController::class, 'print_inventory_inspection'])->name('iirup.print');
 
     Route::get('/inventory-of-furniture-and-fixtures', [GeneralInventoryController::class, 'iff_index'])->name('iif.index');
+
+    Route::get('/about-the-model', [ForecastingController::class, 'about_the_model'])->name('model.info');
+    Route::get('/item-forecasting', [ForecastingController::class, 'item_forecasting_index'])->name('if.all');
+    Route::get('/item-forecasting/{id?}/generate', [ForecastingController::class, 'generate_forecasting_single'])->name('if.generate');
+    Route::post('/item-forecasting/{id?}/generate', [ForecastingController::class, 'generate_forecasting'])->name('if.process');
+    Route::get('/item-forecasting/{item_details_id?}/view/{id?}', [ForecastingController::class, 'view_forecast'])->name('if.view');
 });
 
 //ADMIN ONLY

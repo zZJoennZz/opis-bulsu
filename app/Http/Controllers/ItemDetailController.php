@@ -161,7 +161,7 @@ class ItemDetailController extends Controller
         //
         $user = Auth::user();
 
-        $itemDetail = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->where('item_details.id', '=', $id)->select('item_details.*', 'units.uom', 'item_categories.description as cat_desc')->get();
+        $itemDetail = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('item_category_groups', 'item_categories.under_of_group', '=', 'item_category_groups.id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->where('item_details.id', '=', $id)->select('item_details.*', 'units.uom', 'item_categories.description as cat_desc', 'item_category_groups.title as cat_desc_group')->get();
 
         if (count($itemDetail) === 0) {
             abort(404);

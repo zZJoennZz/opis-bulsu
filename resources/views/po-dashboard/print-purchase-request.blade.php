@@ -24,9 +24,9 @@
     </head>
     <body>
         <div style="width: 98%;" class="m-auto small">
+            <div class="text-end w-100 fst-italic mb-2">Appendix 60 of GAM</div>
             <table class="w-100">
                 {{-- <thead class="border-bottom border-dark">
-                    
                 </thead> --}}
                 <tbody class="border border-dark">
                     <tr>
@@ -139,6 +139,37 @@
                     
                 </tfoot> --}}
             </table>
+            <div class="row mt-3">
+                <div class="col-12 fst-italic mb-3">
+                    To be accomplished by the Procurement Office:
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-4">
+                            Included in the:
+                        </div>
+                        <div class="col-8">
+                            <div>☐ 2024 Annual Procurement Plan</div>
+                            <div>☐ 2024 Supplemental PPMP</div>
+                            <div>☐ 2024 Revised PPMP</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-6">
+                            <div>Item No.:____ Page No.____</div>
+                            <div>Item No.:____ Page No.____</div>
+                            <div>Item No.:____ Page No.____</div>
+                        </div>
+                        <div class="col-6" style="font-size: 10px !important;">
+                            PROCUREMENT OFFICER
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <script>
             window.addEventListener('load', function () {

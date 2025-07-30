@@ -20,10 +20,10 @@ class ItemMaintenanceController extends Controller
             })
             ->get();
 
-        $maintenanceProperties = InventoryTransactionItemProperty::has('histories')
+        $maintenanceProperties = InventoryTransactionItemProperty::whereHas('histories')
             ->with([
                 'histories' => function ($builder) {
-                    $builder->orderBy('created_at', 'DESC')->where('type', 'MAINTENANCE')->get();
+                    $builder->orderBy('created_at', 'DESC')->get();
                 },
                 'item.equipment_code'
             ])
@@ -83,18 +83,18 @@ class ItemMaintenanceController extends Controller
             ->with('properties', $properties);
     }
 
-    public function disposal_form($id)
+    public function disposal_form()
     {
-        $property = InventoryTransactionItemProperty::where('id', $id)
+        $properties = InventoryTransactionItemProperty::whereIn('id', json_decode(session()->get('selectedItems')))
             ->where('is_available', true)
-            ->first();
+            ->get();
 
-        if ($property === null) {
-            return redirect()->route('so-dashboard.show')->withErrors(['Invalid property.']);
+        if (count($properties) === 0) {
+            return redirect()->route('so-dashboard.show')->withErrors(['Invalid selected properties.']);
         }
 
         return view('so-dashboard.disposal-form')
-            ->with('property', $property);
+            ->with('properties', $properties);
     }
 
     public function print_maintenance_request($id)
@@ -195,26 +195,22 @@ class ItemMaintenanceController extends Controller
             return view('so-dashboard.print-rssp')
                 ->with('groupedPropertyHistories', $groupedPropertyHistories);
         } else {
-            return redirect()->back()->withErrors(['Invalaid action. Please try again.']);
+            return redirect()->back()->withErrors(['Invalid action. Please try again.']);
         }
     }
 
-    public function submit_disposal_form(Request $request, $id)
+    public function submit_disposal_form(Request $request)
     {
         try {
-            DB::beginTransaction();
-            $property = InventoryTransactionItemProperty::where('id', $id)
-                ->where('is_available', true)
-                ->first();
+            // $properties = InventoryTransactionItemProperty::whereIn('id', json_decode(session()->get('selectedItems')))
+            //     ->where('is_available', true)
+            //     ->get();
 
-            if ($property === null) {
-                return redirect()->back()->withErrors(['Invalid property selected.']);
+            if (count(array_diff($request->itemId, json_decode(session()->get('selectedItems')))) > 0) {
+                return redirect()->back()->withErrors(['Invalid transaction. Please try again!']);
             }
 
-            $details = [
-                "cause_damage" => $request->cause_damage,
-                "remarks" => $request->remarks,
-            ];
+            DB::beginTransaction();
 
             $yearNow = date('Y');
 
@@ -231,21 +227,39 @@ class ItemMaintenanceController extends Controller
                 str_pad($rec_number_ctr, 3, '0', STR_PAD_LEFT),
             );
 
-            $newHistory = new InventoryTransactionItemPropertyHistory([
-                'inventory_transaction_item_properties_id' => $property->id,
-                'type' => 'DISPOSE',
-                'record_number' => $rec_number,
-                'details' => json_encode($details),
-                'added_by' => Auth::user()->id,
-            ]);
-            $newHistory->save();
+            for ($i = 0; $i < count($request->itemId); $i++) {
+                $propertyDetail = InventoryTransactionItemProperty::where('id', $request->itemId[$i])
+                    ->with(['item.transaction', 'item.bac_reso_item.quotation.pr_item.ppmp.item_detail', 'item.bac_reso_item.quotation.pr_item.ppmp.item_detail.unit', 'current_owners.end_user.branch', 'current_owners.end_user.position'])
+                    ->first();
 
-            InventoryTransactionItemProperty::where('id', $property->id)
-                ->update(['is_available' => false]);
+                $details = [
+                    "cause_damage" => $request->cause_damage[$i],
+                    "property_condition" => $request->property_condition[$i],
+                    "remarks" => $request->remarks[$i],
+                    "property_detail" => $propertyDetail,
+                    "signatories" => [
+                        "noted_by" => [
+                            "name" => $request->noted_by,
+                            "designation" => $request->designation,
+                        ],
+                        "verifier" => $request->verifier,
+                    ],
+                ];
 
-            DB::rollBack();
+                $newHistory = new InventoryTransactionItemPropertyHistory([
+                    'inventory_transaction_item_properties_id' => $propertyDetail->id,
+                    'type' => 'DISPOSE',
+                    'record_number' => $rec_number,
+                    'details' => json_encode($details),
+                    'added_by' => Auth::user()->id,
+                ]);
+                $newHistory->save();
 
-            return $property;
+                InventoryTransactionItemProperty::where('id', $propertyDetail->id)
+                    ->update(['is_available' => false, 'property_condition' => $request->property_condition[$i]]);
+            }
+
+            DB::commit();
 
             return redirect()->route('maintenance.index')->with('success', 'Successfully submitted.');
         } catch (\Exception $e) {

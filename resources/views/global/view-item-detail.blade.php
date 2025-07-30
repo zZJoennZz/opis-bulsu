@@ -65,7 +65,7 @@
             <div class="form-floating mb-3">
                 <select class="form-select" id="category_id" name="category_id" @if($item_detail->is_delete===1) disabled @endif aria-label="Item category">
                     @foreach ($item_categories as $category)
-                        <option value="{{ $category->id }}" @if ($item_detail->category_id === $category->id) selected @endif>{{ $category->description }}</option>
+                    <option value="{{ $category->id }}" @if ($item_detail->category_id === $category->id) selected @endif>{{ $category->group->title }}@if($category->description!="N/A"), {{$category->description}}@endif</option>
                     @endforeach
                 </select>
                 <label for="category_id">Category</label>

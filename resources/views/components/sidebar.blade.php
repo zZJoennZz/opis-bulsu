@@ -133,7 +133,7 @@
                     Copyright © {{ date("Y") }}. Bulacan State University.
                 </div>
                 <div class="mt-2 fst-italic" style="font-size: 12px; color: rgb(192, 192, 192);">
-                    OPIS version: 0.2.1
+                    OPIS version: 0.9.0
                 </div>
             </li>
         </ul>

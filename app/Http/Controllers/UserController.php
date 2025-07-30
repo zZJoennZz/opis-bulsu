@@ -58,7 +58,7 @@ class UserController extends Controller
         $inputs = $request->all();
         $user = Auth::user();
 
-        if ($user->account_type !== "admin" && $user->account_type !== "PROCUREMENT_OFFICE") {
+        if ($user->account_type !== "admin" && $user->account_type !== "PROCUREMENT_OFFICE" && $user->account_type !== "PROCUREMENT_HEAD") {
             return redirect()->route('dashboard.show');
         } else {
             DB::beginTransaction();

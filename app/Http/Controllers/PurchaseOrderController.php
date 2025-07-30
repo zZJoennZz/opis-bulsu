@@ -36,6 +36,9 @@ class PurchaseOrderController extends Controller
     {
 
         $bac_reso = BACReso::with(['purchase_order'])
+            ->whereHas('abstract_of_canvass', function ($query) {
+                $query->where('year', getPpmpYear());
+            })
             ->where('is_delete', '=', 0)
             ->where('is_draft', '=', 0)
             ->get();

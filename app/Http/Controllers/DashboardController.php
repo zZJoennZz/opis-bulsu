@@ -32,7 +32,7 @@ class DashboardController extends Controller
 
         if ($user->account_type === "END_USER" || $user->account_type === "admin") {
             $allCategories = ItemCategory::all();
-            $allItems = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->where('item_details.is_approve', '=', 1)->where('item_details.is_delete', '=', 0)->select('item_details.*', 'item_categories.description as cat_desc', 'units.uom')->get();
+            $allItems = ItemDetail::leftJoin('item_categories', 'item_categories.id', '=', 'item_details.category_id')->leftJoin('item_category_groups', 'item_category_groups.id', '=', 'item_categories.under_of_group')->leftJoin('units', 'units.id', '=', 'item_details.unit_id')->where('item_details.is_approve', '=', 1)->where('item_details.is_delete', '=', 0)->select('item_details.*', 'item_categories.description as cat_desc', 'item_category_groups.title as cat_group_under', 'units.uom')->get();
             $is_consolidated = count(ProProManPlan::where('year', '=', Auth::user()->ppmp_year)->where('is_consolidate', '=', 1)->get()) > 0 ? true : false;
             $viewToReturn = $viewToReturn->with('categories', $allCategories)->with('items', $allItems)->with('is_consolidated', $is_consolidated);
         }

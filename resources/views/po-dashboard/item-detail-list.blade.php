@@ -59,12 +59,12 @@
                             data-bs-placement="bottom"
                             data-bs-title="{{ $item->article }}"
                         >
-                            {{ $item->description }}
+                        {{ $item->description }} @if($item->extra_article!=null), {{ $item->extra_article }}@endif
                         </span>
                         @if($item->is_delete===1) <span class="badge bg-secondary">Item Deleted</span> @else <button type="button" class="btn btn-danger" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" onclick="deleteRecord({{$item->id}})"><em class="bi bi-trash-fill"></em></button> @endif
                     </td>
                     <td>{{$item->unit->uom}}</td>
-                    <td>{{$item->category->description}}</td>
+                    <td><strong><em>{{$item->category->group->title}}</em></strong> @if($item->category->description!="N/A"), <strong>{{$item->category->description}}</strong>@endif</td>
                     <td class="small">{{date('Y-m-d h:iA', strtotime($item->created_at))}}</td>
                 </tr>
                 @endforeach

@@ -7,6 +7,7 @@ use App\Models\Setting;
 use App\Models\ProProManPlan;
 use App\Models\Notification;
 use App\Models\FileAttachment;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 if (!function_exists('checkIfDeleted')) {
@@ -278,5 +279,77 @@ if (!function_exists('getFileAttachment')) {
     function getFileAttachment($attachmentId)
     {
         return FileAttachment::find($attachmentId)->file_name;
+    }
+}
+
+
+
+if (!function_exists('exponentialSmoothing')) {
+    function exponentialSmoothing(array $data, $alpha, $forecastPeriod = null)
+    {
+        $n = count($data);
+        if ($n == 0) {
+            return [];
+        }
+
+        // If forecastPeriod is not provided, set it to the count of data
+        if ($forecastPeriod === null) {
+            $forecastPeriod = $n;
+        }
+
+        $smoothed = [];
+        $smoothed[0] = $data[0]['value']; // Initial smoothed value is the first data point
+
+        for ($i = 1; $i < $n; $i++) {
+            $smoothed[$i] = $alpha * $data[$i]['value'] + (1 - $alpha) * $smoothed[$i - 1];
+        }
+
+        $forecast = [];
+        $lastSmoothed = end($smoothed);
+        for ($i = 1; $i <= $forecastPeriod; $i++) {
+            $forecast[] = $lastSmoothed; // Forecast is the same as last smoothed value in SES
+        }
+
+        // Combine original data with smoothed data, including keys
+        $combinedData = [];
+        for ($i = 0; $i < $n; $i++) {
+            $combinedData[] = [
+                'key' => $data[$i]['key'],
+                'original' => $data[$i]['value'],
+                'smoothed' => $smoothed[$i]
+            ];
+        }
+
+        return [
+            'smoothed' => $smoothed,
+            'forecast' => $forecast,
+            'combined' => $combinedData
+        ];
+    }
+}
+
+if (!function_exists("prepareData")) {
+    function prepareData($data)
+    {
+        // Prepare the data, setting empty values to 0 and preserving keys
+        $flattened = [];
+        foreach ($data as $key => $value) {
+            $flattened[] = [
+                'key' => $key,
+                'value' => empty($value) ? 0 : $value
+            ];
+        }
+        return $flattened;
+    }
+}
+
+if (!function_exists("formatDate")) {
+    function formatDate($dateString)
+    {
+        // Create a Carbon instance from the input date string
+        $date = Carbon::parse($dateString);
+
+        // Format the date to the desired format
+        return $date->format('F j, Y g:i A');
     }
 }

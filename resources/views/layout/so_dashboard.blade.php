@@ -2,7 +2,7 @@
     <h2 class="fw-bold text-uppercase fs-5">Supply Office Dashboard</h2>
 </div>
 <div class="row">
-    <div class="col-sm-12 col-md-9">
+    <div class="col-sm-12 col-md-12">
         <div class="table-responsive">
             <table class="table table-sm table-hover border-primary caption-top" id="5-recent-transactions">
                 <caption class="border border-primary text-primary px-1 py-1 rounded-top">
@@ -62,12 +62,12 @@
             </table>
         </div>
     </div>
-    <div class="col-sm-12 col-md-3">
+    {{-- <div class="col-sm-12 col-md-3">
         <div class="text-primary text-uppercase mb-1">Available Items</div>
         <div>
             <div class="text-center fw-bold text-primary" style="font-size: 100px;">20</div>
             <div class="text-center"><a href="{{ route('ics.all') }}" class="btn btn-sm btn-link">View ICS Items</a></div>
             <div class="text-center"><a href="{{ route('par.all') }}" class="btn btn-sm btn-link">View PAR Items</a></div>
         </div>
-    </div>
+    </div> --}}
 </div>

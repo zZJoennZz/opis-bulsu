@@ -30,4 +30,14 @@ class ItemDetail extends Model
     {
         return $this->hasMany(ProProManPlan::class, 'item_details_id', 'id');
     }
+
+    public function last_issued()
+    {
+        return $this->hasOne(ItemDetailLastIssue::class, 'item_details_id', 'id');
+    }
+
+    public function forecasts()
+    {
+        return $this->hasMany(ItemForecasting::class, 'item_details_id', 'id');
+    }
 }
